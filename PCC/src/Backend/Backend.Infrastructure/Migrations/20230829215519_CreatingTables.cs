@@ -6,21 +6,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class CreatingTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ProductTypes",
+                name: "ProductType",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductTypes", x => x.Id);
+                    table.PrimaryKey("PK_ProductType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -37,17 +43,22 @@ namespace Backend.Infrastructure.Migrations
                     LiquidWeight = table.Column<decimal>(type: "numeric", nullable: true),
                     CestId = table.Column<int>(type: "integer", nullable: true),
                     NcmId = table.Column<int>(type: "integer", nullable: true),
-                    cEAN = table.Column<string>(type: "text", nullable: true),
-                    cEANTax = table.Column<string>(type: "text", nullable: true),
-                    TaxUnitId = table.Column<int>(type: "integer", nullable: true)
+                    CEAN = table.Column<string>(type: "text", nullable: true),
+                    CEANTax = table.Column<string>(type: "text", nullable: true),
+                    TaxUnitId = table.Column<int>(type: "integer", nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_ProductTypes_ProductTypeId",
+                        name: "FK_Product_ProductType_ProductTypeId",
                         column: x => x.ProductTypeId,
-                        principalTable: "ProductTypes",
+                        principalTable: "ProductType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -65,7 +76,7 @@ namespace Backend.Infrastructure.Migrations
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "ProductTypes");
+                name: "ProductType");
         }
     }
 }
