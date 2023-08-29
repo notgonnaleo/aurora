@@ -24,11 +24,16 @@ namespace Backend.Domain.Entities.Products
         public decimal? LiquidWeight { get; set; }
         public int? CestId { get; set; }
         public int? NcmId { get; set; }
-        public string? cEAN { get; set; }
-        public string? cEANTax { get; set; }
+        public string? CEAN { get; set; }
+        public string? CEANTax { get; set; }
         public int? TaxUnitId { get; set; }
+        public bool Active { get; set; }
+        public DateTime? Created { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public DateTime? Updated { get; set;}
+        public Guid? UpdatedBy { get; set; }
 
         [Required]
-        public virtual ProductType ProductTypes { get; set; }
+        public virtual ProductType ProductType { get; set; }
     }
 }
