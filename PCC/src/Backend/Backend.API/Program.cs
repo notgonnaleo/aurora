@@ -1,6 +1,20 @@
+using Backend.Infrastructure.Context;
+using Backend.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using System;
+using Backend.Infrastructure.Services.Products;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<ProductService>();
+
+// Setting-up context for database migrations.
+builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LocalAppDb"),
+    x => x.MigrationsAssembly("Backend.Infrastructure")));
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
