@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Services.Products
 {
-    public class ProductService
+    public class ProductTypeService
     {
         private readonly AppDbContext _appDbContext;
 
-        public ProductService(AppDbContext appDbContext)
+        public ProductTypeService(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<Product>> Get()
+        public async Task<IEnumerable<ProductType>> Get()
         {
             try
             {
-                IEnumerable<Product> products = _appDbContext.Products.Where(x => x.Active == true).ToList();
-                return products;
+                IEnumerable<ProductType> productType = _appDbContext.ProductTypes.ToList();
+                return productType;
             }
             catch (Exception ex)
             {
@@ -31,12 +31,12 @@ namespace Backend.Infrastructure.Services.Products
             }
         }
 
-        public async Task<Product> GetById(Guid Id)
+        public async Task<ProductType> GetById(Guid Id)
         {
             try
             {
-                Product product = _appDbContext.Products.Where(x => x.Id == Id).First();
-                return product;
+                ProductType productType = _appDbContext.ProductTypes.Where(x => x.Id == Id).First();
+                return productType;
             }
             catch (Exception ex)
             {
@@ -45,16 +45,17 @@ namespace Backend.Infrastructure.Services.Products
             }
         }
 
-        public async Task<Product> Add(Product product)
+        public async Task<ProductType> Add(ProductType productType)
         {
             try
             {
-                product.Id = Guid.NewGuid();
-                product.Created = DateTime.Now;
-                product.CreatedBy = Guid.NewGuid(); // TODO: Get it from the user account id while it's log in.
+                productType.Id = Guid.NewGuid();
+                productType.Created = DateTime.Now;
+                productType.CreatedBy = Guid.NewGuid(); // TODO: Get it from the user account id while it's log in.
 
-                _appDbContext.Products.Add(product);
-                return product;
+                _appDbContext.ProductTypes.Add(productType);
+                _appDbContext.SaveChanges();
+                return productType;
             }
             catch (Exception ex)
             {
@@ -63,20 +64,19 @@ namespace Backend.Infrastructure.Services.Products
 
         }
 
-        public async Task<bool> Update(Product product)
+        public async Task<bool> Update(ProductType productType)
         {
             try
             {
-                product = new Product() // Updating the header info from the product.
+                productType = new ProductType() // Updating the header info from the product.
                 {
-                    Id = product.Id,
-                    Name = product.Name,
-                    SKU = product.SKU,
-                    Description = product.Description,
+                    Id = productType.Id,
+                    Name = productType.Name,
+                    Description = productType.Description,
                     Updated = null,
                     UpdatedBy = null // TODO: Get it from the user account id while it's log in.
                 };
-                _appDbContext.Update(product);
+                _appDbContext.Update(productType);
                 var response = _appDbContext.SaveChanges();
 
                 if (response <= 0)
@@ -95,10 +95,10 @@ namespace Backend.Infrastructure.Services.Products
         {
             try
             {
-                Product product = _appDbContext.Products.Where(x => x.Id == Id).First();
-                product.Active = false;
+                ProductType productType = _appDbContext.ProductTypes.Where(x => x.Id == Id).First();
+                productType.Active = false;
 
-                _appDbContext.Update(product);
+                _appDbContext.Update(productType);
                 var response = _appDbContext.SaveChanges();
 
                 if (response <= 0)
