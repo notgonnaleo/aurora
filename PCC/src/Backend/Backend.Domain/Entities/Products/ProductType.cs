@@ -15,6 +15,7 @@ namespace Backend.Domain.Entities.Products
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
+        public Guid ICMSId { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public Guid? CreatedBy { get; set; }

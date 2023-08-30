@@ -2,7 +2,7 @@ using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.API.Controllers
+namespace Backend.API.Controllers.Products
 {
     [ApiController]
     [Route("[controller]")]
@@ -19,16 +19,30 @@ namespace Backend.API.Controllers
         [Route("List")]
         public async Task<ActionResult> Get()
         {
-            IEnumerable<Product> products = await _productService.Get();
-            return Ok(products);
+            try
+            {
+                return Ok(await _productService.Get());
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpGet]
         [Route("Find")]
         public async Task<ActionResult> GetById(Guid Id)
         {
-            Product product = await _productService.GetById(Id);
-            return Ok(product);
+            try
+            {
+                return Ok(await _productService.GetById(Id));
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpPost]

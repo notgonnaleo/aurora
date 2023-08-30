@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities.Products
@@ -22,18 +23,14 @@ namespace Backend.Domain.Entities.Products
         public decimal Value { get; set; }
         public decimal? TotalWeight { get; set; }
         public decimal? LiquidWeight { get; set; }
-        public int? CestId { get; set; }
-        public int? NcmId { get; set; }
-        public string? CEAN { get; set; }
-        public string? CEANTax { get; set; }
-        public int? TaxUnitId { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public Guid? CreatedBy { get; set; }
-        public DateTime? Updated { get; set;}
+        public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
 
         [Required]
+        [JsonIgnore]
         public virtual ProductType ProductType { get; set; }
     }
 }
