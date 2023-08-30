@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Backend.Domain.Entities.Taxes.Products.Taxes.Tributes
+{
+    public class Tribute
+    {
+        public Guid? TributeId { get; set; }
+        public Guid? TributeMetricId { get; set; } // uTrib - KG
+        public decimal? TributeQuantity { get; set; } // qTrib - Item quantity * weight per item 
+        public decimal? TributeValue { get; set; } // vTrib - Value
+    }
+}

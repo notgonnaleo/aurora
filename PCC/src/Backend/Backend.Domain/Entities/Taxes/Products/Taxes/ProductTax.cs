@@ -1,4 +1,4 @@
-﻿using Backend.Domain.Entities.Taxes.ICMS;
+﻿using Backend.Domain.Entities.Products;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,24 +8,27 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Backend.Domain.Entities.Products
+namespace Backend.Domain.Entities.Taxes.Products.Taxes
 {
-    [Table("ProductType")]
-    public class ProductType
+    [Table("ProductTax")]
+    public class ProductTax
     {
-        [Required]
         public Guid Id { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
-        [ForeignKey("ICMS")]
-        public Guid? ICMSId { get; set; }
+        [ForeignKey("Product")]
+        public Guid ProductId { get; set; }
+        public int? CestId { get; set; }
+        public int? NcmId { get; set; }
+        public Guid? TributeId { get; set; }
+        public Guid? CommercialTaxId { get; set; }
+        public string? CEAN { get; set; } // EAN (Same thing.)
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public Guid? CreatedBy { get; set; }
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
 
+        [Required]
         [JsonIgnore]
-        public virtual ICMS ICMS { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

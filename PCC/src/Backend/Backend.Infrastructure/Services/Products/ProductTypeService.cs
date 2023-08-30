@@ -52,6 +52,8 @@ namespace Backend.Infrastructure.Services.Products
                 productType.Id = Guid.NewGuid();
                 productType.Created = DateTime.Now;
                 productType.CreatedBy = Guid.NewGuid(); // TODO: Get it from the user account id while it's log in.
+                productType.Updated = null;
+                productType.UpdatedBy = null;
 
                 _appDbContext.ProductTypes.Add(productType);
                 _appDbContext.SaveChanges();
@@ -73,8 +75,8 @@ namespace Backend.Infrastructure.Services.Products
                     Id = productType.Id,
                     Name = productType.Name,
                     Description = productType.Description,
-                    Updated = null,
-                    UpdatedBy = null // TODO: Get it from the user account id while it's log in.
+                    Updated = DateTime.Now,
+                    UpdatedBy = Guid.NewGuid() // TODO: Get it from the user account id while it's log in.
                 };
                 _appDbContext.Update(productType);
                 var response = _appDbContext.SaveChanges();
