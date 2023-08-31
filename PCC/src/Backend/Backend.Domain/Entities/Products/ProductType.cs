@@ -15,6 +15,7 @@ namespace Backend.Domain.Entities.Products
     {
         [Required]
         public Guid Id { get; set; }
+        public Guid AgentId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         [ForeignKey("ICMS")]

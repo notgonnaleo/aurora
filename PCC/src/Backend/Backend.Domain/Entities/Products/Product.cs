@@ -16,6 +16,7 @@ namespace Backend.Domain.Entities.Products
         public Guid Id { get; set; }
         [Required]
         public string? SKU { get; set; }
+        public Guid AgentId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         [ForeignKey("ProductType")]
