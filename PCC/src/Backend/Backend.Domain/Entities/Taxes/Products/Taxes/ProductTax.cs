@@ -13,6 +13,7 @@ namespace Backend.Domain.Entities.Taxes.Products.Taxes
     [Table("ProductTax")]
     public class ProductTax
     {
+        [Key]
         public Guid Id { get; set; }
         [ForeignKey("Product")]
         public Guid ProductId { get; set; }

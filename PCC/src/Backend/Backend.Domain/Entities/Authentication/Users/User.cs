@@ -10,13 +10,11 @@ using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities.Authentication.Users
 {
+    [Table("User")]
     public class User
     {
-        // TODO: Create new table linking tenant with user
-
+        [Key]
         public Guid Id { get; set; }
-        [ForeignKey("Tenant")]
-        public Guid TenantId { get; set; }
         public string Email { get; set; }
         public string Username { get; set; }
         public string? FirstName { get; set; }
@@ -24,12 +22,6 @@ namespace Backend.Domain.Entities.Authentication.Users
         public string Password { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
-        public Guid? CreatedBy { get; set; }
         public DateTime? Updated { get; set; }
-        public Guid? UpdatedBy { get; set; }
-
-        [Required]
-        [JsonIgnore]
-        public virtual Tenant Tenant { get; set; }
     }
 }

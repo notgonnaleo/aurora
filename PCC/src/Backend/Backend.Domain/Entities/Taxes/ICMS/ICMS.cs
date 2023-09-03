@@ -11,7 +11,7 @@ namespace Backend.Domain.Entities.Taxes.ICMS
     [Table("ICMS")]
     public class ICMS
     {
-        [Required]
+        [Key]
         public Guid Id { get; set; }
         public string? State { get; set; }
         public string? ProductType { get; set; }

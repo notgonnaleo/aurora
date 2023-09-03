@@ -13,6 +13,8 @@ namespace Backend.Domain.Entities.Products
     public class Product
     {
         [Required]
+        public Guid TenantId { get; set; }
+        [Key]
         public Guid Id { get; set; }
         [Required]
         public string? SKU { get; set; }

@@ -13,7 +13,7 @@ namespace Backend.Domain.Entities.Products
     [Table("ProductType")]
     public class ProductType
     {
-        [Required]
+        [Key]
         public Guid Id { get; set; }
         public Guid AgentId { get; set; }
         public string? Name { get; set; }

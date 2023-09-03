@@ -21,8 +21,7 @@ namespace Backend.Infrastructure.Services.Products
         {
             try
             {
-                IEnumerable<Product> products = _appDbContext.Products.Where(x => x.Active == true).ToList();
-                return products;
+                return _appDbContext.Products.Where(x => x.Active == true).ToList();
             }
             catch (Exception ex)
             {

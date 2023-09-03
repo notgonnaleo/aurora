@@ -1,4 +1,6 @@
-﻿using Backend.Domain.Entities.Authentication.Users;
+﻿using Backend.Domain.Entities.Authentication.Linkage;
+using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Authentication.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -28,5 +30,7 @@ namespace Backend.Infrastructure.Context
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<Linkage> Linkages { get; set; }
     }
 }

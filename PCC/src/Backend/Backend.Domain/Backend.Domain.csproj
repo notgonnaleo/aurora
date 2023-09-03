@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Agents\Contacts\" />
     <Folder Include="Entities\Taxes\Products\Taxes\TributeSituationCodes\" />
   </ItemGroup>
 
