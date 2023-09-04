@@ -3,6 +3,9 @@ using Backend.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System;
 using Backend.Infrastructure.Services.Products;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +35,26 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configurati
 builder.Services.AddDbContext<AuthDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LocalAuthDb"),
     x => x.MigrationsAssembly("Backend.Infrastructure")));
 
+/* Authentication & Middleware Middleware section */
+// Authenticate
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x => 
+{
+    x.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration.GetSection("JWTKeySettings:SecretKey").Value)),
+        ValidateIssuerSigningKey = true
+    };
+});
+
+// Authorize
+builder.Services.AddAuthorization();
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddHttpContextAccessor();
@@ -53,6 +76,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Run the auth system.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -20,5 +20,15 @@ namespace Backend.Infrastructure.Services.Users
         {
             return _authDbContext.Users.Where(x => x.Active == true).ToList();
         }
+
+        public async Task<IEnumerable<User>> GetById(Guid Id)
+        {
+            return _authDbContext.Users.Where(x => x.Id == Id && x.Active == true).ToList();
+        }
+
+        public async Task<IEnumerable<User>> GetByUserName(string UserName)
+        {
+            return _authDbContext.Users.Where(x => x.Username == UserName && x.Active == true).ToList();
+        }
     }
 }

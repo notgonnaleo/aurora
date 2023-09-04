@@ -16,10 +16,14 @@ namespace Backend.Domain.Entities.Authentication.Users
         [Key]
         public Guid Id { get; set; }
         public string Email { get; set; }
+        [Required]
         public string Username { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+        [Required]
         public string Password { get; set; }
+        [NotMapped]
+        public string Token { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }

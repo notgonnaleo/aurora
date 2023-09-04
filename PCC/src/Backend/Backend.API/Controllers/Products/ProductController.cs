@@ -1,9 +1,11 @@
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.API.Controllers.Products
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ProductController : ControllerBase
