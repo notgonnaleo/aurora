@@ -22,8 +22,6 @@ namespace Backend.Domain.Entities.Authentication.Users
         public string? LastName { get; set; }
         [Required]
         public string Password { get; set; }
-        [NotMapped]
-        public string Token { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }

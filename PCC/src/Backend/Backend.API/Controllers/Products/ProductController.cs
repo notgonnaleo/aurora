@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.API.Controllers.Products
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ProductController : ControllerBase

@@ -9,6 +9,9 @@ namespace Backend.Domain.Entities.Authentication.Users.Login.Response
 {
     public class LoginResponse : LoginRequest
     {
-        public string Token { get; set; }
+        public Guid? Id { get; set; }
+        public string? Token { get; set; }
+        public string? Message { get; set; }
+        public bool Success { get; set; }
     }
 }

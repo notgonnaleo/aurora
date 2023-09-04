@@ -13,8 +13,8 @@ namespace Backend.Domain.Entities.Authentication.Linkage
 {
     // i fucking hate this shit
 
-    [Table("Linkage")]
-    public class Linkage
+    [Table("Membership")]
+    public class Membership
     {
         [Key]
         public Guid Id { get; set; }

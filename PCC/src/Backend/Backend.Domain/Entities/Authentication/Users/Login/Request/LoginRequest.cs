@@ -8,7 +8,6 @@ namespace Backend.Domain.Entities.Authentication.Users.Login.Request
 {
     public class LoginRequest
     {
-        public Guid Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
     }
