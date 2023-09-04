@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Services.Authentication
 {
-    public class LoginService
+    public class AuthenticationService
     {
         private readonly AuthDbContext _authDbContext;
         private readonly UserService _userService;
         private readonly IConfiguration _configuration;
-        public LoginService(AuthDbContext authDbContext, UserService userService, IConfiguration configuration)
+        public AuthenticationService(AuthDbContext authDbContext, UserService userService, IConfiguration configuration)
         {
             _authDbContext = authDbContext;
             _userService = userService;
@@ -29,22 +29,40 @@ namespace Backend.Infrastructure.Services.Authentication
 
         public LoginResponse Authenticate(LoginRequest request)
         {
-            LoginResponse user = _authDbContext.Users.Where(x => x.Username == request.Username && x.Password == request.Password)
-                .Select(x => new LoginResponse
-                {
-                    Id = x.Id,
-                    Username = x.Username,
-                    Password = x.Password,
-                })
-                .First();
+            User? user = _authDbContext.Users.Where(x => x.Username == request.Username && x.Password == request.Password)
+                .FirstOrDefault();
 
-            user.Token = GenerateToken(user);
-            return user; // Returning the user basic info + token to authorize api request (TODO: Add claims on it tho)
+            LoginResponse response = new LoginResponse();
+            if (user != null)
+            {
+                response = new LoginResponse()
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Token = GenerateToken(user),
+                    Success = true,
+                    Message = "Logged in"
+                };
+            }
+            else
+            {
+                response = new LoginResponse()
+                {
+                    Id = null,
+                    Username = "",
+                    Password = "",
+                    Token = "",
+                    Success = false,
+                    Message = "User does not exists or credentials are wrong."
+                };
+            }
+            return response; // Returning the user basic info + token to authorize api request (TODO: Add claims on it tho)
         }
         // Things looks good yet
 
         // Need to review this token generate method
-        private string GenerateToken(LoginResponse user)
+        private string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JWTKeySettings:SecretKey").Value);
