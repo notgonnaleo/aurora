@@ -17,7 +17,7 @@ namespace Backend.Infrastructure.Context
         {
         }
 
-        public AuthDbContext(DbContextOptions options) : base(options)
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
         }
 
@@ -26,6 +26,7 @@ namespace Backend.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresExtension("uuid-ossp"); // idk if this works i need to test it btw
             modelBuilder.UseSerialColumns();
         }
 

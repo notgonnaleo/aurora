@@ -15,7 +15,7 @@ namespace Backend.Infrastructure.Context
         {
         }
 
-        public AppDbContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
@@ -24,6 +24,8 @@ namespace Backend.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Addd the Postgres Extension for UUID generation
+            modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.UseSerialColumns();
         }
 
