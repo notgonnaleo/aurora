@@ -32,6 +32,6 @@ namespace Backend.Infrastructure.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
-        public DbSet<Linkage> Linkages { get; set; }
+        public DbSet<Membership> Linkages { get; set; }
     }
 }
