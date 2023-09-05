@@ -18,13 +18,13 @@ namespace Backend.Infrastructure.Services.Authorization
             _authDbContext = authDbContext;
         }
 
-        public async Task<IEnumerable<UserRole>> GetUserRoles(Guid TenantId, Guid UserId)
-        {
-            List<UserRole> userRoles = _authDbContext.UserRoles.Where(x => x.UserId == UserId && x.TenantId == TenantId).ToList();
-            List<Role> roles = _authDbContext.Roles.Where(x => x.TenantId == TenantId).ToList();
-            User user = _authDbContext.Users.Where(x => x.Id == UserId).First();
+        //public async Task<IEnumerable<UserRole>> GetUserRoles(Guid TenantId, Guid UserId)
+        //{
+        //    List<UserRole> userRoles = _authDbContext.UserRoles.Where(x => x.UserId == UserId && x.TenantId == TenantId).ToList();
+        //    List<Role> roles = _authDbContext.Roles.Where(x => x.TenantId == TenantId).ToList();
+        //    User user = _authDbContext.Users.Where(x => x.Id == UserId).First();
 
-            return 
-        }
+        //    return;
+        //}
     }
 }
