@@ -21,7 +21,7 @@ namespace Backend.API.Controllers.Authentication
         public ActionResult Login(LoginRequest request)
         {
             var response = _authenticationService.Authenticate(request);
-            var userPermissions = _authorizationService.GetUserRoles(response.TenantId, response.UserId);
+            var userPermissions = _authorizationService.GetUserRoles(response.Tenants, response.UserId);
             return response.Success ? Ok(response.Token) : NotFound(response.Message);
         }
     }
