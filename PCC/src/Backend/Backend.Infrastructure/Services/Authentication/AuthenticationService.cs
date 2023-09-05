@@ -1,4 +1,6 @@
-﻿using Backend.Domain.Entities.Authentication.Users;
+﻿using Backend.Domain.Entities.Authentication.Membership;
+using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Authentication.Users;
 using Backend.Domain.Entities.Authentication.Users.Login.Request;
 using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Backend.Infrastructure.Context;
@@ -32,12 +34,25 @@ namespace Backend.Infrastructure.Services.Authentication
             User? user = _authDbContext.Users.Where(x => x.Username == request.Username && x.Password == request.Password)
                 .FirstOrDefault();
 
+            // need to decouple it to a separate method.
+            List<Membership> membership = _authDbContext.Memberships.Where(x => x.UserId == user.Id).ToList();
+            List<Tenant> tenantsLinkedToUser = new List<Tenant>();
+
+            if(membership.Any())
+            {
+                foreach (var tenant in membership.Select(x => x.Tenant))
+                {
+                    tenantsLinkedToUser.Add(tenant);
+                };
+            }
+
             LoginResponse response = new LoginResponse();
             if (user != null)
             {
                 response = new LoginResponse()
                 {
-                    Id = user.Id,
+                    Tenants = tenantsLinkedToUser,
+                    UserId = user.Id,
                     Username = user.Username,
                     Password = user.Password,
                     Token = GenerateToken(user),
@@ -49,7 +64,8 @@ namespace Backend.Infrastructure.Services.Authentication
             {
                 response = new LoginResponse()
                 {
-                    Id = null,
+                    Tenants = tenantsLinkedToUser,
+                    UserId = null,
                     Username = "",
                     Password = "",
                     Token = "",
