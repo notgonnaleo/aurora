@@ -3,6 +3,7 @@ using System;
 using Backend.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230905020253_authorization tables")]
+    partial class authorizationtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +26,7 @@ namespace Backend.Infrastructure.Migrations.AuthDb
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.Domain.Entities.Authentication.Membership.Membership", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Authentication.Linkage.Membership", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,6 +129,9 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid?>("Module")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -135,10 +141,38 @@ namespace Backend.Infrastructure.Migrations.AuthDb
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Module");
+
                     b.ToTable("Module");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Authorization.Roles.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("SubscriptionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Authorization.Subscription.Subscription", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,45 +199,10 @@ namespace Backend.Infrastructure.Migrations.AuthDb
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Role");
+                    b.ToTable("Subscription");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Authorization.UserRoles.UserRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("TenantId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRole");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.Authentication.Membership.Membership", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Authentication.Linkage.Membership", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Authentication.Tenants.Tenant", "Tenant")
                         .WithMany()
@@ -222,7 +221,14 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Authorization.Roles.Role", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Authorization.Modules.Module", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Authorization.Subscription.Subscription", null)
+                        .WithMany("Modules")
+                        .HasForeignKey("Module");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Authorization.Subscription.Subscription", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Authorization.Modules.Module", "Module")
                         .WithMany()
@@ -241,31 +247,9 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Authorization.UserRoles.UserRole", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Authorization.Subscription.Subscription", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Authorization.Roles.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Domain.Entities.Authentication.Tenants.Tenant", "Tenant")
-                        .WithMany()
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backend.Domain.Entities.Authentication.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("Tenant");
-
-                    b.Navigation("User");
+                    b.Navigation("Modules");
                 });
 #pragma warning restore 612, 618
         }

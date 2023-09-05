@@ -1,6 +1,9 @@
-﻿using Backend.Domain.Entities.Authentication.Linkage;
+﻿using Backend.Domain.Entities.Authentication.Membership;
 using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Authentication.Users;
+using Backend.Domain.Entities.Authorization.Modules;
+using Backend.Domain.Entities.Authorization.Roles;
+using Backend.Domain.Entities.Authorization.UserRoles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -32,6 +35,9 @@ namespace Backend.Infrastructure.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
-        public DbSet<Membership> Linkages { get; set; }
+        public DbSet<Membership> Memberships { get; set; }
+        public DbSet<Module> Modules { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
     }
 }
