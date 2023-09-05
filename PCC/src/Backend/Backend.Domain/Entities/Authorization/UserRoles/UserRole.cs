@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
-using Backend.Domain.Entities.Authorization.Modules;
+using Backend.Domain.Entities.Authentication.Users;
+using Backend.Domain.Entities.Authorization.Roles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,26 +10,31 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Backend.Domain.Entities.Authorization.Roles
+namespace Backend.Domain.Entities.Authorization.UserRoles
 {
-    [Table("Role")]
-    public class Role
+    [Table("UserRole")]
+    public class UserRole
     {
         [Key]
         public Guid Id { get; set; }
         [ForeignKey("Tenant")]
         public Guid TenantId { get; set; }
-        [ForeignKey("Module")]
-        public Guid ModuleId { get; set; }
-        public bool Active { get; set; }1
+        [ForeignKey("Role")]
+        public Guid RoleId { get; set; }
+        [ForeignKey("User")]
+        public Guid UserId { get; set; }
+        public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }
 
         [Required]
         [JsonIgnore]
-        public virtual Tenant Tenant { get; set; }
+        public virtual User User { get; set; }
         [Required]
         [JsonIgnore]
-        public virtual Module Module { get; set; }
+        public virtual Role Role { get; set; }
+        [Required]
+        [JsonIgnore]
+        public virtual Tenant Tenant { get; set; }
     }
 }

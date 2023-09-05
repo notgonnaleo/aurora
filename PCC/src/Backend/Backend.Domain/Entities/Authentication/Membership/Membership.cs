@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Backend.Domain.Entities.Authentication.Linkage
+namespace Backend.Domain.Entities.Authentication.Membership
 {
     // i fucking hate this shit
 
