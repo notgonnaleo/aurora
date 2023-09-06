@@ -40,9 +40,10 @@ namespace Backend.Infrastructure.Services.Authentication
 
             if(membership.Any())
             {
-                foreach (var tenant in membership.Select(x => x.Tenant))
+                foreach (var link in membership)
                 {
-                    tenantsLinkedToUser.Add(tenant);
+                    Tenant tenantDetails = _authDbContext.Tenants.Where(x => x.Id == link.TenantId).First();
+                    tenantsLinkedToUser.Add(tenantDetails);
                 };
             }
 
@@ -65,7 +66,7 @@ namespace Backend.Infrastructure.Services.Authentication
                 response = new LoginResponse()
                 {
                     Tenants = tenantsLinkedToUser,
-                    UserId = null,
+                    UserId = Guid.Empty,
                     Username = "",
                     Password = "",
                     Token = "",

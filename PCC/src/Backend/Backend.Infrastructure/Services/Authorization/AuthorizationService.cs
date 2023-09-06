@@ -29,43 +29,34 @@ namespace Backend.Infrastructure.Services.Authorization
             public List<Module> Modules { get; set; }
         }
 
-        public async Task<UserPermissions> GetUserRoles(List<Tenant> tenants, Guid userId)
+        public async Task<List<UserPermissions>> GetUserContext(List<Tenant> tenants, Guid userId)
         {
-            /*
-             * One User can be linked to various tenants (1:N)
-             * So after the user realize his login, he can choose which tenant he wants to manage.
-             */
-
-            // need to figure out how can i return a list with:
-            /*
-            - user id
-            - list of tenants (ids)
-            - role (name and id)
-            - list of modules (name and ids)
-             */
-
-            UserRole userRole = _authDbContext.UserRoles
-                .Where(x => x.UserId == userId && x.TenantId == tenantId)
-                .Include(i => i.RoleId)
-                .First();
-
-            Role role = _authDbContext.Roles
-                .Where(x => x.TenantId == tenantId && x.Id == userRole.RoleId)
-                .First();
-
-            List<Module> modules = _authDbContext.Modules
-                .Where(x => x.Id == role.ModuleId)
-                .ToList();
-
-            UserPermissions userPermissions = new UserPermissions
+            List<UserPermissions> userPermissions = new List<UserPermissions>();
+            foreach (var tenantId in tenants.Select(x => x.Id))
             {
-                TenantId = tenantId,
-                UserId = userId,
-                Role = role,
-                Modules = modules
-            };
+                UserRole userRole = _authDbContext.UserRoles
+                    .Where(x => x.UserId == userId && x.TenantId == tenantId)
+                    .Include(i => i.RoleId)
+                    .First();
 
-            return userPermissions;
+                Role role = _authDbContext.Roles
+                    .Where(x => x.TenantId == tenantId && x.Id == userRole.RoleId)
+                    .First();
+
+                List<Module> modules = _authDbContext.Modules
+                    .Where(x => x.Id == role.ModuleId)
+                    .ToList();
+
+                UserPermissions claim = new UserPermissions
+                {
+                    TenantId = tenantId,
+                    UserId = userId,
+                    Role = role,
+                    Modules = modules
+                };
+                userPermissions.Add(claim);
+            }
+            return userPermissions.ToList();
         }
     }
 }

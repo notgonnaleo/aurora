@@ -11,12 +11,14 @@ using Backend.Infrastructure.Services.Tenants;
 using Backend.Infrastructure.Services.Users;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Backend.Infrastructure.Services.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Authentication
+// Authentication & Authorization
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AuthorizationService>();
 
 // Products
 builder.Services.AddScoped<ProductService>();

@@ -2,6 +2,7 @@
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Backend.Infrastructure.Services.Authorization.AuthorizationService;
 
 namespace Backend.API.Controllers.Authentication
 {
@@ -17,12 +18,31 @@ namespace Backend.API.Controllers.Authentication
             _authorizationService = authorizationService;
         }
 
+        public class UserContextResponse
+        {
+            public List<UserPermissions> perms { get; set; }
+            public string Token { get; set; }
+        }
+
         [HttpPost]
-        public ActionResult Login(LoginRequest request)
+        public async Task<ActionResult> Login(LoginRequest request)
         {
             var response = _authenticationService.Authenticate(request);
-            var userPermissions = _authorizationService.GetUserRoles(response.Tenants, response.UserId);
-            return response.Success ? Ok(response.Token) : NotFound(response.Message);
+            if (response.Success)
+            {
+                List<UserPermissions> userPermissions = await _authorizationService.GetUserContext(response.Tenants, response.UserId);
+
+                UserContextResponse userContextResponse = new UserContextResponse()
+                {
+                    perms = userPermissions,
+                    Token = response.Token
+                };
+                return Ok(userContextResponse);
+            }
+            else
+            {
+                return NotFound(response.Message);
+            }
         }
     }
 }

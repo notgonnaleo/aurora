@@ -10,7 +10,7 @@ namespace Backend.Domain.Entities.Authentication.Users.Login.Response
 {
     public class LoginResponse : LoginRequest
     {
-        public List<Tenant> Tenants { get; set; }
+        public List<Tenant>? Tenants { get; set; }
         public Guid UserId { get; set; }
         public string? Token { get; set; }
         public string? Message { get; set; }
