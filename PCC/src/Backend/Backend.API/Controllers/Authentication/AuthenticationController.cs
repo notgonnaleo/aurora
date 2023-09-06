@@ -20,7 +20,7 @@ namespace Backend.API.Controllers.Authentication
 
         public class UserContextResponse
         {
-            public List<UserPermissions> perms { get; set; }
+            public List<UserPermissions> Claims { get; set; }
             public string Token { get; set; }
         }
 
@@ -34,7 +34,7 @@ namespace Backend.API.Controllers.Authentication
 
                 UserContextResponse userContextResponse = new UserContextResponse()
                 {
-                    perms = userPermissions,
+                    Claims = userPermissions,
                     Token = response.Token
                 };
                 return Ok(userContextResponse);

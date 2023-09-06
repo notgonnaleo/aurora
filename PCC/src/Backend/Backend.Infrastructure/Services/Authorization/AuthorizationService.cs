@@ -23,7 +23,7 @@ namespace Backend.Infrastructure.Services.Authorization
 
         public class UserPermissions
         {
-            public Guid TenantId { get; set; }
+            public Tenant Tenant { get; set; }
             public Guid UserId { get; set; }
             public Role Role { get; set; }
             public List<Module> Modules { get; set; }
@@ -32,15 +32,15 @@ namespace Backend.Infrastructure.Services.Authorization
         public async Task<List<UserPermissions>> GetUserContext(List<Tenant> tenants, Guid userId)
         {
             List<UserPermissions> userPermissions = new List<UserPermissions>();
-            foreach (var tenantId in tenants.Select(x => x.Id))
+            foreach (var tenant in tenants)
             {
                 UserRole userRole = _authDbContext.UserRoles
-                    .Where(x => x.UserId == userId && x.TenantId == tenantId)
+                    .Where(x => x.UserId == userId && x.TenantId == tenant.Id)
                     .Include(i => i.RoleId)
                     .First();
 
                 Role role = _authDbContext.Roles
-                    .Where(x => x.TenantId == tenantId && x.Id == userRole.RoleId)
+                    .Where(x => x.TenantId == tenant.Id && x.Id == userRole.RoleId)
                     .First();
 
                 List<Module> modules = _authDbContext.Modules
@@ -49,7 +49,7 @@ namespace Backend.Infrastructure.Services.Authorization
 
                 UserPermissions claim = new UserPermissions
                 {
-                    TenantId = tenantId,
+                    Tenant = tenant,
                     UserId = userId,
                     Role = role,
                     Modules = modules
