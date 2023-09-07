@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Authentication.Users;
+using Backend.Domain.Entities.Authentication.Users.Claims;
 using Backend.Domain.Entities.Authorization.Modules;
 using Backend.Domain.Entities.Authorization.Roles;
 using Backend.Domain.Entities.Authorization.UserRoles;
@@ -21,17 +22,9 @@ namespace Backend.Infrastructure.Services.Authorization
             _authDbContext = authDbContext;
         }
 
-        public class UserPermissions
+        public async Task<List<Claim>> GetUserContext(List<Tenant> tenants, Guid userId)
         {
-            public Tenant Tenant { get; set; }
-            public Guid UserId { get; set; }
-            public Role Role { get; set; }
-            public List<Module> Modules { get; set; }
-        }
-
-        public async Task<List<UserPermissions>> GetUserContext(List<Tenant> tenants, Guid userId)
-        {
-            List<UserPermissions> userPermissions = new List<UserPermissions>();
+            List<Claim> userPermissions = new List<Claim>();
             foreach (var tenant in tenants)
             {
                 UserRole userRole = _authDbContext.UserRoles
@@ -47,7 +40,7 @@ namespace Backend.Infrastructure.Services.Authorization
                     .Where(x => x.Id == role.ModuleId)
                     .ToList();
 
-                UserPermissions claim = new UserPermissions
+                Claim claim = new Claim
                 {
                     Tenant = tenant,
                     UserId = userId,

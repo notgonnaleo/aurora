@@ -1,3 +1,4 @@
+using Backend.API.Helpers.Controllers.Extensions;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ namespace Backend.API.Controllers.Products
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductController : CustomController
     {
         private readonly ProductService _productService;
 
@@ -22,6 +23,7 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
+                var context = LoadUserContext();
                 return Ok(await _productService.Get());
             }
             catch (Exception ex)

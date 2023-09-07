@@ -4,6 +4,7 @@ using Backend.Domain.Entities.Authentication.Users;
 using Backend.Domain.Entities.Authentication.Users.Login.Request;
 using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Services.Memberships;
 using Backend.Infrastructure.Services.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -21,35 +22,36 @@ namespace Backend.Infrastructure.Services.Authentication
     {
         private readonly AuthDbContext _authDbContext;
         private readonly UserService _userService;
+        private readonly MembershipService _membershipService;
         private readonly IConfiguration _configuration;
-        public AuthenticationService(AuthDbContext authDbContext, UserService userService, IConfiguration configuration)
+        public AuthenticationService(AuthDbContext authDbContext, UserService userService, MembershipService membershipService, IConfiguration configuration)
         {
             _authDbContext = authDbContext;
             _userService = userService;
+            _membershipService = membershipService;
             _configuration = configuration;
         }
 
         public LoginResponse Authenticate(LoginRequest request)
         {
+            LoginResponse response = new LoginResponse();
+            List<Tenant> tenantsLinkedToUser = new List<Tenant>();
             User? user = _authDbContext.Users.Where(x => x.Username == request.Username && x.Password == request.Password)
                 .FirstOrDefault();
 
-            // need to decouple it to a separate method.
-            List<Membership> membership = _authDbContext.Memberships.Where(x => x.UserId == user.Id).ToList();
-            List<Tenant> tenantsLinkedToUser = new List<Tenant>();
-
-            if(membership.Any())
-            {
-                foreach (var link in membership)
-                {
-                    Tenant tenantDetails = _authDbContext.Tenants.Where(x => x.Id == link.TenantId).First();
-                    tenantsLinkedToUser.Add(tenantDetails);
-                };
-            }
-
-            LoginResponse response = new LoginResponse();
             if (user != null)
             {
+                List<Membership> membership = _membershipService.GetUserMemberships(user.Id);
+
+                if (membership.Any())
+                {
+                    foreach (var link in membership)
+                    {
+                        Tenant tenantDetails = _authDbContext.Tenants.Where(x => x.Id == link.TenantId).First();
+                        tenantsLinkedToUser.Add(tenantDetails);
+                    };
+                }
+
                 response = new LoginResponse()
                 {
                     Tenants = tenantsLinkedToUser,
@@ -74,11 +76,9 @@ namespace Backend.Infrastructure.Services.Authentication
                     Message = "User does not exists or credentials are wrong."
                 };
             }
-            return response; // Returning the user basic info + token to authorize api request (TODO: Add claims on it tho)
+            return response;
         }
-        // Things looks good yet
 
-        // Need to review this token generate method
         private string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

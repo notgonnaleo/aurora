@@ -1,5 +1,11 @@
-﻿using Backend.Domain.Entities.Products;
+﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
+using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Services.Authentication;
+using Backend.Infrastructure.Services.Authorization;
+using Backend.Infrastructure.Services.Tenants;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +17,7 @@ namespace Backend.Infrastructure.Services.Products
     public class ProductService
     {
         private readonly AppDbContext _appDbContext;
-
-        public ProductService(AppDbContext appDbContext)
+        public ProductService (AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }

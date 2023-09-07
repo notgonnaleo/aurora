@@ -20,6 +20,7 @@ namespace Backend.Domain.Entities.Authorization.Roles
         public Guid TenantId { get; set; }
         [ForeignKey("Module")]
         public Guid ModuleId { get; set; }
+        public string? Name { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }
