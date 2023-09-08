@@ -1,4 +1,5 @@
 using Backend.API.Helpers.Controllers.Extensions;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.API.Controllers.Products
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("Products")]
     public class ProductController : CustomController
     {
         private readonly ProductService _productService;
@@ -23,12 +24,15 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
-                var context = LoadUserContext();
+                /* need to figure out how to encapsulate this thing */
+                Context userContext = LoadUserContext();
+                if (userContext.Success == false)
+                    return Unauthorized(userContext.Message);
+
                 return Ok(await _productService.Get());
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

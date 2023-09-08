@@ -3,6 +3,7 @@ using Backend.Domain.Entities.Authentication.Users.Login.Request;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
+using Backend.API.Helpers.Session.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static Backend.Infrastructure.Services.Authorization.AuthorizationService;
@@ -33,8 +34,7 @@ namespace Backend.API.Controllers.Authentication
                     Claims = userPermissions,
                     Token = response.Token
                 };
-                // instead of using string figure out how can i use my own object
-                HttpContext.Session.SetString("UserContext", JsonConvert.SerializeObject(userContextResponse));
+                Helpers.Session.Extensions.SessionExtensions.Set(HttpContext.Session, "UserContext", userContextResponse);
                 return Ok(userContextResponse);
             }
             else
