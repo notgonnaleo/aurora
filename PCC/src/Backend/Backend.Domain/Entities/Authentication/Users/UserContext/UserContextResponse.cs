@@ -13,7 +13,7 @@ namespace Backend.Domain.Entities.Authentication.Users.UserContext
         public string Token { get; set; }
     }
 
-    public class Context : UserContextResponse 
+    public class UserSessionContext : UserContextResponse 
     {
         public bool Success { get; set; }
         public string Message { get; set; }

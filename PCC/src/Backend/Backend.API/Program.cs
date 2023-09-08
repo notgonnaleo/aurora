@@ -33,7 +33,7 @@ builder.Services.AddScoped<TenantService>();
 
 // User
 builder.Services.AddScoped<UserService>();
-
+builder.Services.AddScoped<UserContextService>();
 // Getting shot in the head seems to be the solution for all my problems
 // I really hate myself
 

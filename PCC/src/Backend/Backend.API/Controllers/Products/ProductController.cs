@@ -1,6 +1,7 @@
 using Backend.API.Helpers.Controllers.Extensions;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
+using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,13 @@ namespace Backend.API.Controllers.Products
     public class ProductController : CustomController
     {
         private readonly ProductService _productService;
+        private readonly UserContextService _userContextService;
 
-        public ProductController(ProductService productService)
+        public ProductController(ProductService productService, UserContextService userContextService)
+            : base(userContextService)
         {
             _productService = productService;
+            _userContextService = userContextService;
         }
 
         [HttpGet]
@@ -24,11 +28,7 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
-                /* need to figure out how to encapsulate this thing */
-                Context userContext = LoadUserContext();
-                if (userContext.Success == false)
-                    return Unauthorized(userContext.Message);
-
+                GenerateAndValidateContext();
                 return Ok(await _productService.Get());
             }
             catch (Exception ex)
