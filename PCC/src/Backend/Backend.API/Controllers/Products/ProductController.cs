@@ -22,13 +22,13 @@ namespace Backend.API.Controllers.Products
             _userContextService = userContextService;
         }
 
+        [ValidateUserContext]
         [HttpGet]
         [Route("List")]
         public async Task<ActionResult> Get()
         {
             try
             {
-                GenerateAndValidateContext();
                 return Ok(await _productService.Get());
             }
             catch (Exception ex)

@@ -16,7 +16,7 @@ namespace Backend.Infrastructure.Services.Authorization
         {
             List<UserRoute> userRoutes = VerifyUserRequest(userContext, requestInfo);
             UserSessionContext context = new UserSessionContext();
-            if (userRoutes.Count() > 0)
+            if (userRoutes.Count() < 0)
             {
                 return context = new UserSessionContext()
                 {

@@ -105,6 +105,8 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
           }
         });
+
+    c.OperationFilter<UserContextValidationFilter>();
 });
 builder.Services.AddAuthorization();
 
