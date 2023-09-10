@@ -10,9 +10,9 @@ namespace Backend.Domain.Entities.Taxes.Products.Taxes.Tributes
     public class Tribute
     {
         [Key]
-        public Guid? TributeId { get; set; }
-        public Guid? TributeMetricId { get; set; } // uTrib - KG
-        public decimal? TributeQuantity { get; set; } // qTrib - Item quantity * weight per item 
-        public decimal? TributeValue { get; set; } // vTrib - Value
+        public int TributeId { get; set; }
+        public int TributeMetricId { get; set; } // uTrib - KG
+        public decimal TributeQuantity { get; set; } // qTrib - Item quantity * weight per item 
+        public decimal TributeValue { get; set; } // vTrib - Value
     }
 }

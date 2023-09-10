@@ -7,10 +7,6 @@ using System.Reflection;
 
 namespace Backend.API.Helpers.Controllers.Extensions
 {
-    /*
-     * When I wrote this, only me and God knew what this was supposed to do.
-     * Now, only God knows...
-     */
     public class CustomController : ControllerBase
     {
         private readonly UserContextService _userContextService;
@@ -33,12 +29,13 @@ namespace Backend.API.Helpers.Controllers.Extensions
             }
         }
 
-        // Every request should call this method before running the entire action.
-        [HttpGet] 
-        public bool GenerateAndValidateContext()
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet]
+        [Route("Verify")]
+        public UserSessionContext GenerateAndValidateContext()
         {
             var userSessionContext = LoadUserContext();
-            return userSessionContext.Success;
+            return userSessionContext;
         }
     }
 }

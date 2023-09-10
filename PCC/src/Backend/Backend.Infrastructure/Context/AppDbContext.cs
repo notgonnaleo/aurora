@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Products;
+﻿using Backend.Domain.Entities.Agent;
+using Backend.Domain.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;

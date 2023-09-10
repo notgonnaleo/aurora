@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,7 +19,6 @@ namespace Backend.Domain.Entities.Products
         public Guid Id { get; set; }
         [Required]
         public string? SKU { get; set; }
-        public Guid AgentId { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         [ForeignKey("ProductType")]
@@ -32,8 +32,7 @@ namespace Backend.Domain.Entities.Products
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
 
-        [Required]
         [JsonIgnore]
-        public virtual ProductType ProductType { get; set; }
+        public virtual ProductType? ProductType { get; set; }
     }
 }

@@ -26,11 +26,9 @@ namespace Backend.Domain.Entities.Authentication.Membership
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }
 
-        [Required]
         [JsonIgnore]
-        public virtual Tenant Tenant { get; set; }
-        [Required]
+        public virtual Tenant? Tenant { get; set; }
         [JsonIgnore]
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }

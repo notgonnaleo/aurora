@@ -10,9 +10,9 @@ namespace Backend.Domain.Entities.Taxes.Products.Taxes.Commercial
     public class CommercialTax
     {
         [Key]
-        public Guid CommercialTaxId { get; set; } // uCom - Identity in the system
-        public Guid? CommercialTaxMetricId { get; set; } // uCom - Metric Unity
-        public int? CommercialTaxQuantity { get; set; } // qCom - Quantity
-        public decimal? CommercialTaxValue { get; set; } // vCom - Value
+        public int CommercialTaxId { get; set; } // uCom - Identity in the system
+        public int CommercialTaxMetricId { get; set; } // uCom - Metric Unity
+        public int CommercialTaxQuantity { get; set; } // qCom - Quantity
+        public decimal CommercialTaxValue { get; set; } // vCom - Value
     }
 }

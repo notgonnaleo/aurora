@@ -27,14 +27,11 @@ namespace Backend.Domain.Entities.Authorization.UserRoles
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }
 
-        [Required]
         [JsonIgnore]
-        public virtual User User { get; set; }
-        [Required]
+        public virtual User? User { get; set; }
         [JsonIgnore]
-        public virtual Role Role { get; set; }
-        [Required]
+        public virtual Role? Role { get; set; }
         [JsonIgnore]
-        public virtual Tenant Tenant { get; set; }
+        public virtual Tenant? Tenant { get; set; }
     }
 }

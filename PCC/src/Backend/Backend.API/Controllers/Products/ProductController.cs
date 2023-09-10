@@ -25,25 +25,25 @@ namespace Backend.API.Controllers.Products
         [ValidateUserContext]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get(Guid tenantId)
         {
             try
             {
-                return Ok(await _productService.Get());
+                return Ok(await _productService.Get(tenantId));
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid Id)
+        public async Task<ActionResult> GetById(Guid tenantId, Guid productId)
         {
             try
             {
-                return Ok(await _productService.GetById(Id));
+                return Ok(await _productService.GetById(tenantId, productId));
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpPost]
         [Route("Add")]
         public async Task<ActionResult> Add(Product product)
@@ -67,7 +67,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpPut]
         [Route("Update")]
         public async Task<ActionResult> Update(Product product)
@@ -83,7 +83,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpPut]
         [Route("Delete")]
         public async Task<ActionResult> Delete(Guid Id)

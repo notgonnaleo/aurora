@@ -10,7 +10,7 @@ namespace Backend.Domain.Entities.Taxes.CNAE
     public class CNAE
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string? Description { get; set; }
     }
 }

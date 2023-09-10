@@ -8,8 +8,7 @@ namespace Backend.Domain.Entities.Authorization.UserRoutes
 {
     public class UserRoute
     {
-        public Guid? RouteId { get; set; }
-        public int? RouteCode { get; set; }
+        public int RouteId { get; set; }
         public string RouteName { get; set; }
         public bool Access { get; set; }
     }

@@ -10,8 +10,8 @@ namespace Backend.Domain.Entities.Taxes.Products.Taxes.TributeSituationCodes
     public class TributeSituationCode
     {
         [Key]
-        public Guid Id { get; set; }
-        public int? Code { get; set; } // https://cdmcontabilidade.com.br/tabela-cst-pis-cofins/
-        public string? Description { get; set; }
+        public int Id { get; set; }
+        public int Code { get; set; } // https://cdmcontabilidade.com.br/tabela-cst-pis-cofins/
+        public string Description { get; set; }
     }
 }

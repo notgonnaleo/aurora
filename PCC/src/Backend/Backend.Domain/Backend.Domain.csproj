@@ -10,4 +10,8 @@
     <Folder Include="Entities\Taxes\Products\Taxes\TributeSituationCodes\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
 </Project>

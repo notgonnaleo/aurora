@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Taxes.ICMS;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,7 @@ namespace Backend.Domain.Entities.Products
         public string? Name { get; set; }
         public string? Description { get; set; }
         [ForeignKey("ICMS")]
-        public Guid? ICMSId { get; set; }
+        public int? ICMSId { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public Guid? CreatedBy { get; set; }
@@ -27,6 +28,6 @@ namespace Backend.Domain.Entities.Products
         public Guid? UpdatedBy { get; set; }
 
         [JsonIgnore]
-        public virtual ICMS ICMS { get; set; }
+        public virtual ICMS? ICMS { get; set; }
     }
 }

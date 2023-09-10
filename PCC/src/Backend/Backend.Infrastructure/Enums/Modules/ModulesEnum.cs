@@ -8,6 +8,9 @@ namespace Backend.Infrastructure.Enums.Modules
 {
     public enum ModulesEnum
     {
-        Products = 0
+        Products = 1,
+        ProductTypes = 2
     }
+
+
 }

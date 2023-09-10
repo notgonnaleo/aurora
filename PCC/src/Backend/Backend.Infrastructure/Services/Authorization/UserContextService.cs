@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Authorization.UserRoles;
 using Backend.Domain.Entities.Authorization.UserRoutes;
+using Backend.Infrastructure.Enums.Modules;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -39,17 +40,15 @@ namespace Backend.Infrastructure.Services.Authorization
         {
             try
             {
-                // I should also implement an int Id and use Enum here besides only the string match
                 string routeName = requestInfo.Substring(0, requestInfo.IndexOf('/'));
                 List<UserRoute> userRoutes = new List<UserRoute>();
                 foreach (var module in userContext.Claims.Select(x => x.Modules).ToList())
                 {
-                    if (module.Any(x => x.Name == routeName))
+                    if (module.Any(x => Enum.GetValues(typeof(ModulesEnum)).Cast<int>().Contains(x.Id) && x.Name == routeName))
                     {
                         userRoutes.Add(new UserRoute()
                         {
                             RouteId = module.First().Id,
-                            RouteCode = null,
                             RouteName = module.First().Name,
                             Access = true
                         });
