@@ -64,6 +64,8 @@ namespace Backend.Infrastructure.Services.Products
                 product.UpdatedBy = null;
 
                 _appDbContext.Products.Add(product);
+                _appDbContext.SaveChanges();
+
                 return product;
             }
             catch (Exception ex)
