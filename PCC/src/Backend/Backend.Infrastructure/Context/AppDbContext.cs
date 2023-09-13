@@ -1,5 +1,11 @@
 ﻿using Backend.Domain.Entities.Agent;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.Taxes.CNAE;
+using Backend.Domain.Entities.Taxes.ICMS;
+using Backend.Domain.Entities.Taxes.Products.Taxes;
+using Backend.Domain.Entities.Taxes.Products.Taxes.Commercial;
+using Backend.Domain.Entities.Taxes.Products.Taxes.Tributes;
+using Backend.Domain.Entities.Taxes.Products.Taxes.TributeSituationCodes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -30,8 +36,19 @@ namespace Backend.Infrastructure.Context
             modelBuilder.UseSerialColumns();
         }
 
+        // Agents
+        public DbSet<Agent> Agents { get; set; }
+
         // Products
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+
+        // Taxes
+        public DbSet<ICMS> ICMS { get; set; }
+        public DbSet<CNAE> CNAE { get; set; }
+        public DbSet<CommercialTax> CommercialTaxes { get; set; }
+        public DbSet<TributeSituationCode> TributeSituationCodes { get; set; }
+        public DbSet<Tribute> Tributes { get; set; }
+        public DbSet<ProductTax> ProductTaxes { get; set; }
     }
 }

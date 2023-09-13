@@ -31,7 +31,7 @@ namespace Backend.API.Helpers.Controllers.Extensions
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet]
-        [Route("Verify")]
+        [Route("GetUserContext")]
         public UserSessionContext GenerateAndValidateContext()
         {
             var userSessionContext = LoadUserContext();

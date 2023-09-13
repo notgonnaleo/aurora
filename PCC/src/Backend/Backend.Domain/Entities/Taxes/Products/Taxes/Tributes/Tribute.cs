@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities.Taxes.Products.Taxes.Tributes
 {
+    [Table("Tribute")]
     public class Tribute
     {
         [Key]
