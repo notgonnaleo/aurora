@@ -1,5 +1,12 @@
-﻿using Backend.Domain.Entities.Products;
+﻿using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
+using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Services.Authentication;
+using Backend.Infrastructure.Services.Authorization;
+using Backend.Infrastructure.Services.Tenants;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +18,18 @@ namespace Backend.Infrastructure.Services.Products
     public class ProductService
     {
         private readonly AppDbContext _appDbContext;
-
-        public ProductService(AppDbContext appDbContext)
+        public ProductService (AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public async Task<IEnumerable<Product>> Get()
+        public async Task<IEnumerable<Product>> Get(Guid tenantId)
         {
             try
             {
-                return _appDbContext.Products.Where(x => x.Active == true).ToList();
+                return _appDbContext.Products
+                    .Where(x => x.TenantId == tenantId && x.Active == true)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -30,12 +38,13 @@ namespace Backend.Infrastructure.Services.Products
             }
         }
 
-        public async Task<Product> GetById(Guid Id)
+        public async Task<Product> GetById(Guid tenantId, Guid productId)
         {
             try
             {
-                Product product = _appDbContext.Products.Where(x => x.Id == Id).First();
-                return product;
+                return _appDbContext.Products
+                    .Where(x => x.TenantId == tenantId && x.Id == productId && x.Active == true)
+                    .First();
             }
             catch (Exception ex)
             {
@@ -55,6 +64,8 @@ namespace Backend.Infrastructure.Services.Products
                 product.UpdatedBy = null;
 
                 _appDbContext.Products.Add(product);
+                _appDbContext.SaveChanges();
+
                 return product;
             }
             catch (Exception ex)

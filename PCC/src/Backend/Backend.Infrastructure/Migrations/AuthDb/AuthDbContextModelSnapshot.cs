@@ -116,9 +116,11 @@ namespace Backend.Infrastructure.Migrations.AuthDb
 
             modelBuilder.Entity("Backend.Domain.Entities.Authorization.Modules.Module", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -150,8 +152,11 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("ModuleId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");

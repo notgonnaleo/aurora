@@ -1,6 +1,12 @@
-﻿using Backend.Domain.Entities.Authentication.Users.Login.Request;
+﻿using Backend.Domain.Entities.Authentication.Users.Claims;
+using Backend.Domain.Entities.Authentication.Users.Login.Request;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Infrastructure.Services.Authentication;
+using Backend.Infrastructure.Services.Authorization;
+using Backend.API.Helpers.Session.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using static Backend.Infrastructure.Services.Authorization.AuthorizationService;
 
 namespace Backend.API.Controllers.Authentication
 {
@@ -9,16 +15,32 @@ namespace Backend.API.Controllers.Authentication
     public class AuthenticationController : ControllerBase
     {
         private readonly AuthenticationService _authenticationService;
-        public AuthenticationController(AuthenticationService authenticationService) 
+        private readonly AuthorizationService _authorizationService;
+        public AuthenticationController(AuthenticationService authenticationService, AuthorizationService authorizationService) 
         { 
             _authenticationService = authenticationService;
+            _authorizationService = authorizationService;
         }
 
         [HttpPost]
-        public ActionResult Login(LoginRequest request)
+        public async Task<ActionResult> Login(LoginRequest request)
         {
             var response = _authenticationService.Authenticate(request);
-            return response.Success ? Ok(response.Token) : NotFound(response.Message);
+            if (response.Success)
+            {
+                List<Claim> userPermissions = await _authorizationService.GetUserContext(response.Tenants, response.UserId);
+                UserContextResponse userContextResponse = new UserContextResponse()
+                {
+                    Claims = userPermissions,
+                    Token = response.Token
+                };
+                Helpers.Session.Extensions.SessionExtensions.Set(HttpContext.Session, "UserContext", userContextResponse);
+                return Ok(userContextResponse);
+            }
+            else
+            {
+                return NotFound(response.Message);
+            }
         }
     }
 }

@@ -19,16 +19,15 @@ namespace Backend.Domain.Entities.Authorization.Roles
         [ForeignKey("Tenant")]
         public Guid TenantId { get; set; }
         [ForeignKey("Module")]
-        public Guid ModuleId { get; set; }
+        public int ModuleId { get; set; }
+        public string? Name { get; set; }
         public bool Active { get; set; }
         public DateTime? Created { get; set; }
         public DateTime? Updated { get; set; }
 
-        [Required]
         [JsonIgnore]
-        public virtual Tenant Tenant { get; set; }
-        [Required]
+        public virtual Tenant? Tenant { get; set; }
         [JsonIgnore]
-        public virtual Module Module { get; set; }
+        public virtual Module? Module { get; set; }
     }
 }

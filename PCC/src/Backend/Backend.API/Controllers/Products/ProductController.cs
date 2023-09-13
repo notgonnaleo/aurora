@@ -1,4 +1,7 @@
+using Backend.API.Helpers.Controllers.Extensions;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
+using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,38 +9,41 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.API.Controllers.Products
 {
     [ApiController]
-    [Route("[controller]")]
-    public class ProductController : ControllerBase
+    [Route("Products")]
+    public class ProductController : CustomController
     {
         private readonly ProductService _productService;
+        private readonly UserContextService _userContextService;
 
-        public ProductController(ProductService productService)
+        public ProductController(ProductService productService, UserContextService userContextService)
+            : base(userContextService)
         {
             _productService = productService;
+            _userContextService = userContextService;
         }
 
+        [ValidateUserContext]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult> Get(Guid tenantId)
         {
             try
             {
-                return Ok(await _productService.Get());
+                return Ok(await _productService.Get(tenantId));
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid Id)
+        public async Task<ActionResult> GetById(Guid tenantId, Guid productId)
         {
             try
             {
-                return Ok(await _productService.GetById(Id));
+                return Ok(await _productService.GetById(tenantId, productId));
             }
             catch (Exception ex)
             {
@@ -45,7 +51,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpPost]
         [Route("Add")]
         public async Task<ActionResult> Add(Product product)
@@ -61,7 +67,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpPut]
         [Route("Update")]
         public async Task<ActionResult> Update(Product product)
@@ -77,7 +83,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-
+        [ValidateUserContext]
         [HttpPut]
         [Route("Delete")]
         public async Task<ActionResult> Delete(Guid Id)

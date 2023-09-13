@@ -11,25 +11,31 @@ using Backend.Infrastructure.Services.Tenants;
 using Backend.Infrastructure.Services.Users;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Backend.Infrastructure.Services.Authorization;
+using Backend.Infrastructure.Services.Memberships;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Authentication
+// Authentication & Authorization
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AuthorizationService>();
 
 // Products
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ProductTypeService>();
+
+// Memberships
+builder.Services.AddScoped<MembershipService>();
 
 // Tenants
 builder.Services.AddScoped<TenantService>();
 
 // User
 builder.Services.AddScoped<UserService>();
-
-// Getting shot in the head seems better than having to deal with this garbage and two-context applications
-// I really hate this thing
+builder.Services.AddScoped<UserContextService>();
+// Getting shot in the head seems to be the solution for all my problems
+// I really hate myself
 
 /*
  * HOW TO UPDATE AND GENERATE MIGRATIONS:
@@ -39,8 +45,6 @@ builder.Services.AddScoped<UserService>();
  * you got it migration wrote up ready to be applied now.
  */
 
-// engole essa ai pra quem falou que nao tem pq fazer dois bancos separados ze (indireta faat)
-
 // Application Context
 builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LocalAppDb"),
     x => x.MigrationsAssembly("Backend.Infrastructure")));
@@ -48,6 +52,11 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configurati
 // Authentication Context
 builder.Services.AddDbContext<AuthDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LocalAuthDb"),
     x => x.MigrationsAssembly("Backend.Infrastructure")));
+
+/* Session & Cookies */
+builder.Services.AddSession(o => o.IdleTimeout = TimeSpan.FromMinutes(60));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache(); // Use in-memory cache for session data
 
 /* Authentication & Authorization Middleware section */
 // Authenticate
@@ -96,9 +105,9 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
           }
         });
-});
 
-// Authorize
+    c.OperationFilter<UserContextValidationFilter>();
+});
 builder.Services.AddAuthorization();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -121,6 +130,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
 
 // Run the auth system.
 app.UseAuthentication();

@@ -20,5 +20,10 @@ namespace Backend.Infrastructure.Services.Tenants
         {
             return _authDbContext.Tenants.Where(x => x.Active == true).ToList();
         }
+
+        public Tenant GetById(Guid tenantId)
+        {
+            return _authDbContext.Tenants.Where(x => x.Id == tenantId && x.Active == true).First();
+        }
     }
 }

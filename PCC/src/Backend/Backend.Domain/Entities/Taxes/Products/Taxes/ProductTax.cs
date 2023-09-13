@@ -30,6 +30,6 @@ namespace Backend.Domain.Entities.Taxes.Products.Taxes
 
         [Required]
         [JsonIgnore]
-        public virtual Product Product { get; set; }
+        public virtual Product? Product { get; set; }
     }
 }

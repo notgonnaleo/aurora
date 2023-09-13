@@ -12,7 +12,7 @@ namespace Backend.Domain.Entities.Taxes.ICMS
     public class ICMS
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string? State { get; set; }
         public string? ProductType { get; set; }
         public decimal? TaxValue { get; set; }
