@@ -43,7 +43,6 @@ namespace Backend.Infrastructure.Services.Authorization
                 Claim claim = new Claim
                 {
                     Tenant = tenant,
-                    UserId = userId,
                     Role = role,
                     Modules = modules
                 };

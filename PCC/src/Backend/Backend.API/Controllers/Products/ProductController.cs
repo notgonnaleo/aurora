@@ -1,4 +1,3 @@
-using Backend.API.Helpers.Controllers.Extensions;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Authorization;
@@ -10,13 +9,12 @@ namespace Backend.API.Controllers.Products
 {
     [ApiController]
     [Route("Products")]
-    public class ProductController : CustomController
+    public class ProductController : ControllerBase
     {
         private readonly ProductService _productService;
         private readonly UserContextService _userContextService;
 
         public ProductController(ProductService productService, UserContextService userContextService)
-            : base(userContextService)
         {
             _productService = productService;
             _userContextService = userContextService;
@@ -58,6 +56,9 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
+                var context = _userContextService.LoadContext();
+                product.CreatedBy = context.UserId;
+
                 return Ok(await _productService.Add(product));
 
             }

@@ -18,9 +18,12 @@ namespace Backend.Infrastructure.Services.Products
     public class ProductService
     {
         private readonly AppDbContext _appDbContext;
-        public ProductService (AppDbContext appDbContext)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public ProductService (AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor)
         {
             _appDbContext = appDbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<Product>> Get(Guid tenantId)

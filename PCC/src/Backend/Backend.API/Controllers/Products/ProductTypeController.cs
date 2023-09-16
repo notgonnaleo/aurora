@@ -1,4 +1,3 @@
-using Backend.API.Helpers.Controllers.Extensions;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Products;
@@ -8,13 +7,12 @@ namespace Backend.API.Controllers
 {
     [ApiController]
     [Route("ProductTypes")]
-    public class ProductTypeController : CustomController
+    public class ProductTypeController : ControllerBase
     {
         private readonly ProductTypeService _productTypeService;
         private readonly UserContextService _userContextService;
 
         public ProductTypeController(ProductTypeService productTypeService, UserContextService userContextService)
-        : base(userContextService)
         {
             _productTypeService = productTypeService;
             _userContextService = userContextService;

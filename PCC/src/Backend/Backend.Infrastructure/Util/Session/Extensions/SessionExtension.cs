@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
+﻿using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
-namespace Backend.API.Helpers.Session.Extensions
+namespace Backend.API.Util.Session.Extensions
 {
     public static class SessionExtensions
     {

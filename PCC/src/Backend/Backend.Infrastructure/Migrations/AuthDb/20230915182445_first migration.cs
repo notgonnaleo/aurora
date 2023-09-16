@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AuthDb
 {
     /// <inheritdoc />
-    public partial class changedguidtointforroles : Migration
+    public partial class firstmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,22 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Module", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscription",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscription", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,7 +88,7 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
                     ModuleId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
+                    SubscriptionId = table.Column<int>(type: "integer", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -84,6 +100,12 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                         name: "FK_Role_Module_ModuleId",
                         column: x => x.ModuleId,
                         principalTable: "Module",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Role_Subscription_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscription",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -173,6 +195,11 @@ namespace Backend.Infrastructure.Migrations.AuthDb
                 column: "ModuleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Role_SubscriptionId",
+                table: "Role",
+                column: "SubscriptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Role_TenantId",
                 table: "Role",
                 column: "TenantId");
@@ -210,6 +237,9 @@ namespace Backend.Infrastructure.Migrations.AuthDb
 
             migrationBuilder.DropTable(
                 name: "Module");
+
+            migrationBuilder.DropTable(
+                name: "Subscription");
 
             migrationBuilder.DropTable(
                 name: "Tenant");

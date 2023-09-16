@@ -1,4 +1,6 @@
-﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
+﻿using Backend.API.Util.Session.Extensions;
+using Backend.Domain.Entities.Authentication.Users.Claims;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Authorization.UserRoles;
 using Backend.Domain.Entities.Authorization.UserRoutes;
 using Backend.Infrastructure.Enums.Modules;
@@ -8,18 +10,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SessionExtensions = Backend.API.Util.Session.Extensions.SessionExtensions;
 
 namespace Backend.Infrastructure.Services.Authorization
 {
     public class UserContextService
     {
-        public UserSessionContext Handler(UserContextResponse userContext, string requestInfo)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public UserContextService(IHttpContextAccessor httpContextAccessor)
         {
-            List<UserRoute> userRoutes = VerifyUserRequest(userContext, requestInfo);
-            UserSessionContext context = new UserSessionContext();
+            _httpContextAccessor = httpContextAccessor;
+        }
+        public UserSessionContext Handler(UserSessionContext userContext)
+        {
+            List<UserRoute> userRoutes = VerifyUserRequest(userContext.Claims);
             if (userRoutes.Count() < 0)
             {
-                return context = new UserSessionContext()
+                return userContext = new UserSessionContext()
                 {
                     Success = false,
                     Message = "User does not have permission to use this resource."
@@ -27,7 +35,7 @@ namespace Backend.Infrastructure.Services.Authorization
             }
             else
             {
-                return context = new UserSessionContext()
+                return userContext = new UserSessionContext()
                 {
                     Claims = userContext.Claims,
                     Token = userContext.Token,
@@ -36,15 +44,21 @@ namespace Backend.Infrastructure.Services.Authorization
                 };
             }
         }
-        protected List<UserRoute> VerifyUserRequest(UserContextResponse userContext, string requestInfo)
+
+        public UserSessionContext LoadContext()
+        {
+            var userContext = SessionExtensions.Get<UserSessionContext>(_httpContextAccessor.HttpContext.Session, "UserContext");
+            return Handler(userContext);
+        }
+
+        public List<UserRoute> VerifyUserRequest(List<Claim> userClaims)
         {
             try
             {
-                string routeName = requestInfo.Substring(0, requestInfo.IndexOf('/'));
                 List<UserRoute> userRoutes = new List<UserRoute>();
-                foreach (var module in userContext.Claims.Select(x => x.Modules).ToList())
+                foreach (var module in userClaims.Select(x => x.Modules).ToList())
                 {
-                    if (module.Any(x => Enum.GetValues(typeof(ModulesEnum)).Cast<int>().Contains(x.Id) && x.Name == routeName))
+                    if (module.Any(x => Enum.GetValues(typeof(ModulesEnum)).Cast<int>().Contains(x.Id)))
                     {
                         userRoutes.Add(new UserRoute()
                         {
@@ -58,7 +72,6 @@ namespace Backend.Infrastructure.Services.Authorization
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }

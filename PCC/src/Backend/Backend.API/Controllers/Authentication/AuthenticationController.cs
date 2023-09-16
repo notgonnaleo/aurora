@@ -3,7 +3,7 @@ using Backend.Domain.Entities.Authentication.Users.Login.Request;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
-using Backend.API.Helpers.Session.Extensions;
+using Backend.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static Backend.Infrastructure.Services.Authorization.AuthorizationService;
@@ -16,26 +16,32 @@ namespace Backend.API.Controllers.Authentication
     {
         private readonly AuthenticationService _authenticationService;
         private readonly AuthorizationService _authorizationService;
-        public AuthenticationController(AuthenticationService authenticationService, AuthorizationService authorizationService) 
+        private readonly UserContextService _userContextService;
+        public AuthenticationController(AuthenticationService authenticationService, AuthorizationService authorizationService, UserContextService userContextService) 
         { 
             _authenticationService = authenticationService;
             _authorizationService = authorizationService;
+            _userContextService = userContextService;
         }
 
         [HttpPost]
+        [Route("Login")]
         public async Task<ActionResult> Login(LoginRequest request)
         {
             var response = _authenticationService.Authenticate(request);
             if (response.Success)
             {
                 List<Claim> userPermissions = await _authorizationService.GetUserContext(response.Tenants, response.UserId);
-                UserContextResponse userContextResponse = new UserContextResponse()
+                UserSessionContext userContext = new UserSessionContext()
                 {
+                    UserId = response.UserId,
+                    Username = response.Username,
                     Claims = userPermissions,
-                    Token = response.Token
+                    Token = response.Token,
+                    Levels = _userContextService.VerifyUserRequest(userPermissions),
                 };
-                Helpers.Session.Extensions.SessionExtensions.Set(HttpContext.Session, "UserContext", userContextResponse);
-                return Ok(userContextResponse);
+                Util.Session.Extensions.SessionExtensions.Set(HttpContext.Session, "UserContext", userContext);
+                return Ok(userContext);
             }
             else
             {
