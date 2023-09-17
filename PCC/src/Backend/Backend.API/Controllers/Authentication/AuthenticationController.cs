@@ -39,6 +39,7 @@ namespace Backend.API.Controllers.Authentication
                     Claims = userPermissions,
                     Token = response.Token,
                     Levels = _userContextService.VerifyUserRequest(userPermissions),
+                    Success = true
                 };
                 Util.Session.Extensions.SessionExtensions.Set(HttpContext.Session, "UserContext", userContext);
                 return Ok(userContext);

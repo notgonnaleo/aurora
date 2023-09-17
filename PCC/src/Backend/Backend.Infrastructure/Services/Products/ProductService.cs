@@ -62,7 +62,7 @@ namespace Backend.Infrastructure.Services.Products
             {
                 product.Id = Guid.NewGuid();
                 product.Created = DateTime.Now;
-                product.CreatedBy = Guid.NewGuid(); // TODO: Get it from the user account id while it's log in.
+                product.CreatedBy = product.CreatedBy;
                 product.Updated = null;
                 product.UpdatedBy = null;
 
@@ -75,7 +75,6 @@ namespace Backend.Infrastructure.Services.Products
             {
                 throw ex;
             }
-
         }
 
         public async Task<bool> Update(Product product)

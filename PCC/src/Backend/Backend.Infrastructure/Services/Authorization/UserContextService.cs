@@ -37,8 +37,11 @@ namespace Backend.Infrastructure.Services.Authorization
             {
                 return userContext = new UserSessionContext()
                 {
+                    UserId = userContext.UserId,
+                    Username = userContext.Username,
                     Claims = userContext.Claims,
                     Token = userContext.Token,
+                    Levels = userContext.Levels,
                     Success = true,
                     Message = "Access granted."
                 };
