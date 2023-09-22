@@ -13,7 +13,8 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
         var userContext = SessionExtensions.Get<UserSessionContext>(context.HttpContext.Session, "UserContext");
 
         // If there is no userContext it probably mean the user is not fucking logged in
-        if(userContext == null){
+        if(userContext == null)
+        {
             context.Result = new UnauthorizedObjectResult(userContext)
             {
                 StatusCode = 401,
