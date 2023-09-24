@@ -7,6 +7,7 @@ using Backend.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static Backend.Infrastructure.Services.Authorization.AuthorizationService;
+using Backend.Domain.Entities.Authentication.Users.Login.Response;
 
 namespace Backend.API.Controllers.Authentication
 {
@@ -26,7 +27,7 @@ namespace Backend.API.Controllers.Authentication
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult> Login(LoginRequest request)
+        public async Task<ActionResult<UserSessionContext>> Login(LoginRequest request)
         {
             var response = _authenticationService.Authenticate(request);
             if (response.Success)
