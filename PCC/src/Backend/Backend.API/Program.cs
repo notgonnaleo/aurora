@@ -16,6 +16,7 @@ using Backend.Infrastructure.Services.Memberships;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var DevAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 // Authentication & Authorization
 builder.Services.AddScoped<AuthenticationService>();
@@ -120,6 +121,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: DevAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:7201", "http://localhost:5058").AllowAnyMethod().AllowAnyHeader();
+                      });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -128,6 +138,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors(DevAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 

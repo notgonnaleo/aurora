@@ -27,7 +27,7 @@ namespace Backend.Infrastructure.Context
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Server=localhost;Database=authdb;Port=5432;User ID=postgres;Password=1234;Pooling=true;");
+            => optionsBuilder.UseNpgsql("Server=calmer-emu-12306.7tt.cockroachlabs.cloud;Database=authdb;Port=26257;User ID=aurora;Password=8bu513iFYZQaqkXADNE-WQ;Pooling=true;");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
