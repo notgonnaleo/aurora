@@ -7,15 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5903D516-E53
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{E0C9AA5F-2CDB-4B92-8B54-46705227D446}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.API", "src\Backend\Backend.API\Backend.API.csproj", "{21F352B4-995A-4026-8CC0-F8619C5CF3B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.API", "Backend\Backend.API\Backend.API.csproj", "{21F352B4-995A-4026-8CC0-F8619C5CF3B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Domain", "src\Backend\Backend.Domain\Backend.Domain.csproj", "{84E63B7A-72FE-4B44-8E77-B106EDF5A005}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Domain", "Backend\Backend.Domain\Backend.Domain.csproj", "{84E63B7A-72FE-4B44-8E77-B106EDF5A005}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Infrastructure", "src\Backend\Backend.Infrastructure\Backend.Infrastructure.csproj", "{B79B0E54-CC70-4FC3-9F16-F61DA5912E35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Infrastructure", "Backend\Backend.Infrastructure\Backend.Infrastructure.csproj", "{B79B0E54-CC70-4FC3-9F16-F61DA5912E35}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{28259E07-8393-421F-AF46-C5830DA1A9F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWeb", "src\Frontend\BlazorWeb\BlazorWeb.csproj", "{8D55F166-41C2-4FD9-AE70-EF9EA3F83ADD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorWeb", "Frontend\BlazorWeb\BlazorWeb.csproj", "{8D55F166-41C2-4FD9-AE70-EF9EA3F83ADD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
