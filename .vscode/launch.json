@@ -9,8 +9,8 @@
             "type": "blazorwasm",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/PCC/src/Frontend/BlazorWeb/bin/Debug/net6.0/BlazorWeb.dll",
-            "cwd": "${workspaceFolder}/PCC/src/Frontend/BlazorWeb",
+            "program": "${workspaceFolder}/src/Frontend/BlazorWeb/bin/Debug/net6.0/BlazorWeb.dll",
+            "cwd": "${workspaceFolder}/src/Frontend/BlazorWeb",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -28,9 +28,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/PCC/src/Backend/Backend.API/bin/Debug/net6.0/Backend.API.dll",
+            "program": "${workspaceFolder}/src/Backend/Backend.API/bin/Debug/net6.0/Backend.API.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/PCC/src/Backend/Backend.API",
+            "cwd": "${workspaceFolder}/src/Backend/Backend.API",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
@@ -47,7 +47,7 @@
     ],
     "compounds": [
         {
-          "name": "Run Aurora",
+          "name": "Aurora",
           "configurations": ["Frontend", "Backend"],
           "stopAll": true
         }

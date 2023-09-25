@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/PCC/PCC.sln",
+                "${workspaceFolder}/src/Aurora.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/PCC/PCC.sln",
+                "${workspaceFolder}/src/Aurora.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/PCC/PCC.sln"
+                "${workspaceFolder}/src/Aurora.sln"
             ],
             "problemMatcher": "$msCompile"
         }
