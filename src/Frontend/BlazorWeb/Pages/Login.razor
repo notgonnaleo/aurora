@@ -3,7 +3,8 @@
 @using System.Text.Json;
 @using System.Text;
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
-@inject HttpClient client
+@inject HttpClient _http
+@inject BlazorWeb.Util.SessionStorageAccessor _session
 
 <div class="container" style="margin-top:30px">
 <div class="col-md-4">
@@ -34,17 +35,12 @@
 
         var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7299/Authentication/Login");
         request.Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-        var response = await client.SendAsync(request);
+        var response = await _http.SendAsync(request);
 
-        var aids = await response.Content.ReadFromJsonAsync<UserSessionContext>();
+        var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();
 
-        Console.WriteLine(JsonSerializer.Serialize(aids));
-        foreach (var header in response.Headers)
-        {
-            Console.WriteLine($"{header.Key}={header.Value.First()}");
-        }
-        //TODO: IMPLEMENT THE COOKIE OF THE AUTHORIZATION OF GETTING THE SESSION BECAUSE LEO IS GAY 
-        // READ AS A RUSSIAN
+        // Store the user session on the user session because it is the user session so the user will use it on the session
+        await _session.SetValueAsync("UserSession",userSession);
 
     }
 }
