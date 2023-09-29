@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 
-namespace BlazorWeb.Util
+namespace Frontend.Web.Util
 {
     public class SessionStorageAccessor : IAsyncDisposable
     {

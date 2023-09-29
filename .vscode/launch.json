@@ -9,8 +9,8 @@
             "type": "blazorwasm",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Frontend/BlazorWeb/bin/Debug/net6.0/BlazorWeb.dll",
-            "cwd": "${workspaceFolder}/src/Frontend/BlazorWeb",
+            "program": "${workspaceFolder}/src/Frontend/Frontend.Web/bin/Debug/net6.0/Frontend.Web.dll",
+            "cwd": "${workspaceFolder}/src/Frontend/Frontend.Web",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",
