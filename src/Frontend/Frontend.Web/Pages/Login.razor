@@ -29,18 +29,31 @@
 
 
 @code {
+
+    /*
+        Leo: Somehow, figure out how to uncouple this logical code piece from the entire html file.
+
+        instead of having this write here
+        folder structure would look like this:
+        Pages > Login > Views > Login.razor
+        Pages > Login > Actions (i guess, need to re-think a name) > Action.razor
+        then import action.razor inside login.razor, this should look better.
+    */
+
     private LoginRequest model = new LoginRequest();
 
-    private async void SignIn(){
-
-        var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7299/Authentication/Login");
+    // We should return this a bool or the model maybe, in the future it could be useful to build the user UI.
+    // I can explain later.
+    private async void SignIn()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7299/Authentication/Login"); // TODO: use environment variables.
         request.Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
         var response = await _http.SendAsync(request);
 
         var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();
 
-        // Store the user session on the user session because it is the user session so the user will use it on the session
-        await _session.SetValueAsync("UserSession",userSession);
+        // this looks stupid but trust me
+        await _session.SetValueAsync("UserSession", JsonSerializer.Serialize(userSession));
 
     }
 }

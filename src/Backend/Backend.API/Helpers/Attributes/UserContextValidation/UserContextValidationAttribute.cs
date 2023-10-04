@@ -11,6 +11,13 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         var tokenRequest = context.HttpContext.Request.Headers.Authorization;
+     
+        /* 
+         * BUG - 4/10/23
+         * After implementing the context session storage in the web app for some unknown reason
+         * when saving the session in the API app runs, it's not saving it.
+         * need to figure out WHY the context API is not being saved when login is triggered by the UI.
+         */
         var userContext = SessionExtensions.Get<UserSessionContext>(context.HttpContext.Session, "UserContext");
 
         // If there is no userContext it probably mean the user is not fucking logged in

@@ -1,5 +1,9 @@
 ﻿@page "/fetchdata"
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.Products;
+@using Newtonsoft.Json;
 @inject HttpClient Http
+@inject Frontend.Web.Util.SessionStorageAccessor _session
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -36,12 +40,53 @@ else
     </table>
 }
 
+<h1>Products Example</h1>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+                <tr>
+                    <td>@product.SKU</td>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
 @code {
     private WeatherForecast[]? forecasts;
+    private List<Product>? products;
 
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+
+        // Concept proof made in a dirty way.
+        // As said before, we need to decoupled all this stuff and create like a main method that calls this stuff here.
+        var userContext = await _session.GetValueAsync<UserSessionContext>("UserSession");
+        Http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userContext.Token);
+
+        // TODO: take a look on this
+        // Should pick the first tenant for the user OR pick the one he selected.
+        var tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
+        products = await Http.GetFromJsonAsync<List<Product>>($"https://localhost:7299/Products/List?tenantId=" + tenantIdSample); 
     }
 
     public class WeatherForecast

@@ -29,6 +29,7 @@ namespace Backend.API.Controllers.Authentication
         [Route("Login")]
         public async Task<ActionResult<UserSessionContext>> Login(LoginRequest request)
         {
+            // maybe create a tenant list explicit would be easier
             var response = _authenticationService.Authenticate(request);
             if (response.Success)
             {
