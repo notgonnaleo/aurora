@@ -37,6 +37,9 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
             return; // Fuck off 
         }
 
+        // If the user is authenticated it will refresh the token on the cache to extend it's duration
+        _cache.Set(userContext.Token,userContext,TimeSpan.FromHours(4));
+
         if (tokenRequest == userContext.Token)
         {
             foreach (var access in userContext.Levels) // i have no idea on wtf im doing | << chill out you doing fine

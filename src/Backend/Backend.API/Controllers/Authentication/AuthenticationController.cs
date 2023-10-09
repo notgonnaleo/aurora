@@ -47,7 +47,8 @@ namespace Backend.API.Controllers.Authentication
                     Success = true
                 };
 
-                _cache.Set(userContext.Token,userContext);
+                // It will store the userContext on the cache and it can be found by getting it using the token
+                _cache.Set(userContext.Token,userContext,TimeSpan.FromHours(4));
                 return Ok(userContext);
             }
             else
