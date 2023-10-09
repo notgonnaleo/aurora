@@ -16,8 +16,7 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
     }
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        string tokenRequest = context.HttpContext.Request.Headers.Authorization.ToString();
-     
+        string tokenRequest = context.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer", "").Trim();     
         var userContext = _cache.Get<UserSessionContext>(tokenRequest);
 
         // If there is no userContext it probably mean the user is not fucking logged in
