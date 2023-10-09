@@ -20,7 +20,7 @@ namespace Backend.API.Controllers.Products
             _userContextService = userContextService;
         }
 
-        [ValidateUserContext]
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
         public async Task<ActionResult> Get(Guid tenantId)
@@ -34,7 +34,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-        [ValidateUserContext]
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
         public async Task<ActionResult> GetById(Guid tenantId, Guid productId)
@@ -49,7 +49,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-        [ValidateUserContext]
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
         public async Task<ActionResult> Add(Product product)
@@ -68,7 +68,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-        [ValidateUserContext]
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
         public async Task<ActionResult> Update(Product product)
@@ -84,7 +84,7 @@ namespace Backend.API.Controllers.Products
                 throw ex;
             }
         }
-        [ValidateUserContext]
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Delete")]
         public async Task<ActionResult> Delete(Guid Id)
