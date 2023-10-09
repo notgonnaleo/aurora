@@ -58,6 +58,7 @@ builder.Services.AddDbContext<AuthDbContext>(o => o.UseNpgsql(builder.Configurat
 builder.Services.AddSession(o => o.IdleTimeout = TimeSpan.FromMinutes(60));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache(); // Use in-memory cache for session data
+builder.Services.AddMemoryCache();
 
 /* Authentication & Authorization Middleware section */
 // Authenticate
@@ -113,8 +114,6 @@ builder.Services.AddAuthorization();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddMemoryCache();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
