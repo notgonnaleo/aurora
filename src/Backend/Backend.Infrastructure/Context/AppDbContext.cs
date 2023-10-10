@@ -25,7 +25,7 @@ namespace Backend.Infrastructure.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-
+        //TODO: Review this
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Server=calmer-emu-12306.7tt.cockroachlabs.cloud;Database=appdb;Port=26257;User ID=aurora;Password=8bu513iFYZQaqkXADNE-WQ;Pooling=true;");
 

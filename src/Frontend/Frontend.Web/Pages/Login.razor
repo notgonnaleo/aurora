@@ -1,10 +1,11 @@
 ﻿@page "/login"
+@using Frontend.Web.Util.Session;
 @using Backend.Domain.Entities.Authentication.Users.Login.Request;
 @using System.Text.Json;
 @using System.Text;
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
 @inject HttpClient _http
-@inject Frontend.Web.Util.SessionStorageAccessor _session
+@inject SessionStorageAccessor _session
 
 <div class="container" style="margin-top:30px">
 <div class="col-md-4">

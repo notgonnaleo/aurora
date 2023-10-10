@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Microsoft.JSInterop;
 
-namespace Frontend.Web.Util
+namespace Frontend.Web.Util.Session
 {
     public class SessionStorageAccessor : IAsyncDisposable
     {
@@ -37,10 +37,10 @@ namespace Frontend.Web.Util
         {
             await WaitForReference();
             var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
-            if(result.Any())
+            if (result.Any())
                 return JsonSerializer.Deserialize<T>(result);
             else
-                return default(T);
+                return default;
         }
 
         public async Task SetValueAsync<T>(string key, T value)

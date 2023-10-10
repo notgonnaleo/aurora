@@ -25,7 +25,7 @@ namespace Backend.Infrastructure.Context
         public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
         }
-
+        //TODO: Review this
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql("Server=calmer-emu-12306.7tt.cockroachlabs.cloud;Database=authdb;Port=26257;User ID=aurora;Password=8bu513iFYZQaqkXADNE-WQ;Pooling=true;");
 

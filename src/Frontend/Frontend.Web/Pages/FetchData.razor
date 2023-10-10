@@ -1,9 +1,12 @@
 ﻿@page "/fetchdata"
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
 @using Backend.Domain.Entities.Products;
+@using Frontend.Web.Util.Session;
+@using Frontend.Web.Repository.Client;
 @using Newtonsoft.Json;
 @inject HttpClient Http
-@inject Frontend.Web.Util.SessionStorageAccessor _session
+@inject SessionStorageAccessor _session
+@inject HttpClientRepository _httpClientRepository
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -76,6 +79,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        var tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
+        _httpClientRepository.Get<Product>(tenantIdSample);
+
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
 
         // Concept proof made in a dirty way.
@@ -85,8 +91,9 @@ else
 
         // TODO: take a look on this
         // Should pick the first tenant for the user OR pick the one he selected.
-        var tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
         products = await Http.GetFromJsonAsync<List<Product>>($"https://localhost:7299/Products/List?tenantId=" + tenantIdSample); 
+
+        
     }
 
     public class WeatherForecast
