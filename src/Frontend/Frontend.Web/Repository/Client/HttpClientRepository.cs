@@ -36,7 +36,9 @@ namespace Frontend.Web.Repository.Client
         /// <exception cref="NotImplementedException"></exception>
         public async Task<List<T>> Get<T>(string key)
         {
+            // I think we can encapsulate this more hehehe
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader();
+            _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
             return await _httpClient.GetFromJsonAsync<List<T>>($"{httpRequestHeader.Endpoint}/Products/List?tenantId=" + key);
         }
 
