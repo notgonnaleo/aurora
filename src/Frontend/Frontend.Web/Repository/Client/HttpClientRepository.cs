@@ -20,17 +20,14 @@ namespace Frontend.Web.Repository.Client
     public class HttpClientRepository
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-        private readonly SessionStorageAccessor _sessionProvider;
         private readonly HttpRequestHeader _httpRequestHeader;
-        public HttpClientRepository(HttpClient httpClient, IConfiguration configuration, SessionStorageAccessor sessionProvider, HttpRequestHeader httpRequestHeader)
+        public HttpClientRepository(HttpClient httpClient, HttpRequestHeader httpRequestHeader)
         {
             _httpClient = httpClient;
-            _configuration = configuration;
-            _sessionProvider = sessionProvider;
             _httpRequestHeader = httpRequestHeader;
         }
 
+        /* Private Methods */
         /// <summary>
         /// Get method to list all items.
         /// </summary>
@@ -58,12 +55,36 @@ namespace Frontend.Web.Repository.Client
             var request = new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Endpoint}/Authentication/Login");
             request.Content = new StringContent(JsonSerializer.Serialize(model), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
             return await _httpClient.SendAsync(request);
-
-            //this goes on service
-            //var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();
-            //await _sessionProvider.SetValueAsync("UserSession", JsonSerializer.Serialize(userSession));
         }
 
+        /// <summary>
+        /// Put method, private only with authorization.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<HttpResponseMessage> Put<T>(T model)
+        {
+            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
+            var request = new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Endpoint}/RouteGoHere");
+            request.Content = new StringContent(JsonSerializer.Serialize(model), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+            return await _httpClient.SendAsync(request);
+        }
+
+        /// <summary>
+        /// Delete method, private only with authorization.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<HttpRequestMessage> Delete<T>(Guid key1) // review
+        {
+            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
+            return new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Endpoint}/Products/Delete?Id={key1}");
+            
+        }
+
+        /* Public Methods */
         /// <summary>
         /// Post method, public not necessary to authenticate first.
         /// </summary>

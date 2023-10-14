@@ -1,6 +1,7 @@
 using Frontend.Web;
 using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Client;
+using Frontend.Web.Services.Authentication;
 using Frontend.Web.Util.Environments;
 using Frontend.Web.Util.Session;
 using Microsoft.AspNetCore.Components.Web;
@@ -15,5 +16,6 @@ builder.Services.AddScoped<SessionStorageAccessor>();
 builder.Services.AddScoped<HttpClientRepository>();
 builder.Services.AddScoped<HttpRequestHeader>();
 builder.Services.AddScoped<EnvironmentHandler>();
+builder.Services.AddScoped<AuthenticationService>();
 
 await builder.Build().RunAsync();

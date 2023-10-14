@@ -12,5 +12,10 @@ namespace Backend.Infrastructure.Enums.Modules
         ProductTypes = 2
     }
 
+    public class ModulesEnumAlias
+    {
+        public static readonly string Authentication = "Authentication";
+        public static readonly string Products = "Products";
+    }
 
 }
