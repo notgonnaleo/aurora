@@ -1,6 +1,5 @@
 ﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Frontend.Web.Util.Enums.ContentTypeEnums;
-using Frontend.Web.Util.Enums.HttpMethodEnums;
 using Frontend.Web.Util.Environments;
 using Frontend.Web.Util.Session;
 using Microsoft.Extensions.Configuration;
@@ -37,15 +36,15 @@ namespace Frontend.Web.Models.Client
         /// Build client HTTP Request header
         /// </summary>
         /// <returns>HTTP Header Settings</returns>
-        public async Task<HttpRequestHeader> BuildHttpRequestHeader()
+        public async Task<HttpRequestHeader> BuildHttpRequestHeader(HttpMethod method, bool isPublic, string contentType)
         {
             HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _sessionProvider, _environmentHandler)
             {
-                Endpoint = _environmentHandler.GetEndpoint(), // See if its for QA, Prod or Local
-                Authorization = await GetToken(),
-                Method = HttpMethodsEnum.POST, // this need to be set as parameter
+                Endpoint = _environmentHandler.GetEndpoint(),
+                Authorization = isPublic ? null : await GetToken(),
+                Method = method,
                 Encoding = Encoding.UTF8,
-                ContentType = ContentTypeEnum.Application.JSON
+                ContentType = contentType
             };
             return httpRequestHeader;
         }

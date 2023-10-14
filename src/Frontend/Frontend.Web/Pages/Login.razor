@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using Frontend.Web.Repository.Client;
 @using Frontend.Web.Util.Session;
 @using Backend.Domain.Entities.Authentication.Users.Login.Request;
 @using System.Text.Json;
@@ -6,6 +7,7 @@
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
 @inject HttpClient _http
 @inject SessionStorageAccessor _session
+@inject HttpClientRepository _httpClientRepository
 
 <div class="container" style="margin-top:30px">
 <div class="col-md-4">
@@ -30,31 +32,14 @@
 
 
 @code {
-
-    /*
-        Leo: Somehow, figure out how to uncouple this logical code piece from the entire html file.
-
-        instead of having this write here
-        folder structure would look like this:
-        Pages > Login > Views > Login.razor
-        Pages > Login > Actions (i guess, need to re-think a name) > Action.razor
-        then import action.razor inside login.razor, this should look better.
-    */
-
     private LoginRequest model = new LoginRequest();
 
-    // We should return this a bool or the model maybe, in the future it could be useful to build the user UI.
-    // I can explain later.
     private async void SignIn()
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:7299/Authentication/Login"); // TODO: use environment variables.
-        request.Content = new StringContent(JsonSerializer.Serialize(model), Encoding.UTF8, "application/json");
-        var response = await _http.SendAsync(request);
+        var response = await _httpClientRepository.Post(model, true);
 
+        // this go to service layer
         var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();
-
-        // this looks stupid but trust me
         await _session.SetValueAsync("UserSession", JsonSerializer.Serialize(userSession));
-
     }
 }
