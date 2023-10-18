@@ -40,7 +40,7 @@ namespace Frontend.Web.Models.Client
         {
             HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _sessionProvider, _environmentHandler)
             {
-                Endpoint = _environmentHandler.GetEndpoint(),
+                Uri = _environmentHandler.GetEndpoint(),
                 Authorization = isPublic ? null : await GetToken(),
                 Method = method,
                 Encoding = Encoding.UTF8,
@@ -52,7 +52,7 @@ namespace Frontend.Web.Models.Client
         /// <summary>
         /// HTTP Request header properties
         /// </summary>
-        public string Endpoint { get; set; }
+        public string Uri { get; set; }
         public HttpMethod Method { get; set; }
         public AuthenticationHeaderValue Authorization { get; set; }
         public Encoding Encoding { get; set; }

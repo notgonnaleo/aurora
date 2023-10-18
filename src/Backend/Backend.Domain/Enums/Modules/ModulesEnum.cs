@@ -12,10 +12,26 @@ namespace Backend.Infrastructure.Enums.Modules
         ProductTypes = 2
     }
 
-    public class ModulesEnumAlias
+    public class Endpoints
     {
-        public static readonly string Authentication = "Authentication";
-        public static readonly string Products = "Products";
+        public static string Authentication = "Authentication";
+        public static string Products = "Products";
+    }
+
+    public class Methods
+    {
+        public class Default
+        {
+            public static string GET = "List";
+            public static string POST = "Add";
+            public static string PUT = "Update";
+            public static string DELETE = "Delete";
+        }
+
+        public class Authentication
+        {
+            public static string Login = "Login";
+        }
     }
 
 }
