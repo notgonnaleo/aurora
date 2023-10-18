@@ -20,10 +20,18 @@ namespace Backend.Infrastructure.Enums.Modules
 
     public class Methods
     {
-        public static string GET = "List";
-        public static string POST = "Add";
-        public static string PUT = "Update";
-        public static string DELETE = "Delete";
+        public class Default
+        {
+            public static string GET = "List";
+            public static string POST = "Add";
+            public static string PUT = "Update";
+            public static string DELETE = "Delete";
+        }
+
+        public class Authentication
+        {
+            public static string Login = "Login";
+        }
     }
 
 }
