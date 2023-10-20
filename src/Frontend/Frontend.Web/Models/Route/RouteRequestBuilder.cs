@@ -4,14 +4,14 @@ namespace Frontend.Web.Models.Route
 {
     public class RouteBuilder<T>
     {
-        public RouteBuilder<T> BuildRoute(string endpoint, string actionName, string parameters, T model)
+        public RouteBuilder<T> BuildRoute(string endpoint, string actionName, string? parameters, T? body)
         {
             RouteBuilder<T> route = new RouteBuilder<T>()
             {
                 Endpoint = endpoint,
                 ActionName = actionName,
                 Parameters = parameters,
-                Body = model
+                Body = body
             };
             return route;
         }
@@ -23,6 +23,6 @@ namespace Frontend.Web.Models.Route
         public string Endpoint { get; set; }
         public string ActionName { get; set; }
         public string? Parameters { get; set; }
-        public T Body { get; set; }
+        public T? Body { get; set; }
     }
 }
