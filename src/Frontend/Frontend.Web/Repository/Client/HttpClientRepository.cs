@@ -41,7 +41,7 @@ namespace Frontend.Web.Repository.Client
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
             _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-            return await _httpClient.GetFromJsonAsync<List<T>>($"{httpRequestHeader.Uri}/{route.Endpoint}?{route.Parameters}");
+            return await _httpClient.GetFromJsonAsync<List<T>>($"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}?{route.Parameters}");
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Frontend.Web.Repository.Client
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
             _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-            return await _httpClient.GetFromJsonAsync<T>($"{httpRequestHeader.Uri}/{route.Endpoint}?{route.Parameters}");
+            return await _httpClient.GetFromJsonAsync<T>($"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}?{route.Parameters}");
         }
 
         /// <summary>
