@@ -24,7 +24,6 @@ builder.Services.AddScoped<AuthorizationService>();
 
 // Products
 builder.Services.AddScoped<ProductService>();
-builder.Services.AddScoped<ProductTypeService>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();
@@ -44,6 +43,7 @@ builder.Services.AddScoped<UserContextService>();
  * "ef-core migrations" commands, and this not optional, you must do it. 
  * just type --context NameOfYourContext at the end of your dotnet ef migration or database update comnand and boom
  * you got it migration wrote up ready to be applied now.
+ * dotnet ef migrations add coolname --context ContextName --output-dir FolderContext
  */
 
 // Application Context

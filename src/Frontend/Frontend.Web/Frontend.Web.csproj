@@ -15,4 +15,10 @@
     <ProjectReference Include="..\..\Backend\Backend.Domain\Backend.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\Products\Forms\Add\" />
+    <Folder Include="Components\Products\Forms\Edit\" />
+    <Folder Include="Components\Products\Forms\Delete\" />
+  </ItemGroup>
+
 </Project>
