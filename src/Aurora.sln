@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Backend.Infrastructure", "B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{28259E07-8393-421F-AF46-C5830DA1A9F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend.Web", "Frontend\Frontend.Web\Frontend.Web.csproj", "{23C2C605-04E1-4709-A294-1B45052BBF38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend.Web", "Frontend\Frontend.Web\Frontend.Web.csproj", "{23C2C605-04E1-4709-A294-1B45052BBF38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
