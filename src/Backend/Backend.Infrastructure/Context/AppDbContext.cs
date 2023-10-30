@@ -41,14 +41,5 @@ namespace Backend.Infrastructure.Context
 
         // Products
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductType> ProductTypes { get; set; }
-
-        // Taxes
-        public DbSet<ICMS> ICMS { get; set; }
-        public DbSet<CNAE> CNAE { get; set; }
-        public DbSet<CommercialTax> CommercialTaxes { get; set; }
-        public DbSet<TributeSituationCode> TributeSituationCodes { get; set; }
-        public DbSet<Tribute> Tributes { get; set; }
-        public DbSet<ProductTax> ProductTaxes { get; set; }
     }
 }
