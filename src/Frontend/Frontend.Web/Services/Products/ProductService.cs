@@ -4,6 +4,8 @@ using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 
+using ProductsEnums = Backend.Infrastructure.Enums.Modules.Methods.Products;
+
 namespace Frontend.Web.Services.Products
 {
     public class ProductService
@@ -13,38 +15,31 @@ namespace Frontend.Web.Services.Products
         {
             _httpClientRepository = httpClientRepository;
         }
-        public void Send(params object[] parameters)
-        {
-            // Do something with the parameters
-            // For example, you can send them somewhere
-
-            foreach (var param in parameters)
-            {
-                Console.WriteLine($"Parameter: {param}");
-            }
-        }
-
-        /*
-        public RouteBuilder<Product> Send(string tenantId)
-        {
-            return new RouteBuilder<Product>()
-                .BuildRoute(Endpoints.Products,
-                Methods.Default.GET,
-                new RouteParameters().BuildParameterString(new RouteParameters()
-                {
-                    Key = 1,
-                    ParameterName = "tenantId",
-                    ParameterValue = tenantId,
-                }),
-                null);
-        }
-        */
 
         public async Task<List<Product>> GetProducts(string tenantId)
         {
-            Send(tenantId); // maybe a dictionary? or a object again? idk this shit is confusing as fuck
-            //return await _httpClientRepository.Get<Product>(routeBuilder);
-            return new List<Product> { new Product() };
+            var parameters = new RouteParameterRequest() { ParameterName = ProductsEnums.GET.GetProducts.tenantId, ParameterValue = tenantId };
+            var request = new RouteBuilder<Product>().Send(Endpoints.Products,Methods.Default.GET, parameters, null);
+            return await _httpClientRepository.Get(request);
+        }
+
+        public async Task<Product> GetProduct(string tenantId, string productId)
+        {
+            var parameters = new List<RouteParameterRequest>() // this looks kinda overkill but trust me it's worth the pain
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = ProductsEnums.GET.GetProduct.tenantId,
+                    ParameterValue = tenantId,
+                },
+                    new RouteParameterRequest()
+                {
+                    ParameterName = ProductsEnums.GET.GetProduct.productId,
+                    ParameterValue = productId,
+                }
+            };
+            var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.FIND, parameters, null);
+            return await _httpClientRepository.GetById(request);
         }
     }
 }

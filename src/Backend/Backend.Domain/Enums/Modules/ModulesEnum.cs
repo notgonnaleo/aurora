@@ -20,9 +20,10 @@ namespace Backend.Infrastructure.Enums.Modules
 
     public class Methods
     {
-        public class Default
+        public class Default // fix this ugly ass shit
         {
             public static string GET = "List";
+            public static string FIND = "Find";
             public static string POST = "Add";
             public static string PUT = "Update";
             public static string DELETE = "Delete";
@@ -31,6 +32,22 @@ namespace Backend.Infrastructure.Enums.Modules
         public class Authentication
         {
             public static string Login = "Login";
+        }
+
+        public class Products
+        {
+            public static class GET
+            {
+                public static class GetProducts
+                {
+                    public static string tenantId = "tenantId";
+                }
+                public static class GetProduct
+                {
+                    public static string tenantId = "tenantId";
+                    public static string productId = "productId";
+                }
+            }
         }
     }
 
