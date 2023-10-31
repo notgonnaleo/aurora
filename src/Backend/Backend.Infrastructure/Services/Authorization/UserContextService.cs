@@ -5,6 +5,7 @@ using Backend.Domain.Entities.Authorization.UserRoles;
 using Backend.Domain.Entities.Authorization.UserRoutes;
 using Backend.Infrastructure.Enums.Modules;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace Backend.Infrastructure.Services.Authorization
     public class UserContextService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMemoryCache _cache;
 
-        public UserContextService(IHttpContextAccessor httpContextAccessor)
+        public UserContextService(IHttpContextAccessor httpContextAccessor, IMemoryCache cache)
         {
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
         }
         public UserSessionContext Handler(UserSessionContext userContext)
         {
@@ -50,7 +53,13 @@ namespace Backend.Infrastructure.Services.Authorization
 
         public UserSessionContext LoadContext() // FIXME: change this mf to cache instead session bruh
         {
-            var userContext = SessionExtensions.Get<UserSessionContext>(_httpContextAccessor.HttpContext.Session, "UserContext");
+            var retrieveAuthToken = _cache.Get<string>("Token");
+            if (retrieveAuthToken == null)
+                throw new ArgumentNullException("Invalid or missing authorization token.");
+
+            var userContext = _cache.Get<UserSessionContext>(retrieveAuthToken);
+
+
             return Handler(userContext);
         }
 

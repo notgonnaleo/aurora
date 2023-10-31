@@ -31,7 +31,8 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
         }
 
         // If the user is authenticated it will refresh the token on the cache to extend it's duration
-        _cache.Set(userContext.Token,userContext,TimeSpan.FromHours(4));
+        _cache.Set("Token", tokenRequest, TimeSpan.FromHours(4));
+        _cache.Set(userContext.Token, userContext, TimeSpan.FromHours(4));
 
         if (tokenRequest == userContext.Token)
         {

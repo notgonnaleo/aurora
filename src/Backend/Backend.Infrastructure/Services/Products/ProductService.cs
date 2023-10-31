@@ -65,12 +65,11 @@ namespace Backend.Infrastructure.Services.Products
                 var context = _userContextService.LoadContext();
 
                 product.Id = Guid.NewGuid();
-
                 product.CreatedBy = context.UserId;
                 product.Created = DateTime.Now;
-
                 product.Updated = null;
                 product.UpdatedBy = null;
+                product.Active = true; // always create as on lol
 
                 _appDbContext.Products.Add(product);
                 _appDbContext.SaveChanges();

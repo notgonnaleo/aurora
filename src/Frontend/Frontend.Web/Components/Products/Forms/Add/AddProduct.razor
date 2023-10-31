@@ -8,6 +8,8 @@
             <div class="panel-heading"><h3 class="panel-title"><strong>Sign In </strong></h3></div>
             <div class="panel-body">
                 <form role="form">
+                    <span>You're creating products using Tenant: Aurora as Default only for testing.</span>
+                    <span>Your tenant key is: (cabaa57a-37ff-4871-be7d-0187ed3534a5)</span>
                     <div class="form-group">
                         <label for="username">SKU</label>
                         <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
@@ -42,5 +44,12 @@
 @code
 {
     private Product model = new Product();
-    public async Task CreateProduct() => await _productService.CreateProduct(model);
+
+    public async Task CreateProduct()
+    {
+        Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
+        model.TenantId = tenantIdGuid;
+
+        await _productService.CreateProduct(model);
+    }
 }
