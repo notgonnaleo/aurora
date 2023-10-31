@@ -23,7 +23,7 @@ namespace Frontend.Web.Services.Authentication
         }
         public async Task<bool> SignIn(LoginRequest model)
         {
-            RouteBuilder<LoginRequest> routeBuilder = new RouteBuilder<LoginRequest>().BuildRoute(Endpoints.Authentication, Methods.Authentication.Login, null, model);
+            RouteBuilder<LoginRequest> routeBuilder = new RouteBuilder<LoginRequest>().Send(Endpoints.Authentication, Methods.Authentication.Login, model);
             var response = await _httpClientRepository.Post(routeBuilder, true);
 
             var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();

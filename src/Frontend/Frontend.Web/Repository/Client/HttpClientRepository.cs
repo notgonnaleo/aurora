@@ -73,7 +73,7 @@ namespace Frontend.Web.Repository.Client
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                T responseObject = JsonSerializer.Deserialize<T>(responseContent);
+                T responseObject = JsonSerializer.Deserialize<T>(responseContent)!;
                 return responseObject;
             }
             else

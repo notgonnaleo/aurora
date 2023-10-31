@@ -4,21 +4,49 @@ namespace Frontend.Web.Models.Route
 {
     public class RouteBuilder<T>
     {
-        public RouteBuilder<T> Send(string moduleEndpoint, string moduleMethod, RouteParameterRequest? parameters, T? body)
+        /// <summary>
+        /// Send the request parameter or object with the selected module, building the Route model for the request.
+        /// </summary>
+        /// <param name="moduleEndpoint">Service module being accessed</param>
+        /// <param name="moduleMethod">Http REST method being executed</param>
+        /// <param name="body">Object model</param>
+        /// <returns>Type of RouteBuilder<T> using the provided generic type.</returns>
+        public RouteBuilder<T> Send(string moduleEndpoint, string moduleMethod, T body)
+        {
+                return new RouteBuilder<T>()
+                    .BuildRoute(moduleEndpoint, moduleMethod, body);
+        }
+
+        /// <summary>
+        /// Send the request parameter or object with the selected module, building the Route model for the request.
+        /// </summary>
+        /// <param name="moduleEndpoint">Service module being accessed</param>
+        /// <param name="moduleMethod">Http REST method being executed</param>
+        /// <param name="parameter">One parameter only</param>
+        /// <param name="body">Object model</param>
+        /// <returns>Type of RouteBuilder<T> using the provided generic type.</returns>
+        public RouteBuilder<T> Send(string moduleEndpoint, string moduleMethod, RouteParameterRequest parameter)
         {
             return new RouteBuilder<T>()
                 .BuildRoute(moduleEndpoint,
                 moduleMethod,
                 new RouteParameters().BuildParameterString(new RouteParameters()
                 {
-                    Key = 1,
-                    ParameterName = parameters.ParameterName,
-                    ParameterValue = parameters.ParameterValue,
-                }),
-                body);
+                    ParameterName = parameter.ParameterName,
+                    ParameterValue = parameter.ParameterValue,
+                })!
+                );
         }
 
-        public RouteBuilder<T> SendMultiple(string moduleEndpoint, string moduleMethod, List<RouteParameterRequest> parameters, T? body)
+        /// <summary>
+        /// Send the request a list of parameters or object with the selected module, building the Route model for the request.
+        /// </summary>
+        /// <param name="moduleEndpoint">Service module being accessed</param>
+        /// <param name="moduleMethod">Http REST method being executed</param>
+        /// <param name="parameters">List of parameters</param>
+        /// <param name="body">Object model</param>
+        /// <returns>Type of RouteBuilder<T> using the provided generic type.</returns>
+        public RouteBuilder<T> SendMultiple(string moduleEndpoint, string moduleMethod, List<RouteParameterRequest> parameters)
         {
             int key = 0;
             var parameterRequestList = new List<RouteParameters>();
@@ -36,21 +64,46 @@ namespace Frontend.Web.Models.Route
             return new RouteBuilder<T>()
                 .BuildRoute(moduleEndpoint,
                 moduleMethod,
-                new RouteParameters().BuildParameterString(parameterRequestList),
-                body);
+                new RouteParameters().BuildParameterString(parameterRequestList));
         }
-        public RouteBuilder<T> BuildRoute(string endpoint, string actionName, string? parameters, T? body)
+
+        /// <summary>
+        /// Build the route after receiving Send methods response.
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="actionName"></param>
+        /// <param name="parameters"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public RouteBuilder<T> BuildRoute(string endpoint, string actionName, T body)
         {
             RouteBuilder<T> route = new RouteBuilder<T>()
             {
                 Endpoint = endpoint,
                 ActionName = actionName,
-                Parameters = parameters,
                 Body = body
             };
             return route;
         }
-        // i should make the parameters value be an object maybe?
+
+        /// <summary>
+        /// Build the route after receiving Send methods response.
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="actionName"></param>
+        /// <param name="parameters"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public RouteBuilder<T> BuildRoute(string endpoint, string actionName, string parameters)
+        {
+            RouteBuilder<T> route = new RouteBuilder<T>()
+            {
+                Endpoint = endpoint,
+                ActionName = actionName,
+                Parameters = parameters
+            };
+            return route;
+        }
 
         /// <summary>
         /// Route Request Builder Properties

@@ -26,12 +26,15 @@ namespace Frontend.Web.Models.Route
             return queryString;
         }
 
-        public string BuildParameterString(RouteParameters parameter)
+        public string? BuildParameterString(RouteParameters parameter)
         {
+            if (parameter == null)
+                return null;
+
             return $"{parameter.ParameterName}={parameter.ParameterValue}";
         }
 
-        public int Key { get; set; }
+        public int? Key { get; set; }
         public string ParameterName { get; set; }
         public string ParameterValue { get; set; }
     }
