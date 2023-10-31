@@ -48,7 +48,7 @@ namespace Backend.Infrastructure.Services.Authorization
             }
         }
 
-        public UserSessionContext LoadContext()
+        public UserSessionContext LoadContext() // FIXME: change this mf to cache instead session bruh
         {
             var userContext = SessionExtensions.Get<UserSessionContext>(_httpContextAccessor.HttpContext.Session, "UserContext");
             return Handler(userContext);
