@@ -56,11 +56,7 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
-                var context = _userContextService.LoadContext();
-                product.CreatedBy = context.UserId;
-
                 return Ok(await _productService.Add(product));
-
             }
             catch (Exception ex)
             {

@@ -41,7 +41,7 @@ namespace Frontend.Web.Repository.Client
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
             _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-            return await _httpClient.GetFromJsonAsync<List<T>>($"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}?{route.Parameters}");
+            return await _httpClient.GetFromJsonAsync<List<T>>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Frontend.Web.Repository.Client
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
             _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-            return await _httpClient.GetFromJsonAsync<T>($"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}?{route.Parameters}");
+            return await _httpClient.GetFromJsonAsync<T>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
         }
 
         /// <summary>
@@ -64,12 +64,22 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> Post<T>(RouteBuilder<T> route)
+        public async Task<T> Post<T>(RouteBuilder<T> route)
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
-            var request = new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Uri}/{route.Endpoint}");
+            var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
             request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-            return await _httpClient.SendAsync(request);
+            HttpResponseMessage response = await _httpClient.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                T responseObject = JsonSerializer.Deserialize<T>(responseContent);
+                return responseObject;
+            }
+            else
+            {
+                throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+            }
         }
 
         /// <summary>

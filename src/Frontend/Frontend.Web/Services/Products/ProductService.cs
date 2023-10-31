@@ -19,7 +19,7 @@ namespace Frontend.Web.Services.Products
         public async Task<List<Product>> GetProducts(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = ProductsEnums.GET.GetProducts.tenantId, ParameterValue = tenantId };
-            var request = new RouteBuilder<Product>().Send(Endpoints.Products,Methods.Default.GET, parameters, null);
+            var request = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.GET, parameters, null);
             return await _httpClientRepository.Get(request);
         }
 
@@ -40,6 +40,12 @@ namespace Frontend.Web.Services.Products
             };
             var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.FIND, parameters, null);
             return await _httpClientRepository.GetById(request);
+        }
+
+        public async Task<Product> CreateProduct(Product product)
+        {
+            var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, null, product);
+            return await _httpClientRepository.Post(model);
         }
     }
 }

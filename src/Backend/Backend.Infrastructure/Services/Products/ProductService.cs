@@ -19,11 +19,13 @@ namespace Backend.Infrastructure.Services.Products
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserContextService _userContextService;
 
-        public ProductService (AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor)
+        public ProductService (AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
+            _userContextService = userContextService;
         }
 
         public async Task<IEnumerable<Product>> Get(Guid tenantId)
@@ -60,9 +62,13 @@ namespace Backend.Infrastructure.Services.Products
         {
             try
             {
+                var context = _userContextService.LoadContext();
+
                 product.Id = Guid.NewGuid();
+
+                product.CreatedBy = context.UserId;
                 product.Created = DateTime.Now;
-                product.CreatedBy = product.CreatedBy;
+
                 product.Updated = null;
                 product.UpdatedBy = null;
 
