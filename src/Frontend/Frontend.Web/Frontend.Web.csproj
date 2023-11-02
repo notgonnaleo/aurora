@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Products\Forms\Edit\" />
     <Folder Include="Components\Products\Forms\Delete\" />
   </ItemGroup>
 
