@@ -5,6 +5,7 @@
 @inject HttpClient Http
 @inject SessionStorageAccessor _session
 @inject ProductService _productService
+@inject NavigationManager NavigationManager
 
 <h3>ProductsTable</h3>
 
@@ -37,7 +38,7 @@ else
                     <td>@product.Value</td>
                     <td>@product.LiquidWeight</td>
                     <td>@product.TotalWeight</td>
-                    <td><a>Edit</a></td>
+                    <td><a @onclick="() => Edit(product)">Edit</a></td>
                 </tr>
             }
         </tbody>
@@ -47,9 +48,15 @@ else
 
 @code {
     private List<Product>? products;
+    string tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
+
     protected override async Task OnInitializedAsync()
     {
-        var tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
         products = await _productService.GetProducts(tenantIdSample);
+    }
+
+    private void Edit(Product product)
+    {
+        NavigationManager.NavigateTo($"/edit-products/{product.Id}");
     }
 }

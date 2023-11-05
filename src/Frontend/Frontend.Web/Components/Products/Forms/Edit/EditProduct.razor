@@ -1,11 +1,12 @@
 ﻿@using Backend.Domain.Entities.Products;
 @using Frontend.Web.Services.Products;
 @inject ProductService _productService
+@inject NavigationManager NavigationManager
 
 <div class="container" style="margin-top:30px">
     <div class="col-md-4">
         <div class="panel panel-default">
-            <div class="panel-heading"><h3 class="panel-title"><strong>Sign In </strong></h3></div>
+            <div class="panel-heading"><h3 class="panel-title"><strong>Edit Product</strong></h3></div>
             <div class="panel-body">
                 <form role="form">
                     <span>You're creating products using Tenant: Aurora as Default only for testing.</span>
@@ -34,7 +35,7 @@
                         <label for="totalWeight">TotalWeight</label>
                         <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
                     </div>
-                    <button type="button" @onclick="CreateProduct" class="btn btn-default">Add</button>
+                    <button type="button" @onclick="UpdateProduct" class="btn btn-default">Save</button>
                 </form>
             </div>
         </div>
@@ -43,13 +44,21 @@
 
 @code
 {
+    [Parameter]
+    public string productId { get; set; }
+
     private Product model = new Product();
+    Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
 
-    public async Task CreateProduct()
+    protected override async Task OnInitializedAsync()
     {
-        Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
-        model.TenantId = tenantIdGuid;
+        var cu = NavigationManager.Uri.Split('/').Last();
+        model = await _productService.GetProduct(tenantIdGuid.ToString(), productId.ToString());
+    }
 
-        await _productService.CreateProduct(model);
+    public async Task UpdateProduct()
+    {
+        model.TenantId = tenantIdGuid;
+        await _productService.UpdateProduct(model);
     }
 }

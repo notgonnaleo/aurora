@@ -92,6 +92,7 @@ namespace Backend.Infrastructure.Services.Products
                     Name = product.Name,
                     SKU = product.SKU,
                     Description = product.Description,
+                    Active = true,
                     Updated = DateTime.Now,
                     UpdatedBy = Guid.NewGuid() // TODO: Get it from the user account id while it's log in.
                 };

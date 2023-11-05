@@ -25,7 +25,7 @@ namespace Frontend.Web.Services.Products
 
         public async Task<Product> GetProduct(string tenantId, string productId)
         {
-            var parameters = new List<RouteParameterRequest>() // this looks kinda overkill but trust me it's worth the pain
+            var parameters = new List<RouteParameterRequest>()
             {
                 new RouteParameterRequest()
                 {
@@ -46,6 +46,12 @@ namespace Frontend.Web.Services.Products
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
             return await _httpClientRepository.Post(model);
+        }
+
+        public async Task<Product> UpdateProduct(Product product)
+        {
+            var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.PUT, product);
+            return await _httpClientRepository.Put(model);
         }
     }
 }

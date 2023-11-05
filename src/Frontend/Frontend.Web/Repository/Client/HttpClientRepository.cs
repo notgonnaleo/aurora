@@ -16,6 +16,7 @@ using HttpRequestHeader = Frontend.Web.Models.Client.HttpRequestHeader;
 using Frontend.Web.Util.Enums.ContentTypeEnums;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
+using Microsoft.AspNetCore.Routing;
 
 namespace Frontend.Web.Repository.Client
 {
@@ -88,12 +89,23 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> Put<T>(T model)
+        public async Task<T> Put<T>(RouteBuilder<T> route)
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
-            var request = new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Uri}/RouteGoHere");
-            request.Content = new StringContent(JsonSerializer.Serialize(model), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-            return await _httpClient.SendAsync(request);
+            var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
+            var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
+            request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+            HttpResponseMessage response = await _httpClient.PutAsync(endpoint, request.Content);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                T responseObject = JsonSerializer.Deserialize<T>(responseContent)!;
+                return responseObject;
+            }
+            else
+            {
+                throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+            }
         }
 
         /// <summary>
