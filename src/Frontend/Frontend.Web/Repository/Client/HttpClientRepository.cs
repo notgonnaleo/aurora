@@ -89,7 +89,7 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<T> Put<T>(RouteBuilder<T> route)
+        public async Task<bool> Put<T>(RouteBuilder<T> route)
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
             var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
@@ -99,26 +99,13 @@ namespace Frontend.Web.Repository.Client
             if (response.IsSuccessStatusCode)
             {
                 string responseContent = await response.Content.ReadAsStringAsync();
-                T responseObject = JsonSerializer.Deserialize<T>(responseContent)!;
+                bool responseObject = JsonSerializer.Deserialize<bool>(responseContent)!;
                 return responseObject;
             }
             else
             {
                 throw new Exception("HTTP request failed with status code: " + response.StatusCode);
             }
-        }
-
-        /// <summary>
-        /// Delete method, private only with authorization.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<HttpRequestMessage> Delete<T>(Guid key1) // review
-        {
-            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
-            return new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Uri}/Products/Delete?Id={key1}");
-            
         }
 
         /* Public Methods */

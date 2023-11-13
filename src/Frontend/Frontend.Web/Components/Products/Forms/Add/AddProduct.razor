@@ -1,6 +1,7 @@
 ﻿@using Backend.Domain.Entities.Products;
 @using Frontend.Web.Services.Products;
 @inject ProductService _productService
+@inject NavigationManager navigator
 
 <div class="container" style="margin-top:30px">
     <div class="col-md-4">
@@ -50,6 +51,11 @@
         Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
         model.TenantId = tenantIdGuid;
 
-        await _productService.CreateProduct(model);
+        Product newProduct = await _productService.CreateProduct(model);
+
+        if (newProduct != null)
+            navigator.NavigateTo("/products");
+        else
+            throw new Exception("Failed while creating new item.");
     }
 }

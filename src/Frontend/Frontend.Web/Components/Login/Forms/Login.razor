@@ -2,11 +2,25 @@
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
 @using Frontend.Web.Services.Authentication
 @inject AuthenticationService _authenticationService;
+@inject NavigationManager Navigator
 
 <div class="container" style="margin-top:30px">
     <div class="col-md-4">
         <div class="panel panel-default">
             <div class="panel-heading"><h3 class="panel-title"><strong>Sign In </strong></h3></div>
+            @if (logged)
+            {
+                // TODO: Implement redirecting to main page 
+                <div class="alert alert-success fade-in" role="alert">
+                    Success, redirecting to main page. 
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-warning fade-in" role="alert">
+                    Something went wrong.
+                </div>
+            }
             <div class="panel-body">
                 <form role="form">
                     <div class="form-group">
@@ -26,9 +40,13 @@
 
 @code
 {
+    public bool logged;
     private LoginRequest model = new LoginRequest();
-    public async Task SignIn()
+
+    public async Task<bool> SignIn()
     {
-        await _authenticationService.SignIn(model);
+        logged = await _authenticationService.SignIn(model);
+        return logged;
+        // https://www.reddit.com/r/Blazor/comments/zlsw11/redirect_user_after_successful_login/ - redirect user to another page need sum more stuff rather than a navigator.
     }
 }

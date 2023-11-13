@@ -48,7 +48,7 @@ namespace Frontend.Web.Services.Products
             return await _httpClientRepository.Post(model);
         }
 
-        public async Task<Product> UpdateProduct(Product product)
+        public async Task<bool> UpdateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.PUT, product);
             return await _httpClientRepository.Put(model);
