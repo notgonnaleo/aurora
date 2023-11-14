@@ -1,0 +1,12 @@
+﻿@page "/edit-products/{productId}"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Aurora - Edit Product</PageTitle>
+
+<Frontend.Web.Components.Products.Forms.Edit.EditProduct productId="@productId" />
+
+@code
+{
+    [Parameter]
+    public string productId { get; set; }
+}

@@ -1,0 +1,65 @@
+﻿@page "/fetchdata"
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Products;
+@using Frontend.Web.Util.Session;
+@using Frontend.Web.Repository.Client;
+@using Newtonsoft.Json;
+@inject HttpClient Http
+@inject SessionStorageAccessor _session
+@inject ProductService _productService
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<h1>Products Example</h1>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in products)
+            {
+                <tr>
+                    <td>@product.SKU</td>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        @{
+            var aa = productFound;
+        }
+    </div>
+}
+
+
+@code {
+    private List<Product>? products;
+    private Product? productFound;
+    protected override async Task OnInitializedAsync()
+    {
+        var tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
+        products = await _productService.GetProducts(tenantIdSample);
+
+        var productIdSample = "019ca9ea-acb3-43f9-8f38-954212ddbae0";
+        var productFound = await _productService.GetProduct(tenantIdSample, productIdSample);
+    }
+}

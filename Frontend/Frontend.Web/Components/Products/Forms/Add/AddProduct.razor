@@ -1,0 +1,61 @@
+﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Products;
+@inject ProductService _productService
+@inject NavigationManager navigator
+
+<div class="container" style="margin-top:30px">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title"><strong>Sign In </strong></h3></div>
+            <div class="panel-body">
+                <form role="form">
+                    <span>You're creating products using Tenant: Aurora as Default only for testing.</span>
+                    <span>Your tenant key is: (cabaa57a-37ff-4871-be7d-0187ed3534a5)</span>
+                    <div class="form-group">
+                        <label for="username">SKU</label>
+                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" id="description" placeholder="Description" @bind="@model.Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="value">Value</label>
+                        <input type="number" class="form-control" id="value" placeholder="Value" @bind="@model.Value">
+                    </div>
+                    <div class="form-group">
+                        <label for="liquidWeight">LiquidWeight</label>
+                        <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@model.LiquidWeight">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalWeight">TotalWeight</label>
+                        <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
+                    </div>
+                    <button type="button" @onclick="CreateProduct" class="btn btn-default">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private Product model = new Product();
+
+    public async Task CreateProduct()
+    {
+        Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
+        model.TenantId = tenantIdGuid;
+
+        Product newProduct = await _productService.CreateProduct(model);
+
+        if (newProduct != null)
+            navigator.NavigateTo("/products");
+        else
+            throw new Exception("Failed while creating new item.");
+    }
+}
