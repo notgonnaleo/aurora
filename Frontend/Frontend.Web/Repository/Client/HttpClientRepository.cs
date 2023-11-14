@@ -123,5 +123,26 @@ namespace Frontend.Web.Repository.Client
             request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
             return await _httpClient.SendAsync(request);
         }
+
+        public async Task<bool> Delete<T>(RouteBuilder<T> route)
+        {
+            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Delete, false, ContentTypeEnum.JSON);
+            var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
+            var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
+            request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+            HttpResponseMessage response = await _httpClient.DeleteAsync(endpoint);
+            if (response.IsSuccessStatusCode)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                bool responseObject = JsonSerializer.Deserialize<bool>(responseContent)!;
+                return responseObject;
+            }
+            else
+            {
+                throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+            }
+        }
+
+
     }
 }

@@ -81,13 +81,13 @@ namespace Backend.API.Controllers.Products
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
-        [HttpPut]
+        [HttpDelete]
         [Route("Delete")]
-        public async Task<ActionResult> Delete(Guid Id)
+        public async Task<ActionResult> Delete(Guid tenantId, Guid productId)
         {
             try
             {
-                return Ok(await _productService.Delete(Id));
+                return Ok(await _productService.Delete(tenantId,productId));
             }
             catch (Exception ex)
             {

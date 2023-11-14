@@ -111,11 +111,11 @@ namespace Backend.Infrastructure.Services.Products
             }
         }
 
-        public async Task<bool> Delete(Guid Id)
+        public async Task<bool> Delete(Guid tenantId, Guid productId)
         {
             try
             {
-                Product product = _appDbContext.Products.Where(x => x.Id == Id).First();
+                Product product = _appDbContext.Products.Where(x => x.Id == productId).First();
                 product.Active = false;
 
                 _appDbContext.Update(product);
