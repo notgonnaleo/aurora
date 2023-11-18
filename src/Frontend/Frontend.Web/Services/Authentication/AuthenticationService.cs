@@ -32,7 +32,7 @@ namespace Frontend.Web.Services.Authentication
             return userSession.Success;
         }
 
-        public async Task<UserSessionContext> IsUserLogged()
+        public async Task<UserSessionContext?> IsUserLogged()
         {
             return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
         }

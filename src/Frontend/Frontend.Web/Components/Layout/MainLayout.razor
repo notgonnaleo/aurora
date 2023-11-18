@@ -41,7 +41,10 @@
     public async Task<bool> IsAuthenticated()
     {
         var response = await _authService.IsUserLogged();
-        if (response != null) isAuthenticated = true;
+        if (response != null)
+            isAuthenticated = true;
+        else
+            isAuthenticated = false;
         StateHasChanged();
         return isAuthenticated;
     }

@@ -37,7 +37,7 @@ namespace Frontend.Web.Util.Session
         {
             await WaitForReference();
             var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
-            if (result.Any())
+            if (result != null && result.Any())
                 return JsonSerializer.Deserialize<T>(result);
             else
                 return default;
