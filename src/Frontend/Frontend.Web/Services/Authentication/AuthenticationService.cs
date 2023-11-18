@@ -31,5 +31,10 @@ namespace Frontend.Web.Services.Authentication
                 throw new Exception("Error while trying to log in");
             return userSession.Success;
         }
+
+        public async Task<UserSessionContext> IsUserLogged()
+        {
+            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+        }
     }
 }

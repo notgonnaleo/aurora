@@ -1,17 +1,48 @@
-﻿@inherits LayoutComponentBase
+﻿@using Frontend.Web.Services.Authentication;
+@inherits LayoutComponentBase
+@inject AuthenticationService _authService
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    @if (isAuthenticated)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        @if (isAuthenticated)
+        {
+            <div class="top-row px-4">
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
+            <article class="content px-4">
+                @Body
+            </article>
+        }
+        else
+        {
+            <article class="content px-4">
+                <Frontend.Web.Components.Login.Forms.Login />
+            </article>
+        }
     </main>
 </div>
+@code
+{
+    private bool isAuthenticated; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        await IsAuthenticated();
+    }
+
+    public async Task<bool> IsAuthenticated()
+    {
+        var response = await _authService.IsUserLogged();
+        if (response != null) isAuthenticated = true;
+        StateHasChanged();
+        return isAuthenticated;
+    }
+}

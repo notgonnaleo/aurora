@@ -46,7 +46,12 @@
     public async Task<bool> SignIn()
     {
         logged = await _authenticationService.SignIn(model);
+        RedirectAfterSuccess(logged);
         return logged;
-        // https://www.reddit.com/r/Blazor/comments/zlsw11/redirect_user_after_successful_login/ - redirect user to another page need sum more stuff rather than a navigator.
+    }
+
+    public void RedirectAfterSuccess(bool logged)
+    {
+        if (logged) Navigator.NavigateTo("/");
     }
 }
