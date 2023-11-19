@@ -1,51 +1,52 @@
-﻿@using Frontend.Web.Services.Authentication;
+﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Authentication;
 @inherits LayoutComponentBase
 @inject AuthenticationService _authService
+@inject NavigationManager navigator
 
 <div class="page">
-    @if (isAuthenticated)
+    @if (isAuthenticated.HasValue && isAuthenticated.Value)
     {
         <div class="sidebar">
             <NavMenu />
         </div>
     }
-
     <main>
-        @if (isAuthenticated)
-        {
-            <div class="top-row px-4">
-                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-            </div>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
 
-            <article class="content px-4">
-                @Body
-            </article>
-        }
-        else
-        {
-            <article class="content px-4">
-                <Frontend.Web.Components.Login.Forms.Login />
-            </article>
-        }
+        <article class="content px-4">
+            @Body
+        </article>
     </main>
 </div>
 @code
 {
-    private bool isAuthenticated; 
+    public bool? isAuthenticated;
+    public UserSessionContext? userSession;
 
     protected override async Task OnInitializedAsync()
     {
         await IsAuthenticated();
+        StateHasChanged();
     }
 
-    public async Task<bool> IsAuthenticated()
+    public async Task<bool?> IsAuthenticated()
     {
         var response = await _authService.IsUserLogged();
         if (response != null)
+        {
             isAuthenticated = true;
+            navigator.NavigateTo("/");
+        }
         else
+        {
             isAuthenticated = false;
-        StateHasChanged();
+            navigator.NavigateTo("/Login");
+        }
         return isAuthenticated;
     }
+
+    // TODO create heartbeat method to read session and see if isauthenticated is true or false
 }
