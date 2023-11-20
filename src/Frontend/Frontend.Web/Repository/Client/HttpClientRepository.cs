@@ -119,7 +119,7 @@ namespace Frontend.Web.Repository.Client
         public async Task<HttpResponseMessage> Post<T>(RouteBuilder<T> route, bool isPublic = true)
         {
             HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, isPublic, ContentTypeEnum.JSON);
-            var request = new HttpRequestMessage(httpRequestHeader.Method, $"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}");
+            var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
             request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
             return await _httpClient.SendAsync(request);
         }

@@ -26,10 +26,8 @@ namespace Frontend.Web.Services.Authentication
             RouteBuilder<LoginRequest> routeBuilder = new RouteBuilder<LoginRequest>().Send(Endpoints.Authentication, Methods.Authentication.Login, model);
             var response = await _httpClientRepository.Post(routeBuilder, true);
             var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();
-            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(userSession));
-            if (userSession == null)
-                throw new Exception("Error while trying to log in");
-            return userSession.Success;
+            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(userSession)); // rather use cookies 
+            return userSession != null;
         }
 
         public async Task<UserSessionContext?> IsUserLogged()

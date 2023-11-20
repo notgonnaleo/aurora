@@ -49,9 +49,10 @@
         RedirectAfterSuccess(logged);
         return logged;
     }
-
+    
     public void RedirectAfterSuccess(bool logged)
     {
-        if (logged) Navigator.NavigateTo("/");
+        if (logged) Navigator.NavigateTo("/", true);
     }
+    
 }

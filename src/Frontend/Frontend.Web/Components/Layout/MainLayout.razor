@@ -5,7 +5,7 @@
 @inject NavigationManager navigator
 
 <div class="page">
-    @if (isAuthenticated.HasValue && isAuthenticated.Value)
+    @if (isAuthenticated)
     {
         <div class="sidebar">
             <NavMenu />
@@ -23,30 +23,22 @@
 </div>
 @code
 {
-    public bool? isAuthenticated;
-    public UserSessionContext? userSession;
+    public bool isAuthenticated;
 
     protected override async Task OnInitializedAsync()
     {
-        await IsAuthenticated();
-        StateHasChanged();
+        isAuthenticated = await IsAuthenticated();
+        Redirect(isAuthenticated);
     }
 
-    public async Task<bool?> IsAuthenticated()
+    public void Redirect(bool isAuthenticated)
     {
-        var response = await _authService.IsUserLogged();
-        if (response != null)
-        {
-            isAuthenticated = true;
-            navigator.NavigateTo("/");
-        }
-        else
-        {
-            isAuthenticated = false;
+        if (!isAuthenticated)
             navigator.NavigateTo("/Login");
-        }
-        return isAuthenticated;
     }
 
-    // TODO create heartbeat method to read session and see if isauthenticated is true or false
+    public async Task<bool> IsAuthenticated()
+    {
+        return await _authService.IsUserLogged() != null;
+    }
 }
