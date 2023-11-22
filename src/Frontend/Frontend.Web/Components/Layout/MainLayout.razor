@@ -7,13 +7,21 @@
 <div class="page">
     @if (isAuthenticated)
     {
-        <div class="sidebar">
+        <div class="sidebar-nav scroll-sidebar @NavMenuCssClass" @onclick="ToggleNavMenu">
             <NavMenu />
         </div>
     }
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        @if (isAuthenticated)
+        {
+            <a @onclick="ToggleNavMenu">
+                    <i class="ti ti-menu-2"></i>
+            </a>
+        }
+            <a href="https://github.com/notgonnaleo/aurora">
+                <i class="ti ti-brand-github-filled"></i>
+            </a>
         </div>
 
         <article class="content px-4">
@@ -21,6 +29,8 @@
         </article>
     </main>
 </div>
+
+@* Authentication and Authorization *@
 @code
 {
     public bool isAuthenticated;
@@ -40,5 +50,17 @@
     public async Task<bool> IsAuthenticated()
     {
         return await _authService.IsUserLogged() != null;
+    }
+}
+
+@* Sidebar Interaction *@
+@code {
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
     }
 }
