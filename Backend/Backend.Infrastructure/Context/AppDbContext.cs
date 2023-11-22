@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Agent;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.Taxes.CNAE;
 using Backend.Domain.Entities.Taxes.ICMS;
 using Backend.Domain.Entities.Taxes.Products.Taxes;
@@ -25,9 +26,10 @@ namespace Backend.Infrastructure.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        //calmer-emu-12306.7tt.cockroachlabs.cloud
         //TODO: Review this
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Server=calmer-emu-12306.7tt.cockroachlabs.cloud;Database=appdb;Port=26257;User ID=aurora;Password=8bu513iFYZQaqkXADNE-WQ;Pooling=true;");
+            => optionsBuilder.UseNpgsql("Server=localhost;Database=appdb;Port=5432;User ID=postgres;Password=1234;Pooling=true;");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,5 +43,7 @@ namespace Backend.Infrastructure.Context
 
         // Products
         public DbSet<Product> Products { get; set; }
+        //ProductTypes
+        public DbSet<ProductType> ProductTypes { get; set; }    
     }
 }

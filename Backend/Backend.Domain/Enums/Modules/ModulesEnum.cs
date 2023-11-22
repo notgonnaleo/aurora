@@ -58,6 +58,11 @@ namespace Backend.Infrastructure.Enums.Modules
                 }
             }
         }
+
+        public static class ProductTypes 
+        {
+
+        }
     }
 
 }

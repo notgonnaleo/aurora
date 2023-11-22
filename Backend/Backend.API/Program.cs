@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Memberships;
+using Backend.Infrastructure.Services.ProductTypes;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,9 @@ builder.Services.AddScoped<AuthorizationService>();
 
 // Products
 builder.Services.AddScoped<ProductService>();
+
+//ProductType
+builder.Services.AddScoped<ProductTypeService>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();
