@@ -8,22 +8,14 @@
     @if (isAuthenticated)
     {
         <div class="sidebar-nav scroll-sidebar @NavMenuCssClass" @onclick="ToggleNavMenu">
-            <NavMenu />
+            <Sidebar />
         </div>
     }
     <main>
-        <div class="top-row px-4">
         @if (isAuthenticated)
         {
-            <a @onclick="ToggleNavMenu">
-                    <i class="ti ti-menu-2"></i>
-            </a>
+            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
         }
-            <a href="https://github.com/notgonnaleo/aurora">
-                <i class="ti ti-brand-github-filled"></i>
-            </a>
-        </div>
-
         <article class="content px-4">
             @Body
         </article>
