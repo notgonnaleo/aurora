@@ -7,43 +7,97 @@
 @inject ProductService _productService
 @inject NavigationManager NavigationManager
 
-<h3>ProductsTable</h3>
-
 @if (products == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>SKU</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Value</th>
-                <th>LiquidWeight</th>
-                <th>TotalWeight</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in products)
-            {
-                <tr>
-                    <td>@product.Id</td>
-                    <td>@product.SKU</td>
-                    <td>@product.Name</td>
-                    <td>@product.Description</td>
-                    <td>@product.Value</td>
-                    <td>@product.LiquidWeight</td>
-                    <td>@product.TotalWeight</td>
-                    <td><a @onclick="() => Edit(product)">Edit</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card-body p-4">
+        <h5 class="card-title fw-semibold mb-4">Products</h5>
+        <div class="table-responsive">
+            <table class="table text-nowrap mb-0 align-middle">
+                <thead class="text-dark fs-4">
+                    <tr>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                Id
+                            </h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                SKU
+                            </h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                Name
+                            </h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                Description
+                            </h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                Value
+                            </h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                LiquidWeight
+                            </h6>
+                        </th>
+                        <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">
+                                TotalWeight
+                            </h6>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in products)
+                    {
+                        <tr>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">
+                                @product.Id
+                                </h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">
+                                    @product.SKU
+                                </h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">
+                                    @product.Name
+                                </h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">
+                                    @product.Value
+                                </h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">
+                                    @product.LiquidWeight
+                                </h6>
+                            </td>
+                            <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">
+                                    @product.TotalWeight
+                                </h6>
+                            </td>
+                            <td><a @onclick="() => Edit(product)">Edit</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
+    </div>
 }
 
 @code {

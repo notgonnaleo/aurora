@@ -4,23 +4,25 @@
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
 
-<div class="page">
-    @if (isAuthenticated)
-    {
-        <div class="sidebar-nav scroll-sidebar @NavMenuCssClass" @onclick="ToggleNavMenu">
-            <Sidebar />
-        </div>
-    }
-    <main>
+<body>
+    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         @if (isAuthenticated)
         {
-            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
+            <div class="sidebar-nav scroll-sidebar @NavMenuCssClass" @onclick="ToggleNavMenu">
+                <Sidebar />
+            </div>
         }
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+        <div class="body-wrapper">
+            @if (isAuthenticated)
+            {
+                <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
+            }
+            <div class="container-fluid">
+                @Body
+            </div>
+        </div>
+    </div>
+</body>
 
 @* Authentication and Authorization *@
 @code

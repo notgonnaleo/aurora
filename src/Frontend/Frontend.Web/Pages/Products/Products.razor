@@ -1,7 +1,16 @@
 ﻿@page "/products"
 
 <PageTitle>Aurora - Products</PageTitle>
+<div class="row">
+    <div class="col-lg-16 d-flex align-items-stretch">
+        <div class="card w-100">
+            <Frontend.Web.Components.Products.Forms.Add.AddProduct />
+        </div>
+        <div class="card w-100">
+            <Frontend.Web.Components.Products.Table.ProductsTable />
+        </div>
+    </div>
+</div>
 
-<Frontend.Web.Components.Products.Forms.Add.AddProduct />
-<Frontend.Web.Components.Products.Table.ProductsTable />
+
 
