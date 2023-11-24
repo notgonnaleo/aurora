@@ -71,6 +71,24 @@ namespace Backend.Infrastructure.Services.ProductTypes
                 throw ex;
             }
         }
+
+        public async Task<ProductType> Update(ProductType productType, int id)
+        {
+            ProductType ProductTypeId = await GetById(id);
+
+            if (productType == null)
+            {
+                throw new Exception($"Não encontrado {id}");
+            }
+            ProductTypeId.Name = productType.Name;
+            ProductTypeId.Description = productType.Description;
+            ProductTypeId.Active = productType.Active;
+
+            _appDbContext.ProductTypes.Update(ProductTypeId);
+             _appDbContext.SaveChanges();
+
+            return ProductTypeId;
+        }
     }
 
 }

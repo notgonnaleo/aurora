@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
+using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.ProductTypes;
@@ -63,6 +64,29 @@ namespace Backend.API.Controllers.ProductTypes
             {
 
                 throw ex;
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPut]
+        [Route("Update")]
+        public async Task<ActionResult> Update(ProductType productType, int id)
+        {
+            try
+            {
+                var updatedProductType = await _productTypeService.Update(productType, id);
+
+                if (updatedProductType == null)
+                {
+                    return NotFound($"Produto com ID {id} não encontrado.");
+                }
+
+                return Ok(updatedProductType);
+            }
+            catch (Exception ex)
+            {
+                // Registre o erro em um log ou trate de acordo com seus requisitos
+                return StatusCode(500, "Erro interno do servidor.");
             }
         }
     }
