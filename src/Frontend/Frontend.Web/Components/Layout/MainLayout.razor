@@ -1,0 +1,44 @@
+﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Authentication;
+@inherits LayoutComponentBase
+@inject AuthenticationService _authService
+@inject NavigationManager navigator
+
+<div class="page">
+    @if (isAuthenticated)
+    {
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    }
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+@code
+{
+    public bool isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isAuthenticated = await IsAuthenticated();
+        Redirect(isAuthenticated);
+    }
+
+    public void Redirect(bool isAuthenticated)
+    {
+        if (!isAuthenticated)
+            navigator.NavigateTo("/Login");
+    }
+
+    public async Task<bool> IsAuthenticated()
+    {
+        return await _authService.IsUserLogged() != null;
+    }
+}
