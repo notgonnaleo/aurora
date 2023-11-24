@@ -13,10 +13,10 @@
             </div>
         }
         <div class="body-wrapper">
-            @if (isAuthenticated)
-            {
-                <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
-            }
+        @if (isAuthenticated)
+        {
+            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
+        }
             <div class="container-fluid">
                 @Body
             </div>

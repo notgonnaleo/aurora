@@ -5,21 +5,22 @@
 @inject NavigationManager Navigator
 
 <div class="card-body">
-    <div class="panel-heading">
-        <h3 class="panel-title"><strong>Sign In </strong></h3>
-    </div>
+    <a class="text-nowrap logo-img text-center d-block py-3 w-100">
+        <h3 class="panel-title"><strong>Blazor Wasm</strong></h3>
+    </a>
+    <p class="text-center">Log in your account</p>
     @if (logged)
     {
         <div class="alert alert-success fade-in" role="alert">
             Success, redirecting to main page. 
         </div>
     }
-    else
+    @*else
     {
         <div class="alert alert-warning fade-in" role="alert">
             Something went wrong.
         </div>
-    }
+    }*@
     <form>
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
