@@ -1,25 +1,28 @@
 ﻿@page "/products"
 
 <PageTitle>Aurora - Products</PageTitle>
-<div class="row">
-    <div class="m-4">
-        <button class="btn btn-outline-primary" @onclick="ToggleForm">
-            @btnText
-        </button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleForm">
+                @btnText
+            </button>
+        </div>
+        <div class="col-lg-16 d-flex align-items-stretch">
+            <div class="card w-100 @formCssClass">
+                <Frontend.Web.Components.Products.Forms.Add.AddProduct />
+            </div>
+        </div>
     </div>
-    <div class="col-lg-16 d-flex align-items-stretch">
-        <div class="card w-100 @formCssClass">
-            <Frontend.Web.Components.Products.Forms.Add.AddProduct />
+    <div class="row">
+        <div class="col-lg-16 d-flex align-items-stretch">
+            <div class="card w-100">
+                <Frontend.Web.Components.Products.Table.ProductsTable />
+            </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-16 d-flex align-items-stretch">
-        <div class="card w-100">
-            <Frontend.Web.Components.Products.Table.ProductsTable />
-        </div>
-    </div>
-</div>
+
 
 @code
 {
