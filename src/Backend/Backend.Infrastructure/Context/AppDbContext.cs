@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Agent;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.Taxes.CNAE;
 using Backend.Domain.Entities.Taxes.ICMS;
 using Backend.Domain.Entities.Taxes.Products.Taxes;
@@ -41,5 +42,8 @@ namespace Backend.Infrastructure.Context
 
         // Products
         public DbSet<Product> Products { get; set; }
+
+        // Product Types
+        public DbSet<ProductType> ProductTypes { get; set; }
     }
 }
