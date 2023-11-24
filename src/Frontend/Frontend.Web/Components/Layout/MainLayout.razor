@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
 @using Frontend.Web.Services.Authentication;
+@inject IJSRuntime JS
 @inherits LayoutComponentBase
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
@@ -23,6 +24,19 @@
         </div>
     </div>
 </body>
+
+@* Inject js dependencies *@
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeAsync<IJSObjectReference>("import", "./lib/jquery/dist/jquery.min.js");
+            await JS.InvokeAsync<IJSObjectReference>("import", "./js/sidebarmenu.js");
+        }
+    }
+}
 
 @* Authentication and Authorization *@
 @code

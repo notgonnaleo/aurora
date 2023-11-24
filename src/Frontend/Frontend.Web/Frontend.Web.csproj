@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\icons\tabler-icons\fonts\" />
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>
