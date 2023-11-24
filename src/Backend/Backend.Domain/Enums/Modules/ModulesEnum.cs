@@ -48,6 +48,38 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string productId = "productId";
                 }
             }
+
+            public static class DELETE
+            { 
+                public static class DeleteProduct
+                {
+                    public static string tenantId = "tenantId";
+                    public static string productId = "productId";
+                }
+            }
+        }
+
+        public static class ProductTypes
+        {
+            public static class GET
+            {
+                public static string GetAllProductTypes = "ProductTypes/List";
+
+                public static class GetProductType
+                {
+                    public static string ProductTypeId = "ProductTypes/Find";
+                }
+            }
+
+            public static class POST
+            {
+                public static string AddProductType = "ProductTypes/Add";
+            }
+
+            public static class PUT
+            {
+                public static string UpdateProductType = "ProductTypes/Update";
+            }
         }
     }
 
