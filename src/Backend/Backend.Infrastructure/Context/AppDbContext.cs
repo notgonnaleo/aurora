@@ -21,6 +21,7 @@ namespace Backend.Infrastructure.Context
     {
         public AppDbContext()
         {
+            // oi
         }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
