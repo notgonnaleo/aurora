@@ -398,4 +398,4 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Entity Framework Migrations Folder
-**/migrations/**
+/Migrations
