@@ -16,6 +16,9 @@ namespace Backend.Infrastructure.Enums.Modules
     {
         public static string Authentication = "Authentication";
         public static string Products = "Products";
+        public static string ProductsTypes = "ProductsTypes";
+        public static string Category = "Category";
+        public static string SubCategory = "SubCategory";
     }
 
     public class Methods
@@ -50,7 +53,7 @@ namespace Backend.Infrastructure.Enums.Modules
             }
 
             public static class DELETE
-            { 
+            {
                 public static class DeleteProduct
                 {
                     public static string tenantId = "tenantId";
@@ -81,6 +84,44 @@ namespace Backend.Infrastructure.Enums.Modules
                 public static string UpdateProductType = "ProductTypes/Update";
             }
         }
-    }
 
+        public static class Categorys
+        {
+            public static class GET
+            {
+                public static string GetAllCategories = "Categorys/List";
+                public static string GetCategory = "Categorys/Find";
+            }
+
+            public static class POST
+            {
+                public static string AddCategory = "Categorys/Add";
+            }
+
+            public static class PUT
+            {
+                public static string UpdateCategory = "Categorys/Update";
+            }
+        }
+
+        public static class SubCategorys
+        {
+            public static class GET
+            {
+                public static string GetAllSubCategories = "SubCategorys/List";
+                public static string GetSubCategory = "SubCategorys/Find";
+            }
+
+            public static class POST
+            {
+                public static string AddSubCategory = "SubCategorys/Add";
+            }
+
+            public static class PUT
+            {
+                public static string UpdateSubCategory = "SubCategorys/Update";
+            }
+        }
+
+    }
 }

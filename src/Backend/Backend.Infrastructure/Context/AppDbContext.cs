@@ -1,6 +1,8 @@
 ﻿using Backend.Domain.Entities.Agent;
+using Backend.Domain.Entities.Categorys;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
+using Backend.Domain.Entities.SubCategory;
 using Backend.Domain.Entities.Taxes.CNAE;
 using Backend.Domain.Entities.Taxes.ICMS;
 using Backend.Domain.Entities.Taxes.Products.Taxes;
@@ -28,7 +30,7 @@ namespace Backend.Infrastructure.Context
         }
         //TODO: Review this
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Server=calmer-emu-12306.7tt.cockroachlabs.cloud;Database=appdb;Port=26257;User ID=aurora;Password=8bu513iFYZQaqkXADNE-WQ;Pooling=true;");
+            => optionsBuilder.UseNpgsql("Server=localhost;Database=appdb;Port=5432;User ID=postgres;Password=1234;Pooling=true;");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,5 +47,12 @@ namespace Backend.Infrastructure.Context
 
         // Product Types
         public DbSet<ProductType> ProductTypes { get; set; }
+        
+        //Category
+        public DbSet<Category> Categorys { get; set; }  
+
+        //SubCategorys
+        public DbSet<SubCategory> SubCategorys { get; set; }    
+
     }
 }
