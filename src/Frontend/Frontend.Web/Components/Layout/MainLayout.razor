@@ -21,18 +21,19 @@
     </div>
 </div>
 
-@* Inject js dependencies *@
+@* Inject js dependencies 
+FYI: Not using it right now but this is a sample on how we inject js in Blazor Wasm
 @code
 {
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await JS.InvokeAsync<IJSObjectReference>("import", "./lib/jquery/dist/jquery.min.js");
             await JS.InvokeAsync<IJSObjectReference>("import", "./js/sidebarmenu.js");
         }
     }
 }
+*@
 
 @* Authentication and Authorization *@
 @code
