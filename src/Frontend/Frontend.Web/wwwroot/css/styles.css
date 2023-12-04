@@ -19909,3 +19909,23 @@ ul {
     .timeline-widget .timeline-item .timeline-badge.badge-primary {
         border: 2px solid #5D87FF
     }
+
+/*Colors suck*/
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    } 

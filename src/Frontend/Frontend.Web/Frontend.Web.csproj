@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Components\Products\Forms\Delete\**" />
+    <Compile Remove="wwwroot\lib\**" />
     <Content Remove="Components\Products\Forms\Delete\**" />
+    <Content Remove="wwwroot\lib\**" />
     <EmbeddedResource Remove="Components\Products\Forms\Delete\**" />
+    <EmbeddedResource Remove="wwwroot\lib\**" />
     <None Remove="Components\Products\Forms\Delete\**" />
+    <None Remove="wwwroot\lib\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\css\icons\tabler-icons\fonts\" />
-    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>
