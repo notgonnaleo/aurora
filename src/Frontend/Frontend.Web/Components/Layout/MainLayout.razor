@@ -5,22 +5,25 @@
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
 
-<div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+@* main-wrapper is bugging the shit of main layout i neewd to figure out someway to fix it*@
     @if (isAuthenticated)
     {
-        <div class="sidebar-nav scroll-sidebar @NavMenuCssClass">
-            <Sidebar />
-        </div>
-        <div class="body-wrapper">
-            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
-            @Body
+        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+            <div class="sidebar-nav scroll-sidebar @NavMenuCssClass">
+                <Sidebar />
+            </div>
+            <div class="body-wrapper">
+                <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
+                @Body
+            </div>
         </div>
     }
     else
     {
-        @Body
+        <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+            @Body
+        </div>
     }
-</div>
 
 @* Inject js dependencies 
 FYI: Not using it right now but this is a sample on how we inject js in Blazor Wasm
