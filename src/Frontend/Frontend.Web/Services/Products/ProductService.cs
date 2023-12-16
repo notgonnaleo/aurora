@@ -32,7 +32,7 @@ namespace Frontend.Web.Services.Products
                     ParameterName = ProductsEnums.GET.GetProduct.tenantId,
                     ParameterValue = tenantId,
                 },
-                    new RouteParameterRequest()
+                new RouteParameterRequest()
                 {
                     ParameterName = ProductsEnums.GET.GetProduct.productId,
                     ParameterValue = productId,
