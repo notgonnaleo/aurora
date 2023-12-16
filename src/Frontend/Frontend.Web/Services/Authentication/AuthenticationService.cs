@@ -30,9 +30,13 @@ namespace Frontend.Web.Services.Authentication
             return userSession != null;
         }
 
-        public async Task<UserSessionContext?> IsUserLogged()
+        public async Task<bool> IsUserLogged()
         {
-            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            var session = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            if(session != null)
+                return true;
+
+            return false;
         }
     }
 }

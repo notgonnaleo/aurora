@@ -54,7 +54,7 @@ FYI: Not using it right now but this is a sample on how we inject js in Blazor W
 
     public async Task<bool> IsAuthenticated()
     {
-        return await _authService.IsUserLogged() != null;
+        return await _authService.IsUserLogged();
     }
 }
 
