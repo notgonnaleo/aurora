@@ -5,39 +5,24 @@
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
 
-@* main-wrapper is bugging the shit of main layout i neewd to figure out someway to fix it*@
-    @if (isAuthenticated)
-    {
-        <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-            <div class="sidebar-nav scroll-sidebar @NavMenuCssClass">
-                <Sidebar />
-            </div>
-            <div class="body-wrapper">
-                <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
-                @Body
-            </div>
+@if (isAuthenticated)
+{
+    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        <div class="sidebar-nav scroll-sidebar @NavMenuCssClass">
+            <Sidebar />
         </div>
-    }
-    else
-    {
-        <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        <div class="body-wrapper">
+            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
             @Body
         </div>
-    }
-
-@* Inject js dependencies 
-FYI: Not using it right now but this is a sample on how we inject js in Blazor Wasm
-@code
-{
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JS.InvokeAsync<IJSObjectReference>("import", "./js/sidebarmenu.js");
-        }
-    }
+    </div>
 }
-*@
+else
+{
+    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        @Body
+    </div>
+}
 
 @* Authentication and Authorization *@
 @code

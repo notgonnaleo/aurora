@@ -101,7 +101,7 @@ else
 }
 
 @code {
-    private List<Product>? products;
+    private IEnumerable<Product>? products;
     string tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
 
     protected override async Task OnInitializedAsync()
@@ -111,6 +111,6 @@ else
 
     private void Edit(Product product)
     {
-        NavigationManager.NavigateTo($"/edit-products/{product.Id}");
+        NavigationManager.NavigateTo($"/products/edit/{product.Id}");
     }
 }

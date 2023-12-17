@@ -18,6 +18,7 @@ builder.Services.AddScoped<HttpClientRepository>();
 builder.Services.AddScoped<HttpRequestHeader>();
 builder.Services.AddScoped<EnvironmentHandler>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 
 await builder.Build().RunAsync();

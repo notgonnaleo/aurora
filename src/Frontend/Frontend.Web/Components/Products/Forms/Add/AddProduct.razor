@@ -43,14 +43,19 @@
 
     public async Task CreateProduct()
     {
-        Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
-        model.TenantId = tenantIdGuid;
+        try
+        {
+            Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
+            model.TenantId = tenantIdGuid;
+            Product newProduct = await _productService.CreateProduct(model);
+            if (newProduct != null)
+                navigator.NavigateTo("/products");
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
 
-        Product newProduct = await _productService.CreateProduct(model);
-
-        if (newProduct != null)
-            navigator.NavigateTo("/products");
-        else
-            throw new Exception("Failed while creating new item.");
     }
 }
