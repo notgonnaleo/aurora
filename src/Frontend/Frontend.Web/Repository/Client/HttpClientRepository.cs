@@ -40,9 +40,17 @@ namespace Frontend.Web.Repository.Client
         /// <exception cref="NotImplementedException"></exception>
         public async Task<List<T>> Get<T>(RouteBuilder<T> route)
         {
-            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
-            _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-            return await _httpClient.GetFromJsonAsync<List<T>>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+            try
+            {
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
+                _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
+                return await _httpClient.GetFromJsonAsync<List<T>>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -54,9 +62,17 @@ namespace Frontend.Web.Repository.Client
         /// <exception cref="NotImplementedException"></exception>
         public async Task<T> GetById<T>(RouteBuilder<T> route)
         {
-            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
-            _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-            return await _httpClient.GetFromJsonAsync<T>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+            try
+            {
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
+                _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
+                return await _httpClient.GetFromJsonAsync<T>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -67,19 +83,23 @@ namespace Frontend.Web.Repository.Client
         /// <returns></returns>
         public async Task<T> Post<T>(RouteBuilder<T> route)
         {
-            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
-            var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
-            request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-            HttpResponseMessage response = await _httpClient.SendAsync(request);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                T responseObject = JsonSerializer.Deserialize<T>(responseContent)!;
-                return responseObject;
-            }
-            else
-            {
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
+                var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+                request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    T responseObject = JsonSerializer.Deserialize<T>(responseContent)!;
+                    return responseObject;
+                }
                 throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -91,21 +111,26 @@ namespace Frontend.Web.Repository.Client
         /// <returns></returns>
         public async Task<bool> Put<T>(RouteBuilder<T> route)
         {
-            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
-            var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
-            var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
-            request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-            HttpResponseMessage response = await _httpClient.PutAsync(endpoint, request.Content);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string responseContent = await response.Content.ReadAsStringAsync();
-                bool responseObject = JsonSerializer.Deserialize<bool>(responseContent)!;
-                return responseObject;
-            }
-            else
-            {
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
+                var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
+                var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
+                request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                HttpResponseMessage response = await _httpClient.PutAsync(endpoint, request.Content);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    bool responseObject = JsonSerializer.Deserialize<bool>(responseContent)!;
+                    return responseObject;
+                }
                 throw new Exception("HTTP request failed with status code: " + response.StatusCode);
             }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
 
         /* Public Methods */
@@ -118,10 +143,18 @@ namespace Frontend.Web.Repository.Client
         /// <returns></returns>
         public async Task<HttpResponseMessage> Post<T>(RouteBuilder<T> route, bool isPublic = true)
         {
-            HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, isPublic, ContentTypeEnum.JSON);
-            var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
-            request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-            return await _httpClient.SendAsync(request);
+            try
+            {
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, isPublic, ContentTypeEnum.JSON);
+                var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+                request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                return await _httpClient.SendAsync(request);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
     }
 }
