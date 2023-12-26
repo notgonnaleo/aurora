@@ -58,7 +58,7 @@ namespace Backend.Infrastructure.Services.SubCategorys
             }
         }
 
-        public async Task<SubCategory> Add(SubCategory subCategory, string categoryId)
+        public async Task<SubCategory> Add(SubCategory subCategory, Guid categoryId)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Backend.Infrastructure.Services.SubCategorys
                 }
                 else
                 {
-                    throw new ArgumentException($"CategoryId {categoryId} não encontrado.");
+                    throw new ArgumentException("The Subcategory searched does not exist or is invalid");
                 }
 
                 
