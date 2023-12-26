@@ -1,17 +1,14 @@
-﻿<aside class="left-sidebar" >
-    <!-- Sidebar scroll-->
+﻿<aside class="left-sidebar" > 
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="./index.html" class="text-nowrap logo-img">
                 <h1>Blazor</h1>
             </a>
-            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse" @onclick="ToggleNavMenu">
                 <i class="ti ti-x fs-8"></i>
             </div>
         </div>
-        <!-- Sidebar navigation-->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-
             <ul id="sidebarnav">
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -145,19 +142,21 @@
                 </div>
             </div>
         </nav>
-        <!-- End Sidebar navigation -->
     </div>
-    <!-- End Sidebar scroll-->
 </aside>
 
-@* Sidebar Interaction *@
-@code {
+@code 
+{
     private bool collapseSubNavMenu = true;
-
     private string? SubNavMenuCssClass => collapseSubNavMenu ? "collapse" : null;
-
     private void ToggleSubNavMenu()
     {
         collapseSubNavMenu = !collapseSubNavMenu;
     }
+}
+
+@code
+{
+    [Parameter] public bool CollapseNavMenu { get; set; }
+    [Parameter] public Action ToggleNavMenu { get; set; }
 }

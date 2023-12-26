@@ -7,10 +7,8 @@
 
 @if (isAuthenticated)
 {
-    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-        <div class="sidebar-nav scroll-sidebar @NavMenuCssClass">
-            <Sidebar />
-        </div>
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
             @Body
@@ -24,8 +22,18 @@ else
     </div>
 }
 
-@* Authentication and Authorization *@
-@code
+@code 
+{
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? null : "show-sidebar";
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
+
+@code 
 {
     public bool isAuthenticated;
 
@@ -44,17 +52,5 @@ else
     public async Task<bool> IsAuthenticated()
     {
         return await _authService.IsUserLogged();
-    }
-}
-
-@* Sidebar Interaction *@
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
     }
 }

@@ -1,4 +1,4 @@
-﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+﻿@import "../css/styles.css";
 
 html, body {
     font-family: 'Plus Jakarta Sans', Helvetica, Arial, sans-serif;
