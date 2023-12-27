@@ -19216,29 +19216,15 @@ textarea.form-control-lg {
 }
 
 .right-sidebar {
-    right: -600px;
-    width: 600px;
+    right: -315px;
+    width: 300px;
     background-color: #fff;
-    position: absolute;
+    position: fixed;
     -webkit-transition: 0.2s ease-in;
     transition: 0.2s ease-in;
     height: 100%;
     z-index: 11;
     border-left: 1px solid rgb(229,234,239)
-}
-
-@media (max-width:1199px) {
-    .right-sidebar {
-        right: -315px;
-        width: -315px;
-        background-color: #fff;
-        position: absolute;
-        -webkit-transition: 0.2s ease-in;
-        transition: 0.2s ease-in;
-        height: 100%;
-        z-index: 11;
-        border-left: 1px solid rgb(229,234,239)
-    }
 }
 
     .show-menu {
@@ -19802,6 +19788,12 @@ textarea.form-control-lg {
 
         #main-wrapper[data-layout=vertical][data-sidebartype=full].show-sidebar .left-sidebar, #main-wrapper[data-layout=vertical][data-sidebartype=mini-sidebar].show-sidebar .left-sidebar {
             left: 0
+        }
+    }
+
+    @media (max-width:1199px) {
+        .right-sidebar {
+            width: 100% !important;
         }
     }
 

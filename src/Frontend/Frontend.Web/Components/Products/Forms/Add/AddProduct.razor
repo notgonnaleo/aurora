@@ -3,36 +3,35 @@
 @inject ProductService _productService
 @inject NavigationManager navigator
 
-<div class="card-body">
+<div>
+    <i class="ti ti-x cursor-pointer" @onclick="ToggleRightSidebar"></i>
+</div>
+<div class="card-body p-4">
     <form>
-        <div class="row">
-            <div class="mb-3 col-sm-3">
+            <div class="mb-3 col-sm-12">
                 <label for="sku" class="form-label">SKU</label>
                 <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
             </div>
-            <div class="mb-3 col-sm-3">
+            <div class="mb-3 col-sm-12">
                 <label for="name" class="form-label">Name</label>
                 <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
             </div>
-            <div class="mb-3 col-sm-3">
+            <div class="mb-3 col-sm-12">
                 <label for="description" class="form-label">Description</label>
                 <input type="text" class="form-control" id="description" placeholder="Description" @bind="@model.Description">
             </div>
-            <div class="mb-3 col-sm-3">
+            <div class="mb-3 col-sm-12">
                 <label for="value" class="form-label">Value</label>
                 <input type="number" class="form-control" id="value" placeholder="Value" @bind="@model.Value">
             </div>
-        </div>
-        <div class="row">
-            <div class="mb-3 col-sm-3">
+            <div class="mb-3 col-sm-12">
                 <label for="liquidWeight" class="form-label">Liquid Weight</label>
                 <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@model.LiquidWeight">
             </div>
-            <div class="mb-3 col-sm-3">
+            <div class="mb-3 col-sm-12">
                 <label for="totalWeight" class="form-label">Total Weight</label>
                 <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
             </div>
-        </div>
         <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
     </form>
 </div>
@@ -58,4 +57,12 @@
         }
 
     }
+}
+
+@code
+{
+    [Parameter] public Action ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+
+
 }

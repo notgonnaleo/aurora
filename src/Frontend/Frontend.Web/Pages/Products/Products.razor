@@ -3,7 +3,7 @@
 <PageTitle>Aurora - Products</PageTitle>
 
 <aside class="right-sidebar @formCssClass">
-    <Frontend.Web.Components.Products.Forms.Add.AddProduct />
+    <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm"/>
 </aside>
 
 <div class="container-fluid">
@@ -27,7 +27,7 @@
 {
     private bool collapseForm = true;
 
-    private string? formCssClass => collapseForm ? "show-menu" : null;
+    private string? formCssClass => collapseForm ?  null : "show-menu";
     private string? btnText => collapseForm ? "New" : "Hide menu";
 
     private void ToggleForm()
