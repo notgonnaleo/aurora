@@ -1,17 +1,17 @@
 ﻿@page "/products"
 
 <PageTitle>Aurora - Products</PageTitle>
+
+<aside class="right-sidebar @formCssClass">
+    <Frontend.Web.Components.Products.Forms.Add.AddProduct />
+</aside>
+
 <div class="container-fluid">
     <div class="row">
         <div class="m-4">
             <button class="btn btn-outline-primary" @onclick="ToggleForm">
                 @btnText
             </button>
-        </div>
-        <div class="col-lg-16 d-flex align-items-stretch">
-            <div class="card w-100 @formCssClass">
-                <Frontend.Web.Components.Products.Forms.Add.AddProduct />
-            </div>
         </div>
     </div>
     <div class="row">
@@ -23,12 +23,11 @@
     </div>
 </div>
 
-
 @code
 {
     private bool collapseForm = true;
 
-    private string? formCssClass => collapseForm ? "collapse" : null;
+    private string? formCssClass => collapseForm ? "show-menu" : null;
     private string? btnText => collapseForm ? "New" : "Hide menu";
 
     private void ToggleForm()
