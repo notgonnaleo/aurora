@@ -19216,7 +19216,7 @@ textarea.form-control-lg {
 }
 
 .right-sidebar {
-    right: -315px;
+    right: -425px;
     width: 300px;
     background-color: #fff;
     position: fixed;
@@ -19791,7 +19791,7 @@ textarea.form-control-lg {
         }
     }
 
-    @media (max-width:1199px) {
+    @media (max-width:425px) {
         .right-sidebar {
             width: 100% !important;
         }

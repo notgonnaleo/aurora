@@ -60,3 +60,15 @@ a, .btn-link {
 .blazor-error-boundary::after {
     content: "An error has occurred."
 }
+
+.item-card{
+    display: flex;
+    flex-direction: row;
+}
+
+@media(max-width: 1105px){
+    item-card{
+        display: flex;
+        flex-direction: column;
+    }
+}

@@ -5,7 +5,6 @@
 <aside class="right-sidebar @formCssClass">
     <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm"/>
 </aside>
-
 <div class="container-fluid">
     <div class="row">
         <div class="m-4">
@@ -15,10 +14,8 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-16 d-flex align-items-stretch">
-            <div class="card w-100">
-                <Frontend.Web.Components.Products.Table.ProductsTable />
-            </div>
+        <div class="col-lg-16 item-card">
+            <Frontend.Web.Components.Products.Table.ProductsTable />
         </div>
     </div>
 </div>
@@ -26,7 +23,6 @@
 @code
 {
     private bool collapseForm = true;
-
     private string? formCssClass => collapseForm ?  null : "show-menu";
     private string? btnText => collapseForm ? "New" : "Hide menu";
 
