@@ -35,6 +35,13 @@ namespace Backend.Domain.Entities.Products
             return new Product()
             {
                 Id = Guid.NewGuid(),
+                TenantId = product.TenantId,
+                SKU = product.SKU, 
+                Name = product.Name,
+                Description = product.Description,
+                Value = product.Value,
+                TotalWeight = product.TotalWeight,
+                LiquidWeight = product.LiquidWeight,
                 CreatedBy = userId,
                 Created = DateTime.UtcNow,
                 Updated = null,
