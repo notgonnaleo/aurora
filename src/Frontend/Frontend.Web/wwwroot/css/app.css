@@ -61,14 +61,21 @@ a, .btn-link {
     content: "An error has occurred."
 }
 
-.item-card{
-    display: flex;
+.card-list {
+    justify-content: space-between;
     flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 @media(max-width: 1105px){
-    item-card{
+    .card-list {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
     }
 }
