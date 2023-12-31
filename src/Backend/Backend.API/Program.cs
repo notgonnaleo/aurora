@@ -13,6 +13,12 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Memberships;
+using Backend.Infrastructure.Services.ProductTypes;
+using System.ComponentModel;
+using Backend.Domain.Entities.Categorys;
+using Backend.Domain.Entities.SubCategory;
+using Backend.Infrastructure.Services.Categorys;
+using Backend.Infrastructure.Services.SubCategorys;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +30,15 @@ builder.Services.AddScoped<AuthorizationService>();
 
 // Products
 builder.Services.AddScoped<ProductService>();
+
+//ProductsType
+builder.Services.AddScoped<ProductTypeService>();
+
+//Category
+builder.Services.AddScoped<CategoryService>();
+
+//SubCategorys
+builder.Services.AddScoped<SubCategoryService>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();

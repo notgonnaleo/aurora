@@ -81,7 +81,7 @@ namespace Backend.API.Controllers.Products
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
-        [HttpPut]
+        [HttpDelete]
         [Route("Delete")]
         public async Task<ActionResult> Delete(Guid Id)
         {
