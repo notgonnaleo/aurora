@@ -15,33 +15,27 @@ else
 {
     @foreach (var product in products)
     {
-    <div class="card item">
-        <div class="p-4">
-            <h6 class="fw-semibold fs-4">
-                #@product.SKU - @product.Name
-            </h6>
-        </div>
-        <div class="d-flex align-items-center justify-content-between p-4">
-            <div>
-                <h6 class="fw-semibold mb-0">
-                    @product.Value
-                </h6>
+    <div class="col-sm-6 col-xl-3">
+        <div class="card overflow-hidden rounded-2">
+            <div class="card-img-top rounded-0">
+                <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" class="card-img-top rounded-0">
             </div>
-
-            <div>
-                <h6 class="fw-semibold mb-0">
-                    @product.LiquidWeight
+            <div class="card-body pt-3 p-4">
+                <h6 class="fw-semibold fs-4">
+                    #@product.SKU - @product.Name
                 </h6>
-            </div>
-
-            <div>
-                <h6 class="fw-semibold mb-0">
-                    @product.TotalWeight
-                </h6>
-            </div>
-
-            <div>
-                <a class="cursor-pointer" @onclick="() => Edit(product)">Edit</a>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h6 class="fw-semibold fs-4 mb-0">
+                            R$ @product.Value
+                        </h6>
+                    </div>
+                    <div>
+                        <a class="bg-primary rounded-circle p-2 text-white d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
+                            <i class="ti ti-edit"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
