@@ -29,5 +29,25 @@ namespace Backend.Domain.Entities.Products
         public Guid? CreatedBy { get; set; }
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
+
+        public Product Create(Product product, Guid userId)
+        {
+            return new Product()
+            {
+                Id = Guid.NewGuid(),
+                TenantId = product.TenantId,
+                SKU = product.SKU, 
+                Name = product.Name,
+                Description = product.Description,
+                Value = product.Value,
+                TotalWeight = product.TotalWeight,
+                LiquidWeight = product.LiquidWeight,
+                CreatedBy = userId,
+                Created = DateTime.UtcNow,
+                Updated = null,
+                UpdatedBy = null,
+                Active = true
+            };
+        }
     }
 }

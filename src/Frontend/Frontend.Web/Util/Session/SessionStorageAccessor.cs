@@ -33,7 +33,7 @@ namespace Frontend.Web.Util.Session
             }
         }
 
-        public async Task<T> GetValueAsync<T>(string key)
+        public async Task<T?> GetValueAsync<T>(string key)
         {
             await WaitForReference();
             var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);

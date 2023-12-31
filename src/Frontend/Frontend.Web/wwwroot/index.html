@@ -4,28 +4,29 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Frontend.Web</title>
-    <base href="/" />
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <title>Aurora</title>
     <link href="css/app.css" rel="stylesheet" />
-    <link href="Frontend.Web.styles.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
-    <link href="css/styles.min.css" rel="stylesheet" />
-    <link href="css/icons/tabler-icons/tabler-icons.css" rel="stylesheet" />
-    <link href="css/icons/tabler-icons/tabler-icons.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div class="loader">
+            <section class="dots-container">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </section>
+        </div>
+    </div>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-
-    <script src="lib/jquery/dist/jquery.min.js"></script>
-    <script src="js/sidebarmenu.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 

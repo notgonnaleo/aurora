@@ -5,41 +5,35 @@
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
 
-<body>
-    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-        @if (isAuthenticated)
-        {
-            <div class="sidebar-nav scroll-sidebar @NavMenuCssClass" @onclick="ToggleNavMenu">
-                <Sidebar />
-            </div>
-        }
+@if (isAuthenticated)
+{
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
         <div class="body-wrapper">
-        @if (isAuthenticated)
-        {
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
-        }
-            <div class="container-fluid">
-                @Body
-            </div>
+            @Body
         </div>
     </div>
-</body>
-
-@* Inject js dependencies *@
-@code
+}
+else
 {
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+        @Body
+    </div>
+}
+
+@code 
+{
+    private bool collapseNavMenu = true;
+    private string? NavMenuCssClass => collapseNavMenu ? null : "show-sidebar";
+
+    private void ToggleNavMenu()
     {
-        if (firstRender)
-        {
-            await JS.InvokeAsync<IJSObjectReference>("import", "./lib/jquery/dist/jquery.min.js");
-            await JS.InvokeAsync<IJSObjectReference>("import", "./js/sidebarmenu.js");
-        }
+        collapseNavMenu = !collapseNavMenu;
     }
 }
 
-@* Authentication and Authorization *@
-@code
+@code 
 {
     public bool isAuthenticated;
 
@@ -57,18 +51,6 @@
 
     public async Task<bool> IsAuthenticated()
     {
-        return await _authService.IsUserLogged() != null;
-    }
-}
-
-@* Sidebar Interaction *@
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
+        return await _authService.IsUserLogged();
     }
 }

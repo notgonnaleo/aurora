@@ -29,9 +29,9 @@ namespace Backend.API.Controllers.Products
             {
                 return Ok(await _productService.Get(tenantId));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw ex;
+                throw;
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
@@ -43,10 +43,10 @@ namespace Backend.API.Controllers.Products
             {
                 return Ok(await _productService.GetById(tenantId, productId));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
@@ -58,10 +58,10 @@ namespace Backend.API.Controllers.Products
             {
                 return Ok(await _productService.Add(product));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
@@ -74,10 +74,10 @@ namespace Backend.API.Controllers.Products
                 return Ok(await _productService.Update(product));
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
@@ -89,10 +89,10 @@ namespace Backend.API.Controllers.Products
             {
                 return Ok(await _productService.Delete(Id));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
         }
     }

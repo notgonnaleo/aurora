@@ -58,12 +58,19 @@
 
     public async Task UpdateProduct()
     {
-        model.TenantId = tenantIdGuid;
-        bool updated = await _productService.UpdateProduct(model);
+        try
+        {
+            model.TenantId = tenantIdGuid;
+            bool updated = await _productService.UpdateProduct(model);
 
-        if (updated)
-            navigator.NavigateTo("/products");
-        else
-            throw new Exception("Failed while creating new item.");
+            if (updated)
+                navigator.NavigateTo("/products");
+
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+
     }
 }
