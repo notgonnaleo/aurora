@@ -1,6 +1,8 @@
 ﻿using Backend.Domain.Entities.Agent;
+using Backend.Domain.Entities.Categorys;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
+using Backend.Domain.Entities.SubCategory;
 using Backend.Domain.Entities.Taxes.CNAE;
 using Backend.Domain.Entities.Taxes.ICMS;
 using Backend.Domain.Entities.Taxes.Products.Taxes;
@@ -39,5 +41,8 @@ namespace Backend.Infrastructure.Context
         public DbSet<Agent> Agents { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<Category> Categorys { get; set; }
+        public DbSet<SubCategory> SubCategorys { get; set; }
+
     }
 }
