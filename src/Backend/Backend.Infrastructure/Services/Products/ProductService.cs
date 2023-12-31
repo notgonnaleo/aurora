@@ -21,7 +21,7 @@ namespace Backend.Infrastructure.Services.Products
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserContextService _userContextService;
 
-        public ProductService (AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public ProductService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
@@ -48,8 +48,7 @@ namespace Backend.Infrastructure.Services.Products
             try
             {
                 return _appDbContext.Products
-                    .Where(x => x.TenantId == tenantId && x.Id == productId && x.Active == true)
-                    .First();
+                  .FirstOrDefault(x => x.TenantId == tenantId && x.Id == productId && x.Active == true);
             }
             catch (Exception ex)
             {
