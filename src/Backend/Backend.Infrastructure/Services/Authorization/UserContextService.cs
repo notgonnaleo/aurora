@@ -55,15 +55,12 @@ namespace Backend.Infrastructure.Services.Authorization
         {
             var retrieveAuthToken = _cache.Get<string>("Token");
             if (retrieveAuthToken == null)
-                throw new ArgumentNullException("Invalid or missing authorization token.");
-
+                throw new Exception("Invalid or missing authorization token.");
             var userContext = _cache.Get<UserSessionContext>(retrieveAuthToken);
-
-
             return Handler(userContext);
         }
 
-        public List<UserRoute> VerifyUserRequest(List<Claim> userClaims)
+        public List<UserRoute> VerifyUserRequest(IEnumerable<Claim> userClaims)
         {
             try
             {
@@ -87,6 +84,5 @@ namespace Backend.Infrastructure.Services.Authorization
                 throw ex;
             }
         }
-
     }
 }

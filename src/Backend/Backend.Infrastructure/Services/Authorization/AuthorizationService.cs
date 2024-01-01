@@ -1,10 +1,15 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Authentication.Users;
 using Backend.Domain.Entities.Authentication.Users.Claims;
+using Backend.Domain.Entities.Authentication.Users.Login.Response;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Authorization.Modules;
 using Backend.Domain.Entities.Authorization.Roles;
 using Backend.Domain.Entities.Authorization.UserRoles;
+using Backend.Domain.Entities.Authorization.UserRoutes;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Services.Tenants;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -17,13 +22,21 @@ namespace Backend.Infrastructure.Services.Authorization
     public class AuthorizationService
     {
         private readonly AuthDbContext _authDbContext;
-        public AuthorizationService(AuthDbContext authDbContext) 
+        private readonly UserContextService _userContextService;
+        private readonly IMemoryCache _cache;
+        private readonly TenantService _tenantService;
+
+        public AuthorizationService(AuthDbContext authDbContext, UserContextService userContextService, IMemoryCache cache, TenantService tenantService) 
         { 
             _authDbContext = authDbContext;
+            _userContextService = userContextService;
+            _cache = cache;
+            _tenantService = tenantService;
         }
 
-        public async Task<List<Claim>> GetUserContext(List<Tenant> tenants, Guid userId)
+        public IEnumerable<Claim> GetUserContext(List<Tenant> tenants /*remove this motherfucker */, Guid userId)
         {
+            // TODO: should be able to list tenants by the user id 
             List<Claim> userPermissions = new List<Claim>();
             foreach (var tenant in tenants)
             {
@@ -49,6 +62,37 @@ namespace Backend.Infrastructure.Services.Authorization
                 userPermissions.Add(claim);
             }
             return userPermissions.ToList();
+        }
+        public UserSessionContext MapUserContextRolesAndToken(LoginResponse response, IEnumerable<Claim> claims)
+        {
+            return new UserSessionContext()
+            {
+                UserId = response.UserId,
+                Username = response.Username,
+                Claims = claims,
+                Token = response.Token,
+                Levels = _userContextService.VerifyUserRequest(claims),
+                Success = true,
+                Tenant = claims.FirstOrDefault().Tenant,
+                
+            };
+        }
+        public UserSessionContext SetTenant(Guid tenantId)
+        {
+            var context = _userContextService.LoadContext();
+            UserSessionContext userSessionContext = new UserSessionContext()
+            {
+                Tenant = _tenantService.GetById(tenantId),
+                UserId = context.UserId,
+                Claims = context.Claims,
+                Token = context.Token,
+                Success = context.Success,
+                Levels = context.Levels,
+                Message = context.Message,
+                Username = context.Username,
+            };
+            _cache.Set<UserSessionContext>(context.Token, userSessionContext);
+            return userSessionContext;
         }
     }
 }

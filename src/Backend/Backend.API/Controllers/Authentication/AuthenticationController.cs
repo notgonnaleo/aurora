@@ -32,29 +32,23 @@ namespace Backend.API.Controllers.Authentication
         [Route("Login")]
         public async Task<ActionResult<UserSessionContext>> Login(LoginRequest request)
         {
-            // maybe create a tenant list explicit would be easier
             var response = _authenticationService.Authenticate(request);
             if (response.Success)
             {
-                List<Claim> userPermissions = await _authorizationService.GetUserContext(response.Tenants, response.UserId);
-                UserSessionContext userContext = new UserSessionContext()
-                {
-                    UserId = response.UserId,
-                    Username = response.Username,
-                    Claims = userPermissions,
-                    Token = response.Token,
-                    Levels = _userContextService.VerifyUserRequest(userPermissions),
-                    Success = true
-                };
-
-                // It will store the userContext on the cache and it can be found by getting it using the token
+                IEnumerable<Claim> claims = _authorizationService.GetUserContext(response.Tenants, response.UserId);
+                UserSessionContext userContext = _authorizationService.MapUserContextRolesAndToken(response, claims);
                 _cache.Set(userContext.Token, userContext, TimeSpan.FromHours(4));
                 return Ok(userContext);
             }
-            else
-            {
-                return NotFound(response.Message);
-            }
+            return NotFound(response.Message);
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPost]
+        [Route("SetTenant")]
+        public async Task<ActionResult<UserSessionContext>> SetTenant(Guid tenantId)
+        {
+            return _authorizationService.SetTenant(tenantId);
         }
     }
 }

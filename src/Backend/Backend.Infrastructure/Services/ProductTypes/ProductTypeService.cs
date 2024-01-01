@@ -85,7 +85,7 @@ namespace Backend.Infrastructure.Services.ProductTypes
             ProductTypeId.Active = productType.Active;
 
             _appDbContext.ProductTypes.Update(ProductTypeId);
-             _appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
             return ProductTypeId;
         }

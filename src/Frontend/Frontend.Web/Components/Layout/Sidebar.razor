@@ -16,7 +16,7 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="./index.html" aria-expanded="false">
+                    <a class="sidebar-link" href="/" aria-expanded="false">
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
@@ -41,7 +41,7 @@
                         <li class="sidebar-item">
                             <a href="../main/form-inputs.html" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
-                                    <i class="ti ti-circle"></i>
+                                    <i class="ti ti-circle-filled"></i>
                                 </div>
                                 <span class="hide-menu">Forms Input</span>
                             </a>
@@ -50,11 +50,11 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="./ui-buttons.html" aria-expanded="false">
+                    <a class="sidebar-link" href="products" aria-expanded="false">
                         <span>
-                            <i class="ti ti-article"></i>
+                            <i class="ti ti-building-store"></i>
                         </span>
-                        <span class="hide-menu">Buttons</span>
+                        <span class="hide-menu">Products</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -144,6 +144,14 @@
         </nav>
     </div>
 </aside>
+
+@code
+{
+    private IEnumerable<Backend.Domain.Entities.Authentication.Tenants.Tenant> GetTenantsByUserId(Guid userId)
+    {
+        return null; // create list of tenants that the user has a membership with
+    }
+}
 
 @code 
 {
