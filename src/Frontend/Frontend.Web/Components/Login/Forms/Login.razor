@@ -46,11 +46,8 @@
     {
         bool isAuthenticated = await _authenticationService.IsUserLogged();
         if (isAuthenticated)
-    {
             Navigator.NavigateTo("/", true);
-        }
     }
-
 
     public async Task<bool> SignIn()
     {

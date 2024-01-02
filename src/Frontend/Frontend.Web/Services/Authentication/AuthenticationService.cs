@@ -3,6 +3,7 @@ using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
+using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Client;
 using Frontend.Web.Util.Session;
 using Microsoft.AspNetCore.Http;
@@ -16,18 +17,18 @@ namespace Frontend.Web.Services.Authentication
     {
         private readonly HttpClientRepository _httpClientRepository;
         private readonly SessionStorageAccessor _sessionStorageAccessor;
-        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor)
+        private readonly AuthenticationRepository _authenticationRepository;
+        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor, AuthenticationRepository authenticationRepository)
         {
             _sessionStorageAccessor = sessionStorageAccessor;
             _httpClientRepository = httpClientRepository;
+            _authenticationRepository = authenticationRepository;
         }
         public async Task<bool> SignIn(LoginRequest model)
         {
-            RouteBuilder<LoginRequest> routeBuilder = new RouteBuilder<LoginRequest>().Send(Endpoints.Authentication, Methods.Authentication.Login, model);
-            var response = await _httpClientRepository.Post(routeBuilder, true);
-            var userSession = await response.Content.ReadFromJsonAsync<UserSessionContext>();
-            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(userSession)); // rather use cookies 
-            return userSession != null;
+            var response = await _authenticationRepository.SignIn(model);
+            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(response));
+            return response != null;
         }
 
         public async Task<bool> IsUserLogged()

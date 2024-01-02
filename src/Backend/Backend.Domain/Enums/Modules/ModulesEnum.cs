@@ -23,7 +23,7 @@ namespace Backend.Infrastructure.Enums.Modules
 
     public class Methods
     {
-        public class Default // fix this ugly ass shit
+        public class Default
         {
             public static string GET = "List";
             public static string FIND = "Find";
@@ -35,6 +35,12 @@ namespace Backend.Infrastructure.Enums.Modules
         public class Authentication
         {
             public static string Login = "Login";
+            public static string SetTenant = "SetTenant";
+
+            public static class SetTenantParameters
+            {
+                public static string tenantId = "tenantId";
+            }
         }
 
         public class Products

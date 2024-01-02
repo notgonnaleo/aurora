@@ -1,4 +1,7 @@
-﻿<aside class="left-sidebar" > 
+﻿@using Backend.Domain.Entities.Authentication.Tenants;
+@using Frontend.Web.Services.Tenants;
+@inject TenantService _tenantService; 
+<aside class="left-sidebar" > 
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a href="./index.html" class="text-nowrap logo-img">
@@ -147,9 +150,15 @@
 
 @code
 {
-    private IEnumerable<Backend.Domain.Entities.Authentication.Tenants.Tenant> GetTenantsByUserId(Guid userId)
+
+}
+
+@code
+{
+    /* FIXME: Get data from user session and send here lmao */
+    private IEnumerable<Tenant> GetTenantsByUserId()
     {
-        return null; // create list of tenants that the user has a membership with
+        return _tenantService.GetTenantsByUserId();
     }
 }
 

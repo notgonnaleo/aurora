@@ -1,5 +1,6 @@
 using Frontend.Web;
 using Frontend.Web.Models.Client;
+using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Client;
 using Frontend.Web.Services.Authentication;
 using Frontend.Web.Services.Products;
@@ -18,6 +19,7 @@ builder.Services.AddScoped<HttpClientRepository>();
 builder.Services.AddScoped<HttpRequestHeader>();
 builder.Services.AddScoped<EnvironmentHandler>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AuthenticationRepository>();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 
