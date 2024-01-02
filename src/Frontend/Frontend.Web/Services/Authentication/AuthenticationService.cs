@@ -1,10 +1,12 @@
-﻿using Backend.Domain.Entities.Authentication.Users.Login.Request;
+﻿using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Authentication.Users.Login.Request;
 using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Client;
+using Frontend.Web.Services.Tenants;
 using Frontend.Web.Util.Session;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +20,14 @@ namespace Frontend.Web.Services.Authentication
         private readonly HttpClientRepository _httpClientRepository;
         private readonly SessionStorageAccessor _sessionStorageAccessor;
         private readonly AuthenticationRepository _authenticationRepository;
-        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor, AuthenticationRepository authenticationRepository)
+        private readonly TenantService _tenantService;
+
+        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor, AuthenticationRepository authenticationRepository, TenantService tenantService)
         {
             _sessionStorageAccessor = sessionStorageAccessor;
             _httpClientRepository = httpClientRepository;
             _authenticationRepository = authenticationRepository;
+            _tenantService = tenantService;
         }
         public async Task<bool> SignIn(LoginRequest model)
         {
@@ -43,6 +48,15 @@ namespace Frontend.Web.Services.Authentication
         public async Task<UserSessionContext> GetContext()
         {
             return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+        }
+
+        public async Task<bool> UpdateTenantInformationInContext(Tenant selectedTenant)
+        {
+            UserSessionContext context = await GetContext();
+
+            context.Tenant = selectedTenant;
+            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
+            return true;
         }
     }
 }

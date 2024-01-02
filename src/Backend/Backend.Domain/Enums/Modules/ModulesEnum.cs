@@ -52,6 +52,11 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static string userId = "userId";
             }
+            public static class GetTenantById
+            {
+                public static string tenantId = "Id";
+
+            }
         }
 
         public class Products

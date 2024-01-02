@@ -1,6 +1,8 @@
 ﻿@using Backend.Domain.Entities.Authentication.Tenants;
+@using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Tenants;
 @inject TenantService _tenantService; 
+@inject AuthenticationService _authenticationService;
 <aside class="left-sidebar" > 
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -166,9 +168,11 @@
 
 @code
 {
-    private async Task<Tenant> ChangeTenant(Guid tenantId)
+    private async Task<bool> ChangeTenant(Guid tenantId)
     {
-        return await _tenantService.SetTenant(tenantId);
+        /* Might need to refactor this later on */
+        Tenant selectedTenant = await _tenantService.SetTenant(tenantId); // Set the new tenant in the actual backend context
+        return await _authenticationService.UpdateTenantInformationInContext(selectedTenant); // Refresh the frontend context too so we can render info based on the new tenant selected
     }
 }
 

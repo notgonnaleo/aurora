@@ -14,6 +14,10 @@ namespace Frontend.Web.Services.Tenants
             _tenantRepository = tenantRepository;
             _authenticationService = authenticationService;
         }
+        public async Task<Tenant> GetTenantById(Guid tenantId)
+        {
+            return await _tenantRepository.GetTenantById(tenantId);
+        }
         public async Task<IEnumerable<Tenant>> GetTenantsByUserId()
         {
             UserSessionContext context = await _authenticationService.GetContext();
