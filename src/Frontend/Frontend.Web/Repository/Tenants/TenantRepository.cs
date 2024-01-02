@@ -13,11 +13,18 @@ namespace Frontend.Web.Repository.TenantRepository
         { 
             _httpClientRepository = httpClientRepository;
         }
-        public async Task<IEnumerable<Tenant>> GetTenantsByUserId(Guid userId)
+        public async Task<IEnumerable<Tenant>> GetTenantsByUserId(Guid userId) 
         {
-            var parameters = new RouteParameterRequest() { ParameterName = Methods.Authentication.SetTenantParameters.tenantId, ParameterValue = userId.ToString() };
-            var request = new RouteBuilder<Tenant>().Send(Endpoints.Authentication, Methods.Authentication.SetTenant, parameters);
+            var parameters = new RouteParameterRequest() { ParameterName = Methods.Tenant.GetTenantsByUserIdParameters.userId, ParameterValue = userId.ToString() };
+            var request = new RouteBuilder<Tenant>().Send(Endpoints.Membership, Methods.Tenant.GetTenantsByUserId, parameters);
             return await _httpClientRepository.Get(request);
+        }
+
+        public async Task<Tenant> SetTenant(Guid tenantId)
+        {
+            var parameters = new RouteParameterRequest() { ParameterName = Methods.Authentication.SetTenantParameters.tenantId, ParameterValue = tenantId.ToString() };
+            var request = new RouteBuilder<Tenant>().Send(Endpoints.Authentication, Methods.Authentication.SetTenant, parameters);
+            return await _httpClientRepository.GetById(request);
         }
     }
 }

@@ -1,18 +1,27 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Frontend.Web.Repository.TenantRepository;
+using Frontend.Web.Services.Authentication;
 
 namespace Frontend.Web.Services.Tenants
 {
     public class TenantService
     {
         private readonly TenantRepository _tenantRepository;
-        public TenantService(TenantRepository tenantRepository) 
+        private readonly AuthenticationService _authenticationService;
+        public TenantService(TenantRepository tenantRepository, AuthenticationService authenticationService) 
         { 
             _tenantRepository = tenantRepository;
+            _authenticationService = authenticationService;
         }
-        public async Task<IEnumerable<Tenant>> GetTenantsByUserId(Guid userId)
+        public async Task<IEnumerable<Tenant>> GetTenantsByUserId()
         {
-            return await _tenantRepository.GetTenantsByUserId(userId);
+            UserSessionContext context = await _authenticationService.GetContext();
+            return await _tenantRepository.GetTenantsByUserId(context.UserId);
+        }
+        public async Task<Tenant> SetTenant(Guid tenantId)
+        {
+            return await _tenantRepository.SetTenant(tenantId);
         }
     }
 }

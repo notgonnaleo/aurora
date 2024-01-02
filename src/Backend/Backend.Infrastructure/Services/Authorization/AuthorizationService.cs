@@ -8,6 +8,7 @@ using Backend.Domain.Entities.Authorization.Roles;
 using Backend.Domain.Entities.Authorization.UserRoles;
 using Backend.Domain.Entities.Authorization.UserRoutes;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Services.Memberships;
 using Backend.Infrastructure.Services.Tenants;
 using Microsoft.Extensions.Caching.Memory;
 using System;

@@ -39,5 +39,10 @@ namespace Frontend.Web.Services.Authentication
 
             return false;
         }
+
+        public async Task<UserSessionContext> GetContext()
+        {
+            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+        }
     }
 }

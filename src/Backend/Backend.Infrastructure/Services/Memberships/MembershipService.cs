@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Authentication.Membership;
+using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Authentication.Users;
 using Backend.Infrastructure.Context;
 using System;
@@ -17,10 +18,13 @@ namespace Backend.Infrastructure.Services.Memberships
             _authDbContext = authDbContext;
         }
 
-        public List<Membership> GetUserMemberships(Guid userId)
+        public IEnumerable<Membership> GetUserMemberships(Guid userId)
         {
-            return _authDbContext.Memberships.Where(x => x.UserId == userId).ToList();
+            return _authDbContext.Memberships.Where(x => x.UserId == userId);
         }
-
+        public IEnumerable<Tenant> GetTenantsByUserId(Guid userId)
+        {
+            return _authDbContext.Memberships.Where(x => x.UserId == userId).Select(x => x.Tenant);
+        }
     }
 }

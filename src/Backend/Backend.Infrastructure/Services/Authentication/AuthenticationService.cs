@@ -41,7 +41,7 @@ namespace Backend.Infrastructure.Services.Authentication
 
             if (user != null)
             {
-                List<Membership> membership = _membershipService.GetUserMemberships(user.Id);
+                List<Membership> membership = _membershipService.GetUserMemberships(user.Id).ToList();
 
                 if (membership.Any())
                 {

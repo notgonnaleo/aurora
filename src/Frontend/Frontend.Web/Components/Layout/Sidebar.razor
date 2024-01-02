@@ -39,15 +39,17 @@
                         </span>
                         <span class="hide-menu">Company</span>
                     </div>
-
                     <ul aria-expanded="false" class="@SubNavMenuCssClass first-level">
                         <li class="sidebar-item">
-                            <a href="../main/form-inputs.html" class="sidebar-link">
+                        @foreach (var tenant in tenants)
+                        {
+                            <a href="@tenant.Id" class="sidebar-link">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle-filled"></i>
                                 </div>
-                                <span class="hide-menu">Forms Input</span>
+                                <span class="hide-menu">@tenant.Name</span>
                             </a>
+                        }
                         </li>
                     </ul>
                 </li>
@@ -150,15 +152,23 @@
 
 @code
 {
+    private IEnumerable<Tenant> tenants = new List<Tenant>();
+    private async void GetTenants()
+    {
+        tenants = await _tenantService.GetTenantsByUserId();
+    }
 
+    protected override async Task OnInitializedAsync()
+    {
+        GetTenants();
+    }
 }
 
 @code
 {
-    /* FIXME: Get data from user session and send here lmao */
-    private IEnumerable<Tenant> GetTenantsByUserId()
+    private async Task<Tenant> SetTenant(Guid tenantId)
     {
-        return _tenantService.GetTenantsByUserId();
+        return await _tenantService.SetTenant(tenantId);
     }
 }
 

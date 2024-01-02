@@ -15,6 +15,8 @@ namespace Backend.Infrastructure.Enums.Modules
     public class Endpoints
     {
         public static string Authentication = "Authentication";
+        public static string Tenant = "Tenant";
+        public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
         public static string Category = "Category";
@@ -43,6 +45,15 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        public class Tenant
+        {
+            public static string GetTenantsByUserId = "GetTenantsByUserId";
+            public static class GetTenantsByUserIdParameters
+            {
+                public static string userId = "userId";
+            }
+        }
+
         public class Products
         {
             public static class GET
@@ -68,7 +79,7 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
-        public static class ProductTypes
+        public class ProductTypes
         {
             public static class GET
             {
@@ -91,7 +102,7 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
-        public static class Categorys
+        public class Categorys
         {
             public static class GET
             {
@@ -110,7 +121,7 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
-        public static class SubCategorys
+        public class SubCategorys
         {
             public static class GET
             {
