@@ -54,10 +54,9 @@ namespace Frontend.Web.Models.Client
         // TODO: Improve here
         public string BuildRequestUri<T>(HttpRequestHeader httpRequestHeader, RouteBuilder<T> route)
         {
-            if (httpRequestHeader.Method == HttpMethod.Get || httpRequestHeader.Method == HttpMethod.Delete)
+            if (route.Parameters != null)
                 return $"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}?{route.Parameters}";
-            else 
-                return $"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}"; // If its not a GET then it's a POST or PUT which most of the cases are the same.
+            return $"{httpRequestHeader.Uri}/{route.Endpoint}/{route.ActionName}";
         }
 
         /// <summary>

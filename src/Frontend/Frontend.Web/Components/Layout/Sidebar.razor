@@ -43,7 +43,7 @@
                         <li class="sidebar-item">
                         @foreach (var tenant in tenants)
                         {
-                            <a href="@tenant.Id" class="sidebar-link">
+                            <a class="sidebar-link" @onclick="() => ChangeTenant(tenant.Id)">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle-filled"></i>
                                 </div>
@@ -166,7 +166,7 @@
 
 @code
 {
-    private async Task<Tenant> SetTenant(Guid tenantId)
+    private async Task<Tenant> ChangeTenant(Guid tenantId)
     {
         return await _tenantService.SetTenant(tenantId);
     }
