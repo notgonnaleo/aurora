@@ -1,9 +1,10 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
-
+using System.Net.Http.Json;
 using ProductsEnums = Backend.Infrastructure.Enums.Modules.Methods.Products;
 
 namespace Frontend.Web.Services.Products
@@ -45,7 +46,11 @@ namespace Frontend.Web.Services.Products
         public async Task<Product> CreateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
-            return await _httpClientRepository.Post(model);
+            var response = await _httpClientRepository.Post(model);
+            return await response.Content.ReadFromJsonAsync<Product>(); 
+            // YES, this is UGLY AS FUCK but since I'm literally alone on this i dont give a fuck
+            // + IDE is bitching about null values but we are never getting null values here.
+
         }
 
         public async Task<bool> UpdateProduct(Product product)

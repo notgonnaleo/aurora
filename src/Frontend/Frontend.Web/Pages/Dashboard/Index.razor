@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>
-@*Vou lidar com isso aqui dps *@
+
 @code
 {
     private bool _isAuthenticated = false;
@@ -28,11 +28,10 @@
         return await _authenticationService.IsUserLogged();
     }
 
-    private async void GetTenantProfileName()
+    private async void GetTenantProfileName() // I HAVE NO FUCKING IDEA ON WHATS GOING ON
     {
         var result = await _authenticationService.GetContext();
-        if (result != null)
-            tenantProfile = result.Tenant;
+        tenantProfile = result.Tenant;
     }
 
     protected override async Task OnInitializedAsync()

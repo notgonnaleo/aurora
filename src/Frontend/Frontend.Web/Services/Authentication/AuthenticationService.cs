@@ -45,13 +45,13 @@ namespace Frontend.Web.Services.Authentication
 
         public async Task<UserSessionContext?> GetContext()
         {
-            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            var fuck = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            return fuck;
         }
 
         public async Task<bool> UpdateTenantInformationInContext(Tenant selectedTenant)
         {
             UserSessionContext context = await GetContext();
-
             context.Tenant = selectedTenant;
             await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
             return true;

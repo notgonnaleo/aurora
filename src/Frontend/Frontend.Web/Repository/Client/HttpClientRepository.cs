@@ -81,25 +81,15 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<T> Post<T>(RouteBuilder<T> route)
+        public async Task<HttpResponseMessage> Post<T>(RouteBuilder<T> route)
         {
             try
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
-
-                if(route.Body != null)
-                    request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-
-                HttpResponseMessage response = await _httpClient.SendAsync(request);
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    T responseObject = JsonSerializer.Deserialize<T>(responseContent)!; /* Meu atual problema eh com esse desgracado que nao ta deserializando meu request do SetTenant*/
-                    return responseObject;
-                }
-                throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+                if (route.Body != null) request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                return await _httpClient.SendAsync(request); // It should return the actual item but I forgot that my code is a piece of shit and instead I need to send the httpresponse to be deserialized first.
             }
             catch (Exception ex)
             {

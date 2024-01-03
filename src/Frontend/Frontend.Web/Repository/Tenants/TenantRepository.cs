@@ -3,6 +3,7 @@ using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
+using System.Net.Http.Json;
 
 namespace Frontend.Web.Repository.TenantRepository
 {
@@ -29,7 +30,8 @@ namespace Frontend.Web.Repository.TenantRepository
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Authentication.SetTenantParameters.tenantId, ParameterValue = tenantId.ToString() };
             var request = new RouteBuilder<Tenant>().Send(Endpoints.Authentication, Methods.Authentication.SetTenant, parameters);
-            return await _httpClientRepository.Post(request);
+            var response = await _httpClientRepository.Post(request);
+            return await response.Content.ReadFromJsonAsync<Tenant>();
         }
     }
 }
