@@ -20,14 +20,12 @@ namespace Frontend.Web.Services.Authentication
         private readonly HttpClientRepository _httpClientRepository;
         private readonly SessionStorageAccessor _sessionStorageAccessor;
         private readonly AuthenticationRepository _authenticationRepository;
-        private readonly TenantService _tenantService;
 
-        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor, AuthenticationRepository authenticationRepository, TenantService tenantService)
+        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor, AuthenticationRepository authenticationRepository)
         {
             _sessionStorageAccessor = sessionStorageAccessor;
             _httpClientRepository = httpClientRepository;
             _authenticationRepository = authenticationRepository;
-            _tenantService = tenantService;
         }
         public async Task<bool> SignIn(LoginRequest model)
         {
@@ -45,7 +43,7 @@ namespace Frontend.Web.Services.Authentication
             return false;
         }
 
-        public async Task<UserSessionContext> GetContext()
+        public async Task<UserSessionContext?> GetContext()
         {
             return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
         }

@@ -78,12 +78,13 @@ namespace Backend.Infrastructure.Services.Authorization
                 
             };
         }
-        public UserSessionContext SetTenant(Guid tenantId)
+        public Tenant SetTenant(Guid tenantId)
         {
             var context = _userContextService.LoadContext();
+            Tenant newTenant = _tenantService.GetById(tenantId);
             UserSessionContext userSessionContext = new UserSessionContext()
             {
-                Tenant = _tenantService.GetById(tenantId),
+                Tenant = newTenant,
                 UserId = context.UserId,
                 Claims = context.Claims,
                 Token = context.Token,
@@ -93,7 +94,7 @@ namespace Backend.Infrastructure.Services.Authorization
                 Username = context.Username,
             };
             _cache.Set<UserSessionContext>(context.Token, userSessionContext);
-            return userSessionContext;
+            return newTenant;
         }
     }
 }

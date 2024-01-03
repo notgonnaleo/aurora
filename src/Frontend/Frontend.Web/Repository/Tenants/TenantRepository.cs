@@ -13,11 +13,11 @@ namespace Frontend.Web.Repository.TenantRepository
         { 
             _httpClientRepository = httpClientRepository;
         }
-        public async Task<IEnumerable<Tenant>> GetTenantsById(Guid tenantId)
+        public async Task<Tenant> GetTenantById(Guid tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Default.FIND, ParameterValue = tenantId.ToString() };
             var request = new RouteBuilder<Tenant>().Send(Endpoints.Tenant, Methods.Default.FIND, parameters);
-            return await _httpClientRepository.Get(request);
+            return await _httpClientRepository.GetById(request);
         }
         public async Task<IEnumerable<Tenant>> GetTenantsByUserId(Guid userId) 
         {

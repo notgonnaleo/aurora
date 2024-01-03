@@ -1,10 +1,48 @@
 ﻿@page "/"
+@using Backend.Domain.Entities.Authentication.Tenants;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Authentication;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager Navigator
+
 <PageTitle>Aurora - Dashboard</PageTitle>
 <div class="container-fluid">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            <p class="mb-0">This is a sample page </p>
+            @if (_isAuthenticated)
+            {
+                <p class="mb-0">You're logged in @tenantProfile.Name</p>
+            }
         </div>
     </div>
 </div>
+@*Vou lidar com isso aqui dps *@
+@code
+{
+    private bool _isAuthenticated = false;
+    private Tenant tenantProfile = new Tenant();
+    
+    public async Task<bool> IsAuthenticated()
+    {
+        return await _authenticationService.IsUserLogged();
+    }
+
+    private async void GetTenantProfileName()
+    {
+        var result = await _authenticationService.GetContext();
+        if (result != null)
+            tenantProfile = result.Tenant;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isAuthenticated = await IsAuthenticated();
+        if (_isAuthenticated)
+        {
+            GetTenantProfileName();
+            StateHasChanged();
+        }
+    }
+
+}

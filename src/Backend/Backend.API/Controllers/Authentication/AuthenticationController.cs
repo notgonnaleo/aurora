@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using static Backend.Infrastructure.Services.Authorization.AuthorizationService;
 using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Microsoft.Extensions.Caching.Memory;
+using Backend.Domain.Entities.Authentication.Tenants;
 
 namespace Backend.API.Controllers.Authentication
 {
@@ -46,7 +47,7 @@ namespace Backend.API.Controllers.Authentication
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("SetTenant")]
-        public async Task<ActionResult<UserSessionContext>> SetTenant(Guid tenantId)
+        public async Task<ActionResult<Tenant>> SetTenant(Guid tenantId)
         {
             return _authorizationService.SetTenant(tenantId);
         }

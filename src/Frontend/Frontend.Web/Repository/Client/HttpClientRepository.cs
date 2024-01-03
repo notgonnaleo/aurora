@@ -96,7 +96,7 @@ namespace Frontend.Web.Repository.Client
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    T responseObject = JsonSerializer.Deserialize<T>(responseContent)!;
+                    T responseObject = JsonSerializer.Deserialize<T>(responseContent)!; /* Meu atual problema eh com esse desgracado que nao ta deserializando meu request do SetTenant*/
                     return responseObject;
                 }
                 throw new Exception("HTTP request failed with status code: " + response.StatusCode);
