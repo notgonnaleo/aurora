@@ -3,6 +3,7 @@
 @using Frontend.Web.Services.Tenants;
 @inject TenantService _tenantService; 
 @inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
 <aside class="left-sidebar" > 
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -155,15 +156,8 @@
 @code
 {
     private IEnumerable<Tenant> tenants = new List<Tenant>();
-    private async void GetTenants()
-    {
-        tenants = await _tenantService.GetTenantsByUserId();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        GetTenants();
-    }
+    private async void GetTenants() => tenants = await _tenantService.GetTenantsByUserId();
+    protected override async Task OnInitializedAsync() => GetTenants();
 }
 
 @code
@@ -174,18 +168,16 @@
         var response = await _authenticationService.UpdateTenantInformationInContext(selectedTenant);
         if (!response)
             throw new Exception("Could not change the tenant profile.");
-        StateHasChanged();
+        navigator.NavigateTo("/", forceLoad: true);
     }
+}
 }
 
 @code 
 {
     private bool collapseSubNavMenu = true;
     private string? SubNavMenuCssClass => collapseSubNavMenu ? "collapse" : null;
-    private void ToggleSubNavMenu()
-    {
-        collapseSubNavMenu = !collapseSubNavMenu;
-    }
+    private void ToggleSubNavMenu() => collapseSubNavMenu = !collapseSubNavMenu;
 }
 
 @code
