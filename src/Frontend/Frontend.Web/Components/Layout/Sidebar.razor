@@ -176,7 +176,6 @@
         if (!response)
             throw new Exception("Could not change the tenant profile.");
         StateHasChanged();
-        await OnTenantChange.InvokeAsync();
     }
 }
 
@@ -194,5 +193,4 @@
 {
     [Parameter] public bool CollapseNavMenu { get; set; }
     [Parameter] public Action ToggleNavMenu { get; set; }
-    [Parameter] public EventCallback OnTenantChange { get; set; }
 }

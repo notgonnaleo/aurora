@@ -27,18 +27,6 @@
         * Pra toda requisicao feita pelo usuario, a gente tem que ter certeza de que ele ta validando as rotas de acesso dele.
         * Graças a minha estupidez eu já fiz um middleware que valida isso em forma de atributo na controller das APIs.
 *@
-
-<Index OnTenantChange="HandleTenantChange" />
-@code
-{
-    private async Task HandleTenantChange()
-    {
-        // Refresh the tenant profile on the main page
-        GetTenantProfileName();
-        StateHasChanged();
-    }
-}
-
 @code
 {
     private bool _isAuthenticated = false;
