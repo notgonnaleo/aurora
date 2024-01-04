@@ -17,21 +17,43 @@
         </div>
     </div>
 </div>
+@*
+    // CODE SMELLS:
+         * Um bom desenvolvedor vai notar que isso aqui tem uma chance fudida de dar merda,
+         * Ai voce vai me perguntar o porque, Simples: A gente ta usando o cache pra renderizar boa parte dos dados 
+         * O problema acontece quando o usuario decide cheretar a aba de aplicacao do navegador, e a gente simplesmente nao tem como controlar isso
+         * Se ele altera o nome do tenant logado na aba de aplicacao o novo nome vai ser exibido aqui.
+    // Como resolver isso:
+        * Pra toda requisicao feita pelo usuario, a gente tem que ter certeza de que ele ta validando as rotas de acesso dele.
+        * Graças a minha estupidez eu já fiz um middleware que valida isso em forma de atributo na controller das APIs.
+*@
+
+<Index OnTenantChange="HandleTenantChange" />
+@code
+{
+    private async Task HandleTenantChange()
+    {
+        // Refresh the tenant profile on the main page
+        GetTenantProfileName();
+        StateHasChanged();
+    }
+}
 
 @code
 {
     private bool _isAuthenticated = false;
     private Tenant tenantProfile = new Tenant();
-    
+
     public async Task<bool> IsAuthenticated()
     {
         return await _authenticationService.IsUserLogged();
     }
 
-    private async void GetTenantProfileName() // I HAVE NO FUCKING IDEA ON WHATS GOING ON
+    public async void GetTenantProfileName() // I HAVE NO FUCKING IDEA ON WHATS GOING ON
     {
         var result = await _authenticationService.GetContext();
         tenantProfile = result.Tenant;
+        StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync()
@@ -40,8 +62,11 @@
         if (_isAuthenticated)
         {
             GetTenantProfileName();
-            StateHasChanged();
         }
     }
 
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        await _authenticationService.GetContext();
+    }
 }

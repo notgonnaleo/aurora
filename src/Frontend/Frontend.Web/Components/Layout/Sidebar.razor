@@ -168,11 +168,15 @@
 
 @code
 {
-    private async Task<bool> ChangeTenant(Guid tenantId)
+    private async void ChangeTenant(Guid tenantId)
     {
         /* Might need to refactor this later on */
-        Tenant selectedTenant = await _tenantService.SetTenant(tenantId); // Set the new tenant in the actual backend context
-        return await _authenticationService.UpdateTenantInformationInContext(selectedTenant); // Refresh the frontend context too so we can render info based on the new tenant selected
+        Tenant selectedTenant = await _tenantService.SetTenant(tenantId);
+        var response = await _authenticationService.UpdateTenantInformationInContext(selectedTenant);
+        if (!response)
+            throw new Exception("Could not change the tenant profile.");
+        StateHasChanged();
+        await OnTenantChange.InvokeAsync();
     }
 }
 
@@ -190,4 +194,5 @@
 {
     [Parameter] public bool CollapseNavMenu { get; set; }
     [Parameter] public Action ToggleNavMenu { get; set; }
+    [Parameter] public EventCallback OnTenantChange { get; set; }
 }

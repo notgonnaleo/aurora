@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Transactions;
 
 namespace Frontend.Web.Services.Authentication
 {
@@ -36,22 +37,19 @@ namespace Frontend.Web.Services.Authentication
 
         public async Task<bool> IsUserLogged()
         {
-            var session = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
-            if(session != null)
-                return true;
-
-            return false;
+            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession") != null;
         }
 
         public async Task<UserSessionContext?> GetContext()
         {
-            var fuck = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
-            return fuck;
+            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
         }
 
         public async Task<bool> UpdateTenantInformationInContext(Tenant selectedTenant)
         {
-            UserSessionContext context = await GetContext();
+            UserSessionContext? context = await GetContext();
+            if(context == null) 
+                return false;
             context.Tenant = selectedTenant;
             await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
             return true;
