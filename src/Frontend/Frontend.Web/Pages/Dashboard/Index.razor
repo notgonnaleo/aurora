@@ -8,13 +8,7 @@
 <PageTitle>Aurora - Dashboard</PageTitle>
 <div class="container-fluid">
     <div class="card">
-        <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            @if (_isAuthenticated)
-            {
-                <p class="mb-0">You're logged in @tenantProfile.Name</p>
-            }
-        </div>
+        <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated TenantProfileName=@tenantProfile.Name/>
     </div>
 </div>
 @*
@@ -29,7 +23,7 @@
 *@
 @code
 {
-    private bool _isAuthenticated = false;
+    private bool isAuthenticated = false;
     private Tenant tenantProfile = new Tenant();
 
     public async Task<bool> IsAuthenticated()
@@ -46,15 +40,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _isAuthenticated = await IsAuthenticated();
-        if (_isAuthenticated)
+        isAuthenticated = await IsAuthenticated();
+        if (isAuthenticated)
         {
             GetTenantProfileName();
         }
-    }
-
-    protected override async void OnAfterRender(bool firstRender)
-    {
-        await _authenticationService.GetContext();
     }
 }

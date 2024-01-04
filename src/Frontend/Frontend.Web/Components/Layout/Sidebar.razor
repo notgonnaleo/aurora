@@ -170,7 +170,6 @@
 {
     private async void ChangeTenant(Guid tenantId)
     {
-        /* Might need to refactor this later on */
         Tenant selectedTenant = await _tenantService.SetTenant(tenantId);
         var response = await _authenticationService.UpdateTenantInformationInContext(selectedTenant);
         if (!response)
