@@ -111,18 +111,18 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
-                public static string GetAllCategories = "Categorys/List";
-                public static string GetCategory = "Categorys/Find";
+                public static string GetAllCategories = "Categories/List";
+                public static string GetCategory = "Categories/Find";
             }
 
             public static class POST
             {
-                public static string AddCategory = "Categorys/Add";
+                public static string AddCategory = "Categories/Add";
             }
 
             public static class PUT
             {
-                public static string UpdateCategory = "Categorys/Update";
+                public static string UpdateCategory = "Categories/Update";
             }
         }
 
@@ -130,18 +130,18 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
-                public static string GetAllSubCategories = "SubCategorys/List";
+                public static string GetAllSubCategories = "SubCategories/List";
                 public static string GetSubCategory = "SubCategorys/Find";
             }
 
             public static class POST
             {
-                public static string AddSubCategory = "SubCategorys/Add";
+                public static string AddSubCategory = "SubCategories/Add";
             }
 
             public static class PUT
             {
-                public static string UpdateSubCategory = "SubCategorys/Update";
+                public static string UpdateSubCategory = "SubCategories/Update";
             }
         }
 

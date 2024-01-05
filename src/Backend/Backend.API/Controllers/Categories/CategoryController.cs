@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace Backend.API.Controllers.Categorys
 {
     [ApiController]
-    [Route("Categorys")]
+    [Route("Categories")]
     public class CategoryController : ControllerBase
     {
         private readonly CategoryService _categoryService;
@@ -79,7 +79,7 @@ namespace Backend.API.Controllers.Categorys
 
                 if (Category == null)
                 {
-                    return NotFound($"Produto com ID {categoryId} não encontrado.");
+                    return NotFound("The category searched does not exist or is invalid");
                 }
 
                 return Ok(Category);
@@ -87,7 +87,7 @@ namespace Backend.API.Controllers.Categorys
             catch (Exception ex)
             {
                 // Registre o erro em um log ou trate de acordo com seus requisitos
-                return StatusCode(500, "Erro interno do servidor.");
+                return StatusCode(500,ex.Message);
             }
         }
 

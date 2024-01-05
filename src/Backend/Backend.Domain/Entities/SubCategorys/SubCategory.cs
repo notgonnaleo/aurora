@@ -20,8 +20,8 @@ namespace Backend.Domain.Entities.SubCategory
         public DateTime? Created { get; set; }  
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
-        public string? CategoryId { get; set; }
-        
+        public Guid CategoryId { get; set; }
+        // obs: mudei a chave FK string pra Guid 
 
 
     }
