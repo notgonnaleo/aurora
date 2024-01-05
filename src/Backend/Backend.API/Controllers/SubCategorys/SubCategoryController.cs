@@ -51,7 +51,7 @@ namespace Backend.API.Controllers.SubCategorys
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(SubCategory subCategory, string categoryId)
+        public async Task<ActionResult> Add(SubCategory subCategory, Guid categoryId)
         {
             try
             {
