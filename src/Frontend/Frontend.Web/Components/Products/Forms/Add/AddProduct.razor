@@ -1,6 +1,8 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
 @inject ProductService _productService
+@inject AuthenticationService _authenticationService
 @inject NavigationManager navigator
 
 <div>
@@ -39,13 +41,12 @@
 @code
 {
     private Product model = new Product();
-
     public async Task CreateProduct()
     {
         try
         {
-            Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
-            model.TenantId = tenantIdGuid;
+            var context = await _authenticationService.GetContext();
+            model.TenantId = context.Tenant.Id;
             Product newProduct = await _productService.CreateProduct(model);
             if (newProduct != null)
                 navigator.NavigateTo("/products");
@@ -55,7 +56,6 @@
             
             throw;
         }
-
     }
 }
 
@@ -63,6 +63,4 @@
 {
     [Parameter] public Action ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
-
-
 }

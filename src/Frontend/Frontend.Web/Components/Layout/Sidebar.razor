@@ -46,7 +46,7 @@
                         <li class="sidebar-item">
                         @foreach (var tenant in tenants)
                         {
-                            <a class="sidebar-link" @onclick="() => ChangeTenant(tenant.Id)">
+                            <a class="sidebar-link cursor-pointer" @onclick="() => ChangeTenant(tenant.Id)">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle-filled"></i>
                                 </div>
