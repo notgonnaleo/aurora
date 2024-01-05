@@ -1,10 +1,12 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
 @using Frontend.Web.Util.Session;
 @using Newtonsoft.Json;
 @inject HttpClient Http
 @inject SessionStorageAccessor _session
 @inject ProductService _productService
+@inject AuthenticationService _authenticationService;
 @inject NavigationManager NavigationManager
 
 @if (products == null)
@@ -42,18 +44,16 @@ else
     }
 }
 
-
 @code {
     private IEnumerable<Product>? products;
-    string tenantIdSample = "cabaa57a-37ff-4871-be7d-0187ed3534a5";
-
     protected override async Task OnInitializedAsync()
     {
-        products = await _productService.GetProducts(tenantIdSample);
+        var context = await _authenticationService.GetContext();
+        products = await _productService.GetProducts(context.Tenant.Id.ToString());
     }
+}
 
-    private void Edit(Product product)
-    {
-        NavigationManager.NavigateTo($"/products/edit/{product.Id}");
-    }
+@code
+{
+    private void Edit(Product product) => NavigationManager.NavigateTo($"/products/edit/{product.Id}");
 }
