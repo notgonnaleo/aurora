@@ -28,7 +28,7 @@ namespace Backend.API.Controllers.SubCategorys
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -43,8 +43,7 @@ namespace Backend.API.Controllers.SubCategorys
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -61,10 +60,6 @@ namespace Backend.API.Controllers.SubCategorys
             {
                 return BadRequest(ex.Message);
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
         }
 
 
@@ -78,16 +73,13 @@ namespace Backend.API.Controllers.SubCategorys
                 var SubCategory = await _subCategoryService.Update(category, SubCategoryId);
 
                 if (SubCategory == null)
-                {
                     return NotFound($"Produto com ID {SubCategoryId} não encontrado.");
-                }
 
                 return Ok(SubCategory);
             }
             catch (Exception ex)
             {
-                // Registre o erro em um log ou trate de acordo com seus requisitos
-                return StatusCode(500, "Erro interno do servidor.");
+                return StatusCode(500, ex.Message);
             }
         }
     }
