@@ -27,6 +27,12 @@ namespace Backend.Infrastructure.Context
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.UseSerialColumns();
+
+            modelBuilder.Entity<ProductType>().HasData(
+                    new ProductType { Id = 1, Name = "Feedstock", Description = "Crafting material", Active = true },
+                    new ProductType { Id = 2, Name = "Intermediate Component", Description = "Intermediate Product/Crafting material", Active = true },
+                    new ProductType { Id = 3, Name = "Product", Description = "Final Product", Active = true }
+                );
         }
 
         public DbSet<Agent> Agents { get; set; }

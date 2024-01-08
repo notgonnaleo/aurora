@@ -16,13 +16,9 @@ namespace Backend.Domain.Entities.Products
     {
         [Required]
         public Guid TenantId { get; set; }
-
         [Key]
         public Guid Id { get; set; }
-
-        [ForeignKey("ProductType")]
         public int ProductTypeId { get; set; }
-
         [Required]
         public string SKU { get; set; }
         public string Name { get; set; }
@@ -35,6 +31,10 @@ namespace Backend.Domain.Entities.Products
         public Guid? CreatedBy { get; set; }
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
+
+        [ForeignKey("ProductTypeId")]
+        public virtual ProductType ProductType { get; set; }
+
 
         public Product Create(Product product, Guid userId)
         {

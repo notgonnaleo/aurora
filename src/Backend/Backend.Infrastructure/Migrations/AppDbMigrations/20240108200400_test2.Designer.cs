@@ -3,6 +3,7 @@ using System;
 using Backend.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240108200400_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,20 +120,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             Active = true,
                             Description = "Crafting material",
                             Name = "Feedstock"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = true,
-                            Description = "Intermediate Product/Crafting material",
-                            Name = "Intermediate Component"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = true,
-                            Description = "Final Product",
-                            Name = "Product"
                         });
                 });
 
@@ -183,8 +172,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductTypeId");
-
                     b.ToTable("Product");
                 });
 
@@ -218,17 +205,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasKey("SubCategoryId");
 
                     b.ToTable("SubCategory");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
-                {
-                    b.HasOne("Backend.Domain.Entities.ProductTypes.ProductType", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductType");
                 });
 #pragma warning restore 612, 618
         }
