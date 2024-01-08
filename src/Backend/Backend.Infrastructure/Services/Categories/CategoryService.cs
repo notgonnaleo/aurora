@@ -11,15 +11,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend.Infrastructure.Services.Categorys
+namespace Backend.Infrastructure.Services.Categories
 {
-    public class CategoryService
+    public class Categorieservice
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserContextService _userContextService;
 
-        public CategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public Categorieservice(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
@@ -30,7 +30,7 @@ namespace Backend.Infrastructure.Services.Categorys
         {
             try
             {
-                return _appDbContext.Categorys
+                return _appDbContext.Categories
                     .Where(x => x.TenantId == tenantId)
                     .ToList();
 
@@ -48,7 +48,7 @@ namespace Backend.Infrastructure.Services.Categorys
         {
             try
             {
-                return _appDbContext.Categorys
+                return _appDbContext.Categories
                      .FirstOrDefault(x => x.TenantId == tenantId && x.CategoryId == categoryId);
                      
 
@@ -70,7 +70,7 @@ namespace Backend.Infrastructure.Services.Categorys
                 category.Created = DateTime.Now;
                 category.Updated = null;
                 category.UpdatedBy = null;
-                _appDbContext.Categorys.Add(category);
+                _appDbContext.Categories.Add(category);
                 _appDbContext.SaveChanges();
 
                 return category;
@@ -83,7 +83,7 @@ namespace Backend.Infrastructure.Services.Categorys
 
         public async Task<Category> Update(Category category, Guid categoryId)
         {
-            var Category = await _appDbContext.Categorys.FindAsync(categoryId);
+            var Category = await _appDbContext.Categories.FindAsync(categoryId);
 
             if (Category == null)
             {

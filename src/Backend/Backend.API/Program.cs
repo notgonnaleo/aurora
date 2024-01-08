@@ -17,8 +17,8 @@ using Backend.Infrastructure.Services.ProductTypes;
 using System.ComponentModel;
 using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.SubCategory;
-using Backend.Infrastructure.Services.Categorys;
-using Backend.Infrastructure.Services.SubCategorys;
+using Backend.Infrastructure.Services.Categories;
+using Backend.Infrastructure.Services.SubCategories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,10 +36,10 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ProductTypeService>();
 
 //Category
-builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<Categorieservice>();
 
-//SubCategorys
-builder.Services.AddScoped<SubCategoryService>();
+//SubCategories
+builder.Services.AddScoped<SubCategorieservice>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();

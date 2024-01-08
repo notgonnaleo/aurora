@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240107174937_test")]
+    [Migration("20240108195428_test")]
     partial class test
     {
         /// <inheritdoc />
@@ -163,8 +163,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductTypeId");
-
                     b.ToTable("Product");
                 });
 
@@ -198,17 +196,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasKey("SubCategoryId");
 
                     b.ToTable("SubCategory");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
-                {
-                    b.HasOne("Backend.Domain.Entities.ProductTypes.ProductType", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductType");
                 });
 #pragma warning restore 612, 618
         }

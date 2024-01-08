@@ -160,8 +160,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductTypeId");
-
                     b.ToTable("Product");
                 });
 
@@ -195,17 +193,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasKey("SubCategoryId");
 
                     b.ToTable("SubCategory");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
-                {
-                    b.HasOne("Backend.Domain.Entities.ProductTypes.ProductType", "ProductType")
-                        .WithMany()
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductType");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,7 +22,6 @@ namespace Backend.Domain.Entities.Products
 
         [ForeignKey("ProductType")]
         public int ProductTypeId { get; set; }
-        public ProductType ProductType { get; set; }
 
         [Required]
         public string SKU { get; set; }

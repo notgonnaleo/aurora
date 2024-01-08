@@ -1,10 +1,8 @@
 ﻿using Backend.Domain.Entities.Agent;
-using Backend.Domain.Entities.Authentication.Users;
 using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.SubCategory;
-using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -34,8 +32,8 @@ namespace Backend.Infrastructure.Context
         public DbSet<Agent> Agents { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
-        public DbSet<Category> Categorys { get; set; }
-        public DbSet<SubCategory> SubCategorys { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
 
     }
 }
