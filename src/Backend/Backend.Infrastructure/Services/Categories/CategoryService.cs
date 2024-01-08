@@ -1,5 +1,5 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
-using Backend.Domain.Entities.Categorys;
+using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Infrastructure.Context;

@@ -1,4 +1,4 @@
-﻿using Backend.Domain.Entities.Categorys;
+﻿using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.SubCategory;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Services.Authorization;

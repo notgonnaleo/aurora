@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Backend.Domain.Entities.ProductTypes;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,11 +16,17 @@ namespace Backend.Domain.Entities.Products
     {
         [Required]
         public Guid TenantId { get; set; }
+
         [Key]
         public Guid Id { get; set; }
+
+        [ForeignKey("ProductType")]
+        public int ProductTypeId { get; set; }
+        public ProductType ProductType { get; set; }
+
         [Required]
-        public string? SKU { get; set; }
-        public string? Name { get; set; }
+        public string SKU { get; set; }
+        public string Name { get; set; }
         public string? Description { get; set; }
         public decimal Value { get; set; }
         public decimal? TotalWeight { get; set; }

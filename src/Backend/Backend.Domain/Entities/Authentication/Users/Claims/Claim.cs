@@ -11,8 +11,10 @@ namespace Backend.Domain.Entities.Authentication.Users.Claims
 {
     public class Claim
     {
-        public Tenant Tenant { get; set; }
-        public Role Role { get; set; }
-        public List<Module> Modules { get; set; }
+        public Guid TenantId { get; set; }
+        public Guid RoleId { get; set; }
+        public int SubscriptionId { get; set; }
+        public string RoleName { get; set; }
+        public IEnumerable<Module> Modules { get; set; }
     }
 }

@@ -3,20 +3,17 @@ using System;
 using Backend.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backend.Infrastructure.Migrations
+namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231128201207_NovaMigracao")]
-    partial class NovaMigracao
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +58,7 @@ namespace Backend.Infrastructure.Migrations
                     b.ToTable("Agent");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Categorys.Category", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Category.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -87,7 +84,7 @@ namespace Backend.Infrastructure.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categorys");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.ProductTypes.ProductType", b =>
@@ -102,14 +99,16 @@ namespace Backend.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("ProductType");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
@@ -134,7 +133,11 @@ namespace Backend.Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("ProductTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("SKU")
                         .IsRequired()
@@ -157,6 +160,8 @@ namespace Backend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductTypeId");
+
                     b.ToTable("Product");
                 });
 
@@ -166,8 +171,8 @@ namespace Backend.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("text");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -189,7 +194,18 @@ namespace Backend.Infrastructure.Migrations
 
                     b.HasKey("SubCategoryId");
 
-                    b.ToTable("SubCategorys");
+                    b.ToTable("SubCategory");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.ProductTypes.ProductType", "ProductType")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductType");
                 });
 #pragma warning restore 612, 618
         }

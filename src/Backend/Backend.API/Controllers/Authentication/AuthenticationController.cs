@@ -36,7 +36,7 @@ namespace Backend.API.Controllers.Authentication
             var response = _authenticationService.Authenticate(request);
             if (response.Success)
             {
-                IEnumerable<Claim> claims = _authorizationService.GetUserContext(response.Tenants, response.UserId);
+                IEnumerable<Claim> claims = _authorizationService.GetUserContext(response.UserId);
                 UserSessionContext userContext = _authorizationService.MapUserContextRolesAndToken(response, claims);
                 _cache.Set(userContext.Token, userContext, TimeSpan.FromHours(4));
                 return Ok(userContext);
