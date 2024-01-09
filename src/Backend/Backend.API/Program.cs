@@ -19,6 +19,7 @@ using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.SubCategory;
 using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.SubCategories;
+using Backend.Infrastructure.Services.Agents;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 using static Backend.Infrastructure.Enums.Modules.Methods;
 using Backend.Infrastructure.Context;
 using Backend.Domain.Entities.Agent;
-using Backend.Domain.Entities.Products;
-using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.Authentication.Tenants;
-using Backend.Domain.Entities.Categorys;
+
 
 namespace Backend.Infrastructure.Services.Agents
 {

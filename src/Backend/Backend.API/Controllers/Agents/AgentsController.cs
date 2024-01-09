@@ -1,5 +1,4 @@
 ﻿using Backend.Domain.Entities.Agent;
-using Backend.Domain.Entities.Categorys;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
