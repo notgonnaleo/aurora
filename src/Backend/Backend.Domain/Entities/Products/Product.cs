@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.ProductTypes;
+﻿using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.ProductTypes;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace Backend.Domain.Entities.Products
 {
     [Table("Product")]
-    public class Product
+    public class Product : Model
     {
         [Required]
         public Guid TenantId { get; set; }
@@ -26,12 +27,6 @@ namespace Backend.Domain.Entities.Products
         public decimal Value { get; set; }
         public decimal? TotalWeight { get; set; }
         public decimal? LiquidWeight { get; set; }
-        public bool Active { get; set; }
-        public DateTime? Created { get; set; }
-        public Guid? CreatedBy { get; set; }
-        public DateTime? Updated { get; set; }
-        public Guid? UpdatedBy { get; set; }
-        
         [ForeignKey("ProductTypeId")]
         public virtual ProductType? ProductType { get; set; }
 
@@ -72,5 +67,11 @@ namespace Backend.Domain.Entities.Products
                 UpdatedBy = userId
             };
         }
+    }
+
+    public class ProductDetail : Product
+    {
+        public string ProductTypeName { get; set; }
+        // Categories properties are the next
     }
 }
