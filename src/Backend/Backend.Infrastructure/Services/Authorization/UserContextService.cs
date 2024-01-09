@@ -27,7 +27,7 @@ namespace Backend.Infrastructure.Services.Authorization
         }
         public UserSessionContext Handler(UserSessionContext userContext)
         {
-            List<UserRoute> userRoutes = VerifyUserRequest(userContext.Claims);
+            IEnumerable<UserRoute> userRoutes = VerifyUserRequest(userContext.Claims);
             if (userRoutes.Count() < 0)
             {
                 return userContext = new UserSessionContext()
@@ -51,7 +51,7 @@ namespace Backend.Infrastructure.Services.Authorization
             }
         }
 
-        public UserSessionContext LoadContext() // FIXME: change this mf to cache instead session bruh
+        public UserSessionContext LoadContext()
         {
             var retrieveAuthToken = _cache.Get<string>("Token");
             if (retrieveAuthToken == null)
@@ -60,28 +60,24 @@ namespace Backend.Infrastructure.Services.Authorization
             return Handler(userContext);
         }
 
-        public List<UserRoute> VerifyUserRequest(IEnumerable<Claim> userClaims)
+        public IEnumerable<UserRoute> VerifyUserRequest(IEnumerable<Claim> userClaims)
         {
             try
             {
                 List<UserRoute> userRoutes = new List<UserRoute>();
-                foreach (var module in userClaims.Select(x => x.Modules).ToList())
-                {
-                    if (module.Any(x => Enum.GetValues(typeof(ModulesEnum)).Cast<int>().Contains(x.Id)))
-                    {
+                foreach (var module in userClaims.SelectMany(x => x.Modules))
+                    if (Enum.GetValues(typeof(ModulesEnum)).Cast<int>().Contains(module.Id))
                         userRoutes.Add(new UserRoute()
                         {
-                            RouteId = module.First().Id,
-                            RouteName = module.First().Name,
+                            RouteId = module.Id,
+                            RouteName = module.Name,
                             Access = true
                         });
-                    }
-                }
                 return userRoutes;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
     }

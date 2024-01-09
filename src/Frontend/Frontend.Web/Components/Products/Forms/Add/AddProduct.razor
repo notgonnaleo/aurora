@@ -34,6 +34,15 @@
                 <label for="totalWeight" class="form-label">Total Weight</label>
                 <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
             </div>
+            <div class="mb-3 col-sm-12">
+                <label for="productType" class="form-label">Product Type</label>
+                <select class="form-select" @bind="@model.ProductTypeId">
+                    <option value="" selected disabled hidden>Select the product type . . .</option>
+                    <option value="1">Feedstock</option>
+                    <option value="2">Intermediate Component</option>
+                    <option value="3">Product</option>
+                </select>
+            </div>
         <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
     </form>
 </div>
@@ -48,8 +57,7 @@
             var context = await _authenticationService.GetContext();
             model.TenantId = context.Tenant.Id;
             Product newProduct = await _productService.CreateProduct(model);
-            if (newProduct != null)
-                navigator.NavigateTo("/products");
+            if (newProduct != null) navigator.NavigateTo("/products", true);
         }
         catch (Exception)
         {

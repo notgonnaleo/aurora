@@ -15,14 +15,15 @@ using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Memberships;
 using Backend.Infrastructure.Services.ProductTypes;
 using System.ComponentModel;
-using Backend.Domain.Entities.Categorys;
+using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.SubCategory;
-using Backend.Infrastructure.Services.Categorys;
-using Backend.Infrastructure.Services.SubCategorys;
+using Backend.Infrastructure.Services.Categories;
+using Backend.Infrastructure.Services.SubCategories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var DevAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 // Add services to the container.
 // Authentication & Authorization
 builder.Services.AddScoped<AuthenticationService>();
@@ -35,10 +36,10 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ProductTypeService>();
 
 //Category
-builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<Categorieservice>();
 
-//SubCategorys
-builder.Services.AddScoped<SubCategoryService>();
+//SubCategories
+builder.Services.AddScoped<SubCategorieservice>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();
@@ -62,11 +63,12 @@ builder.Services.AddScoped<UserContextService>();
  */
 
 // Application Context
-builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LocalAppDb"),
+builder.Services
+    .AddDbContext<AppDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("App"),
     x => x.MigrationsAssembly("Backend.Infrastructure")));
 
 // Authentication Context
-builder.Services.AddDbContext<AuthDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("LocalAuthDb"),
+builder.Services.AddDbContext<AuthDbContext>(o => o.UseNpgsql(builder.Configuration.GetConnectionString("Auth"),
     x => x.MigrationsAssembly("Backend.Infrastructure")));
 
 /* Session & Cookies */

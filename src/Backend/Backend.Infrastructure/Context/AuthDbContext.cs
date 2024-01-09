@@ -20,6 +20,11 @@ namespace Backend.Infrastructure.Context
     public class AuthDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
+
+        public AuthDbContext()
+        {
+        }
+
         public AuthDbContext(DbContextOptions<AuthDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;

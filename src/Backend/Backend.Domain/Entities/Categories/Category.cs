@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend.Domain.Entities.Categorys
+namespace Backend.Domain.Entities.Category
 {
-    [Table("Categorys")]
+    [Table("Category")]
     public class Category
     {
         public Guid CategoryId { get; set; }

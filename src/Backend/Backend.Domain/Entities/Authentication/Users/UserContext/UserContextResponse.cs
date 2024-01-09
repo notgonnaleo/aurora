@@ -13,12 +13,12 @@ namespace Backend.Domain.Entities.Authentication.Users.UserContext
     {
         public Guid UserId { get; set; }
         public string Username { get; set; }
-        public IEnumerable<Claim> Claims { get; set; }
+        public Tenant Tenant { get; set; }
         public string Token { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
+        public IEnumerable<Claim> Claims { get; set; }
         public IEnumerable<UserRoute> Levels { get; set; }
-        public Tenant Tenant { get; set; }
 
     }
 }
