@@ -1,20 +1,20 @@
-﻿using Backend.Domain.Entities.Categorys;
+﻿using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.SubCategory;
-using Backend.Infrastructure.Services.Categorys;
-using Backend.Infrastructure.Services.SubCategorys;
+using Backend.Infrastructure.Services.Categories;
+using Backend.Infrastructure.Services.SubCategories;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.API.Controllers.SubCategorys
+namespace Backend.API.Controllers.SubCategories
 {
     [ApiController]
-    [Route("SubCategory")]
+    [Route("SubCategories")]
     public class SubCategoryController : ControllerBase
     {
-        private readonly SubCategoryService _subCategoryService;
+        private readonly SubCategorieservice _SubCategorieservice;
 
-        public SubCategoryController(SubCategoryService subCategoryService)
+        public SubCategoryController(SubCategorieservice SubCategorieservice)
         {
-            _subCategoryService = subCategoryService;
+            _SubCategorieservice = SubCategorieservice;
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
@@ -24,11 +24,11 @@ namespace Backend.API.Controllers.SubCategorys
         {
             try
             {
-                return Ok(await _subCategoryService.Get(tenantId));
+                return Ok(await _SubCategorieservice.Get(tenantId));
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -39,31 +39,26 @@ namespace Backend.API.Controllers.SubCategorys
         {
             try
             {
-                return Ok(await _subCategoryService.GetById(subcategoryId,tenantId));
+                return Ok(await _SubCategorieservice.GetById(subcategoryId,tenantId));
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(SubCategory subCategory, string categoryId)
+        public async Task<ActionResult> Add(SubCategory subCategory, Guid categoryId)
         {
             try
             {
-                return Ok(await _subCategoryService.Add(subCategory, categoryId));
+                return Ok(await _SubCategorieservice.Add(subCategory, categoryId));
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
             }
         }
 
@@ -75,19 +70,16 @@ namespace Backend.API.Controllers.SubCategorys
         {
             try
             {
-                var SubCategory = await _subCategoryService.Update(category, SubCategoryId);
+                var SubCategory = await _SubCategorieservice.Update(category, SubCategoryId);
 
                 if (SubCategory == null)
-                {
                     return NotFound($"Produto com ID {SubCategoryId} não encontrado.");
-                }
 
                 return Ok(SubCategory);
             }
             catch (Exception ex)
             {
-                // Registre o erro em um log ou trate de acordo com seus requisitos
-                return StatusCode(500, "Erro interno do servidor.");
+                return StatusCode(500, ex.Message);
             }
         }
     }

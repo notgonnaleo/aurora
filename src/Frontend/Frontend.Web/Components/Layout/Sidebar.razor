@@ -3,6 +3,7 @@
 @using Frontend.Web.Services.Tenants;
 @inject TenantService _tenantService; 
 @inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
 <aside class="left-sidebar" > 
     <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -45,7 +46,7 @@
                         <li class="sidebar-item">
                         @foreach (var tenant in tenants)
                         {
-                            <a class="sidebar-link" @onclick="() => ChangeTenant(tenant.Id)">
+                            <a class="sidebar-link cursor-pointer" @onclick="() => ChangeTenant(tenant.Id)">
                                 <div class="round-16 d-flex align-items-center justify-content-center">
                                     <i class="ti ti-circle-filled"></i>
                                 </div>
@@ -155,38 +156,28 @@
 @code
 {
     private IEnumerable<Tenant> tenants = new List<Tenant>();
-    private async void GetTenants()
-    {
-        tenants = await _tenantService.GetTenantsByUserId();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        GetTenants();
-    }
+    private async void GetTenants() => tenants = await _tenantService.GetTenantsByUserId();
+    protected override async Task OnInitializedAsync() => GetTenants();
 }
 
 @code
 {
     private async void ChangeTenant(Guid tenantId)
     {
-        /* Might need to refactor this later on */
         Tenant selectedTenant = await _tenantService.SetTenant(tenantId);
         var response = await _authenticationService.UpdateTenantInformationInContext(selectedTenant);
         if (!response)
             throw new Exception("Could not change the tenant profile.");
-        StateHasChanged();
+        navigator.NavigateTo("/", forceLoad: true);
     }
+}
 }
 
 @code 
 {
     private bool collapseSubNavMenu = true;
     private string? SubNavMenuCssClass => collapseSubNavMenu ? "collapse" : null;
-    private void ToggleSubNavMenu()
-    {
-        collapseSubNavMenu = !collapseSubNavMenu;
-    }
+    private void ToggleSubNavMenu() => collapseSubNavMenu = !collapseSubNavMenu;
 }
 
 @code

@@ -19,8 +19,8 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
-        public static string Category = "Category";
-        public static string SubCategory = "SubCategory";
+        public static string Category = "Categories";
+        public static string SubCategory = "SubCategories";
     }
 
     public class Methods
@@ -107,41 +107,41 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
-        public class Categorys
+        public class Categories
         {
             public static class GET
             {
-                public static string GetAllCategories = "Categorys/List";
-                public static string GetCategory = "Categorys/Find";
+                public static string GetAllCategories = "Categories/List";
+                public static string GetCategory = "Categories/Find";
             }
 
             public static class POST
             {
-                public static string AddCategory = "Categorys/Add";
+                public static string AddCategory = "Categories/Add";
             }
 
             public static class PUT
             {
-                public static string UpdateCategory = "Categorys/Update";
+                public static string UpdateCategory = "Categories/Update";
             }
         }
 
-        public class SubCategorys
+        public class SubCategories
         {
             public static class GET
             {
-                public static string GetAllSubCategories = "SubCategorys/List";
-                public static string GetSubCategory = "SubCategorys/Find";
+                public static string GetAllSubCategories = "SubCategories/List";
+                public static string GetSubCategory = "SubCategories/Find";
             }
 
             public static class POST
             {
-                public static string AddSubCategory = "SubCategorys/Add";
+                public static string AddSubCategory = "SubCategories/Add";
             }
 
             public static class PUT
             {
-                public static string UpdateSubCategory = "SubCategorys/Update";
+                public static string UpdateSubCategory = "SubCategories/Update";
             }
         }
 

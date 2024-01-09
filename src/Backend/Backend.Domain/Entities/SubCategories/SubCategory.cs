@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Backend.Domain.Entities.Categorys;
+using Backend.Domain.Entities.Category;
 
 
 namespace Backend.Domain.Entities.SubCategory
 {
-    [Table("SubCategorys")]
+    [Table("SubCategory")]
     public class SubCategory
     {
         public Guid SubCategoryId { get; set; }
@@ -20,8 +20,7 @@ namespace Backend.Domain.Entities.SubCategory
         public DateTime? Created { get; set; }  
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
-        public string? CategoryId { get; set; }
-        
+        public Guid CategoryId { get; set; }
 
 
     }

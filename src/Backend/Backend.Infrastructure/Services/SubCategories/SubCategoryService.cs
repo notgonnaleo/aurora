@@ -1,8 +1,8 @@
-﻿using Backend.Domain.Entities.Categorys;
+﻿using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.SubCategory;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Services.Authorization;
-using Backend.Infrastructure.Services.Categorys;
+using Backend.Infrastructure.Services.Categories;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -10,15 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend.Infrastructure.Services.SubCategorys
+namespace Backend.Infrastructure.Services.SubCategories
 {
-    public class SubCategoryService
+    public class SubCategorieservice
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserContextService _userContextService;
 
-        public SubCategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public SubCategorieservice(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
@@ -29,7 +29,7 @@ namespace Backend.Infrastructure.Services.SubCategorys
         {
             try
             {
-                return _appDbContext.SubCategorys
+                return _appDbContext.SubCategories
                     .Where(x => x.TenantId == tenantId)
                     .ToList();
 
@@ -47,7 +47,7 @@ namespace Backend.Infrastructure.Services.SubCategorys
         {
             try
             {
-                return _appDbContext.SubCategorys
+                return _appDbContext.SubCategories
                      .FirstOrDefault(x => x.TenantId == tenantId && x.SubCategoryId == subcategoryId);
 
             }
@@ -58,7 +58,7 @@ namespace Backend.Infrastructure.Services.SubCategorys
             }
         }
 
-        public async Task<SubCategory> Add(SubCategory subCategory, string categoryId)
+        public async Task<SubCategory> Add(SubCategory subCategory, Guid categoryId)
         {
             try
             {
@@ -75,14 +75,14 @@ namespace Backend.Infrastructure.Services.SubCategorys
                     subCategory.Updated = null;
                     subCategory.UpdatedBy = null;
 
-                    _appDbContext.SubCategorys.Add(subCategory);
+                    _appDbContext.SubCategories.Add(subCategory);
                     await _appDbContext.SaveChangesAsync();
 
                     return subCategory;
                 }
                 else
                 {
-                    throw new ArgumentException($"CategoryId {categoryId} não encontrado.");
+                    throw new ArgumentException("The Subcategory searched does not exist or is invalid");
                 }
 
                 
@@ -95,7 +95,7 @@ namespace Backend.Infrastructure.Services.SubCategorys
 
         public async Task<SubCategory> Update(SubCategory subCategory, Guid SubCategoryId)
         {
-            var SubCategory = await _appDbContext.SubCategorys.FindAsync(SubCategoryId);
+            var SubCategory = await _appDbContext.SubCategories.FindAsync(SubCategoryId);
 
             if (SubCategory == null)
             {

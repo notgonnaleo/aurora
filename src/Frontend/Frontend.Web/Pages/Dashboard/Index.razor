@@ -8,13 +8,8 @@
 <PageTitle>Aurora - Dashboard</PageTitle>
 <div class="container-fluid">
     <div class="card">
-        <div class="card-body">
-            <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-            @if (_isAuthenticated)
-            {
-                <p class="mb-0">You're logged in @tenantProfile.Name</p>
-            }
-        </div>
+        <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated TenantProfileName=@tenantProfile.Name/> 
+        @*TODO: Inves de mandar o nome manda o id e lá dentro a gente roda um get *@
     </div>
 </div>
 @*
@@ -29,7 +24,7 @@
 *@
 @code
 {
-    private bool _isAuthenticated = false;
+    private bool isAuthenticated = false;
     private Tenant tenantProfile = new Tenant();
 
     public async Task<bool> IsAuthenticated()
@@ -37,6 +32,10 @@
         return await _authenticationService.IsUserLogged();
     }
 
+    // Ja sei caralho tive uma ideia foda
+    // ao inves de eu embucetar o nosso objeto de contexto eu posso simplesmente colocar a porra do id do tenant DENTRO do token jwt
+    // e ai eu so chamo um metodo pra desconverter o maldito e uso os dados dele aqui assim eu resolvo o code smells que tem nessa merda aqui
+    // mas isso eu so vou fazer depois que fizer essa tela funcionar do jeito que eu quero.
     public async void GetTenantProfileName() // I HAVE NO FUCKING IDEA ON WHATS GOING ON
     {
         var result = await _authenticationService.GetContext();
@@ -46,15 +45,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _isAuthenticated = await IsAuthenticated();
-        if (_isAuthenticated)
+        isAuthenticated = await IsAuthenticated();
+        if (isAuthenticated)
         {
             GetTenantProfileName();
         }
-    }
-
-    protected override async void OnAfterRender(bool firstRender)
-    {
-        await _authenticationService.GetContext();
     }
 }

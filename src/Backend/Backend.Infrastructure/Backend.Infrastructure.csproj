@@ -31,4 +31,9 @@
     <ProjectReference Include="..\Backend.Domain\Backend.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\AppDbMigrations\" />
+    <Folder Include="Migrations\AuthDbMigrations\" />
+  </ItemGroup>
+
 </Project>

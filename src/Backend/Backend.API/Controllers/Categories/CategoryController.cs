@@ -1,23 +1,23 @@
-﻿using Backend.Domain.Entities.Categorys;
+﻿using Backend.Domain.Entities.Category;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Infrastructure.Services.Authorization;
-using Backend.Infrastructure.Services.Categorys;
+using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.ProductTypes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Backend.API.Controllers.Categorys
+namespace Backend.API.Controllers.Categories
 {
     [ApiController]
-    [Route("Categorys")]
+    [Route("Categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly CategoryService _categoryService;
+        private readonly Categorieservice _Categorieservice;
         private readonly UserContextService _userContextService;
 
-        public CategoryController(CategoryService categoryService, UserContextService userContextService)
+        public CategoryController(Categorieservice Categorieservice, UserContextService userContextService)
         {
-            _categoryService = categoryService;
+            _Categorieservice = Categorieservice;
             _userContextService = userContextService;
         }
 
@@ -28,7 +28,7 @@ namespace Backend.API.Controllers.Categorys
         {
             try
             {
-                return Ok(await _categoryService.Get(tenantId));
+                return Ok(await _Categorieservice.Get(tenantId));
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace Backend.API.Controllers.Categorys
         {
             try
             {
-                return Ok(await _categoryService.GetById(categoryId,tenantId));
+                return Ok(await _Categorieservice.GetById(categoryId,tenantId));
             }
             catch (Exception ex)
             {
@@ -59,7 +59,7 @@ namespace Backend.API.Controllers.Categorys
         {
             try
             {
-                return Ok(await _categoryService.Add(category));
+                return Ok(await _Categorieservice.Add(category));
             }
             catch (Exception ex)
             {
@@ -75,11 +75,11 @@ namespace Backend.API.Controllers.Categorys
         {
             try
             {
-                var Category = await _categoryService.Update(category, categoryId);
+                var Category = await _Categorieservice.Update(category, categoryId);
 
                 if (Category == null)
                 {
-                    return NotFound($"Produto com ID {categoryId} não encontrado.");
+                    return NotFound("The category searched does not exist or is invalid");
                 }
 
                 return Ok(Category);
@@ -87,7 +87,7 @@ namespace Backend.API.Controllers.Categorys
             catch (Exception ex)
             {
                 // Registre o erro em um log ou trate de acordo com seus requisitos
-                return StatusCode(500, "Erro interno do servidor.");
+                return StatusCode(500,ex.Message);
             }
         }
 

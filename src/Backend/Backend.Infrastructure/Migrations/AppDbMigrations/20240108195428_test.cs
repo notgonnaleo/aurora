@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backend.Infrastructure.Migrations
+namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     /// <inheritdoc />
-    public partial class NovaMigracao : Migration
+    public partial class test : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,7 @@ namespace Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categorys",
+                name: "Category",
                 columns: table => new
                 {
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -48,7 +48,7 @@ namespace Backend.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categorys", x => x.CategoryId);
+                    table.PrimaryKey("PK_Category", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,8 +57,9 @@ namespace Backend.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductTypeId = table.Column<int>(type: "integer", nullable: false),
                     SKU = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Value = table.Column<decimal>(type: "numeric", nullable: false),
                     TotalWeight = table.Column<decimal>(type: "numeric", nullable: true),
@@ -75,22 +76,22 @@ namespace Backend.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductTypes",
+                name: "ProductType",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductTypes", x => x.Id);
+                    table.PrimaryKey("PK_ProductType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubCategorys",
+                name: "SubCategory",
                 columns: table => new
                 {
                     SubCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -100,11 +101,11 @@ namespace Backend.Infrastructure.Migrations
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    CategoryId = table.Column<string>(type: "text", nullable: true)
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SubCategorys", x => x.SubCategoryId);
+                    table.PrimaryKey("PK_SubCategory", x => x.SubCategoryId);
                 });
         }
 
@@ -115,16 +116,16 @@ namespace Backend.Infrastructure.Migrations
                 name: "Agent");
 
             migrationBuilder.DropTable(
-                name: "Categorys");
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "ProductTypes");
+                name: "ProductType");
 
             migrationBuilder.DropTable(
-                name: "SubCategorys");
+                name: "SubCategory");
         }
     }
 }

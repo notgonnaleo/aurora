@@ -5,6 +5,7 @@ using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Authorization.Modules;
 using Backend.Domain.Entities.Authorization.Roles;
+using Backend.Domain.Entities.Authorization.Subscriptions;
 using Backend.Domain.Entities.Authorization.UserRoles;
 using Backend.Domain.Entities.Authorization.UserRoutes;
 using Backend.Infrastructure.Context;
@@ -35,34 +36,44 @@ namespace Backend.Infrastructure.Services.Authorization
             _tenantService = tenantService;
         }
 
-        public IEnumerable<Claim> GetUserContext(List<Tenant> tenants /*remove this motherfucker */, Guid userId)
+        public IEnumerable<Claim> GetUserContext(Guid userId)
         {
-            // TODO: should be able to list tenants by the user id 
+            IEnumerable<Guid> tenantIds = _authDbContext.Memberships
+                .Where(x => x.UserId == userId)
+                .Select(x => x.TenantId);
+
             List<Claim> userPermissions = new List<Claim>();
-            foreach (var tenant in tenants)
+            foreach (var tenantId in tenantIds.ToList())
             {
                 UserRole userRole = _authDbContext.UserRoles
-                    .Where(x => x.UserId == userId && x.TenantId == tenant.Id)
+                    .Where(x => x.UserId == userId && x.TenantId == tenantId && x.Active == true)
                     .Include(i => i.RoleId)
                     .First();
 
                 Role role = _authDbContext.Roles
-                    .Where(x => x.TenantId == tenant.Id && x.Id == userRole.RoleId)
+                    .Where(x => x.TenantId == tenantId && x.Id == userRole.RoleId && x.Active == true)
+                    .First();
+
+                string roleName = _authDbContext.Subscriptions
+                    .Where(x => x.Id == role.SubscriptionId && x.Active == true)
+                    .Select(x => x.Name)
                     .First();
 
                 List<Module> modules = _authDbContext.Modules
-                    .Where(x => x.Id == role.ModuleId)
+                    .Where(x => x.Id == role.ModuleId && x.Active == true)
                     .ToList();
 
                 Claim claim = new Claim
                 {
-                    Tenant = tenant,
-                    Role = role,
+                    TenantId = tenantId,
+                    RoleId = role.Id,
+                    SubscriptionId = role.SubscriptionId,
+                    RoleName = roleName,
                     Modules = modules
                 };
                 userPermissions.Add(claim);
             }
-            return userPermissions.ToList();
+            return userPermissions;
         }
         public UserSessionContext MapUserContextRolesAndToken(LoginResponse response, IEnumerable<Claim> claims)
         {
@@ -74,7 +85,7 @@ namespace Backend.Infrastructure.Services.Authorization
                 Token = response.Token,
                 Levels = _userContextService.VerifyUserRequest(claims),
                 Success = true,
-                Tenant = claims.FirstOrDefault().Tenant,
+                Tenant = _tenantService.GetById(claims.FirstOrDefault().TenantId),
                 
             };
         }

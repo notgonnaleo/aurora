@@ -4,6 +4,7 @@ using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
+using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Tenants;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -15,20 +16,19 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Services.Products
 {
-    public class ProductService
+    public class ProductService : Service
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserContextService _userContextService;
 
-        public ProductService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public ProductService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService main) 
+            : base(main)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
-            _userContextService = userContextService;
         }
 
-        public async Task<IEnumerable<Product>> Get(Guid tenantId)
+        public IEnumerable<Product> Get(Guid tenantId)
         {
             try
             {
@@ -38,30 +38,30 @@ namespace Backend.Infrastructure.Services.Products
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
 
-        public async Task<Product> GetById(Guid tenantId, Guid productId)
+        public Product? GetById(Guid tenantId, Guid productId)
         {
             try
             {
                 return _appDbContext.Products
-                  .FirstOrDefault(x => x.TenantId == tenantId && x.Id == productId && x.Active == true);
+                    .Where(x => x.TenantId == tenantId && x.Id == productId && x.Active)
+                    .FirstOrDefault();
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
 
-        public async Task<Product> Add(Product product)
+        public Product Add(Product product)
         {
             try
             {
-                var context = _userContextService.LoadContext();
+                var context = LoadContext();
+                product.TenantId = context.Tenant.Id;
                 product = product.Create(product, context.UserId);
                 _appDbContext.Products.Add(product);
                 _appDbContext.SaveChanges();
@@ -69,58 +69,39 @@ namespace Backend.Infrastructure.Services.Products
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
             }
         }
 
-        public async Task<bool> Update(Product product)
+        public bool Update(Product product)
         {
             try
             {
-                product = new Product() // Updating the header info from the product.
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    SKU = product.SKU,
-                    Description = product.Description,
-                    Active = true,
-                    Updated = DateTime.Now,
-                    UpdatedBy = Guid.NewGuid() // TODO: Get it from the user account id while it's log in.
-                };
+                var context = LoadContext();
+                product.TenantId = context.Tenant.Id;
+                product = product.Update(product, context.UserId);
                 _appDbContext.Update(product);
-                var response = _appDbContext.SaveChanges();
-
-                if (response <= 0)
-                    throw new Exception("Failed while trying to update the item.");
-
-                return true;
+                return _appDbContext.SaveChanges() > 0;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
 
-        public async Task<bool> Delete(Guid Id)
+        public bool Delete(Guid Id)
         {
             try
             {
+                var context = LoadContext();
                 Product product = _appDbContext.Products.Where(x => x.Id == Id).First();
                 product.Active = false;
-
                 _appDbContext.Update(product);
-                var response = _appDbContext.SaveChanges();
-
-                if (response <= 0)
-                    throw new Exception("Failed while trying to delete the item.");
-
-                return true;
+                return _appDbContext.SaveChanges() > 0;
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
     }
