@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.API.Controllers.SubCategories
 {
     [ApiController]
-    [Route("SubCategory")]
+    [Route("SubCategories")]
     public class SubCategoryController : ControllerBase
     {
         private readonly SubCategorieservice _SubCategorieservice;

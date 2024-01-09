@@ -19,8 +19,8 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
-        public static string Category = "Category";
-        public static string SubCategory = "SubCategory";
+        public static string Category = "Categories";
+        public static string SubCategory = "SubCategories";
     }
 
     public class Methods
