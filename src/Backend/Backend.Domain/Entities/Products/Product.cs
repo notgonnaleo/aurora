@@ -31,9 +31,9 @@ namespace Backend.Domain.Entities.Products
         public Guid? CreatedBy { get; set; }
         public DateTime? Updated { get; set; }
         public Guid? UpdatedBy { get; set; }
-
+        
         [ForeignKey("ProductTypeId")]
-        public virtual ProductType ProductType { get; set; }
+        public virtual ProductType? ProductType { get; set; }
 
 
         public Product Create(Product product, Guid userId)
@@ -45,6 +45,7 @@ namespace Backend.Domain.Entities.Products
                 SKU = product.SKU, 
                 Name = product.Name,
                 Description = product.Description,
+                ProductTypeId = product.ProductTypeId,
                 Value = product.Value,
                 TotalWeight = product.TotalWeight,
                 LiquidWeight = product.LiquidWeight,
@@ -53,6 +54,22 @@ namespace Backend.Domain.Entities.Products
                 Updated = null,
                 UpdatedBy = null,
                 Active = true
+            };
+        }
+
+        public Product Update(Product product, Guid userId)
+        {
+            return new Product() // Updating the header info from the product.
+            {
+                TenantId = product.TenantId,
+                Id = product.Id,
+                Name = product.Name,
+                SKU = product.SKU,
+                Description = product.Description,
+                ProductTypeId = product.ProductTypeId,
+                Active = true,
+                Updated = DateTime.Now,
+                UpdatedBy = userId
             };
         }
     }

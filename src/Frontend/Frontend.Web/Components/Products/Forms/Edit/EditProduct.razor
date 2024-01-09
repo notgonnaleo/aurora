@@ -1,8 +1,9 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
 @inject ProductService _productService
 @inject NavigationManager navigator
-
+@inject AuthenticationService _authenticationService;
 
 <form role="form">
     <span>You're creating products using Tenant: Aurora as Default only for testing.</span>
@@ -31,6 +32,14 @@
         <label for="totalWeight">TotalWeight</label>
         <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
     </div>
+    <div class="form-group">
+        <label for="productType" class="form-label">Product Type</label>
+        <select class="form-select" @bind="@model.ProductTypeId">
+            <option value="1">Feedstock</option>
+            <option value="2">Intermediate Component</option>
+            <option value="3">Product</option>
+        </select>
+    </div>
     <button type="button" @onclick="UpdateProduct" class="btn btn-default">Save</button>
 </form>
 
@@ -41,24 +50,22 @@
     public string productId { get; set; }
 
     private Product model = new Product();
-    Guid tenantIdGuid = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5");
 
     protected override async Task OnInitializedAsync()
     {
+        var context = await _authenticationService.GetContext();
+        model.TenantId = context.Tenant.Id;
+
         var queryString = navigator.Uri.Split('/').Last();
-        model = await _productService.GetProduct(tenantIdGuid.ToString(), productId.ToString());
+        model = await _productService.GetProduct(model.TenantId.ToString(), productId.ToString());
     }
 
     public async Task UpdateProduct()
     {
         try
         {
-            model.TenantId = tenantIdGuid;
             bool updated = await _productService.UpdateProduct(model);
-
-            if (updated)
-                navigator.NavigateTo("/products");
-
+            if (updated) navigator.NavigateTo("/products");
         }
         catch(Exception ex)
         {

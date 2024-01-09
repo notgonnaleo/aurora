@@ -23,11 +23,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get(Guid tenantId)
+        public ActionResult Get(Guid tenantId)
         {
             try
             {
-                return Ok(await _productService.Get(tenantId));
+                return Ok(_productService.Get(tenantId));
             }
             catch (Exception)
             {
@@ -37,11 +37,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid tenantId, Guid productId)
+        public ActionResult GetById(Guid tenantId, Guid productId)
         {
             try
             {
-                return Ok(await _productService.GetById(tenantId, productId));
+                return Ok(_productService.GetById(tenantId, productId));
             }
             catch (Exception)
             {
@@ -52,26 +52,25 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(Product product)
+        public ActionResult Add(Product product)
         {
             try
             {
-                return Ok(await _productService.Add(product));
+                return Ok(_productService.Add(product));
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(Product product)
+        public ActionResult Update(Product product)
         {
             try
             {
-                return Ok(await _productService.Update(product));
+                return Ok(_productService.Update(product));
 
             }
             catch (Exception)
@@ -83,11 +82,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpDelete]
         [Route("Delete")]
-        public async Task<ActionResult> Delete(Guid Id)
+        public ActionResult Delete(Guid Id)
         {
             try
             {
-                return Ok(await _productService.Delete(Id));
+                return Ok(_productService.Delete(Id));
             }
             catch (Exception)
             {
