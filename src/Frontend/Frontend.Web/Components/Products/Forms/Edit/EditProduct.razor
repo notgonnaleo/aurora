@@ -6,8 +6,6 @@
 @inject AuthenticationService _authenticationService;
 
 <form role="form">
-    <span>You're creating products using Tenant: Aurora as Default only for testing.</span>
-    <span>Your tenant key is: (cabaa57a-37ff-4871-be7d-0187ed3534a5)</span>
     <div class="form-group">
         <label for="username">SKU</label>
         <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
@@ -43,7 +41,6 @@
     <button type="button" @onclick="UpdateProduct" class="btn btn-default">Save</button>
 </form>
 
-
 @code
 {
     [Parameter]
@@ -71,6 +68,5 @@
         {
             throw;
         }
-
     }
 }

@@ -106,3 +106,9 @@ a, .btn-link {
     flex-basis: 100%;
     flex: 1;
 }
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

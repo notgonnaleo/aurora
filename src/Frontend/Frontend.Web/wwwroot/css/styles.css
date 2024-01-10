@@ -6,7 +6,8 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 @import "../css/icons/tabler-icons/tabler-icons.css"; /* Icons */
-@import "../css/loader.css"; /* Loader */
+@import "../css/loaders/loader.css"; /* Loader */
+@import "../css/loaders/loader2.css"; /* Loader 2 */
 
 :root, [data-bs-theme=light] {
     --bs-blue: #5D87FF;

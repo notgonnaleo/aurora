@@ -11,7 +11,11 @@
 
 @if (products == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="overflow-hidden center">
+        <svg viewBox="25 25 50 50">
+            <circle r="20" cy="50" cx="50"></circle>
+        </svg>
+    </div>
 }
 else
 {
@@ -23,9 +27,19 @@ else
                 <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" class="card-img-top rounded-0">
             </div>
             <div class="card-body pt-3 p-4">
-                <h6 class="fw-semibold fs-4">
-                    #@product.SKU - @product.Name <span class="mb-1 badge rounded-pill font-medium bg-info-subtle text-info">@product.ProductTypeId</span>
-                </h6>
+                <div>
+                    <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(product)">
+                        #@product.SKU
+                    </h6>
+                </div>
+                <div>
+                    <h6 class="fw-semibold fs-4">
+                        @product.Name
+                    </h6>
+                </div>
+                <div>
+                    <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@product.ProductTypeName</span>
+                </div>
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <h6 class="fw-semibold fs-4 mb-0">
@@ -45,7 +59,7 @@ else
 }
 
 @code {
-    private IEnumerable<Product>? products;
+    private IEnumerable<ProductDetail>? products;
     protected override async Task OnInitializedAsync()
     {
         var context = await _authenticationService.GetContext();
@@ -55,5 +69,8 @@ else
 
 @code
 {
-    private void Edit(Product product) => NavigationManager.NavigateTo($"/products/edit/{product.Id}");
+    private void Edit(ProductDetail product)
+    {
+        NavigationManager.NavigateTo($"/products/edit/{product.Id}");
+    }
 }

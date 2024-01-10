@@ -23,7 +23,7 @@ namespace Backend.Infrastructure.Services.Products
         private readonly ProductTypeService _productType;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, IHttpContextAccessor httpContextAccessor, UserContextService main) 
+        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, IHttpContextAccessor httpContextAccessor, UserContextService main)
             : base(main)
         {
             _appDbContext = appDbContext;
@@ -38,7 +38,6 @@ namespace Backend.Infrastructure.Services.Products
                 return _appDbContext.Products
                     .Where(x => x.TenantId == tenantId && x.Active)
                     .ToList();
-
             }
             catch (Exception ex)
             {

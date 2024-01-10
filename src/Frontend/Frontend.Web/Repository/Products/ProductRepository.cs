@@ -17,10 +17,10 @@ namespace Frontend.Web.Services.Products
             _httpClientRepository = httpClientRepository;
         }
 
-        public async Task<IEnumerable<Product>> GetProducts(string tenantId)
+        public async Task<IEnumerable<ProductDetail>> GetProducts(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = ProductsEnums.GET.GetProducts.tenantId, ParameterValue = tenantId };
-            var request = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.GET, parameters);
+            var request = new RouteBuilder<ProductDetail>().Send(Endpoints.Products, Methods.Default.GET, parameters);
             return await _httpClientRepository.Get(request);
         }
 
