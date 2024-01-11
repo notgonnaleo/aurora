@@ -5,48 +5,56 @@
 @inject NavigationManager navigator
 @inject AuthenticationService _authenticationService;
 
-<div class="row">
-    <div class="owl-item active" style="width: 590px;">
-        <div class="item rounded overflow-hidden">
-            <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" alt="" class="img-fluid">
+<div>
+    <div class="card p-4">
+        <div class="row">
+            <div class="mb-3 col-md-3">
+                <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" alt="" class="card-img rounded-12">
+            </div>
+            <div class="col-md-9">
+                <form>
+                    <div class="row">
+                        <div class="mb-3 col-sm-6">
+                            <label for="username">SKU</label>
+                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled>
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-sm-6">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control" id="description" placeholder="Description" @bind="@model.Description">
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="value">Value</label>
+                            <input type="number" class="form-control" id="value" placeholder="Value" @bind="@model.Value">
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="productType">Product Type</label>
+                            <select class="form-select" @bind="@model.ProductTypeId">
+                                <option value="1">Feedstock</option>
+                                <option value="2">Intermediate Component</option>
+                                <option value="3">Product</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-sm-3">
+                            <label for="liquidWeight">LiquidWeight</label>
+                            <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@model.LiquidWeight">
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="totalWeight">TotalWeight</label>
+                            <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
+                        </div>
+                    </div>
+                    <button type="button" @onclick="UpdateProduct" class="btn btn-default float-right">Save</button>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="card-body p-4">
-        <form>
-        <div class="mb-3 col-sm-12">
-            <label for="username">SKU</label>
-            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
-        </div>
-        <div class="mb-3 col-sm-12">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
-        </div>
-        <div class="mb-3 col-sm-12">
-            <label for="description">Description</label>
-            <input type="text" class="form-control" id="description" placeholder="Description" @bind="@model.Description">
-        </div>
-        <div class="mb-3 col-sm-12">
-            <label for="value">Value</label>
-            <input type="number" class="form-control" id="value" placeholder="Value" @bind="@model.Value">
-        </div>
-        <div class="mb-3 col-sm-12">
-            <label for="liquidWeight">LiquidWeight</label>
-            <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@model.LiquidWeight">
-        </div>
-        <div class="mb-3 col-sm-12">
-            <label for="totalWeight">TotalWeight</label>
-            <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
-        </div>
-        <div class="mb-3 col-sm-12">
-            <label for="productType" class="form-label">Product Type</label>
-            <select class="form-select" @bind="@model.ProductTypeId">
-                <option value="1">Feedstock</option>
-                <option value="2">Intermediate Component</option>
-                <option value="3">Product</option>
-            </select>
-        </div>
-        <button type="button" @onclick="UpdateProduct" class="btn btn-default">Save</button>
-    </form>
     </div>
 </div>
 
