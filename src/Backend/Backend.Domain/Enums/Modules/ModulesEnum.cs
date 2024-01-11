@@ -9,7 +9,10 @@ namespace Backend.Infrastructure.Enums.Modules
     public enum ModulesEnum
     {
         Products = 1,
-        ProductTypes = 2
+        ProductTypes = 2,
+        Category = 3,
+        SubCategory = 4,
+        Agents = 5
     }
 
     public class Endpoints
@@ -21,6 +24,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string ProductsTypes = "ProductsTypes";
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
+        public static string Agents = "Agents";
     }
 
     public class Methods
@@ -142,6 +146,48 @@ namespace Backend.Infrastructure.Enums.Modules
             public static class PUT
             {
                 public static string UpdateSubCategory = "SubCategories/Update";
+            }
+        }
+
+        public class Agents
+        {
+            public static class GET
+            {
+                public static class GetAgents
+                {
+                    public static string tenantId = "tenantId";
+                }
+                public static class GetAgent
+                {
+                    public static string tenantId = "tenantId";
+                    public static string agentId = "agentId";
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddAgent
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateAgent
+                {
+                    public static string Id = "Id";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteAgent
+                {
+                    public static string Id = "Id";
+                    public static string tenantId = "tenantId";
+                }
             }
         }
 
