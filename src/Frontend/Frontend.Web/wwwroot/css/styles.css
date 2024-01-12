@@ -19934,22 +19934,18 @@ textarea.form-control-lg {
             border: 2px solid #5D87FF
         }
 
-    /*Colors suck*/
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
+.scroll-sidebar::-webkit-scrollbar {
+    width: 5px; /* Remove scrollbar space */
+    background: transparent; /*make scrollbar space invisible */
+    border-radius: 3px;
+    height: 6px;
+}
 
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
+.scroll-sidebar::-webkit-scrollbar-thumb {
+    background: transparent; /*makes it invisible when not hovering*/
+}
 
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #888;
-    }
-
-        /* Handle on hover */
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        } 
+.scroll-sidebar:hover::-webkit-scrollbar-thumb {
+    background: var(--bs-gray-400); /*On hover, it will turn grey*/
+    border-radius: 5px;
+}
