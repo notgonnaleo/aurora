@@ -8,55 +8,182 @@
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
 </div>
-<div class="container scroll-sidebar" style="max-height:100vh; overflow-y:auto;">
-    <div class="card-body p-4">
+<div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
+    <div class="card-body p-2">
         <form>
             <div class="row">
-                <div class="mb-2 col-sm-4">
-                    <label for="sku" class="form-label">SKU</label>
-                    <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
-                </div>
-                <div class="mb-2 col-sm-8">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
+                <div class="accordion accordion-flush position-relative overflow-hidden @productAccordionHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseProductAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleProductAccordion>
+                                Basic Info
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @productAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-4">
+                                        <label for="sku" class="form-label">SKU</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
+                                    </div>
+                                    <div class="mb-2 col-sm-8">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Your product name" @bind="@model.Name">
+                                    </div>
+                                </div>
+                                <div class="mb-2 col-sm-12">
+                                    <label for="description" class="form-label">Description</label>
+                                    <input type="text" class="form-control" id="description" placeholder="Small details of the product" @bind="@model.Description">
+                                </div>
+                                <div class="mb-2 col-sm-12">
+                                    <label for="value" class="form-label">Value</label>
+                                    <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@model.Value">
+                                </div>
+                                <div class="mb-3 col-sm-12">
+                                    <label for="productType" class="form-label">Product Type</label>
+                                    <select class="form-select" @bind="@model.ProductTypeId">
+                                        <option value="" disabled hidden selected>The type of your product</option>
+                                        <option value="1">Feedstock</option>
+                                        <option value="2">Intermediate Component</option>
+                                        <option value="3">Product</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-2 col-sm-12">
-                <label for="description" class="form-label">Description</label>
-                <input type="text" class="form-control" id="description" placeholder="Description" @bind="@model.Description">
-            </div>
-
-            <div class="mb-2 col-sm-12">
-                <label for="value" class="form-label">Value</label>
-                <input type="number" class="form-control" id="value" placeholder="Value" @bind="@model.Value">
+            <div class="accordion accordion-flush position-relative overflow-hidden @weightAccordionHeaderToggle" id="accordionFlushExample">
+                <div class="accordion-item mb-3 shadow-none border rounded">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseWeightAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleWeightAccordion>
+                            Weight
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                        <div class="accordion-body px-3 fw-normal">
+                            <div class="row">
+                                <div class="mb-2 col-sm-6">
+                                    <label for="liquidWeight" class="form-label">Liquid Weight</label>
+                                    <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@model.LiquidWeight">
+                                </div>
+                                <div class="mb-2 col-sm-6">
+                                    <label for="totalWeight" class="form-label">Total Weight</label>
+                                    <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@model.TotalWeight">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
-                <div class="mb-2 col-sm-6">
-                    <label for="liquidWeight" class="form-label">Liquid Weight</label>
-                    <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@model.LiquidWeight">
-                </div>
-                <div class="mb-2 col-sm-6">
-                    <label for="totalWeight" class="form-label">Total Weight</label>
-                    <input type="number" class="form-control" id="0,,totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
+                <div class="accordion accordion-flush position-relative overflow-hidden @categoryAccordionHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleCategoryAccordion>
+                                Categories
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="exampleInputfirstname" class="form-label fw-semibold">First Name</label>
+                                            <input type="text" class="form-control" id="exampleInputfirstname" placeholder="John">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="exampleInputphoneno3" class="form-label fw-semibold">Phone no</label>
+                                            <input type="text" class="form-control" id="exampleInputphoneno3" placeholder="1340 2154 123">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold">Address</label>
+                                            <textarea class="form-control p-7" name="" id="" cols="20" rows="1" placeholder="150, Ring Road"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="exampleInputpincode" class="form-label fw-semibold">Pincode</label>
+                                            <input type="text" class="form-control" id="exampleInputpincode" placeholder="120125">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="exampleInputlandmark" class="form-label fw-semibold">Landmark</label>
+                                            <input type="text" class="form-control" id="exampleInputlandmark" placeholder="Nr. Wall Street">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label for="exampleInputcity" class="form-label fw-semibold">City</label>
+                                            <input type="text" class="form-control" id="exampleInputcity" placeholder="Jackson">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label class="form-label fw-semibold">State</label>
+                                            <select class="form-select" aria-label="Default select example">
+                                                <option selected="">Alaska</option>
+                                                <option value="1">Arizona</option>
+                                                <option value="2">Hawaii</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="fw-semibold">Address Type</h6>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioHome" value="option1">
+                                        <label class="form-check-label" for="inlineRadioHome">Home (All day delivery)</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioOffice" value="option1">
+                                        <label class="form-check-label" for="inlineRadioOffice">
+                                            Office (Delivery between 10 AM - 5
+                                            PM)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="mb-3 col-sm-12">
-                <label for="productType" class="form-label">Product Type</label>
-                <select class="form-select" @bind="@model.ProductTypeId">
-                    <option value="" selected>Select the product type . . .</option>
-                    <option value="1">Feedstock</option>
-                    <option value="2">Intermediate Component</option>
-                    <option value="3">Product</option>
-                </select>
-            </div>
-            <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
         </form>
+    </div>
+    <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+        <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
     </div>
 </div>
 
+
+
+@code
+{
+    @*Category Accordion *@
+    private bool collapseCategoryAccordion = true;
+    private string? categoryAccordionHeaderToggle => collapseCategoryAccordion ? null : "collapsed";
+    private string? categoryAccordionToggle => collapseCategoryAccordion ? "collapse" : "collapse show";
+    private void ToggleCategoryAccordion() => collapseCategoryAccordion = !collapseCategoryAccordion;
+
+    @*Weight Accordion *@
+    private bool collapseWeightAccordion = true;
+    private string? weightAccordionHeaderToggle => collapseWeightAccordion ? null : "collapsed";
+    private string? weightAccordionToggle => collapseWeightAccordion ? "collapse" : "collapse show";
+    private void ToggleWeightAccordion() => collapseWeightAccordion = !collapseWeightAccordion;
+
+    @*Product Accordion *@
+    private bool collapseProductAccordion = true;
+    private string? productAccordionHeaderToggle => collapseProductAccordion ? null : "collapsed";
+    private string? productAccordionToggle => collapseProductAccordion ? "collapse" : "collapse show";
+    private void ToggleProductAccordion() => collapseProductAccordion = !collapseProductAccordion;
+}
 
 @code
 {
