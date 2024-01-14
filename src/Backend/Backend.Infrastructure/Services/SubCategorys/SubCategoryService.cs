@@ -1,5 +1,5 @@
-﻿using Backend.Domain.Entities.Category;
-using Backend.Domain.Entities.SubCategory;
+﻿using Backend.Domain.Entities.Categories;
+using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Categories;
@@ -12,20 +12,20 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Services.SubCategories
 {
-    public class SubCategorieservice
+    public class SubCategoryService
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserContextService _userContextService;
 
-        public SubCategorieservice(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public SubCategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
             _userContextService = userContextService;
         }
 
-        public async Task<IEnumerable<SubCategory>> Get(Guid tenantId)
+        public IEnumerable<SubCategory> Get(Guid tenantId)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Backend.Infrastructure.Services.SubCategories
                     var context = _userContextService.LoadContext();
                     subCategory.CategoryId = categoryId;
                     subCategory.SubCategoryId = Guid.NewGuid();
-                    subCategory.CreatedBy = DateTime.Now;
+                    subCategory.CreatedBy = context.UserId;
                     subCategory.Updated = null;
                     subCategory.UpdatedBy = null;
 
@@ -109,6 +109,11 @@ namespace Backend.Infrastructure.Services.SubCategories
             await _appDbContext.SaveChangesAsync();
 
             return SubCategory;
+        }
+
+        public IEnumerable<SubCategory> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
+        {
+            return _appDbContext.SubCategories.Where(x => x.TenantId == tenantId && x.CategoryId == categoryId);
         }
     }
 }

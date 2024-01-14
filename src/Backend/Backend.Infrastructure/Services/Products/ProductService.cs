@@ -5,7 +5,9 @@ using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
+using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.ProductTypes;
+using Backend.Infrastructure.Services.SubCategories;
 using Backend.Infrastructure.Services.Tenants;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -21,14 +23,18 @@ namespace Backend.Infrastructure.Services.Products
     {
         private readonly AppDbContext _appDbContext;
         private readonly ProductTypeService _productType;
+        private readonly CategoryService _categoryService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, IHttpContextAccessor httpContextAccessor, UserContextService main)
+        private readonly SubCategoryService _subCategoryService;
+             
+        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, IHttpContextAccessor httpContextAccessor, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService)
             : base(main)
         {
             _appDbContext = appDbContext;
             _productType = productTypeService;
             _httpContextAccessor = httpContextAccessor;
+            _categoryService = categoryService;
+            _subCategoryService = subCategoryService;
         }
 
         public IEnumerable<Product> Get(Guid tenantId)
@@ -114,6 +120,8 @@ namespace Backend.Infrastructure.Services.Products
             {
                 var products = Get(tenantId);
                 var types = _productType.Get();
+                //var categories = _categoryService.Get(tenantId);
+                //var subCategories = _subCategoryService.Get(tenantId);
                 return products.Select(product => new ProductDetail
                 {
                     TenantId = product.TenantId,
@@ -127,6 +135,10 @@ namespace Backend.Infrastructure.Services.Products
                     LiquidWeight = product.LiquidWeight,
                     ProductType = types.First(x => x.Id == product.ProductTypeId),
                     ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
+                    //CategoryId = product.CategoryId,
+                    //SubCategoryId = product.SubCategoryId,
+                    //CategoryName = categories.FirstOrDefault(x => x.CategoryId == product.CategoryId).CategoryName,
+                    //SubCategoryName = subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName,
                     Created = product.Created,
                     CreatedBy = product.CreatedBy,
                     Updated = product.Updated,

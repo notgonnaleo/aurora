@@ -1,8 +1,8 @@
 ﻿using Backend.Domain.Entities.Agent;
-using Backend.Domain.Entities.Category;
+using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
-using Backend.Domain.Entities.SubCategory;
+using Backend.Domain.Entities.SubCategories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -45,6 +45,7 @@ namespace Backend.Infrastructure.Context
                         Updated = null,
                         UpdatedBy = null,
                         ProductTypeId = 3,
+                        CategoryId = null
                     },
                     new Product
                     {
@@ -62,6 +63,7 @@ namespace Backend.Infrastructure.Context
                         Updated = null,
                         UpdatedBy = null,
                         ProductTypeId = 3,
+                        CategoryId = null
                     }
                 );
 

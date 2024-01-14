@@ -1,8 +1,15 @@
-﻿@using Backend.Domain.Entities.Products;
+﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Products;
+@using Backend.Domain.Entities.SubCategories;
 @using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
 @using Frontend.Web.Services.Products;
+@using Frontend.Web.Services.SubCategories;
 @inject ProductService _productService
 @inject AuthenticationService _authenticationService
+@inject CategoryService _categoryService;
+@inject SubCategoriesService _subCategoryService;
 @inject NavigationManager navigator
 
 <div>
@@ -78,6 +85,7 @@
                 </div>
             </div>
 
+            <CascadingValue Value="@model.CategoryId">
             <div class="row">
                 <div class="accordion accordion-flush position-relative overflow-hidden @categoryAccordionHeaderToggle" id="accordionFlushExample">
                     <div class="accordion-item mb-3 shadow-none border rounded">
@@ -89,65 +97,26 @@
                         <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
                             <div class="accordion-body px-3 fw-normal">
                                 <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="exampleInputfirstname" class="form-label fw-semibold">First Name</label>
-                                            <input type="text" class="form-control" id="exampleInputfirstname" placeholder="John">
-                                        </div>
+                                    <div class="mb-3 col-sm-12">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select class="form-select" @onchange="LoadSubCategories">
+                                            <option value="" disabled hidden selected>The category of your product</option>
+                                            @foreach (var category in categories)
+                                            {
+                                                <option value="@category.CategoryId">@category.CategoryName</option>
+
+                                            }
+                                        </select>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="exampleInputphoneno3" class="form-label fw-semibold">Phone no</label>
-                                            <input type="text" class="form-control" id="exampleInputphoneno3" placeholder="1340 2154 123">
-                                        </div>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="mb-4">
-                                            <label class="form-label fw-semibold">Address</label>
-                                            <textarea class="form-control p-7" name="" id="" cols="20" rows="1" placeholder="150, Ring Road"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="exampleInputpincode" class="form-label fw-semibold">Pincode</label>
-                                            <input type="text" class="form-control" id="exampleInputpincode" placeholder="120125">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="exampleInputlandmark" class="form-label fw-semibold">Landmark</label>
-                                            <input type="text" class="form-control" id="exampleInputlandmark" placeholder="Nr. Wall Street">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label for="exampleInputcity" class="form-label fw-semibold">City</label>
-                                            <input type="text" class="form-control" id="exampleInputcity" placeholder="Jackson">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-4">
-                                            <label class="form-label fw-semibold">State</label>
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected="">Alaska</option>
-                                                <option value="1">Arizona</option>
-                                                <option value="2">Hawaii</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h6 class="fw-semibold">Address Type</h6>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioHome" value="option1">
-                                        <label class="form-check-label" for="inlineRadioHome">Home (All day delivery)</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioOffice" value="option1">
-                                        <label class="form-check-label" for="inlineRadioOffice">
-                                            Office (Delivery between 10 AM - 5
-                                            PM)
-                                        </label>
+                                    <div class="mb-3 col-sm-12">
+                                        <label for="productType" class="form-label">Sub Category</label>
+                                        <select class="form-select" @bind="@model.SubCategoryId">
+                                            <option value="" disabled hidden selected>The sub category of your product</option>
+                                            @foreach (var subCategory in subCategories)
+                                            {
+                                                <option value="@subCategory.SubCategoryId">@subCategory.SubCategoryName</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -155,14 +124,13 @@
                     </div>
                 </div>
             </div>
+            </CascadingValue>
         </form>
     </div>
     <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
         <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
     </div>
 </div>
-
-
 
 @code
 {
@@ -199,10 +167,37 @@
         }
         catch (Exception)
         {
-            
+
             throw;
         }
     }
+
+    private List<Category> categories = new List<Category>();
+    private List<SubCategory> subCategories = new List<SubCategory>();
+    public async Task GetCategories()
+    {
+        var context = await _authenticationService.GetContext();
+        categories = (await _categoryService.GetCategories(context.Tenant.Id.ToString())).ToList();
+    }
+
+    private async Task LoadSubCategories(ChangeEventArgs args)
+    {
+        string selectedCategoryId = args.Value.ToString();
+        model.CategoryId = new Guid(selectedCategoryId);
+        await GetSubCategories(selectedCategoryId);
+    }
+
+    public async Task GetSubCategories(string categoryId)
+    {
+        var context = await _authenticationService.GetContext();
+        subCategories = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId)).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        GetCategories();
+    }
+
 }
 
 @code

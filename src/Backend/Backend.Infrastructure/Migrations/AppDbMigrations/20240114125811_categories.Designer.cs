@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240108233350_products")]
-    partial class products
+    [Migration("20240114125811_categories")]
+    partial class categories
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,19 +61,22 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.ToTable("Agent");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Category.Category", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Categories.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("CategoryName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("CreatedBy")
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("TenantId")
@@ -146,6 +149,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -169,6 +175,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("SubCategoryId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
@@ -186,14 +195,18 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.HasIndex("ProductTypeId");
+
+                    b.HasIndex("SubCategoryId");
 
                     b.ToTable("Product");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ee5fa645-68e9-4ffe-bff9-44bc37ca34ef"),
+                            Id = new Guid("d5585d8b-6746-44d4-971c-99731a767f78"),
                             Active = true,
                             Description = "Produto de teste gerado na migration - Aurora",
                             LiquidWeight = 0m,
@@ -206,7 +219,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            Id = new Guid("4c16cd4a-1aef-41b9-9c5b-cf9af8421546"),
+                            Id = new Guid("460675d9-5fe9-43cf-9714-bd12b34af4bb"),
                             Active = true,
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             LiquidWeight = 0m,
@@ -219,11 +232,14 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         });
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.SubCategory.SubCategory", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.SubCategories.SubCategory", b =>
                 {
                     b.Property<Guid>("SubCategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
@@ -231,8 +247,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("CreatedBy")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("SubCategoryName")
                         .HasColumnType("text");
@@ -253,13 +269,25 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
                 {
+                    b.HasOne("Backend.Domain.Entities.Categories.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("Backend.Domain.Entities.ProductTypes.ProductType", "ProductType")
                         .WithMany()
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Backend.Domain.Entities.SubCategories.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
+
+                    b.Navigation("Category");
+
                     b.Navigation("ProductType");
+
+                    b.Navigation("SubCategory");
                 });
 #pragma warning restore 612, 618
         }

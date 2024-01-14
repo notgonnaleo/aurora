@@ -1,5 +1,7 @@
 ﻿using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.ProductTypes;
+using Backend.Domain.Entities.SubCategories;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -19,14 +21,24 @@ namespace Backend.Domain.Entities.Products
         public Guid TenantId { get; set; }
         [Key]
         public Guid Id { get; set; }
-        public int ProductTypeId { get; set; }
+
         [Required]
         public string SKU { get; set; }
+        //public string GTIN { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public decimal Value { get; set; }
         public decimal? TotalWeight { get; set; }
         public decimal? LiquidWeight { get; set; }
+
+        public int ProductTypeId { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? SubCategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
+        [ForeignKey("SubCategoryId")]
+        public virtual SubCategory? SubCategory { get; set; }
         [ForeignKey("ProductTypeId")]
         public virtual ProductType? ProductType { get; set; }
 
@@ -71,7 +83,8 @@ namespace Backend.Domain.Entities.Products
 
     public class ProductDetail : Product
     {
+        public string CategoryName { get; set; }
+        public string SubCategoryName { get; set; }
         public string ProductTypeName { get; set; }
-        // Categories properties are the next
     }
 }

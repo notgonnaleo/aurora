@@ -1,4 +1,4 @@
-﻿using Backend.Domain.Entities.Category;
+﻿using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Categories;
@@ -12,10 +12,10 @@ namespace Backend.API.Controllers.Categories
     [Route("Categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly Categorieservice _Categorieservice;
+        private readonly CategoryService _Categorieservice;
         private readonly UserContextService _userContextService;
 
-        public CategoryController(Categorieservice Categorieservice, UserContextService userContextService)
+        public CategoryController(CategoryService Categorieservice, UserContextService userContextService)
         {
             _Categorieservice = Categorieservice;
             _userContextService = userContextService;
@@ -28,7 +28,7 @@ namespace Backend.API.Controllers.Categories
         {
             try
             {
-                return Ok(await _Categorieservice.Get(tenantId));
+                return Ok(_Categorieservice.Get(tenantId));
             }
             catch (Exception ex)
             {
@@ -43,7 +43,7 @@ namespace Backend.API.Controllers.Categories
         {
             try
             {
-                return Ok(await _Categorieservice.GetById(categoryId,tenantId));
+                return Ok(_Categorieservice.GetById(categoryId,tenantId));
             }
             catch (Exception ex)
             {
