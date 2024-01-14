@@ -24,12 +24,13 @@ namespace Backend.Domain.Entities.Products
 
         [Required]
         public string SKU { get; set; }
-        //public string GTIN { get; set; }
+        public string GTIN { get; set; }
+        
         public string Name { get; set; }
         public string? Description { get; set; }
-        public decimal Value { get; set; }
-        public decimal? TotalWeight { get; set; }
-        public decimal? LiquidWeight { get; set; }
+        public double Value { get; set; }
+        public double? TotalWeight { get; set; }
+        public double? LiquidWeight { get; set; }
 
         public int ProductTypeId { get; set; }
         public Guid? CategoryId { get; set; }

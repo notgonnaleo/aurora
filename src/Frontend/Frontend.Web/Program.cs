@@ -33,6 +33,6 @@ builder.Services.AddScoped<TenantService>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<SubCategoryRepository>();
-builder.Services.AddScoped<SubCategoriesService>();
+builder.Services.AddScoped<SubCategoryService>();
 
 await builder.Build().RunAsync();

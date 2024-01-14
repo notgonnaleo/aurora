@@ -28,7 +28,7 @@ namespace Backend.API.Controllers.SubCategories
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
@@ -43,43 +43,38 @@ namespace Backend.API.Controllers.SubCategories
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(SubCategory subCategory, Guid categoryId)
+        public async Task<ActionResult> Add(SubCategory subCategory)
         {
             try
             {
-                return Ok(await _SubCategorieservice.Add(subCategory, categoryId));
+                return Ok(await _SubCategorieservice.Add(subCategory));
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
-
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(SubCategory category, Guid SubCategoryId)
+        public async Task<ActionResult> Update(SubCategory category)
         {
             try
             {
-                var SubCategory = await _SubCategorieservice.Update(category, SubCategoryId);
-
-                if (SubCategory == null)
-                    return NotFound($"Produto com ID {SubCategoryId} não encontrado.");
-
+                var SubCategory = await _SubCategorieservice.Update(category);
                 return Ok(SubCategory);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                throw;
             }
         }
 
@@ -88,7 +83,14 @@ namespace Backend.API.Controllers.SubCategories
         [Route("GetSubCategoriesByCategory")]
         public ActionResult GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
         {
-            return Ok(_SubCategorieservice.GetSubCategoriesByCategory(tenantId, categoryId));
+            try
+            {
+                return Ok(_SubCategorieservice.GetSubCategoriesByCategory(tenantId, categoryId));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

@@ -3,10 +3,10 @@ using Frontend.Web.Repository.SubCategories;
 
 namespace Frontend.Web.Services.SubCategories
 {
-    public class SubCategoriesService
+    public class SubCategoryService
     {
         private readonly SubCategoryRepository _subCategoryRepository;
-        public SubCategoriesService(SubCategoryRepository subCategoryRepository) 
+        public SubCategoryService(SubCategoryRepository subCategoryRepository) 
         { 
             _subCategoryRepository = subCategoryRepository;
         }

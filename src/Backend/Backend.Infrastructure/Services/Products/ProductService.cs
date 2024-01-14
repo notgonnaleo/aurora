@@ -24,15 +24,13 @@ namespace Backend.Infrastructure.Services.Products
         private readonly AppDbContext _appDbContext;
         private readonly ProductTypeService _productType;
         private readonly CategoryService _categoryService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SubCategoryService _subCategoryService;
              
-        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, IHttpContextAccessor httpContextAccessor, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService)
+        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService)
             : base(main)
         {
             _appDbContext = appDbContext;
             _productType = productTypeService;
-            _httpContextAccessor = httpContextAccessor;
             _categoryService = categoryService;
             _subCategoryService = subCategoryService;
         }

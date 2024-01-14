@@ -14,9 +14,13 @@ namespace Backend.Domain.Entities.SubCategories
     [Table("SubCategory")]
     public class SubCategory : Model
     {
-        public Guid SubCategoryId { get; set; }
         public Guid TenantId { get; set; }
+        public Guid SubCategoryId { get; set; }
         public string? SubCategoryName { get; set; }
+
         public Guid CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
     }
 }
