@@ -2,8 +2,11 @@
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
+using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Services.Authorization;
+using Backend.Infrastructure.Services.Base;
+using Backend.Infrastructure.Services.SubCategories;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -13,17 +16,18 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Services.Categories
 {
-    public class CategoryService
+    public class CategoryService : Service
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserContextService _userContextService;
 
-        public CategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        private readonly SubCategoryService _subCategoryService;
+
+        public CategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService, SubCategoryService subCategoryService) : base(userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
-            _userContextService = userContextService;
+            _subCategoryService = subCategoryService;
         }
 
         public IEnumerable<Category> Get(Guid tenantId)
@@ -56,7 +60,7 @@ namespace Backend.Infrastructure.Services.Categories
         {
             try
             {
-                var context = _userContextService.LoadContext();
+                var context = LoadContext();
                 category.CategoryId = Guid.NewGuid();
                 category.CreatedBy = context.UserId;
                 category.Created = DateTime.Now;
@@ -89,6 +93,28 @@ namespace Backend.Infrastructure.Services.Categories
             await _appDbContext.SaveChangesAsync();
 
             return Category;
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoryAndSubCategories(Guid tenantId)
+        {
+            try
+            {
+                List<Category> categories = _appDbContext.Categories
+                    .Where(x => x.TenantId == tenantId).ToList();
+
+                foreach (var category in categories)
+                {
+                    var subCategories = (await _subCategoryService
+                        .GetSubCategoriesByCategory(tenantId, category.CategoryId))
+                        .ToList();
+                    category.SubCategories = subCategories;
+                }
+                return categories;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

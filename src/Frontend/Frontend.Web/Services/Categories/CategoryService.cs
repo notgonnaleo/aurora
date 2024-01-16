@@ -14,6 +14,9 @@ namespace Frontend.Web.Services.Categories
         {
             return await _categoryRepository.GetCategories(tenantId);
         }
-
+        public async Task<IEnumerable<Category>> GetCategoriesAndSubCategories(string tenantId)
+        {
+            return await _categoryRepository.GetCategoriesAndSubCategories(tenantId);
+        }
     }
 }

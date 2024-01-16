@@ -47,10 +47,7 @@ namespace Frontend.Web.Services.Products
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
             var response = await _httpClientRepository.Post(model);
-            return await response.Content.ReadFromJsonAsync<Product>(); 
-            // YES, this is UGLY AS FUCK but since I'm literally alone on this i dont give a fuck
-            // + IDE is bitching about null values but we are never getting null values here.
-
+            return await response.Content.ReadFromJsonAsync<Product>();
         }
 
         public async Task<bool> UpdateProduct(Product product)

@@ -91,6 +91,20 @@ namespace Backend.API.Controllers.Categories
             }
         }
 
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetCategoryAndSubCategories")]
+        public async Task<ActionResult> GetCategoryAndSubCategories(Guid tenantId)
+        {
+            try
+            {
+                return Ok(await _Categorieservice.GetCategoryAndSubCategories(tenantId));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
     }
 }

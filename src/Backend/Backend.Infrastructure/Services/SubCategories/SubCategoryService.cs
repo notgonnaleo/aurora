@@ -6,6 +6,7 @@ using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Categories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,8 +65,6 @@ namespace Backend.Infrastructure.Services.SubCategories
                 subCategory.Updated = null;
                 subCategory.UpdatedBy = null;
 
-                _appDbContext.SubCategories.Add(subCategory);
-                await _appDbContext.SaveChangesAsync();
 
                 return subCategory;                
             }
@@ -94,11 +93,13 @@ namespace Backend.Infrastructure.Services.SubCategories
 
         }
 
-        public IEnumerable<SubCategory> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
+        public async Task<List<SubCategory>> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
         {
             try
             {
-                return _appDbContext.SubCategories.Where(x => x.TenantId == tenantId && x.CategoryId == categoryId);
+                return await _appDbContext.SubCategories
+                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId)
+                    .ToListAsync();
             }
             catch (Exception)
             {

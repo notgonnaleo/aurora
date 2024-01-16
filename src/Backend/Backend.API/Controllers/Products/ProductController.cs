@@ -52,11 +52,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public ActionResult Add(Product product)
+        public async Task<ActionResult> Add(Product product)
         {
             try
             {
-                return Ok(_productService.Add(product));
+                return Ok(await _productService.Add(product));
             }
             catch (Exception)
             {

@@ -63,7 +63,7 @@ namespace Backend.Infrastructure.Services.Products
             }
         }
 
-        public Product Add(Product product)
+        public async Task<Product> Add(Product product)
         {
             try
             {
@@ -71,8 +71,11 @@ namespace Backend.Infrastructure.Services.Products
                 product.TenantId = context.Tenant.Id;
                 product = product.Create(product, context.UserId);
                 _appDbContext.Products.Add(product);
-                _appDbContext.SaveChanges();
-                return product;
+
+                if(await _appDbContext.SaveChangesAsync() > 0)
+                    return product;
+
+                throw new Exception("Failure while saving the new item");
             }
             catch (Exception ex)
             {
@@ -126,6 +129,7 @@ namespace Backend.Infrastructure.Services.Products
                     Id = product.Id,
                     ProductTypeId = product.ProductTypeId,
                     SKU = product.SKU,
+                    GTIN = product.GTIN,
                     Name = product.Name,
                     Description = product.Description,
                     Value = product.Value,
@@ -133,10 +137,10 @@ namespace Backend.Infrastructure.Services.Products
                     LiquidWeight = product.LiquidWeight,
                     ProductType = types.First(x => x.Id == product.ProductTypeId),
                     ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
-                    CategoryId = product.CategoryId,
-                    SubCategoryId = product.SubCategoryId,
-                    CategoryName = categories.FirstOrDefault(x => x.CategoryId == product.CategoryId).CategoryName,
-                    SubCategoryName = subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName,
+                    CategoryId = product.CategoryId ?? null,
+                    SubCategoryId = product.SubCategoryId ?? null,
+                    CategoryName = (product.CategoryId != null) ? categories.FirstOrDefault(x => x.CategoryId == product.CategoryId).CategoryName ?? string.Empty : string.Empty,
+                    SubCategoryName = (product.CategoryId != null) ? subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName ?? string.Empty : string.Empty,
                     Created = product.Created,
                     CreatedBy = product.CreatedBy,
                     Updated = product.Updated,

@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.SubCategories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,9 @@ namespace Backend.Domain.Entities.Categories
         public Guid CategoryId { get; set; }
         public Guid TenantId { get; set; }  
         public string? CategoryName { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SubCategory>? SubCategories { get; set; }
     }
 }
 

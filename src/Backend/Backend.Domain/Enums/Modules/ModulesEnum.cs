@@ -127,6 +127,12 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static string UpdateCategory = "Categories/Update";
             }
+
+            public static string GetCategoryAndSubCategories = "GetCategoryAndSubCategories";
+            public static class GetCategoryAndSubCategoriesParameters
+            {
+                public static string tenantId = "tenantId";
+            }
         }
 
         public class SubCategories

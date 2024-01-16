@@ -75,12 +75,8 @@
     private bool collapseForm = true;
     private string? formCssClass => collapseForm ? null : "show-menu";
     private string? btnText => collapseForm ? "New" : "Hide menu";
+    private List<AccordionItem> items = new List<AccordionItem>();
 
-    private List<AccordionItem> items = new List<AccordionItem>
-    {
-        new AccordionItem { Id = 1, Title = "Accordion Item #1", Body = "This is the first item's accordion body." },
-        // Add more items as needed
-    };
 
     private class AccordionItem
     {
@@ -109,21 +105,30 @@
     protected override async Task OnInitializedAsync()
     {
         context = await _authenticationService.GetContext();
-        categories = (await GetCategories(context.Tenant.Id.ToString())).ToList();
 
+        var response = (await GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+        categories = response;
+        subCategories = response.SelectMany(x => x.SubCategories).ToList();
+
+        items = new List<AccordionItem>();
+        int count = 0;
         foreach (var category in categories)
         {
-            subCategories.Add((await GetSubCategories(context.Tenant.Id.ToString(), category.CategoryId.ToString())).ToList());
+            foreach (var subCategory in subCategories.Where(sc => sc.CategoryId == category.CategoryId))
+            {
+                items.Add(new AccordionItem()
+                {
+                    Id = count++,
+                    Title = category.CategoryName,
+                    Body = subCategory.SubCategoryName,
+                    IsCollapsed = true
+                });
+            }
         }
     }
 
-    public async Task<IEnumerable<Backend.Domain.Entities.Categories.Category>> GetCategories(string tenantId)
+    public async Task<IEnumerable<Backend.Domain.Entities.Categories.Category>> GetCategoriesAndSubCategories(string tenantId)
     {
-        return await _categoryService.GetCategories(tenantId);
-    }
-
-    public async Task<IEnumerable<SubCategory>> GetSubCategories(string tenantId, string categoryId)
-    {
-        return await _subCategoryService.GetSubCategoriesByCategoryId(tenantId, categoryId);
+        return await _categoryService.GetCategoriesAndSubCategories(tenantId);
     }
 }

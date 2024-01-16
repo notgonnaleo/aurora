@@ -88,8 +88,9 @@ namespace Frontend.Web.Repository.Client
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
-                if (route.Body != null) request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-                return await _httpClient.SendAsync(request); // It should return the actual item but I forgot that my code is a piece of shit and instead I need to send the httpresponse to be deserialized first.
+                if (route.Body != null) 
+                    request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                return await _httpClient.SendAsync(request);
             }
             catch (Exception ex)
             {

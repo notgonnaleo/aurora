@@ -162,8 +162,11 @@
         {
             var context = await _authenticationService.GetContext();
             model.TenantId = context.Tenant.Id;
+            model.GTIN = "123493284";
             Product newProduct = await _productService.CreateProduct(model);
-            if (newProduct != null) navigator.NavigateTo("/products", true);
+
+            if (newProduct != null && newProduct.Id != new Guid()) 
+                navigator.NavigateTo("/products", true);
         }
         catch (Exception)
         {
@@ -177,27 +180,17 @@
     public async Task GetCategories()
     {
         var context = await _authenticationService.GetContext();
-        categories = (await _categoryService.GetCategories(context.Tenant.Id.ToString())).ToList();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
     }
 
     private async Task LoadSubCategories(ChangeEventArgs args)
     {
         string selectedCategoryId = args.Value.ToString();
-        model.CategoryId = new Guid(selectedCategoryId);
-        await GetSubCategories(selectedCategoryId);
+        var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
+        subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
     }
 
-    public async Task GetSubCategories(string categoryId)
-    {
-        var context = await _authenticationService.GetContext();
-        subCategories = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId)).ToList();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        GetCategories();
-    }
-
+    protected override async Task OnInitializedAsync() => GetCategories();
 }
 
 @code
