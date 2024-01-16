@@ -19,6 +19,7 @@ using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.SubCategories;
+using Backend.Infrastructure.Services.Agents;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddScoped<CategoryService>();
 
 //SubCategories
 builder.Services.AddScoped<SubCategoryService>();
+
+//Agent
+builder.Services.AddScoped<AgentService>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();
