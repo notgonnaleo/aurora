@@ -24,11 +24,11 @@ namespace Backend.API.Controllers.ProductTypes
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get()
+        public ActionResult Get()
         {
             try
             {
-                return Ok(await _productTypeService.Get());
+                return Ok(_productTypeService.Get());
             }
             catch (Exception ex)
             {

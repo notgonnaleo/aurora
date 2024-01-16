@@ -5,23 +5,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Backend.Domain.Entities.Category;
+using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.Categories;
 
 
-namespace Backend.Domain.Entities.SubCategory
+namespace Backend.Domain.Entities.SubCategories
 {
     [Table("SubCategory")]
-    public class SubCategory
+    public class SubCategory : Model
     {
-        public Guid SubCategoryId { get; set; }
         public Guid TenantId { get; set; }
+        public Guid SubCategoryId { get; set; }
         public string? SubCategoryName { get; set; }
-        public DateTime? CreatedBy { get; set; }
-        public DateTime? Created { get; set; }  
-        public DateTime? Updated { get; set; }
-        public Guid? UpdatedBy { get; set; }
+
         public Guid CategoryId { get; set; }
 
-
+        [ForeignKey("CategoryId")]
+        public virtual Category? Category { get; set; }
     }
 }

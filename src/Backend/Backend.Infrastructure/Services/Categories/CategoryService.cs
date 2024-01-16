@@ -1,5 +1,5 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
-using Backend.Domain.Entities.Category;
+using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Infrastructure.Context;
@@ -13,50 +13,42 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Services.Categories
 {
-    public class Categorieservice
+    public class CategoryService
     {
         private readonly AppDbContext _appDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly UserContextService _userContextService;
 
-        public Categorieservice(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public CategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
         {
             _appDbContext = appDbContext;
             _httpContextAccessor = httpContextAccessor;
             _userContextService = userContextService;
         }
 
-        public async Task<IEnumerable<Category>> Get(Guid tenantId)
+        public IEnumerable<Category> Get(Guid tenantId)
         {
             try
             {
                 return _appDbContext.Categories
                     .Where(x => x.TenantId == tenantId)
                     .ToList();
-
-
-
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
 
-        public async Task<Category> GetById(Guid categoryId, Guid tenantId)
+        public Category GetById(Guid categoryId, Guid tenantId)
         {
             try
             {
-                return _appDbContext.Categories
-                     .FirstOrDefault(x => x.TenantId == tenantId && x.CategoryId == categoryId);
-                     
-
+                return _appDbContext.Categories.FirstOrDefault(x => x.TenantId == tenantId && x.CategoryId == categoryId);
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
 

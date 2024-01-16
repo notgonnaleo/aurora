@@ -27,7 +27,7 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
-                return Ok(_productService.Get(tenantId));
+                return Ok(_productService.GetProductsWithDetail(tenantId));
             }
             catch (Exception)
             {

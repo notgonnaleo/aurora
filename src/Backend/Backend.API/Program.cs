@@ -15,8 +15,8 @@ using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Memberships;
 using Backend.Infrastructure.Services.ProductTypes;
 using System.ComponentModel;
-using Backend.Domain.Entities.Category;
-using Backend.Domain.Entities.SubCategory;
+using Backend.Domain.Entities.Categories;
+using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.SubCategories;
 using Backend.Infrastructure.Services.Agents;
@@ -37,10 +37,10 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ProductTypeService>();
 
 //Category
-builder.Services.AddScoped<Categorieservice>();
+builder.Services.AddScoped<CategoryService>();
 
 //SubCategories
-builder.Services.AddScoped<SubCategorieservice>();
+builder.Services.AddScoped<SubCategoryService>();
 
 //Agent
 builder.Services.AddScoped<AgentService>();

@@ -14,7 +14,7 @@ namespace Frontend.Web.Services.Products
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<Product>> GetProducts(string tenantId)
+        public async Task<IEnumerable<ProductDetail>> GetProducts(string tenantId)
         {
             return await _productRepository.GetProducts(tenantId);
         }
