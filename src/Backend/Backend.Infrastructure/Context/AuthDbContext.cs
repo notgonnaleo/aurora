@@ -19,18 +19,15 @@ namespace Backend.Infrastructure.Context
 {
     public class AuthDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-
         public AuthDbContext()
         {
         }
 
-        public AuthDbContext(DbContextOptions<AuthDbContext> options, IConfiguration configuration) : base(options)
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
-            _configuration = configuration;
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("Auth"));
+            => optionsBuilder.UseNpgsql();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

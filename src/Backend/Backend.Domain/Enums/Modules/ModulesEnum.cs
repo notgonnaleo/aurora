@@ -111,8 +111,7 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
-                public static string GetAllCategories = "Categories/List";
-                public static string GetCategory = "Categories/Find";
+                public static string tenantId = "tenantId";
             }
 
             public static class POST
@@ -130,8 +129,14 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
-                public static string GetAllSubCategories = "SubCategories/List";
-                public static string GetSubCategory = "SubCategories/Find";
+                public static string tenantId = "tenantId";
+            }
+
+            public static string GetSubCategoriesByCategory = "GetSubCategoriesByCategory";
+            public static class GetSubCategoriesByCategoryParameters
+            {
+                public static string tenantId = "tenantId";
+                public static string categoryId = "categoryId";
             }
 
             public static class POST

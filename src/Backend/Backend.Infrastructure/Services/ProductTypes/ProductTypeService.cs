@@ -26,20 +26,17 @@ namespace Backend.Infrastructure.Services.ProductTypes
             _userContextService = userContextService;
         }
 
-        public async Task<IEnumerable<ProductType>> Get()
+        public IEnumerable<ProductType> Get()
         {
             try
             {
                 return _appDbContext.ProductTypes
-                    .Where(x =>  x.Active == true)
+                    .Where(x => x.Active)
                     .ToList();
-
-
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw;
             }
         }
 
