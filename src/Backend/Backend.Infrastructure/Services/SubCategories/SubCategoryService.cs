@@ -17,12 +17,10 @@ namespace Backend.Infrastructure.Services.SubCategories
     public class SubCategoryService : Service
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserContextService _userContextService;
 
         public SubCategoryService(AppDbContext appDbContext, UserContextService userContextService) : base(userContextService)
         {
             _appDbContext = appDbContext;
-            _userContextService = userContextService;
         }
 
         public IEnumerable<SubCategory> Get(Guid tenantId)

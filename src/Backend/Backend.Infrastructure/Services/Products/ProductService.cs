@@ -118,8 +118,8 @@ namespace Backend.Infrastructure.Services.Products
             {
                 var products = Get(tenantId);
                 var types = _productType.Get();
-                //var categories = _categoryService.Get(tenantId);
-                //var subCategories = _subCategoryService.Get(tenantId);
+                var categories = _categoryService.Get(tenantId);
+                var subCategories = _subCategoryService.Get(tenantId);
                 return products.Select(product => new ProductDetail
                 {
                     TenantId = product.TenantId,
@@ -133,10 +133,10 @@ namespace Backend.Infrastructure.Services.Products
                     LiquidWeight = product.LiquidWeight,
                     ProductType = types.First(x => x.Id == product.ProductTypeId),
                     ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
-                    //CategoryId = product.CategoryId,
-                    //SubCategoryId = product.SubCategoryId,
-                    //CategoryName = categories.FirstOrDefault(x => x.CategoryId == product.CategoryId).CategoryName,
-                    //SubCategoryName = subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName,
+                    CategoryId = product.CategoryId,
+                    SubCategoryId = product.SubCategoryId,
+                    CategoryName = categories.FirstOrDefault(x => x.CategoryId == product.CategoryId).CategoryName,
+                    SubCategoryName = subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName,
                     Created = product.Created,
                     CreatedBy = product.CreatedBy,
                     Updated = product.Updated,
