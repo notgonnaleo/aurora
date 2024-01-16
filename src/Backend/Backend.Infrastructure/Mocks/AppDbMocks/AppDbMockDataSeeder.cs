@@ -103,7 +103,6 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 }
             );
         }
-
         private static void SeedProductTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProductType>().HasData(
