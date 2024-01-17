@@ -1,0 +1,96 @@
+﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.SubCategories;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.SubCategories;
+@inject AuthenticationService _authenticationService
+@inject CategoryService _categoryService;
+@inject SubCategoryService _subCategoryService;
+@inject NavigationManager navigator
+
+<div>
+    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+</div>
+<div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
+    <div class="card-body p-2">
+        <form>
+            <div class="row">
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="sku" class="form-label">Category</label>
+                        <input type="text" class="form-control" id="category" placeholder="Your category name" @bind="category.CategoryName">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="sku" class="form-label">Sub Category</label>
+                        <input type="text" class="form-control" id="subcategory" placeholder="Your sub-category name" "@(EnableSubCategoryCreation ? "" : "disabled")">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+        <button type="button" class="btn btn-primary" @onclick="CreateCategory">Save <i class="ti ti-device-floppy"></i></button>
+    </div>
+</div>
+
+@code
+{
+    @*Category Accordion *@
+    private bool collapseCategoryAccordion = true;
+    private string? categoryAccordionHeaderToggle => collapseCategoryAccordion ? null : "collapsed";
+    private string? categoryAccordionToggle => collapseCategoryAccordion ? "collapse" : "collapse show";
+    private void ToggleCategoryAccordion() => collapseCategoryAccordion = !collapseCategoryAccordion;
+}
+
+@code
+{
+    private Category category = new Category();
+    public async Task CreateCategory()
+    {
+        try
+        {
+            var context = await _authenticationService.GetContext();
+            category.TenantId = context.Tenant.Id;
+            Category newCategory = await _categoryService.CreateCategory(category);
+
+            if (newCategory != null && newCategory.CategoryId != new Guid())
+                navigator.NavigateTo("/categories", true);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+}
+
+@code
+{
+    private List<Category> categories = new List<Category>();
+    private List<SubCategory> subCategories = new List<SubCategory>();
+    public async Task GetCategories()
+    {
+        var context = await _authenticationService.GetContext();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+    }
+
+    private async Task LoadSubCategories(ChangeEventArgs args)
+    {
+        string selectedCategoryId = args.Value.ToString();
+        var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
+        subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
+    }
+
+    protected override async Task OnInitializedAsync() => GetCategories();
+}
+
+@code
+{
+    [Parameter] public Action ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+    [Parameter] public bool EnableSubCategoryCreation { get; set; } = false;
+
+}

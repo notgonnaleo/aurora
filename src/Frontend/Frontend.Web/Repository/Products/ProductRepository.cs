@@ -23,7 +23,6 @@ namespace Frontend.Web.Services.Products
             var request = new RouteBuilder<ProductDetail>().Send(Endpoints.Products, Methods.Default.GET, parameters);
             return await _httpClientRepository.Get(request);
         }
-
         public async Task<Product> GetProduct(string tenantId, string productId)
         {
             var parameters = new List<RouteParameterRequest>()
@@ -42,14 +41,12 @@ namespace Frontend.Web.Services.Products
             var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.FIND, parameters);
             return await _httpClientRepository.GetById(request);
         }
-
         public async Task<Product> CreateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
             var response = await _httpClientRepository.Post(model);
             return await response.Content.ReadFromJsonAsync<Product>();
         }
-
         public async Task<bool> UpdateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.PUT, product);

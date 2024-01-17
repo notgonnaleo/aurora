@@ -13,7 +13,7 @@
 <PageTitle>Aurora - Products</PageTitle>
 
 <aside class="right-sidebar @formCssClass">
-    <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
+    <Frontend.Web.Components.Categories.Forms.Add.AddCategory CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
 </aside>
 <div class="container-fluid">
     <div class="row">
@@ -27,9 +27,6 @@
         <div class="col-lg-12 d-flex align-items-stretch">
             <div class="card w-100">
                 <div class="card-body">
-                    <div class="mb-4">
-                        <h5 class="mb-0">Accordion</h5>
-                    </div>
                     <div class="accordion" id="accordionExample">
                         @foreach (var item in items)
                         {
@@ -41,8 +38,8 @@
                                             data-bs-target="@($"#collapse{item.Id}")"
                                             aria-expanded="@(item.IsCollapsed ? "false" : "true")"
                                             aria-controls="@($"collapse{item.Id}")"
-                                    @onclick="(e => ToggleAccordionItem(item.Id))">
-                                        @item.Title
+                                        @onclick="(e => ToggleAccordionItem(item.Id))">
+                                            @item.Title
                                     </button>
                                 </h2>
                                 <div id="@($"collapse{item.Id}")" 
@@ -114,6 +111,15 @@
         int count = 0;
         foreach (var category in categories)
         {
+            if (!category.SubCategories.Any())
+                items.Add(new AccordionItem()
+                {
+                    Id = count++,
+                    Title = category.CategoryName,
+                    Body = string.Empty,
+                    IsCollapsed = true
+                });
+
             foreach (var subCategory in subCategories.Where(sc => sc.CategoryId == category.CategoryId))
             {
                 items.Add(new AccordionItem()

@@ -64,8 +64,7 @@ namespace Backend.Infrastructure.Services.SubCategories
                 subCategory.CreatedBy = context.UserId;
                 subCategory.Updated = null;
                 subCategory.UpdatedBy = null;
-
-
+                subCategory.Active = true;
                 return subCategory;                
             }
             catch (Exception ex)

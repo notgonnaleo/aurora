@@ -66,10 +66,11 @@ namespace Backend.Infrastructure.Services.Categories
                 category.Created = DateTime.Now;
                 category.Updated = null;
                 category.UpdatedBy = null;
+                category.Active = true;
                 _appDbContext.Categories.Add(category);
-                _appDbContext.SaveChanges();
-
-                return category;
+                if(await _appDbContext.SaveChangesAsync() > 0)
+                    return category;
+                throw new Exception("Failed while trying to save new category.");
             }
             catch (Exception ex)
             {

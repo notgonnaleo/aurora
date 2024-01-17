@@ -34,6 +34,12 @@
                                         <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
                                     </div>
                                     <div class="mb-2 col-sm-8">
+                                        <label for="name" class="form-label">GTIN</label>
+                                        <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@model.GTIN">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" id="name" placeholder="Your product name" @bind="@model.Name">
                                     </div>
@@ -162,7 +168,6 @@
         {
             var context = await _authenticationService.GetContext();
             model.TenantId = context.Tenant.Id;
-            model.GTIN = "123493284";
             Product newProduct = await _productService.CreateProduct(model);
 
             if (newProduct != null && newProduct.Id != new Guid()) 
@@ -186,6 +191,7 @@
     private async Task LoadSubCategories(ChangeEventArgs args)
     {
         string selectedCategoryId = args.Value.ToString();
+        model.CategoryId = new Guid(selectedCategoryId); // Setting the selected category in the actual model
         var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
         subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
     }
