@@ -48,6 +48,13 @@
                                     data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         @item.Body
+                                        <div class="d-flex flex-row justify-content-end p-1">
+                                            <button type="button" class="btn btn-success">
+                                                <div class="d-flex align-items-center">
+                                                    Add sub-category <i class="ti ti-circle-plus ms-1 fs-5"></i>
+                                                </div>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +123,7 @@
                 {
                     Id = count++,
                     Title = category.CategoryName,
-                    Body = string.Empty,
+                    Body = "None sub-categories registered yet.",
                     IsCollapsed = true
                 });
 
