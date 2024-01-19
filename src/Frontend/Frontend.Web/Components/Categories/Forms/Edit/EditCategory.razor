@@ -1,9 +1,12 @@
 ﻿@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.SubCategories;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.SubCategories;
 @inject NavigationManager navigator
 @inject AuthenticationService _authenticationService;
 @inject CategoryService _categoryService;
+@inject SubCategoryService _subCategoryService;
 
 <div>
     <div class="card p-4">
@@ -12,7 +15,7 @@
                 <form>
                     <div class="row">
                         <div class="mb-3 col-sm-6">
-                            <label for="username">SKU</label>
+                            <label for="username">Category Display Name</label>
                             <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.CategoryName">
                         </div>
                         <button type="button" @onclick="UpdateCategory" class="btn btn-default float-right">Save</button>
@@ -21,30 +24,64 @@
             </div>
         </div>
     </div>
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-md-9">
+                <form>
+                    <div class="row">
+                        <div class="mb-3 col-sm-6">
+                            <label for="username">Category Display Name</label>
+                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.CategoryName">
+                        </div>
+                        <button type="button" @onclick="UpdateCategory" class="btn btn-default float-right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card p-4">
+            <div class="row">
+                <div class="col-md-9">
+                    @foreach(var item in subCategoryList)
+                    {
+                        <div>
+                            @item.SubCategoryName
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @code
 {
     [Parameter]
     public string categoryId { get; set; }
 
+    private List<SubCategory> subCategoryList = new List<SubCategory>();
+
     private Category model = new Category();
+    private SubCategory subCategory = new SubCategory();
 
     protected override async Task OnInitializedAsync()
     {
         var context = await _authenticationService.GetContext();
         model.TenantId = context.Tenant.Id;
+        subCategory.TenantId = context.Tenant.Id;
+
+        subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).ToList();
 
         var queryString = navigator.Uri.Split('/').Last();
-        model = await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString());
+        //model = await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString());
     }
 
     public async Task UpdateCategory()
     {
         try
         {
-            bool updated = await _categoryService.UpdateCategory(model);
-            if (updated) navigator.NavigateTo("/categories");
+            //bool updated = await _categoryService.UpdateCategory(model);
+            //if (updated) navigator.NavigateTo("/categories");
         }
         catch (Exception ex)
         {

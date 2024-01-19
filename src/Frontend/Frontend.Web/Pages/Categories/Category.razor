@@ -57,7 +57,7 @@
                                         {
                                             <div>
                                                 @item.Body
-                                                <a class="p-2 cursor-pointer" @onclick=() => EditCategory()>
+                                                <a class="p-2 cursor-pointer" @onclick="() => EditCategory(item.ItemId)">
                                                     <i class="ti ti-edit"></i>
                                                 </a>
                                             </div>
@@ -108,6 +108,7 @@
     private class AccordionItem
     {
         public int Id { get; set; }
+        public Guid ItemId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
         public bool IsCollapsed { get; set; } = true;
@@ -145,6 +146,7 @@
                 items.Add(new AccordionItem()
                 {
                     Id = count++,
+                    ItemId = category.CategoryId,
                     Title = category.CategoryName,
                     Body = string.Empty,
                     IsCollapsed = true
@@ -155,6 +157,7 @@
                 items.Add(new AccordionItem()
                 {
                     Id = count++,
+                    ItemId = category.CategoryId,
                     Title = category.CategoryName,
                     Body = subCategory.SubCategoryName,
                     IsCollapsed = true
