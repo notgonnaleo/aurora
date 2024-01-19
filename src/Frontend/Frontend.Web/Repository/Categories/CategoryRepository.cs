@@ -21,6 +21,24 @@ namespace Frontend.Web.Repository.Categories
             var request = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.GET, parameters);
             return await _httpClientRepository.Get(request);
         }
+        public async Task<Category> GetCategory(string tenantId, string categoryId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = Categories.GET.GetProduct.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Categories.GET.GetProduct.productId,
+                    ParameterValue = productId,
+                }
+            };
+            var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.FIND, parameters);
+            return await _httpClientRepository.GetById(request);
+        }
         public async Task<IEnumerable<Category>> GetCategoriesAndSubCategories(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GetCategoryAndSubCategoriesParameters.tenantId, ParameterValue = tenantId };

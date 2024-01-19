@@ -73,7 +73,7 @@
         subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).ToList();
 
         var queryString = navigator.Uri.Split('/').Last();
-        //model = await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString());
+        model = (await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString()));
     }
 
     public async Task UpdateCategory()
