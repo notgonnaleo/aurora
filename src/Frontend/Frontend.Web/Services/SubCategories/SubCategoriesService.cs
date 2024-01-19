@@ -15,5 +15,10 @@ namespace Frontend.Web.Services.SubCategories
             var result = await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId);
             return result;
         }
+
+        public async Task<SubCategory> CreateSubCategory(SubCategory subCategory)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
