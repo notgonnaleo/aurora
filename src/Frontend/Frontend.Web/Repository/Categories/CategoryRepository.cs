@@ -27,14 +27,9 @@ namespace Frontend.Web.Repository.Categories
             {
                 new RouteParameterRequest()
                 {
-                    ParameterName = Categories.GET.GetProduct.tenantId,
+                    ParameterName = C
                     ParameterValue = tenantId,
                 },
-                new RouteParameterRequest()
-                {
-                    ParameterName = Categories.GET.GetProduct.productId,
-                    ParameterValue = productId,
-                }
             };
             var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.FIND, parameters);
             return await _httpClientRepository.GetById(request);
