@@ -18,7 +18,7 @@ namespace Frontend.Web.Services.SubCategories
 
         public async Task<SubCategory> CreateSubCategory(SubCategory subCategory)
         {
-            throw new NotImplementedException();
+            return await _subCategoryRepository.CreateSubCategory(subCategory);
         }
     }
 }

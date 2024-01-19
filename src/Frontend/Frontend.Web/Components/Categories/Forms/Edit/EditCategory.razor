@@ -1,0 +1,54 @@
+﻿@using Backend.Domain.Entities.Categories;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@inject NavigationManager navigator
+@inject AuthenticationService _authenticationService;
+@inject CategoryService _categoryService;
+
+<div>
+    <div class="card p-4">
+        <div class="row">
+            <div class="col-md-9">
+                <form>
+                    <div class="row">
+                        <div class="mb-3 col-sm-6">
+                            <label for="username">SKU</label>
+                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.CategoryName">
+                        </div>
+                        <button type="button" @onclick="UpdateCategory" class="btn btn-default float-right">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public string categoryId { get; set; }
+
+    private Category model = new Category();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        model.TenantId = context.Tenant.Id;
+
+        var queryString = navigator.Uri.Split('/').Last();
+        model = await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString());
+    }
+
+    public async Task UpdateCategory()
+    {
+        try
+        {
+            bool updated = await _categoryService.UpdateCategory(model);
+            if (updated) navigator.NavigateTo("/categories");
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+}

@@ -65,7 +65,12 @@ namespace Backend.Infrastructure.Services.SubCategories
                 subCategory.Updated = null;
                 subCategory.UpdatedBy = null;
                 subCategory.Active = true;
-                return subCategory;                
+                
+                _appDbContext.SubCategories.Add(subCategory);
+                if(await _appDbContext.SaveChangesAsync() > 0)
+                    return subCategory;
+
+                throw new Exception("Failed while saving new item.");
             }
             catch (Exception ex)
             {
