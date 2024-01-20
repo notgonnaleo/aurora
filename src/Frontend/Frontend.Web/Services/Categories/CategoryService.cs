@@ -14,9 +14,9 @@ namespace Frontend.Web.Services.Categories
         {
             return await _categoryRepository.GetCategories(tenantId);
         }
-        public async Task<IEnumerable<Category>> GetCategory(string tenantId, string categoryId)
+        public async Task<Category> GetCategory(string tenantId, string categoryId)
         {
-            return await _categoryRepository.GetCategories(tenantId);
+            return await _categoryRepository.GetCategory(tenantId, categoryId);
         }
         public async Task<IEnumerable<Category>> GetCategoriesAndSubCategories(string tenantId)
         {

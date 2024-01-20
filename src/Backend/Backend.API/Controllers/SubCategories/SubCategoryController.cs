@@ -81,11 +81,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("GetSubCategoriesByCategory")]
-        public ActionResult GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
+        public async Task<ActionResult> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
         {
             try
             {
-                return Ok(_SubCategorieservice.GetSubCategoriesByCategory(tenantId, categoryId));
+                return Ok(await _SubCategorieservice.GetSubCategoriesByCategory(tenantId, categoryId));
             }
             catch (Exception ex)
             {

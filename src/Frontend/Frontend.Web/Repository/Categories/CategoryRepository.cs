@@ -14,10 +14,9 @@ namespace Frontend.Web.Repository.Categories
         { 
             _httpClientRepository = httpClientRepository;
         }
-
         public async Task<IEnumerable<Category>> GetCategories(string tenantId)
         {
-            var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GET.tenantId, ParameterValue = tenantId };
+            var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GET.GetCategories.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.GET, parameters);
             return await _httpClientRepository.Get(request);
         }
@@ -27,8 +26,13 @@ namespace Frontend.Web.Repository.Categories
             {
                 new RouteParameterRequest()
                 {
-                    ParameterName = C
+                    ParameterName = Methods.Categories.GET.GetCategory.tenantId,
                     ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.Categories.GET.GetCategory.categoryId,
+                    ParameterValue = categoryId,
                 },
             };
             var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.FIND, parameters);

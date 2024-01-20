@@ -115,17 +115,7 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
-                public static class GetCategories
-                {
-
-                    public static string tenantId = "tenantId";
-                }
-
-                public static class GetCategory
-                {
-                    public static string tenantId = "tenantId";
-                    public static string categoryId = "categoryId";
-                }
+                public static string tenantId = "tenantId";
             }
 
             public static class POST

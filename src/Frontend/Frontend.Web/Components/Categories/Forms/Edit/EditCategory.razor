@@ -18,7 +18,11 @@
                             <label for="username">Category Display Name</label>
                             <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.CategoryName">
                         </div>
-                        <button type="button" @onclick="UpdateCategory" class="btn btn-default float-right">Save</button>
+                        <div class="mb-3 col-sm-6">
+                            <button type="button" @onclick="UpdateCategory" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
+                                Save
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -26,29 +30,21 @@
     </div>
     <div class="card p-4">
         <div class="row">
+        @foreach(var item in subCategoryList)
+        {
+            selectedSubCategoryName = item.SubCategoryName;
             <div class="col-md-9">
-                <form>
-                    <div class="row">
-                        <div class="mb-3 col-sm-6">
-                            <label for="username">Category Display Name</label>
-                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.CategoryName">
-                        </div>
-                        <button type="button" @onclick="UpdateCategory" class="btn btn-default float-right">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="card p-4">
-            <div class="row">
-                <div class="col-md-9">
-                    @foreach(var item in subCategoryList)
-                    {
-                        <div>
-                            @item.SubCategoryName
-                        </div>
-                    }
+                <div>
+                    <input type="hidden" class="form-control" id="subcategoryId" @bind="@item.SubCategoryId">
+                    <input type="text" class="form-control" id="subcategoryName" placeholder="SKU" @bind="@item.SubCategoryName">
+                </div>
+                <div class="mb-3 col-sm-6">
+                    <button type="button" @onclick="UpdateSubCategory" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
+                        Save
+                    </button>
                 </div>
             </div>
+        }
         </div>
     </div>
 </div>
@@ -60,9 +56,9 @@
     public string categoryId { get; set; }
 
     private List<SubCategory> subCategoryList = new List<SubCategory>();
-
     private Category model = new Category();
     private SubCategory subCategory = new SubCategory();
+    private string selectedSubCategoryName = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,16 +71,35 @@
         var queryString = navigator.Uri.Split('/').Last();
         model = (await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString()));
     }
+}
 
+@code
+{
     public async Task UpdateCategory()
     {
         try
         {
-            //bool updated = await _categoryService.UpdateCategory(model);
-            //if (updated) navigator.NavigateTo("/categories");
+            Console.WriteLine(model);
+            /*bool updated = await _categoryService.UpdateCategory(model);
+            if (updated) navigator.NavigateTo("/categories");*/
         }
-        catch (Exception ex)
+        catch (Exception)
         {
+            throw;
+        }
+    }
+
+    public async Task UpdateSubCategory()
+    {
+        try
+        {
+            Console.WriteLine(selectedSubCategoryName);
+            /*bool updated = await _categoryService.UpdateCategory(model);
+            if (updated) navigator.NavigateTo("/categories");*/
+        }
+        catch (Exception)
+        {
+            
             throw;
         }
     }
