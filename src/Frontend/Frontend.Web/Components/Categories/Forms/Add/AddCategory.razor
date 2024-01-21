@@ -127,7 +127,7 @@
         try
         {
             var context = await _authenticationService.GetContext();
-            category.TenantId = context.Tenant.Id;
+            subCategory.TenantId = context.Tenant.Id;
             SubCategory newSubCategory = await _subCategoryService.CreateSubCategory(subCategory);
 
             if (newSubCategory != null && newSubCategory.SubCategoryId != new Guid())
@@ -153,6 +153,7 @@
     private async Task LoadSubCategories(ChangeEventArgs args)
     {
         string selectedCategoryId = args.Value.ToString();
+        subCategory.CategoryId = new Guid(selectedCategoryId);
         var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
         subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
     }
