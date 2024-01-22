@@ -54,7 +54,7 @@
                                 <div class="row">
                                     <div class="mb-3 col-sm-12">
                                         <label for="category" class="form-label">Parent Category</label>
-                                        <select class="form-select" @bind="subCategory.CategoryId">
+                                        <select class="form-select" @onchange="SetSubCategories">
                                             <option value="" disabled hidden selected> The selected category</option>
                                             @foreach (var category in categories)
                                             {
@@ -150,12 +150,10 @@
         categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
     }
 
-    private async Task LoadSubCategories(ChangeEventArgs args)
+    private async Task SetSubCategories(ChangeEventArgs args)
     {
         string selectedCategoryId = args.Value.ToString();
         subCategory.CategoryId = new Guid(selectedCategoryId);
-        var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
-        subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
     }
 
     protected override async Task OnInitializedAsync() => GetCategories();

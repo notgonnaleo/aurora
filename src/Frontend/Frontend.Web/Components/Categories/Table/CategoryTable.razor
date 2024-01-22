@@ -38,11 +38,14 @@
                                  aria-labelledby="@($"heading{item.Id}")"
                                  data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    @if (item.Body != string.Empty)
+                                    @if (item.Body is not null)
                                     {
-                                        <div>
-                                            @item.Body
-                                        </div>
+                                        @foreach (var subCategoryDisplayName in item.Body)
+                                        {
+                                            <div>
+                                                @subCategoryDisplayName
+                                            </div>
+                                        }
                                     }
                                     else
                                     {
@@ -80,7 +83,7 @@
         public int Id { get; set; }
         public Guid ItemId { get; set; }
         public string Title { get; set; }
-        public string Body { get; set; }
+        public List<string>? Body { get; set; }
         public bool IsCollapsed { get; set; } = true;
     }
 
@@ -113,26 +116,27 @@
         foreach (var category in categories)
         {
             if (!category.SubCategories.Any())
-                items.Add(new AccordionItem()
-                    {
-                        Id = count++,
-                        ItemId = category.CategoryId,
-                        Title = category.CategoryName,
-                        Body = string.Empty,
-                        IsCollapsed = true
-                    });
-
-            foreach (var subCategory in subCategories.Where(sc => sc.CategoryId == category.CategoryId))
             {
                 items.Add(new AccordionItem()
-                    {
-                        Id = count++,
-                        ItemId = category.CategoryId,
-                        Title = category.CategoryName,
-                        Body = subCategory.SubCategoryName,
-                        IsCollapsed = true
-                    });
+                {
+                    Id = count++,
+                    ItemId = category.CategoryId,
+                    Title = category.CategoryName,
+                    Body = null,
+                    IsCollapsed = true
+                });
             }
+            else
+            {
+                items.Add(new AccordionItem()
+                {
+                    Id = count++,
+                    ItemId = category.CategoryId,
+                    Title = category.CategoryName,
+                    Body = category.SubCategories.Select(x => x.SubCategoryName).ToList(),
+                    IsCollapsed = true
+                });
+            };
         }
     }
 
