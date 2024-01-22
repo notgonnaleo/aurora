@@ -16,7 +16,7 @@
                     <div class="row">
                         <div class="mb-3 col-sm-6">
                             <label for="username">Category Display Name</label>
-                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.CategoryName">
+                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@category.CategoryName">
                         </div>
                         <div class="mb-3 col-sm-6">
                             <button type="button" @onclick="UpdateCategory" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
@@ -32,7 +32,7 @@
         <div class="row">
         @foreach(var item in subCategoryList)
         {
-            selectedSubCategoryName = item.SubCategoryName;
+            selectedSubCategory = item;
             <div class="col-md-9">
                 <div>
                     <input type="hidden" class="form-control" id="subcategoryId" @bind="@item.SubCategoryId">
@@ -56,20 +56,22 @@
     public string categoryId { get; set; }
 
     private List<SubCategory> subCategoryList = new List<SubCategory>();
-    private Category model = new Category();
+
+    private Category category = new Category();
     private SubCategory subCategory = new SubCategory();
-    private string selectedSubCategoryName = string.Empty;
+
+    private SubCategory selectedSubCategory = new SubCategory();
 
     protected override async Task OnInitializedAsync()
     {
         var context = await _authenticationService.GetContext();
-        model.TenantId = context.Tenant.Id;
+        category.TenantId = context.Tenant.Id;
         subCategory.TenantId = context.Tenant.Id;
 
         subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).ToList();
 
         var queryString = navigator.Uri.Split('/').Last();
-        model = (await _categoryService.GetCategory(model.TenantId.ToString(), categoryId.ToString()));
+        category = (await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString()));
     }
 }
 
@@ -79,8 +81,8 @@
     {
         try
         {
-            Console.WriteLine(model);
-            /*bool updated = await _categoryService.UpdateCategory(model);
+            Console.WriteLine(category);
+            /*bool updated = await _categoryService.UpdateCategory(category);
             if (updated) navigator.NavigateTo("/categories");*/
         }
         catch (Exception)
@@ -93,8 +95,8 @@
     {
         try
         {
-            Console.WriteLine(selectedSubCategoryName);
-            /*bool updated = await _categoryService.UpdateCategory(model);
+            Console.WriteLine(selectedSubCategory);
+            /*bool updated = await _categoryService.UpdateCategory(category);
             if (updated) navigator.NavigateTo("/categories");*/
         }
         catch (Exception)
