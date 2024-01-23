@@ -42,7 +42,7 @@
                                     {
                                         @foreach (var subCategoryDisplayName in item.Body)
                                         {
-                                            <div>
+                                            <div class="hstack p-3 bg-hover-light-black position-relative border-bottom">
                                                 @subCategoryDisplayName
                                             </div>
                                         }
@@ -50,9 +50,9 @@
                                     else
                                     {
                                         <div class="align-items-center">
-                                            <span class="center">
+                                            <small class="center">
                                                 None sub-categories registered yet.
-                                            </span>
+                                            </small>
                                         </div>
                                     }
                                 </div>
