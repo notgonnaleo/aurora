@@ -8,12 +8,12 @@ namespace Backend.API.Controllers.Agents
 {
     [ApiController]
     [Route("Agents")]
-    public class AgentsController : ControllerBase
+    public class AgentController : ControllerBase
     {
         private readonly AgentService _agentService;
         private readonly UserContextService _userContextService;
 
-        public AgentsController(AgentService agentService, UserContextService userContextService)
+        public AgentController(AgentService agentService, UserContextService userContextService)
         {
             _agentService = agentService;
             _userContextService = userContextService;

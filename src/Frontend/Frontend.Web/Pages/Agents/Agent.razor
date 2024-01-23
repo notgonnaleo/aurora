@@ -1,0 +1,38 @@
+﻿@page "/agents"
+
+<PageTitle>Aurora - Agents</PageTitle>
+
+<aside class="right-sidebar @formCssClass">
+    <Frontend.Web.Components.Agents.Forms.Add.AddAgent CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm"/>
+                                                        
+</aside>
+
+@code
+{
+    private bool collapseForm = true;
+    private string? formCssClass => collapseForm ? null : "show-menu";
+    private string? btnText => collapseForm ? "New" : "Hide menu";
+
+    private void ToggleForm()
+    {
+        collapseForm = !collapseForm;
+    }
+}
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleForm">
+                @btnText
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <Frontend.Web.Components.Agents.Table.AgentsTable />
+    </div>
+</div>
+
+
+
+

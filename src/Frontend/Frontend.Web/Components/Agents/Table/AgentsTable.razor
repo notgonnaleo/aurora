@@ -1,0 +1,62 @@
+﻿@using Backend.Domain.Entities.Agent;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Agents;
+@using Frontend.Web.Util.Session;
+@inject AgentService _agentService
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager NavigationManager
+
+@if (agents == null)
+{
+    <div class="overflow-hidden center">
+        <svg viewBox="25 25 50 50">
+            <circle r="20" cy="50" cx="50"></circle>
+        </svg>
+    </div>
+}
+else
+{
+    @foreach (var agent in agents)
+    {
+        <div class="col-sm-6 col-xl-3">
+            <div class="card overflow-hidden rounded-2">
+                <div class="card-body pt-3 p-4">
+                    <div>
+                        <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(agent)">
+                            #@agent.Name
+                        </h6>
+                    </div>
+                    <div>
+                        <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">Active: @agent.Active </span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h6 class="fw-semibold fs-4 mb-0">
+                                Created: @agent.Created
+                            </h6>
+                        </div>
+                        <div>
+                            <a class="bg-primary rounded-circle p-2 text-white d-inline-flex cursor-pointer" @onclick="() => Edit(agent)">
+                                <i class="ti ti-edit"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    private IEnumerable<Agent>? agents;
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        agents = await _agentService.GetAgents(context.Tenant.Id.ToString());
+    }
+
+    private void Edit(Agent agent)
+    {
+        NavigationManager.NavigateTo($"/agents/edit/{agent.Id}");
+    }
+}
