@@ -50,5 +50,10 @@ namespace Frontend.Web.Repository.Categories
             var response = await _httpClientRepository.Post(model);
             return await response.Content.ReadFromJsonAsync<Category>();
         }
+        public async Task<bool> UpdateCategory(Category category)
+        {
+            var model = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.PUT, category);
+            return await _httpClientRepository.Put(model);
+        }
     }
 }

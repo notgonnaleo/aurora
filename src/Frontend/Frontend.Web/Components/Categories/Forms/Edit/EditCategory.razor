@@ -32,14 +32,13 @@
         <div class="row">
         @foreach(var item in subCategoryList)
         {
-            selectedSubCategory = item;
             <div class="col-md-9">
                 <div>
                     <input type="hidden" class="form-control" id="subcategoryId" @bind="@item.SubCategoryId">
                     <input type="text" class="form-control" id="subcategoryName" placeholder="SKU" @bind="@item.SubCategoryName">
                 </div>
                 <div class="mb-3 col-sm-6">
-                    <button type="button" @onclick="UpdateSubCategory" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
+                    <button type="button" @onclick="() => UpdateSubCategory(item)" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
                         Save
                     </button>
                 </div>
@@ -60,8 +59,6 @@
     private Category category = new Category();
     private SubCategory subCategory = new SubCategory();
 
-    private SubCategory selectedSubCategory = new SubCategory();
-
     protected override async Task OnInitializedAsync()
     {
         var context = await _authenticationService.GetContext();
@@ -81,25 +78,23 @@
     {
         try
         {
-            Console.WriteLine(category);
-            /*bool updated = await _categoryService.UpdateCategory(category);
-            if (updated) navigator.NavigateTo("/categories");*/
+            if (await _categoryService.UpdateCategory(category)) 
+                navigator.NavigateTo("/categories");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             throw;
         }
     }
 
-    public async Task UpdateSubCategory()
+    public async Task UpdateSubCategory(SubCategory selectedSubCategory)
     {
         try
         {
-            Console.WriteLine(selectedSubCategory);
-            /*bool updated = await _categoryService.UpdateCategory(category);
-            if (updated) navigator.NavigateTo("/categories");*/
+            if (await _subCategoryService.UpdateSubCategory(selectedSubCategory))
+                navigator.NavigateTo("/categories");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             
             throw;

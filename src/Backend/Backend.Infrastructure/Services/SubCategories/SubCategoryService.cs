@@ -78,7 +78,7 @@ namespace Backend.Infrastructure.Services.SubCategories
             }
         }
 
-        public async Task<SubCategory> Update(SubCategory subCategory)
+        public async Task<bool> Update(SubCategory subCategory)
         {
             try
             {
@@ -86,9 +86,7 @@ namespace Backend.Infrastructure.Services.SubCategories
                 subCategory.Updated = DateTime.Now;
                 subCategory.UpdatedBy = Guid.NewGuid();
                 _appDbContext.Update(subCategory);
-                if (!(await _appDbContext.SaveChangesAsync() > 0))
-                    throw new Exception("Did not update.");
-                return subCategory;
+                return await _appDbContext.SaveChangesAsync() > 0;
             }
             catch (Exception)
             {

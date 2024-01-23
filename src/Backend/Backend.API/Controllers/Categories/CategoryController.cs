@@ -71,23 +71,15 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(Category category, Guid categoryId)
+        public async Task<ActionResult> Update(Category category)
         {
             try
             {
-                var Category = await _Categorieservice.Update(category, categoryId);
-
-                if (Category == null)
-                {
-                    return NotFound("The category searched does not exist or is invalid");
-                }
-
-                return Ok(Category);
+                return Ok(await _Categorieservice.Update(category));
             }
             catch (Exception ex)
             {
-                // Registre o erro em um log ou trate de acordo com seus requisitos
-                return StatusCode(500,ex.Message);
+                throw;
             }
         }
 

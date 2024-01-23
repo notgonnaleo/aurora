@@ -39,5 +39,10 @@ namespace Frontend.Web.Repository.SubCategories
             var response = await _httpClientRepository.Post(model);
             return await response.Content.ReadFromJsonAsync<SubCategory>();
         }
+        public async Task<bool> UpdateSubCategory(SubCategory category)
+        {
+            var model = new RouteBuilder<SubCategory>().Send(Endpoints.SubCategory, Methods.Default.PUT, category);
+            return await _httpClientRepository.Put(model);
+        }
     }
 }

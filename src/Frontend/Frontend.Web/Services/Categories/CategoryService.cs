@@ -26,5 +26,9 @@ namespace Frontend.Web.Services.Categories
         {
             return await _categoryRepository.CreateCategory(category);
         }
+        public async Task<bool> UpdateCategory(Category category)
+        {
+            return await _categoryRepository.UpdateCategory(category);
+        }
     }
 }

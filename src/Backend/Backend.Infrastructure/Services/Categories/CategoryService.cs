@@ -78,22 +78,24 @@ namespace Backend.Infrastructure.Services.Categories
             }
         }
 
-        public async Task<Category> Update(Category category, Guid categoryId)
+        public async Task<bool> Update(Category category)
         {
-            var Category = await _appDbContext.Categories.FindAsync(categoryId);
 
-            if (Category == null)
+            try
             {
-                throw new ArgumentException("Categoria não encontrada.");
+                var context = LoadContext();
+                category.TenantId = context.Tenant.Id;
+                category.Updated = DateTime.UtcNow;
+                category.UpdatedBy = context.UserId;
+                category.Active = true;
+
+                _appDbContext.Update(category);
+                return _appDbContext.SaveChanges() > 0;
             }
-
-            Category.CategoryName = category.CategoryName;
-            Category.Updated = DateTime.Now;
-            Category.UpdatedBy = Guid.NewGuid();
-
-            await _appDbContext.SaveChangesAsync();
-
-            return Category;
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<IEnumerable<Category>> GetCategoryAndSubCategories(Guid tenantId)

@@ -15,10 +15,13 @@ namespace Frontend.Web.Services.SubCategories
             var result = await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId);
             return result;
         }
-
         public async Task<SubCategory> CreateSubCategory(SubCategory subCategory)
         {
             return await _subCategoryRepository.CreateSubCategory(subCategory);
+        }
+        public async Task<bool> UpdateSubCategory(SubCategory subCategory)
+        {
+            return await _subCategoryRepository.UpdateSubCategory(subCategory);
         }
     }
 }
