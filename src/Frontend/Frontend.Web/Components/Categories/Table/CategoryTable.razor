@@ -125,18 +125,17 @@
                     Body = null,
                     IsCollapsed = true
                 });
+                continue;
             }
-            else
+
+            items.Add(new AccordionItem()
             {
-                items.Add(new AccordionItem()
-                {
-                    Id = count++,
-                    ItemId = category.CategoryId,
-                    Title = category.CategoryName,
-                    Body = category.SubCategories.Select(x => x.SubCategoryName).ToList(),
-                    IsCollapsed = true
-                });
-            };
+                Id = count++,
+                ItemId = category.CategoryId,
+                Title = category.CategoryName,
+                Body = category.SubCategories.Select(x => x.SubCategoryName).ToList(),
+                IsCollapsed = true
+            });
         }
     }
 
