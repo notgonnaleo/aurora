@@ -11,34 +11,26 @@
 <div>
     <div class="card p-4">
         <div class="row">
-            <div class="col-md-9">
-                <form>
-                    <div class="row">
-                        <div class="mb-3 col-sm-6">
-                            <label for="username">Category Display Name</label>
-                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@category.CategoryName">
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <button type="button" @onclick="UpdateCategory" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
-                                Save
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <h5 class="mb-3">Category</h5>
+            <div class="mb-3 col-sm-12">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@category.CategoryName">
+                    <button class="btn bg-primary-subtle text-primary rounded-end font-medium" type="button" @onclick="UpdateCategory">
+                        Save
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     <div class="card p-4">
         <div class="row">
+            <h5 class="mb-3">Sub-Categories</h5>
         @foreach(var item in subCategoryList)
         {
-            <div class="col-md-9">
-                <div>
-                    <input type="hidden" class="form-control" id="subcategoryId" @bind="@item.SubCategoryId">
+            <div class="mb-3 col-sm-12">
+                <div class="input-group mb-3">
                     <input type="text" class="form-control" id="subcategoryName" placeholder="SKU" @bind="@item.SubCategoryName">
-                </div>
-                <div class="mb-3 col-sm-6">
-                    <button type="button" @onclick="() => UpdateSubCategory(item)" class="btn btn-primary bottom-0 mb-9 mt-5 rounded float-right">
+                    <button class="btn bg-primary-subtle text-primary rounded-end font-medium" type="button" @onclick="() => UpdateSubCategory(item)">
                         Save
                     </button>
                 </div>
