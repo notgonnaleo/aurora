@@ -14,7 +14,7 @@
             <h5 class="mb-3">Category</h5>
             <div class="mb-3 col-sm-12">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@category.CategoryName">
+                    <input type="text" class="form-control" id="categoryName" placeholder="categoryName" @bind="@category.CategoryName">
                     <button class="btn bg-primary-subtle text-primary rounded-end font-medium" type="button" @onclick="UpdateCategory">
                         Save
                     </button>
@@ -29,7 +29,7 @@
         {
             <div class="mb-3 col-sm-12">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="subcategoryName" placeholder="SKU" @bind="@item.SubCategoryName">
+                        <input type="text" class="form-control" id="subcategoryName" placeholder="subcategoryName" @bind="@item.SubCategoryName">
                     <button class="btn bg-primary-subtle text-primary rounded-end font-medium" type="button" @onclick="() => UpdateSubCategory(item)">
                         Save
                     </button>
