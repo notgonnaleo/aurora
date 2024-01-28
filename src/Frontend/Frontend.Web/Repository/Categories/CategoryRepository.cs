@@ -40,8 +40,8 @@ namespace Frontend.Web.Repository.Categories
         }
         public async Task<IEnumerable<Category>> GetCategoriesAndSubCategories(string tenantId)
         {
-            var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GetCategoryAndSubCategoriesParameters.tenantId, ParameterValue = tenantId };
-            var request = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Categories.GetCategoryAndSubCategories, parameters);
+            var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GET.GetCategoryAndSubCategoriesParameters.tenantId, ParameterValue = tenantId };
+            var request = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Categories.GET.GetCategoryAndSubCategories, parameters);
             return await _httpClientRepository.Get(request);
         }
         public async Task<Category> CreateCategory(Category category)
@@ -54,6 +54,24 @@ namespace Frontend.Web.Repository.Categories
         {
             var model = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.PUT, category);
             return await _httpClientRepository.Put(model);
+        }
+        public async Task<bool> DeleteCategory(string tenantId, string categoryId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.Categories.GET.GetCategory.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.Categories.GET.GetCategory.categoryId,
+                    ParameterValue = categoryId,
+                },
+            };
+            var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.FIND, parameters);
+            return await _httpClientRepository.Put(request);
         }
     }
 }

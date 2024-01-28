@@ -1,4 +1,8 @@
-﻿<div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+﻿@using Backend.Domain.Entities.Categories;
+@using Frontend.Web.Services.Categories;
+@inject CategoryService _categoryService;
+
+<div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
@@ -9,20 +13,14 @@
             </div>
             <div class="modal-body">
                 <h4>
-                    Are you sure you want to delete this item?
+                    Are you sure you want to delete @Category.CategoryName category?
                 </h4>
-                <p>
-                    TenantId = @TenantId
-                </p>
-                <p>
-                    CategoryId = @CategoryId
-                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAsync(Category.TenantId, Category.CategoryId)">
                     Confirm
                 </button>
             </div>
@@ -47,6 +45,13 @@
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
-    [Parameter] public Guid TenantId { get; set; }
-    [Parameter] public Guid CategoryId { get; set; }
+    [Parameter] public Category Category { get; set; }
+}
+
+@code
+{
+    private async Task<bool> DeleteCategoryAsync(Guid tenantId, Guid categoryId)
+    {
+        return await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString());
+    }
 }

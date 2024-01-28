@@ -30,5 +30,9 @@ namespace Frontend.Web.Services.Categories
         {
             return await _categoryRepository.UpdateCategory(category);
         }
+        public async Task<bool> DeleteCategory(string tenantId, string categoryId)
+        {
+            return await _categoryRepository.DeleteCategory(tenantId,categoryId);
+        }
     }
 }

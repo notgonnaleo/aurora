@@ -111,8 +111,14 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        ///  Categories API Endpoints Map
+        /// </summary>
         public class Categories
         {
+            /// <summary>
+            /// Categories - GET Methods
+            /// </summary>
             public static class GET
             {
                 public static class GetCategories
@@ -126,22 +132,39 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                     public static string categoryId = "categoryId";
                 }
+
+                public static string GetCategoryAndSubCategories = "GetCategoryAndSubCategories";
+                public static class GetCategoryAndSubCategoriesParameters
+                {
+                    public static string tenantId = "tenantId";
+                }
             }
 
+            /// <summary>
+            /// Categories - POST Methods
+            /// </summary>
             public static class POST
             {
                 public static string AddCategory = "Categories/Add";
             }
 
+            /// <summary>
+            /// Categories - PUT Methods
+            /// </summary>
             public static class PUT
             {
                 public static string UpdateCategory = "Categories/Update";
             }
 
-            public static string GetCategoryAndSubCategories = "GetCategoryAndSubCategories";
-            public static class GetCategoryAndSubCategoriesParameters
+            /// <summary>
+            /// Categories - DELETE Methods
+            /// </summary>
+            public static class DELETE 
             {
                 public static string tenantId = "tenantId";
+                public static string categoryId = "categoryId";
+
+                public static string DeleteCategory = "Categories/Delete";
             }
         }
 
