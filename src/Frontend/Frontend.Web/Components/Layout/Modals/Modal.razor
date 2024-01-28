@@ -1,0 +1,52 @@
+﻿<div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myModalLabel">
+                    Small Modal
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <h4>
+                    Overflowing text to show scroll behavior
+                </h4>
+                <p>
+                    Praesent commodo cursus magna, vel scelerisque
+                    nisl consectetur et. Vivamus sagittis lacus
+                    vel augue laoreet rutrum faucibus dolor
+                    auctor.
+                </p>
+                <p>
+                    Aenean lacinia bibendum nulla sed consectetur.
+                    Praesent commodo cursus magna, vel scelerisque
+                    nisl consectetur et. Donec sed odio dui. Donec
+                    ullamcorper nulla non metus auctor fringilla.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                    Close
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@code
+{
+    public string? inlineStyle => ShowModal ? "display: block;" : "display: none;";
+    public string? modalClass => ShowModal ? "show" : null;
+}
+
+@code
+{
+    public void CloseModal() => ShowModal = !ShowModal;
+}
+
+@code
+{
+    [Parameter] public bool ShowModal { get; set; }
+}

@@ -18,7 +18,7 @@
                     <button class="btn bg-primary-subtle text-primary font-medium" type="button" @onclick="UpdateCategory">
                         <i class="ti ti-device-floppy"></i>
                     </button>
-                    <button class="btn bg-danger-subtle text-danger rounded-end" type="button" data-bs-toggle="modal" data-bs-target="#bs-example-modal-sm">
+                    <button class="btn bg-danger-subtle text-danger rounded-end" type="button" @onclick="DeleteCategoryModal" data-bs-toggle="modal" data-bs-target="#bs-example-modal-sm">
                         <i class="ti ti-trash fs-5"></i> <!-- Should open a modal to delete -->
                     </button>
                 </div>
@@ -36,7 +36,7 @@
                     <button class="btn bg-primary-subtle text-primary font-medium" type="button" @onclick="() => UpdateSubCategory(item)">
                         <i class="ti ti-device-floppy"></i>
                     </button>
-                    <button class="btn bg-danger-subtle text-danger rounded-end" type="button" data-bs-toggle="modal" data-bs-target="#bs-example-modal-sm">
+                        <button class="btn bg-danger-subtle text-danger rounded-end" type="button" data-bs-toggle="modal" data-bs-target="#bs-example-modal-sm">
                             <i class="ti ti-trash fs-5"></i> <!-- Should open a modal to delete -->
                     </button>
                 </div>
@@ -47,42 +47,13 @@
 </div>
 
 
-<div class="modal fade" id="bs-example-modal-sm" tabindex="-1" aria-labelledby="mySmallModalLabel" style="display: none;" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header d-flex align-items-center">
-                <h4 class="modal-title" id="myModalLabel">
-                    Small Modal
-                </h4>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <h4>
-                    Overflowing text to show scroll behavior
-                </h4>
-                <p>
-                    Praesent commodo cursus magna, vel scelerisque
-                    nisl consectetur et. Vivamus sagittis lacus
-                    vel augue laoreet rutrum faucibus dolor
-                    auctor.
-                </p>
-                <p>
-                    Aenean lacinia bibendum nulla sed consectetur.
-                    Praesent commodo cursus magna, vel scelerisque
-                    nisl consectetur et. Donec sed odio dui. Donec
-                    ullamcorper nulla non metus auctor fringilla.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
-                    Close
-                </button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
+<Frontend.Web.Components.Categories.Modals.DeleteCategory ShowModal=@showModal TenantId="category.TenantId" CategoryId="category.CategoryId" />
+
+@code
+{
+    public bool showModal = false;
+    public void DeleteCategoryModal() => showModal = !showModal;
+}
 
 @code
 {
