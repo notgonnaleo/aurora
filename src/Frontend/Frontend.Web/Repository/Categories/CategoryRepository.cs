@@ -61,16 +61,16 @@ namespace Frontend.Web.Repository.Categories
             {
                 new RouteParameterRequest()
                 {
-                    ParameterName = Methods.Categories.GET.GetCategory.tenantId,
+                    ParameterName = Methods.Categories.DELETE.tenantId,
                     ParameterValue = tenantId,
                 },
                 new RouteParameterRequest()
                 {
-                    ParameterName = Methods.Categories.GET.GetCategory.categoryId,
+                    ParameterName = Methods.Categories.DELETE.categoryId,
                     ParameterValue = categoryId,
                 },
             };
-            var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.FIND, parameters);
+            var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.DELETE, parameters);
             return await _httpClientRepository.Put(request);
         }
     }
