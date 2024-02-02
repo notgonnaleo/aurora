@@ -98,5 +98,19 @@ namespace Backend.API.Controllers.Categories
             }
         }
 
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPut]
+        [Route("Delete")]
+        public async Task<ActionResult> Delete(Category category)
+        {
+            try
+            {
+                return Ok(await _Categorieservice.Update(category));
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

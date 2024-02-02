@@ -119,5 +119,25 @@ namespace Backend.Infrastructure.Services.Categories
                 throw;
             }
         }
+
+        public async Task<bool> Delete(Guid tenantId, Guid categoryId)
+        {
+
+            try
+            {
+                var context = LoadContext();
+                tenantId = context.Tenant.Id;
+                category.Updated = DateTime.UtcNow;
+                category.UpdatedBy = context.UserId;
+                category.Active = true;
+
+                _appDbContext.Update(category);
+                return _appDbContext.SaveChanges() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -111,7 +111,8 @@ namespace Frontend.Web.Repository.Client
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
                 var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
-                request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                if (route.Body != null)
+                    request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
                 HttpResponseMessage response = await _httpClient.PutAsync(endpoint, request.Content);
                 if (response.IsSuccessStatusCode)
                 {
