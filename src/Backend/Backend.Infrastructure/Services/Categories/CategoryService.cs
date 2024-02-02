@@ -122,16 +122,15 @@ namespace Backend.Infrastructure.Services.Categories
 
         public async Task<bool> Delete(Guid tenantId, Guid categoryId)
         {
-
             try
             {
                 var context = LoadContext();
-                tenantId = context.Tenant.Id;
-                category.Updated = DateTime.UtcNow;
-                category.UpdatedBy = context.UserId;
-                category.Active = true;
-
-                _appDbContext.Update(category);
+                _appDbContext.Update(new Category()
+                {
+                    TenantId = context.Tenant.Id,
+                    CategoryId = categoryId,
+                    Active = false
+                });
                 return _appDbContext.SaveChanges() > 0;
             }
             catch (Exception ex)
