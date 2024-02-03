@@ -125,12 +125,11 @@ namespace Backend.Infrastructure.Services.Categories
             try
             {
                 var context = LoadContext();
-                _appDbContext.Update(new Category()
-                {
-                    TenantId = context.Tenant.Id,
-                    CategoryId = categoryId,
-                    Active = false
-                });
+                Category category = _appDbContext.Categories
+                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId)
+                    .First();
+                category.Active = false;
+                _appDbContext.Update(category);
                 return _appDbContext.SaveChanges() > 0;
             }
             catch (Exception ex)

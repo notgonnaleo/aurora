@@ -99,12 +99,15 @@ namespace Backend.Infrastructure.Services.Products
             }
         }
 
-        public bool Delete(Guid Id)
+        public bool Delete(Guid tenantId, Guid Id)
         {
             try
             {
                 var context = LoadContext();
-                Product product = _appDbContext.Products.Where(x => x.Id == Id).First();
+                Product product = _appDbContext.Products
+                    .Where(x => x.Id == Id && x.TenantId == tenantId)
+                    .First();
+
                 product.Active = false;
                 _appDbContext.Update(product);
                 return _appDbContext.SaveChanges() > 0;

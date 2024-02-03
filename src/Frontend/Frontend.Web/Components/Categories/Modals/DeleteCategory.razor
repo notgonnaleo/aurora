@@ -20,7 +20,7 @@
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAsync(Category.TenantId, Category.CategoryId)">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(Category.TenantId, Category.CategoryId)">
                     Confirm
                 </button>
             </div>
@@ -50,7 +50,7 @@
 
 @code
 {
-    private async Task<bool> DeleteCategoryAsync(Guid tenantId, Guid categoryId)
+    private async Task<bool> DeleteCategoryAction(Guid tenantId, Guid categoryId)
     {
         return await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString());
     }
