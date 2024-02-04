@@ -13,14 +13,14 @@
             </div>
             <div class="modal-body">
                 <h4>
-                    Are you sure you want to delete @Category.CategoryName category?
+                    Are you sure you want to delete @CategoryModel.CategoryName category?
                 </h4>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(Category.TenantId, Category.CategoryId)">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(CategoryModel.TenantId, CategoryModel.CategoryId)">
                     Confirm
                 </button>
             </div>
@@ -45,7 +45,7 @@
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
-    [Parameter] public Category Category { get; set; }
+    [Parameter] public Category CategoryModel { get; set; }
 }
 
 @code

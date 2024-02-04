@@ -101,11 +101,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Delete")]
-        public async Task<ActionResult> Delete(Category category)
+        public async Task<ActionResult> Delete(Guid tenantId, Guid categoryId)
         {
             try
             {
-                return Ok(await _Categorieservice.Update(category));
+                return Ok(await _Categorieservice.Delete(tenantId,categoryId));
             }
             catch (Exception ex)
             {

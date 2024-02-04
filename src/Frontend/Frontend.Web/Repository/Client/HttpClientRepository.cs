@@ -109,20 +109,14 @@ namespace Frontend.Web.Repository.Client
             try
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
-                var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
-                var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
+                var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
+                var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
                 if (route.Body != null)
                     request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-                HttpResponseMessage response = await _httpClient.PutAsync(endpoint, request.Content);
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    bool responseObject = JsonSerializer.Deserialize<bool>(responseContent)!;
-                    return responseObject;
-                }
-                throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+                var response = await _httpClient.SendAsync(request);
+                return response.EnsureSuccessStatusCode().IsSuccessStatusCode;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
