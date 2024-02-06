@@ -105,14 +105,18 @@ namespace Backend.Infrastructure.Services.Categories
                 List<Category> categories = _appDbContext.Categories
                     .Where(x => x.TenantId == tenantId && x.Active).ToList();
 
-                foreach (var category in categories)
+                if(categories is not null)
                 {
-                    var subCategories = (await _subCategoryService
-                        .GetSubCategoriesByCategory(tenantId, category.CategoryId))
-                        .ToList();
-                    category.SubCategories = subCategories;
+                    foreach (var category in categories)
+                    {
+                        var subCategories = (await _subCategoryService
+                            .GetSubCategoriesByCategory(tenantId, category.CategoryId)) // Fix repository and service layering
+                            .ToList();
+                        category.SubCategories = subCategories;
+                    }
+                    return categories;
                 }
-                return categories;
+                return new List<Category>();
             }
             catch (Exception ex)
             {
