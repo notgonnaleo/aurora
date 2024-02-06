@@ -42,7 +42,7 @@
                                     {
                                         @foreach (var subCategoryDisplayName in item.Body)
                                         {
-                                            <div class="hstack p-3 bg-hover-light-black position-relative border-bottom">
+                                            <div class="hstack p-3 position-relative @(subCategoryDisplayName.Equals(item.Body.Last()) ? "" : "border-bottom")">
                                                 @subCategoryDisplayName
                                             </div>
                                         }

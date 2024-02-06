@@ -191,6 +191,17 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static string UpdateSubCategory = "SubCategories/Update";
             }
+
+            public static class DELETE
+            {
+                public static string DeleteSubCategory = "SubCategories/Delete";
+                public static class DeleteParameters
+                {
+                    public static string tenantId = "tenantId";
+                    public static string categoryId = "categoryId";
+                    public static string subCategoryId = "subCategoryId";
+                }
+            }
         }
 
         public class Agents

@@ -23,5 +23,9 @@ namespace Frontend.Web.Services.SubCategories
         {
             return await _subCategoryRepository.UpdateSubCategory(subCategory);
         }
+        public async Task<bool> DeleteSubCategory(string tenantId, string categoryId, string subCategoryId)
+        {
+            return await _subCategoryRepository.DeleteSubCategory(tenantId, categoryId, subCategoryId);
+        }
     }
 }

@@ -36,8 +36,9 @@
                     <button class="btn bg-primary-subtle text-primary font-medium" type="button" @onclick="() => UpdateSubCategory(item)">
                         <i class="ti ti-device-floppy"></i>
                     </button>
-                        <button class="btn bg-danger-subtle text-danger rounded-end" type="button" data-bs-toggle="modal" data-bs-target="#bs-example-modal-sm">
-                            <i class="ti ti-trash fs-5"></i> <!-- Should open a modal to delete -->
+                        <button class="btn bg-danger-subtle text-danger rounded-end" type="button" data-bs-toggle="modal" data-bs-target="#bs-example-modal-sm"
+                        @onclick="() => DeleteSubCategoryModal(item)">
+                            <i class="ti ti-trash fs-5"></i>
                     </button>
                 </div>
             </div>
@@ -47,12 +48,22 @@
 </div>
 
 
-<Frontend.Web.Components.Categories.Modals.DeleteCategory ShowModal=@showModal CategoryModel="@category" />
+<Frontend.Web.Components.Categories.Modals.DeleteCategory ShowModal=@showModal_Category CategoryModel="@category" />
+<Frontend.Web.Components.Categories.Modals.DeleteSubCategory ShowModal=@showModal_SubCategory SubCategoryModel="@selectedSubCategory" />
+
 
 @code
 {
-    public bool showModal = false;
-    public void DeleteCategoryModal() => showModal = !showModal;
+    public bool showModal_Category = false;
+    public bool showModal_SubCategory = false;
+
+    public void DeleteCategoryModal() => showModal_Category = !showModal_Category;
+
+    public void DeleteSubCategoryModal(SubCategory subCategory)
+    {
+        selectedSubCategory = subCategory;
+        showModal_SubCategory = !showModal_SubCategory;
+    }
 }
 
 @code
@@ -61,9 +72,9 @@
     public string categoryId { get; set; }
 
     private List<SubCategory> subCategoryList = new List<SubCategory>();
-
     private Category category = new Category();
     private SubCategory subCategory = new SubCategory();
+    private SubCategory selectedSubCategory = new SubCategory();
 
     protected override async Task OnInitializedAsync()
     {

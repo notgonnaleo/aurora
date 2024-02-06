@@ -108,6 +108,24 @@ namespace Backend.Infrastructure.Services.SubCategories
                 throw;
             }
         }
+
+        public async Task<bool> Delete(Guid tenantId, Guid categoryId, Guid subcategoryId)
+        {
+            try
+            {
+                var context = LoadContext();
+                SubCategory subCategory = _appDbContext.SubCategories
+                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId && x.SubCategoryId == subcategoryId)
+                    .First();
+                subCategory.Active = false;
+                _appDbContext.Update(subCategory);
+                return _appDbContext.SaveChanges() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
 

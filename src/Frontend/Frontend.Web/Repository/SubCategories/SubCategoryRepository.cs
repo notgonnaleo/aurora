@@ -44,5 +44,28 @@ namespace Frontend.Web.Repository.SubCategories
             var model = new RouteBuilder<SubCategory>().Send(Endpoints.SubCategory, Methods.Default.PUT, category);
             return await _httpClientRepository.Put(model);
         }
+        public async Task<bool> DeleteSubCategory(string tenantId, string categoryId, string subCategoryId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.SubCategories.DELETE.DeleteParameters.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.SubCategories.DELETE.DeleteParameters.categoryId,
+                    ParameterValue = categoryId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.SubCategories.DELETE.DeleteParameters.subCategoryId,
+                    ParameterValue = subCategoryId,
+                }
+            };
+            var model = new RouteBuilder<SubCategory>().SendMultiple(Endpoints.SubCategory, Methods.Default.DELETE, parameters);
+            return await _httpClientRepository.Put(model);
+        }
     }
 }
