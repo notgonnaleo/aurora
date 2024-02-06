@@ -34,6 +34,12 @@
                                         <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU">
                                     </div>
                                     <div class="mb-2 col-sm-8">
+                                        <label for="name" class="form-label">GTIN</label>
+                                        <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@model.GTIN">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" id="name" placeholder="Your product name" @bind="@model.Name">
                                     </div>
@@ -163,7 +169,9 @@
             var context = await _authenticationService.GetContext();
             model.TenantId = context.Tenant.Id;
             Product newProduct = await _productService.CreateProduct(model);
-            if (newProduct != null) navigator.NavigateTo("/products", true);
+
+            if (newProduct != null && newProduct.Id != new Guid()) 
+                navigator.NavigateTo("/products", true);
         }
         catch (Exception)
         {
@@ -177,27 +185,18 @@
     public async Task GetCategories()
     {
         var context = await _authenticationService.GetContext();
-        categories = (await _categoryService.GetCategories(context.Tenant.Id.ToString())).ToList();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
     }
 
     private async Task LoadSubCategories(ChangeEventArgs args)
     {
         string selectedCategoryId = args.Value.ToString();
-        model.CategoryId = new Guid(selectedCategoryId);
-        await GetSubCategories(selectedCategoryId);
+        model.CategoryId = new Guid(selectedCategoryId); // Setting the selected category in the actual model
+        var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
+        subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
     }
 
-    public async Task GetSubCategories(string categoryId)
-    {
-        var context = await _authenticationService.GetContext();
-        subCategories = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId)).ToList();
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        GetCategories();
-    }
-
+    protected override async Task OnInitializedAsync() => GetCategories();
 }
 
 @code

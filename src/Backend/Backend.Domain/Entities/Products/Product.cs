@@ -51,6 +51,7 @@ namespace Backend.Domain.Entities.Products
                 Id = Guid.NewGuid(),
                 TenantId = product.TenantId,
                 SKU = product.SKU, 
+                GTIN = product.GTIN,
                 Name = product.Name,
                 Description = product.Description,
                 ProductTypeId = product.ProductTypeId,
@@ -84,8 +85,8 @@ namespace Backend.Domain.Entities.Products
 
     public class ProductDetail : Product
     {
-        public string CategoryName { get; set; }
-        public string SubCategoryName { get; set; }
+        public string? CategoryName { get; set; }
+        public string? SubCategoryName { get; set; }
         public string ProductTypeName { get; set; }
     }
 }

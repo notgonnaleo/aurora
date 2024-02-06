@@ -1,10 +1,33 @@
 ﻿@page "/categories"
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.SubCategories;
+@using Backend.Domain.Entities.Categories;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.SubCategories;
+@inject AuthenticationService _authenticationService;
+@inject CategoryService _categoryService;
+@inject SubCategoryService _subCategoryService;
+@inject NavigationManager _navigationManager;
 
 <PageTitle>Aurora - Products</PageTitle>
 
 <aside class="right-sidebar @formCssClass">
-    <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
+    <Frontend.Web.Components.Categories.Forms.Add.AddCategory CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
 </aside>
+
+@code
+{
+    private bool collapseForm = true;
+    private string? formCssClass => collapseForm ? null : "show-menu";
+    private string? btnText => collapseForm ? "New" : "Hide menu";
+    
+    private void ToggleForm()
+    {
+        collapseForm = !collapseForm;
+    }
+}
+
 <div class="container-fluid">
     <div class="row">
         <div class="m-4">
@@ -13,76 +36,5 @@
             </button>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-12 d-flex align-items-stretch">
-            <div class="card w-100">
-                <div class="card-body">
-                    <div class="mb-4">
-                        <h5 class="mb-0">Accordion</h5>
-                    </div>
-                    <div class="accordion" id="accordionExample">
-                        @foreach (var item in items)
-                        {
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="@($"heading{item.Id}")">
-                                    <button class="accordion-button @(item.IsCollapsed ? "collapsed" : "collapse show")"
-                                            type="button"
-                                            data-bs-toggle="collapse"
-                                            data-bs-target="@($"#collapse{item.Id}")"
-                                            aria-expanded="@(item.IsCollapsed ? "false" : "true")"
-                                            aria-controls="@($"collapse{item.Id}")"
-                                    @onclick="(e => ToggleAccordionItem(item.Id))">
-                                        @item.Title
-                                    </button>
-                                </h2>
-                                <div id="@($"collapse{item.Id}")" 
-                                    class="accordion-collapse collapse @(item.IsCollapsed ? "collapse" : "collapse show")" 
-                                    aria-labelledby="@($"heading{item.Id}")" 
-                                    data-bs-parent="#accordionExample">
-                                    <div class="accordion-body">
-                                        @item.Body
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <Frontend.Web.Components.Categories.Table.CategoryTable />
 </div>
-
-@code
-{
-    private bool collapseForm = true;
-    private string? formCssClass => collapseForm ? null : "show-menu";
-    private string? btnText => collapseForm ? "New" : "Hide menu";
-
-    private List<AccordionItem> items = new List<AccordionItem>
-    {
-        new AccordionItem { Id = 1, Title = "Accordion Item #1", Body = "This is the first item's accordion body." },
-        // Add more items as needed
-    };
-
-    private class AccordionItem
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Body { get; set; }
-        public bool IsCollapsed { get; set; } = true;
-    }
-
-    private void ToggleForm()
-    {
-        collapseForm = !collapseForm;
-    }
-
-    private void ToggleAccordionItem(int itemId)
-    {
-        var item = items.FirstOrDefault(i => i.Id == itemId);
-        if (item != null)
-        {
-            item.IsCollapsed = !item.IsCollapsed;
-        }
-    }
-}

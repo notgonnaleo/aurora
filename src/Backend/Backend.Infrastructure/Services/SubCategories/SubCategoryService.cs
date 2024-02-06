@@ -6,6 +6,7 @@ using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Categories;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,10 @@ namespace Backend.Infrastructure.Services.SubCategories
     public class SubCategoryService : Service
     {
         private readonly AppDbContext _appDbContext;
-        private readonly UserContextService _userContextService;
 
         public SubCategoryService(AppDbContext appDbContext, UserContextService userContextService) : base(userContextService)
         {
             _appDbContext = appDbContext;
-            _userContextService = userContextService;
         }
 
         public IEnumerable<SubCategory> Get(Guid tenantId)
@@ -65,11 +64,13 @@ namespace Backend.Infrastructure.Services.SubCategories
                 subCategory.CreatedBy = context.UserId;
                 subCategory.Updated = null;
                 subCategory.UpdatedBy = null;
-
+                subCategory.Active = true;
+                
                 _appDbContext.SubCategories.Add(subCategory);
-                await _appDbContext.SaveChangesAsync();
+                if(await _appDbContext.SaveChangesAsync() > 0)
+                    return subCategory;
 
-                return subCategory;                
+                throw new Exception("Failed while saving new item.");
             }
             catch (Exception ex)
             {
@@ -77,7 +78,7 @@ namespace Backend.Infrastructure.Services.SubCategories
             }
         }
 
-        public async Task<SubCategory> Update(SubCategory subCategory)
+        public async Task<bool> Update(SubCategory subCategory)
         {
             try
             {
@@ -85,9 +86,7 @@ namespace Backend.Infrastructure.Services.SubCategories
                 subCategory.Updated = DateTime.Now;
                 subCategory.UpdatedBy = Guid.NewGuid();
                 _appDbContext.Update(subCategory);
-                if (!(await _appDbContext.SaveChangesAsync() > 0))
-                    throw new Exception("Did not update.");
-                return subCategory;
+                return await _appDbContext.SaveChangesAsync() > 0;
             }
             catch (Exception)
             {
@@ -96,13 +95,33 @@ namespace Backend.Infrastructure.Services.SubCategories
 
         }
 
-        public IEnumerable<SubCategory> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
+        public async Task<List<SubCategory>> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
         {
             try
             {
-                return _appDbContext.SubCategories.Where(x => x.TenantId == tenantId && x.CategoryId == categoryId);
+                return await _appDbContext.SubCategories
+                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId && x.Active)
+                    .ToListAsync();
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> Delete(Guid tenantId, Guid categoryId, Guid subcategoryId)
+        {
+            try
+            {
+                var context = LoadContext();
+                SubCategory subCategory = _appDbContext.SubCategories
+                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId && x.SubCategoryId == subcategoryId)
+                    .First();
+                subCategory.Active = false;
+                _appDbContext.Update(subCategory);
+                return _appDbContext.SaveChanges() > 0;
+            }
+            catch (Exception ex)
             {
                 throw;
             }

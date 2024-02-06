@@ -52,11 +52,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public ActionResult Add(Product product)
+        public async Task<ActionResult> Add(Product product)
         {
             try
             {
-                return Ok(_productService.Add(product));
+                return Ok(await _productService.Add(product));
             }
             catch (Exception)
             {
@@ -82,11 +82,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpDelete]
         [Route("Delete")]
-        public ActionResult Delete(Guid Id)
+        public ActionResult Delete(Guid tenantId, Guid Id)
         {
             try
             {
-                return Ok(_productService.Delete(Id));
+                return Ok(_productService.Delete(tenantId, Id));
             }
             catch (Exception)
             {

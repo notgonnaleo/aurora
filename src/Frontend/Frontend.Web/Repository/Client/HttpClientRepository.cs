@@ -88,8 +88,9 @@ namespace Frontend.Web.Repository.Client
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
-                if (route.Body != null) request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-                return await _httpClient.SendAsync(request); // It should return the actual item but I forgot that my code is a piece of shit and instead I need to send the httpresponse to be deserialized first.
+                if (route.Body != null) 
+                    request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                return await _httpClient.SendAsync(request);
             }
             catch (Exception ex)
             {
@@ -108,19 +109,14 @@ namespace Frontend.Web.Repository.Client
             try
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
-                var endpoint = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
-                var request = new HttpRequestMessage(httpRequestHeader.Method, endpoint);
-                request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-                HttpResponseMessage response = await _httpClient.PutAsync(endpoint, request.Content);
-                if (response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    bool responseObject = JsonSerializer.Deserialize<bool>(responseContent)!;
-                    return responseObject;
-                }
-                throw new Exception("HTTP request failed with status code: " + response.StatusCode);
+                var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
+                var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
+                if (route.Body != null)
+                    request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
+                var response = await _httpClient.SendAsync(request);
+                return response.EnsureSuccessStatusCode().IsSuccessStatusCode;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
