@@ -1,5 +1,7 @@
 ﻿@using Backend.Domain.Entities.Categories;
 @using Frontend.Web.Services.Categories;
+
+@inject NavigationManager navigator;
 @inject CategoryService _categoryService;
 
 <div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -13,8 +15,11 @@
             </div>
             <div class="modal-body">
                 <h4>
-                    Are you sure you want to delete @CategoryModel.CategoryName category?
+                    Delete category?
                 </h4>
+                <p>
+                   Are you sure you would like to delete @CategoryModel.CategoryName?
+                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
@@ -50,8 +55,9 @@
 
 @code
 {
-    private async Task<bool> DeleteCategoryAction(Guid tenantId, Guid categoryId)
+    private async void DeleteCategoryAction(Guid tenantId, Guid categoryId)
     {
-        return await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString());
+        if(await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString()))
+            navigator.NavigateTo("/categories", forceLoad: true);
     }
 }

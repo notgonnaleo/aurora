@@ -100,7 +100,7 @@ namespace Backend.Infrastructure.Services.SubCategories
             try
             {
                 return await _appDbContext.SubCategories
-                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId)
+                    .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId && x.Active)
                     .ToListAsync();
             }
             catch (Exception)

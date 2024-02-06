@@ -103,7 +103,7 @@ namespace Backend.Infrastructure.Services.Categories
             try
             {
                 List<Category> categories = _appDbContext.Categories
-                    .Where(x => x.TenantId == tenantId).ToList();
+                    .Where(x => x.TenantId == tenantId && x.Active).ToList();
 
                 foreach (var category in categories)
                 {
