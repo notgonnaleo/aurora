@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [     
+        {
+            "name": "Backend",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Backend/Backend.API/Backend.API.csproj"
+        },
+        {
+            "name": "Frontend",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/Frontend/Frontend.Web/Frontend.Web.csproj"
+        }
+    ],
+    "compounds": [
+        {
+          "name": "Frontend & Backend",
+          "configurations": [
+            "Frontend",
+            "Backend"
+          ],
+          "stopAll": true
+        }
+      ]
+}

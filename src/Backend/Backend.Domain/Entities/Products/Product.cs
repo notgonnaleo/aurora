@@ -25,7 +25,7 @@ namespace Backend.Domain.Entities.Products
         [Required]
         public string SKU { get; set; }
         public string GTIN { get; set; }
-        
+
         public string Name { get; set; }
         public string? Description { get; set; }
         public double Value { get; set; }
@@ -44,13 +44,13 @@ namespace Backend.Domain.Entities.Products
         public virtual ProductType? ProductType { get; set; }
 
 
-        public Product Create(Product product, Guid userId)
+        public Product Create(Product product, Guid userId) // This should really be a constructor
         {
             return new Product()
             {
                 Id = Guid.NewGuid(),
                 TenantId = product.TenantId,
-                SKU = product.SKU, 
+                SKU = product.SKU,
                 GTIN = product.GTIN,
                 Name = product.Name,
                 Description = product.Description,
@@ -66,22 +66,16 @@ namespace Backend.Domain.Entities.Products
             };
         }
 
-        public Product Update(Product product, Guid userId)
+        public void ValidateFields()
         {
-            return new Product() // Updating the header info from the product.
+
+            if (Value < 0)
             {
-                TenantId = product.TenantId,
-                Id = product.Id,
-                Name = product.Name,
-                SKU = product.SKU,
-                Description = product.Description,
-                ProductTypeId = product.ProductTypeId,
-                Active = true,
-                Updated = DateTime.Now,
-                UpdatedBy = userId
-            };
+                throw new Exception("Product value shouldn't be less than 0");
+            }
         }
     }
+
 
     public class ProductDetail : Product
     {
