@@ -25,7 +25,7 @@ namespace Backend.Domain.Entities.Products
         [Required]
         public string SKU { get; set; }
         public string GTIN { get; set; }
-        
+
         public string Name { get; set; }
         public string? Description { get; set; }
         public double Value { get; set; }
@@ -50,7 +50,7 @@ namespace Backend.Domain.Entities.Products
             {
                 Id = Guid.NewGuid(),
                 TenantId = product.TenantId,
-                SKU = product.SKU, 
+                SKU = product.SKU,
                 GTIN = product.GTIN,
                 Name = product.Name,
                 Description = product.Description,
@@ -65,7 +65,17 @@ namespace Backend.Domain.Entities.Products
                 Active = true
             };
         }
+
+        public void ValidateFields()
+        {
+
+            if (Value < 0)
+            {
+                throw new Exception("Product value shouldn't be less than 0");
+            }
         }
+    }
+
 
     public class ProductDetail : Product
     {

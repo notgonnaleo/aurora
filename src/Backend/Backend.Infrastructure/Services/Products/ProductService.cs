@@ -25,7 +25,7 @@ namespace Backend.Infrastructure.Services.Products
         private readonly ProductTypeService _productType;
         private readonly CategoryService _categoryService;
         private readonly SubCategoryService _subCategoryService;
-             
+
         public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService)
             : base(main)
         {
@@ -70,6 +70,7 @@ namespace Backend.Infrastructure.Services.Products
                 var context = LoadContext();
                 product.TenantId = context.Tenant.Id;
                 product = product.Create(product, context.UserId);
+                product.ValidateFields();
                 _appDbContext.Products.Add(product);
 
                 if(await _appDbContext.SaveChangesAsync() > 0)
@@ -85,14 +86,15 @@ namespace Backend.Infrastructure.Services.Products
 
         public bool Update(Product product)
         {
-            try
+         try
             {
-                var context = LoadContext();
-                product.TenantId = context.Tenant.Id;
-                product.Updated = DateTime.Now;
-                product.UpdatedBy = context.UserId;
-                _appDbContext.Update(product);
-                return _appDbContext.SaveChanges() > 0;
+            var context = LoadContext();
+            product.TenantId = context.Tenant.Id;
+            product.Updated = DateTime.Now;
+            product.UpdatedBy = context.UserId;
+            product.ValidateFields();
+            _appDbContext.Update(product);
+            return _appDbContext.SaveChanges() > 0;
             }
             catch (Exception ex)
             {
@@ -148,7 +150,7 @@ namespace Backend.Infrastructure.Services.Products
                     Created = product.Created,
                     CreatedBy = product.CreatedBy,
                     Updated = product.Updated,
-                    UpdatedBy = product.UpdatedBy, 
+                    UpdatedBy = product.UpdatedBy,
                     Active = product.Active,
                 });
             }
