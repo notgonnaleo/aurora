@@ -54,7 +54,7 @@ namespace Backend.Infrastructure.Services.Products
             var context = LoadContext();
             product.TenantId = context.Tenant.Id;
             product = product.Create(product, context.UserId);
-            product.ValidateFields();
+            product.ValidateFields(context.Language);
             _appDbContext.Products.Add(product);
 
             if (await _appDbContext.SaveChangesAsync() > 0)
@@ -69,7 +69,7 @@ namespace Backend.Infrastructure.Services.Products
             product.TenantId = context.Tenant.Id;
             product.Updated = DateTime.Now;
             product.UpdatedBy = context.UserId;
-            product.ValidateFields();
+            product.ValidateFields(context.Language);
             _appDbContext.Update(product);
             return _appDbContext.SaveChanges() > 0;
         }

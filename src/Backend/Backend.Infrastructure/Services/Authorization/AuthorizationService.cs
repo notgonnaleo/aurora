@@ -83,6 +83,7 @@ namespace Backend.Infrastructure.Services.Authorization
                 Username = response.Username,
                 Claims = claims,
                 Token = response.Token,
+                Language = Enums.Localization.LanguagesEnum.English, // TODO: Make this be changed by the user
                 Levels = _userContextService.VerifyUserRequest(claims),
                 Success = true,
                 Tenant = _tenantService.GetById(claims.FirstOrDefault().TenantId),
@@ -99,6 +100,7 @@ namespace Backend.Infrastructure.Services.Authorization
                 UserId = context.UserId,
                 Claims = context.Claims,
                 Token = context.Token,
+                Language = context.Language,
                 Success = context.Success,
                 Levels = context.Levels,
                 Message = context.Message,
