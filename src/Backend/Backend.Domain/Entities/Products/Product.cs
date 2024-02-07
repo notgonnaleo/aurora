@@ -44,7 +44,7 @@ namespace Backend.Domain.Entities.Products
         public virtual ProductType? ProductType { get; set; }
 
 
-        public Product Create(Product product, Guid userId)
+        public Product Create(Product product, Guid userId) // This should really be a constructor
         {
             return new Product()
             {
@@ -65,23 +65,7 @@ namespace Backend.Domain.Entities.Products
                 Active = true
             };
         }
-
-        public Product Update(Product product, Guid userId)
-        {
-            return new Product() // Updating the header info from the product.
-            {
-                TenantId = product.TenantId,
-                Id = product.Id,
-                Name = product.Name,
-                SKU = product.SKU,
-                Description = product.Description,
-                ProductTypeId = product.ProductTypeId,
-                Active = true,
-                Updated = DateTime.Now,
-                UpdatedBy = userId
-            };
         }
-    }
 
     public class ProductDetail : Product
     {

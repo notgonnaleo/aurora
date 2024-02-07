@@ -89,7 +89,8 @@ namespace Backend.Infrastructure.Services.Products
             {
                 var context = LoadContext();
                 product.TenantId = context.Tenant.Id;
-                product = product.Update(product, context.UserId);
+                product.Updated = DateTime.Now;
+                product.UpdatedBy = context.UserId;
                 _appDbContext.Update(product);
                 return _appDbContext.SaveChanges() > 0;
             }

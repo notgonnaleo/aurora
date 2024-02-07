@@ -14,9 +14,13 @@
             <div class="col-md-9">
                 <form>
                     <div class="row">
-                        <div class="mb-3 col-sm-6">
+                        <div class="mb-3 col-sm-3">
                             <label for="username">SKU</label>
                             <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled>
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="username">GTIN</label>
+                            <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@model.GTIN" disabled>
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label for="name">Name</label>
