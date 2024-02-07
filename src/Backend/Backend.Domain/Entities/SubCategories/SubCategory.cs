@@ -24,5 +24,30 @@ namespace Backend.Domain.Entities.SubCategories
         [JsonIgnore]
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
+
+        public SubCategory Create(SubCategory subCategory, Guid userId)
+        {
+            return new SubCategory()
+            {
+                SubCategoryId = Guid.NewGuid(),
+                TenantId = subCategory.TenantId,
+                SubCategoryName = subCategory.SubCategoryName,
+                CategoryId = subCategory.CategoryId,
+                CreatedBy = userId,
+                Created = DateTime.UtcNow,
+                Updated = null,
+                UpdatedBy = null,
+                Active = true
+            };
+        }
+
+        public void ValidateFields()
+        {
+            if (CategoryId.Equals(Guid.Empty))
+            {
+                throw new Exception("Cannot create a sub-category without specifying a parent category.");
+            }
+        }
     }
 }
+
