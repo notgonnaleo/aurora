@@ -14,6 +14,8 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
     {
         _cache = cache;
     }
+    //TODO: Validate if the tenant id inputed by user is the same as the one saved in the api cache.
+
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         string tokenRequest = context.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer", "").Trim();     

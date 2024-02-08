@@ -1,13 +1,14 @@
-﻿<div class="card-body">
+﻿@using Backend.Domain.Entities.Authentication.Tenants;
+<div class="card-body">
     <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
     @if (IsAuthenticated)
     {
-        <p class="mb-0">You're logged in @TenantProfileName</p>
+        <p class="mb-0">You're logged in @Tenant.Name</p>
     }
 </div>
 
 @code
 {
     [Parameter] public bool IsAuthenticated { get; set; }
-    [Parameter] public string TenantProfileName { get; set; }
+    [Parameter] public Tenant Tenant { get; set; }
 }

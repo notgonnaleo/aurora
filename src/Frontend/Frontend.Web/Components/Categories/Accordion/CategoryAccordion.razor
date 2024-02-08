@@ -1,0 +1,22 @@
+﻿@using Backend.Domain.Entities.SubCategories;
+@using Frontend.Web.Components.Layout.Accordion;
+
+@inherits ComponentBase
+    <div class="accordion" id="accordionExample">
+        @foreach (var item in Categories)
+        {
+            <Accordion Item="item" ToggleItem="ToggleAccordionItem" EditItem="EditCategory" />
+        }
+    </div>
+
+@code
+{
+    [Parameter]
+    public List<AccordionItem> Categories { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ToggleAccordionItem { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> EditCategory { get; set; }
+}
