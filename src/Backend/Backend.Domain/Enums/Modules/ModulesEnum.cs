@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Backend.Infrastructure.Enums.Modules
 {
+    /// <summary>
+    /// Modules integer identification
+    /// </summary>
     public enum ModulesEnum
     {
         Products = 1,
@@ -15,6 +18,9 @@ namespace Backend.Infrastructure.Enums.Modules
         Agents = 5 
     }
 
+    /// <summary>
+    /// Endpoint module map
+    /// </summary>
     public class Endpoints
     {
         public static string Authentication = "Authentication";
@@ -27,8 +33,14 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Agents = "Agents";
     }
 
+    /// <summary>
+    /// Endpoint methods map
+    /// </summary>
     public class Methods
     {
+        /// <summary>
+        /// Endpoint default methods - Usable for all modules
+        /// </summary>
         public class Default
         {
             public static string GET = "List";
@@ -38,6 +50,9 @@ namespace Backend.Infrastructure.Enums.Modules
             public static string DELETE = "Delete";
         }
 
+        /// <summary>
+        /// Authentication custom endpoints methods
+        /// </summary>
         public class Authentication
         {
             public static string Login = "Login";
@@ -49,6 +64,9 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        /// Tenants custom endpoints methods
+        /// </summary>
         public class Tenant
         {
             public static string GetTenantsByUserId = "GetTenantsByUserId";
@@ -63,6 +81,9 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        /// Products custom endpoints methods
+        /// </summary>
         public class Products
         {
             public static class GET
@@ -88,6 +109,9 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        /// Product types custom endpoint methods
+        /// </summary>
         public class ProductTypes
         {
             public static class GET
@@ -112,13 +136,10 @@ namespace Backend.Infrastructure.Enums.Modules
         }
 
         /// <summary>
-        ///  Categories API Endpoints Map
+        ///  Categories custom endpoint methods
         /// </summary>
         public class Categories
         {
-            /// <summary>
-            /// Categories - GET Methods
-            /// </summary>
             public static class GET
             {
                 public static class GetCategories
@@ -140,25 +161,16 @@ namespace Backend.Infrastructure.Enums.Modules
                 }
             }
 
-            /// <summary>
-            /// Categories - POST Methods
-            /// </summary>
             public static class POST
             {
                 public static string AddCategory = "Categories/Add";
             }
 
-            /// <summary>
-            /// Categories - PUT Methods
-            /// </summary>
             public static class PUT
             {
                 public static string UpdateCategory = "Categories/Update";
             }
 
-            /// <summary>
-            /// Categories - DELETE Methods
-            /// </summary>
             public static class DELETE 
             {
                 public static string tenantId = "tenantId";
@@ -168,6 +180,9 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        /// Sub-Categories custom endpoint methods
+        /// </summary>
         public class SubCategories
         {
             public static class GET
@@ -204,6 +219,9 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        /// Agents custom endpoint methods
+        /// </summary>
         public class Agents
         {
             public static class GET
