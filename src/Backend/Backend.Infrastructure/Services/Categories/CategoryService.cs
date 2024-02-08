@@ -4,6 +4,7 @@ using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.SubCategories;
@@ -43,14 +44,14 @@ namespace Backend.Infrastructure.Services.Categories
         public async Task<Category> Add(Category category)
         {
             var context = LoadContext();
-            category = category.Create(category, context.UserId);
-            category.ValidateFields();
+            category = new Category(category, context.UserId);
+            category.ValidateFields(context.Language);
 
             _appDbContext.Categories.Add(category);
             if(await _appDbContext.SaveChangesAsync() > 0)
                 return category;
 
-            throw new Exception("Failed while trying to save new category.");
+            throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
         public async Task<bool> Update(Category category)
@@ -60,7 +61,7 @@ namespace Backend.Infrastructure.Services.Categories
             category.Updated = DateTime.UtcNow;
             category.UpdatedBy = context.UserId;
             category.Active = true;
-            category.ValidateFields();
+            category.ValidateFields(context.Language);
 
             _appDbContext.Update(category);
             return _appDbContext.SaveChanges() > 0;

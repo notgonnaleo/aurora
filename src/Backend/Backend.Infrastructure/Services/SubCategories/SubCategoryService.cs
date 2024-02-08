@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Categories;
@@ -44,22 +45,23 @@ namespace Backend.Infrastructure.Services.SubCategories
         public async Task<SubCategory> Add(SubCategory subCategory)
         {
             var context = LoadContext();
-            subCategory = subCategory.Create(subCategory, context.UserId);
-            subCategory.ValidateFields();
+            subCategory = new SubCategory(subCategory, context.UserId);
+            subCategory.ValidateFields(context.Language);
 
             _appDbContext.SubCategories.Add(subCategory);
             if(await _appDbContext.SaveChangesAsync() > 0)
                 return subCategory;
 
-            throw new Exception("Failed while saving new item.");
+            throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
         public async Task<bool> Update(SubCategory subCategory)
         {
+            var context = LoadContext();
             subCategory.SubCategoryName = subCategory.SubCategoryName;
-            subCategory.Updated = DateTime.Now;
-            subCategory.UpdatedBy = Guid.NewGuid();
-            subCategory.ValidateFields();
+            subCategory.Updated = DateTime.UtcNow;
+            subCategory.UpdatedBy = context.UserId;
+            subCategory.ValidateFields(context.Language);
 
             _appDbContext.Update(subCategory);
             return await _appDbContext.SaveChangesAsync() > 0;

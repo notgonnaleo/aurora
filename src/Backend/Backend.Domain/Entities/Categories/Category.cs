@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.SubCategories;
+using Backend.Infrastructure.Enums.Localization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +13,8 @@ namespace Backend.Domain.Entities.Categories
     [Table("Category")]
     public class Category : Model
     {
+        public Category() { }
+
         public Guid CategoryId { get; set; }
         public Guid TenantId { get; set; }  
         public string? CategoryName { get; set; }
@@ -19,26 +22,23 @@ namespace Backend.Domain.Entities.Categories
         [NotMapped]
         public IEnumerable<SubCategory>? SubCategories { get; set; }
 
-        public Category Create(Category category, Guid userId)
+        public Category(Category category, Guid userId)
         {
-            return new Category()
-            {
-                TenantId = category.TenantId,
-                CategoryId = Guid.NewGuid(),
-                CategoryName = category.CategoryName,
-                CreatedBy = userId,
-                Created = DateTime.UtcNow,
-                Updated = null,
-                UpdatedBy = null,
-                Active = true,
-            };
+            TenantId = category.TenantId;
+            CategoryId = Guid.NewGuid();
+            CategoryName = category.CategoryName;
+            CreatedBy = userId;
+            Created = DateTime.UtcNow;
+            Updated = null;
+            UpdatedBy = null;
+            Active = true;
         }
 
-        public void ValidateFields()
+        public void ValidateFields(LanguagesEnum language)
         {
-            if (CategoryName is null || CategoryName == string.Empty)
+            if (string.IsNullOrEmpty(CategoryName))
             {
-                throw new Exception("Cannot create or update a category without specifying a name.");
+                throw new Exception(Localization.CategoryValidations.ErrorCategoryMissingName(language));
             }
         }
     }

@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
@@ -52,22 +53,22 @@ namespace Backend.Infrastructure.Services.Products
         public async Task<Product> Add(Product product)
         {
             var context = LoadContext();
-            product.TenantId = context.Tenant.Id;
-            product = product.Create(product, context.UserId);
+            product.TenantId = context.Tenant.Id; // QUESTION: Should we maintain this?
+            product = new Product(product, context.UserId);
             product.ValidateFields(context.Language);
-            _appDbContext.Products.Add(product);
 
+            _appDbContext.Products.Add(product);
             if (await _appDbContext.SaveChangesAsync() > 0)
                 return product;
 
-            throw new Exception("Failure while saving the new item");
+            throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
         public bool Update(Product product)
         {
             var context = LoadContext();
             product.TenantId = context.Tenant.Id;
-            product.Updated = DateTime.Now;
+            product.Updated = DateTime.UtcNow;
             product.UpdatedBy = context.UserId;
             product.ValidateFields(context.Language);
             _appDbContext.Update(product);
