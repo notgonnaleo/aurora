@@ -43,12 +43,9 @@ namespace Backend.Infrastructure.Services.Categories
         public async Task<Category> Add(Category category)
         {
             var context = LoadContext();
-            category.CategoryId = Guid.NewGuid();
-            category.CreatedBy = context.UserId;
-            category.Created = DateTime.Now;
-            category.Updated = null;
-            category.UpdatedBy = null;
-            category.Active = true;
+            category = category.Create(category, context.UserId);
+            category.ValidateFields();
+
             _appDbContext.Categories.Add(category);
             if(await _appDbContext.SaveChangesAsync() > 0)
                 return category;
@@ -63,6 +60,7 @@ namespace Backend.Infrastructure.Services.Categories
             category.Updated = DateTime.UtcNow;
             category.UpdatedBy = context.UserId;
             category.Active = true;
+            category.ValidateFields();
 
             _appDbContext.Update(category);
             return _appDbContext.SaveChanges() > 0;

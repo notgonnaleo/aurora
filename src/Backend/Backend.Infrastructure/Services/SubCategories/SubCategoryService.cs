@@ -59,6 +59,8 @@ namespace Backend.Infrastructure.Services.SubCategories
             subCategory.SubCategoryName = subCategory.SubCategoryName;
             subCategory.Updated = DateTime.Now;
             subCategory.UpdatedBy = Guid.NewGuid();
+            subCategory.ValidateFields();
+
             _appDbContext.Update(subCategory);
             return await _appDbContext.SaveChangesAsync() > 0;
         }

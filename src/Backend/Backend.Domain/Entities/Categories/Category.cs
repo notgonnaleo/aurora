@@ -18,6 +18,29 @@ namespace Backend.Domain.Entities.Categories
 
         [NotMapped]
         public IEnumerable<SubCategory>? SubCategories { get; set; }
+
+        public Category Create(Category category, Guid userId)
+        {
+            return new Category()
+            {
+                TenantId = category.TenantId,
+                CategoryId = Guid.NewGuid(),
+                CategoryName = category.CategoryName,
+                CreatedBy = userId,
+                Created = DateTime.UtcNow,
+                Updated = null,
+                UpdatedBy = null,
+                Active = true,
+            };
+        }
+
+        public void ValidateFields()
+        {
+            if (CategoryName is null || CategoryName == string.Empty)
+            {
+                throw new Exception("Cannot create or update a category without specifying a name.");
+            }
+        }
     }
 }
 
