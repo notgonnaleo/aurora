@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.SubCategories;
+using Backend.Infrastructure.Enums.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
@@ -66,12 +67,12 @@ namespace Backend.Domain.Entities.Products
             };
         }
 
-        public void ValidateFields()
+        public void ValidateFields(LanguagesEnum language)
         {
 
             if (Value < 0)
             {
-                throw new Exception("Product value shouldn't be less than 0");
+                throw new Exception(Localization.ErrorProductNegativeValue(language));
             }
         }
     }
