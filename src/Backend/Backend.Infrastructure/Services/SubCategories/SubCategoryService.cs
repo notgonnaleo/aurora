@@ -6,7 +6,6 @@ using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Categories;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,12 +44,9 @@ namespace Backend.Infrastructure.Services.SubCategories
         public async Task<SubCategory> Add(SubCategory subCategory)
         {
             var context = LoadContext();
-            subCategory.SubCategoryId = Guid.NewGuid();
-            subCategory.CreatedBy = context.UserId;
-            subCategory.Updated = null;
-            subCategory.UpdatedBy = null;
-            subCategory.Active = true;
-                
+            subCategory = subCategory.Create(subCategory, context.UserId);
+            subCategory.ValidateFields();
+
             _appDbContext.SubCategories.Add(subCategory);
             if(await _appDbContext.SaveChangesAsync() > 0)
                 return subCategory;

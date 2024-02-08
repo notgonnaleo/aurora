@@ -19,14 +19,11 @@ namespace Backend.Infrastructure.Services.Categories
     public class CategoryService : Service
     {
         private readonly AppDbContext _appDbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
         private readonly SubCategoryService _subCategoryService;
 
-        public CategoryService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService, SubCategoryService subCategoryService) : base(userContextService)
+        public CategoryService(AppDbContext appDbContext, UserContextService userContextService, SubCategoryService subCategoryService) : base(userContextService)
         {
             _appDbContext = appDbContext;
-            _httpContextAccessor = httpContextAccessor;
             _subCategoryService = subCategoryService;
         }
 
