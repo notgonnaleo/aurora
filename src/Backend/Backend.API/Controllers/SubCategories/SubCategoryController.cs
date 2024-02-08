@@ -10,11 +10,11 @@ namespace Backend.API.Controllers.SubCategories
     [Route("SubCategories")]
     public class SubCategoryController : ControllerBase
     {
-        private readonly SubCategoryService _SubCategorieservice;
+        private readonly SubCategoryService _SubCategoriesService;
 
         public SubCategoryController(SubCategoryService SubCategorieservice)
         {
-            _SubCategorieservice = SubCategorieservice;
+            _SubCategoriesService = SubCategorieservice;
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
@@ -24,11 +24,11 @@ namespace Backend.API.Controllers.SubCategories
         {
             try
             {
-                return Ok(_SubCategorieservice.Get(tenantId));
+                return Ok(_SubCategoriesService.Get(tenantId));
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -39,11 +39,11 @@ namespace Backend.API.Controllers.SubCategories
         {
             try
             {
-                return Ok(await _SubCategorieservice.GetById(subcategoryId,tenantId));
+                return Ok(await _SubCategoriesService.GetById(subcategoryId,tenantId));
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -54,11 +54,11 @@ namespace Backend.API.Controllers.SubCategories
         {
             try
             {
-                return Ok(await _SubCategorieservice.GetSubCategoriesByCategory(tenantId, categoryId));
+                return Ok(await _SubCategoriesService.GetSubCategoriesByCategory(tenantId, categoryId));
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -69,11 +69,11 @@ namespace Backend.API.Controllers.SubCategories
         {
             try
             {
-                return Ok(await _SubCategorieservice.Add(subCategory));
+                return Ok(await _SubCategoriesService.Add(subCategory));
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -84,12 +84,12 @@ namespace Backend.API.Controllers.SubCategories
         {
             try
             {
-                var SubCategory = await _SubCategorieservice.Update(category);
+                var SubCategory = await _SubCategoriesService.Update(category);
                 return Ok(SubCategory);
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -100,11 +100,11 @@ namespace Backend.API.Controllers.SubCategories
         {
             try
             {
-                return Ok(await _SubCategorieservice.Delete(tenantId, categoryId, subCategoryId));
+                return Ok(await _SubCategoriesService.Delete(tenantId, categoryId, subCategoryId));
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
     }

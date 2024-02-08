@@ -32,7 +32,7 @@ namespace Backend.API.Controllers.Categories
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -47,8 +47,7 @@ namespace Backend.API.Controllers.Categories
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -63,8 +62,7 @@ namespace Backend.API.Controllers.Categories
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -79,7 +77,7 @@ namespace Backend.API.Controllers.Categories
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -94,7 +92,7 @@ namespace Backend.API.Controllers.Categories
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
@@ -109,7 +107,7 @@ namespace Backend.API.Controllers.Categories
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
     }

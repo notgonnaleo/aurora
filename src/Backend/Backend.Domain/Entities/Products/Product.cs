@@ -18,6 +18,8 @@ namespace Backend.Domain.Entities.Products
     [Table("Product")]
     public class Product : Model
     {
+        public Product() { }
+
         [Required]
         public Guid TenantId { get; set; }
         [Key]
@@ -44,35 +46,30 @@ namespace Backend.Domain.Entities.Products
         [ForeignKey("ProductTypeId")]
         public virtual ProductType? ProductType { get; set; }
 
-
-        public Product Create(Product product, Guid userId) // This should really be a constructor
+        public Product(Product product, Guid userId)
         {
-            return new Product()
-            {
-                Id = Guid.NewGuid(),
-                TenantId = product.TenantId,
-                SKU = product.SKU,
-                GTIN = product.GTIN,
-                Name = product.Name,
-                Description = product.Description,
-                ProductTypeId = product.ProductTypeId,
-                Value = product.Value,
-                TotalWeight = product.TotalWeight,
-                LiquidWeight = product.LiquidWeight,
-                CreatedBy = userId,
-                Created = DateTime.UtcNow,
-                Updated = null,
-                UpdatedBy = null,
-                Active = true
-            };
+            Id = Guid.NewGuid();
+            TenantId = product.TenantId;
+            SKU = product.SKU;
+            GTIN = product.GTIN;
+            Name = product.Name;
+            Description = product.Description;
+            ProductTypeId = product.ProductTypeId;
+            Value = product.Value;
+            TotalWeight = product.TotalWeight;
+            LiquidWeight = product.LiquidWeight;
+            CreatedBy = userId;
+            Created = DateTime.UtcNow;
+            Updated = null;
+            UpdatedBy = null;
+            Active = true;
         }
 
         public void ValidateFields(LanguagesEnum language)
         {
-
             if (Value < 0)
             {
-                throw new Exception(Localization.ErrorProductNegativeValue(language));
+                throw new Exception(Localization.ProductValidations.ErrorProductNegativeValue(language));
             }
         }
     }
