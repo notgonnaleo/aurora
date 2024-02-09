@@ -8,13 +8,13 @@
             "name": "Backend",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/Backend/Backend.API/Backend.API.csproj"
+            "projectPath": "${workspaceFolder}/src/Backend/Backend.API/Backend.API.csproj"
         },
         {
             "name": "Frontend",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/Frontend/Frontend.Web/Frontend.Web.csproj"
+            "projectPath": "${workspaceFolder}/src/Frontend/Frontend.Web/Frontend.Web.csproj"
         }
     ],
     "compounds": [
