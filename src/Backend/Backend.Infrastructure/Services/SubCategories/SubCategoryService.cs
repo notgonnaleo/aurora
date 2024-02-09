@@ -24,53 +24,64 @@ namespace Backend.Infrastructure.Services.SubCategories
             _appDbContext = appDbContext;
         }
 
-        public IEnumerable<SubCategory> Get(Guid tenantId)
-        {
-            return _appDbContext.SubCategories
-                .Where(x => x.TenantId == tenantId);
-        }
-
-        public async Task<SubCategory> GetById(Guid tenantId, Guid subcategoryId)
-        {
-            return _appDbContext.SubCategories
-                .FirstOrDefault(x => x.TenantId == tenantId && x.SubCategoryId == subcategoryId);
-
-        }
-        public async Task<IEnumerable<SubCategory>> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
-        {
-            return _appDbContext.SubCategories
-                .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId && x.Active);
-        }
-
-        public async Task<SubCategory> Add(SubCategory subCategory)
+        public IEnumerable<SubCategory> Get()
         {
             var context = LoadContext();
-            subCategory = new SubCategory(subCategory, context.UserId);
+            return _appDbContext.SubCategories
+                .Where(x => x.TenantId == context.Tenant.Id);
+        }
+
+        public SubCategory GetById(Guid subcategoryId)
+        {
+            var context = LoadContext();
+            return _appDbContext.SubCategories
+                .First(x => x.TenantId == context.Tenant.Id && x.SubCategoryId == subcategoryId);
+
+        }
+        public IEnumerable<SubCategory> GetSubCategoriesByCategory(Guid categoryId)
+        {
+            var context = LoadContext();
+            return _appDbContext.SubCategories
+                .Where(x => x.TenantId == context.Tenant.Id && x.CategoryId == categoryId && x.Active);
+        }
+
+        public SubCategory Add(SubCategory subCategory)
+        {
+            var context = LoadContext();
+            subCategory.SubCategoryId = Guid.NewGuid();
+            subCategory.TenantId = context.Tenant.Id;
+            subCategory.CreatedBy = context.UserId;
+            subCategory.Created = DateTime.UtcNow;
+            subCategory.Updated = null;
+            subCategory.UpdatedBy = null;
+            subCategory.Active = true;
             subCategory.ValidateFields(context.Language);
 
             _appDbContext.SubCategories.Add(subCategory);
-            if(await _appDbContext.SaveChangesAsync() > 0)
+            if (_appDbContext.SaveChanges() > 0)
                 return subCategory;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
-        public async Task<bool> Update(SubCategory subCategory)
+        public bool Update(SubCategory subCategory)
         {
             var context = LoadContext();
+            ValidateTenant(subCategory.TenantId);
             subCategory.SubCategoryName = subCategory.SubCategoryName;
             subCategory.Updated = DateTime.UtcNow;
             subCategory.UpdatedBy = context.UserId;
             subCategory.ValidateFields(context.Language);
 
             _appDbContext.Update(subCategory);
-            return await _appDbContext.SaveChangesAsync() > 0;
+            return _appDbContext.SaveChanges() > 0;
         }
 
-        public async Task<bool> Delete(Guid tenantId, Guid categoryId, Guid subcategoryId)
+        public bool Delete(Guid subcategoryId)
         {
+            var context = LoadContext();
             SubCategory subCategory = _appDbContext.SubCategories
-                .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId && x.SubCategoryId == subcategoryId)
+                .Where(x => x.TenantId == context.Tenant.Id && x.SubCategoryId == subcategoryId)
                 .First();
             subCategory.Active = false;
             _appDbContext.Update(subCategory);

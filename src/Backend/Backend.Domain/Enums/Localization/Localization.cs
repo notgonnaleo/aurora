@@ -56,6 +56,21 @@ namespace Backend.Infrastructure.Enums.Localization
                 }   
                 return response;
             }
+
+            public static string ErrorItemNotFound(LanguagesEnum language)
+            {
+                string response = "";
+                switch (language)
+                {
+                    case LanguagesEnum.English:
+                        response = "Couldn't find item!";
+                        break;
+                    case LanguagesEnum.Portuguese:
+                        response = "Item não encontrado!";
+                        break;
+                }   
+                return response;
+            }
         }
 
         /// <summary>

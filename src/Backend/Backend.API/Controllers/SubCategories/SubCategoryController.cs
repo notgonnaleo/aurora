@@ -20,11 +20,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get(Guid tenantId)
+        public ActionResult Get()
         {
             try
             {
-                return Ok(_SubCategoriesService.Get(tenantId));
+                return Ok(_SubCategoriesService.Get());
             }
             catch (Exception ex)
             {
@@ -35,11 +35,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid subcategoryId, Guid tenantId)
+        public ActionResult GetById(Guid subcategoryId)
         {
             try
             {
-                return Ok(await _SubCategoriesService.GetById(subcategoryId,tenantId));
+                return Ok(_SubCategoriesService.GetById(subcategoryId));
             }
             catch (Exception ex)
             {
@@ -50,11 +50,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("GetSubCategoriesByCategory")]
-        public async Task<ActionResult> GetSubCategoriesByCategory(Guid tenantId, Guid categoryId)
+        public ActionResult GetSubCategoriesByCategory(Guid categoryId)
         {
             try
             {
-                return Ok(await _SubCategoriesService.GetSubCategoriesByCategory(tenantId, categoryId));
+                return Ok(_SubCategoriesService.GetSubCategoriesByCategory(categoryId));
             }
             catch (Exception ex)
             {
@@ -65,11 +65,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(SubCategory subCategory)
+        public ActionResult Add(SubCategory subCategory)
         {
             try
             {
-                return Ok(await _SubCategoriesService.Add(subCategory));
+                return Ok(_SubCategoriesService.Add(subCategory));
             }
             catch (Exception ex)
             {
@@ -80,11 +80,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(SubCategory category)
+        public ActionResult Update(SubCategory category)
         {
             try
             {
-                var SubCategory = await _SubCategoriesService.Update(category);
+                var SubCategory = _SubCategoriesService.Update(category);
                 return Ok(SubCategory);
             }
             catch (Exception ex)
@@ -96,11 +96,11 @@ namespace Backend.API.Controllers.SubCategories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Delete")]
-        public async Task<ActionResult> Delete(Guid tenantId, Guid categoryId, Guid subCategoryId)
+        public ActionResult Delete(Guid subCategoryId)
         {
             try
             {
-                return Ok(await _SubCategoriesService.Delete(tenantId, categoryId, subCategoryId));
+                return Ok(_SubCategoriesService.Delete(subCategoryId));
             }
             catch (Exception ex)
             {

@@ -28,36 +28,44 @@ namespace Backend.Infrastructure.Services.Categories
             _subCategoryService = subCategoryService;
         }
 
-        public IEnumerable<Category> Get(Guid tenantId)
+        public IEnumerable<Category> Get()
         {
+            var context = LoadContext();
             return _appDbContext.Categories
-                .Where(x => x.TenantId == tenantId)
+                .Where(x => x.TenantId == context.Tenant.Id)
                 .ToList();
         }
 
-        public Category GetById(Guid categoryId, Guid tenantId)
-        {
-            return _appDbContext.Categories
-                .FirstOrDefault(x => x.TenantId == tenantId && x.CategoryId == categoryId);
-        }
-
-        public async Task<Category> Add(Category category)
+        public Category GetById(Guid categoryId)
         {
             var context = LoadContext();
-            category = new Category(category, context.UserId);
+            var res = _appDbContext.Categories.FirstOrDefault(x => x.TenantId == context.Tenant.Id && x.CategoryId == categoryId) ?? throw new Exception(Localization.GenericValidations.ErrorItemNotFound(context.Language));
+            return res;
+        }
+
+        public Category Add(Category category)
+        {
+            var context = LoadContext();
+            category.TenantId = context.Tenant.Id;
+            category.CategoryId = Guid.NewGuid();
+            category.CreatedBy = context.UserId;
+            category.Created = DateTime.UtcNow;
+            category.Updated = null;
+            category.UpdatedBy = null;
+            category.Active = true;
             category.ValidateFields(context.Language);
 
             _appDbContext.Categories.Add(category);
-            if(await _appDbContext.SaveChangesAsync() > 0)
+            if (_appDbContext.SaveChanges() > 0)
                 return category;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
-        public async Task<bool> Update(Category category)
+        public bool Update(Category category)
         {
             var context = LoadContext();
-            category.TenantId = context.Tenant.Id;
+            ValidateTenant(category.TenantId);
             category.Updated = DateTime.UtcNow;
             category.UpdatedBy = context.UserId;
             category.Active = true;
@@ -67,27 +75,28 @@ namespace Backend.Infrastructure.Services.Categories
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public async Task<IEnumerable<Category>> GetCategoryAndSubCategories(Guid tenantId)
+        public IEnumerable<Category> GetCategoryAndSubCategories()
         {
+            var context = LoadContext();
             List<Category> categories = _appDbContext.Categories
-                .Where(x => x.TenantId == tenantId && x.Active).ToList();
+                .Where(x => x.TenantId == context.Tenant.Id && x.Active).ToList();
 
-            if(categories is not null && categories.Count() > 0)
+            if (categories is not null && categories.Count() > 0)
             {
                 foreach (var category in categories)
                 {
-                    category.SubCategories = await _subCategoryService.GetSubCategoriesByCategory(tenantId, category.CategoryId);
+                    category.SubCategories = _subCategoryService.GetSubCategoriesByCategory(category.CategoryId); // TODO: Make this more efficient, like getting it all in one query, you can use joins in entity framework
                 }
                 return categories;
             }
             return new List<Category>();
         }
 
-        public async Task<bool> Delete(Guid tenantId, Guid categoryId)
+        public bool Delete(Guid categoryId)
         {
             var context = LoadContext();
             Category category = _appDbContext.Categories
-                .Where(x => x.TenantId == tenantId && x.CategoryId == categoryId)
+                .Where(x => x.TenantId == context.Tenant.Id && x.CategoryId == categoryId)
                 .First();
             category.Active = false;
             _appDbContext.Update(category);
