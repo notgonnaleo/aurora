@@ -12,22 +12,20 @@ namespace Backend.API.Controllers.Products
     public class ProductMediaController : ControllerBase
     {
         private readonly ProductMediaService _productMediaService;
-        private readonly UserContextService _userContextService;
 
-        public ProductMediaController(ProductMediaService productMediaService, UserContextService userContextService)
+        public ProductMediaController(ProductMediaService productMediaService)
         {
             _productMediaService = productMediaService;
-            _userContextService = userContextService;
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public ActionResult Get(Guid tenantId, Guid productMediaId)
+        public ActionResult Get(Guid productId)
         {
             try
             {
-                return Ok(_productMediaService.Get(tenantId, productMediaId));
+                return Ok(_productMediaService.Get(productId));
             }
             catch (Exception ex)
             {
@@ -38,11 +36,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public ActionResult GetById(Guid tenantId, Guid productId, Guid id)
+        public ActionResult GetById(Guid id)
         {
             try
             {
-                return Ok(_productMediaService.GetById(tenantId, productId, id));
+                return Ok(_productMediaService.GetById(id));
             }
             catch (Exception ex)
             {
@@ -53,11 +51,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(ProductMedia productMedia)
+        public async Task<ActionResult> Add(ProductMedia model)
         {
             try
             {
-                return Ok(await _productMediaService.Add(productMedia));
+                return Ok(await _productMediaService.Add(model));
             }
             catch (Exception ex)
             {
@@ -68,11 +66,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(ProductMedia productMedia)
+        public ActionResult Update(ProductMedia model)
         {
             try
             {
-                return Ok(_productMediaService.Update(productMedia));
+                return Ok(_productMediaService.Update(model));
 
             }
             catch (Exception ex)
@@ -84,11 +82,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpDelete]
         [Route("Delete")]
-        public ActionResult Delete(Guid tenantId, Guid productId, Guid Id)
+        public ActionResult Delete(Guid id)
         {
             try
             {
-                return Ok(_productMediaService.Delete(tenantId, productId, Id));
+                return Ok(_productMediaService.Delete(id));
             }
             catch (Exception ex)
             {

@@ -30,53 +30,54 @@ namespace Backend.Infrastructure.Services.Products
             _appDbContext = appDbContext;
         }
 
-        public IEnumerable<ProductMedia> Get(Guid tenantId, Guid productId)
+        public IEnumerable<ProductMedia> Get(Guid productId)
         {
+            var context = LoadContext();
             return _appDbContext.ProductMedia
-                .Where(x => x.TenantId == tenantId && x.ProductId == productId && x.Active)
+                .Where(x => x.TenantId == context.Tenant.Id && x.ProductId == productId && x.Active)
                 .ToList();
         }
 
-        public ProductMedia? GetById(Guid tenantId, Guid productId, Guid productMediaId)
-        {
-            return _appDbContext.ProductMedia
-                .Where(x => x.TenantId == tenantId && x.ProductId == productId && x.Id == productMediaId && x.Active)
-                .FirstOrDefault();
-        }
-
-        public async Task<ProductMedia> Add(ProductMedia productMedia)
+        public ProductMedia? GetById(Guid id)
         {
             var context = LoadContext();
-            productMedia.TenantId = context.Tenant.Id;
+            return _appDbContext.ProductMedia
+                .FirstOrDefault(x => x.TenantId == context.Tenant.Id && x.Id == id && x.Active);
+        }
 
-            _appDbContext.ProductMedia.Add(productMedia);
+        public async Task<ProductMedia> Add(ProductMedia model)
+        {
+            var context = LoadContext();
+            model.TenantId = context.Tenant.Id;
+
+            _appDbContext.ProductMedia.Add(model);
             if (await _appDbContext.SaveChangesAsync() > 0)
-                return productMedia;
+                return model;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
-        public bool Update(ProductMedia productMedia)
+        public bool Update(ProductMedia model)
         {
             var context = LoadContext();
-            productMedia.TenantId = context.Tenant.Id;
-            productMedia.Updated = DateTime.UtcNow;
-            productMedia.UpdatedBy = context.UserId;
-            _appDbContext.Update(productMedia);
+            if(model.TenantId != context.Tenant.Id) throw new Exception(Localization.GenericValidations.ErrorWrongTenant(context.Language));
+
+            model.Updated = DateTime.UtcNow;
+            model.UpdatedBy = context.UserId;
+            _appDbContext.Update(model);
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public bool Delete(Guid tenantId, Guid productId, Guid Id)
+        public bool Delete(Guid id)
         {
             var context = LoadContext();
-            ProductMedia product = _appDbContext.ProductMedia
-                .Where(x => x.Id == Id && x.TenantId == tenantId && x.ProductId == productId)
-                .First();
 
-            product.Active = false;
-            _appDbContext.Update(product);
+            ProductMedia? model = _appDbContext.ProductMedia.FirstOrDefault(x => x.Id == id && x.TenantId == context.Tenant.Id) ?? throw new Exception(Localization.GenericValidations.ErrorDeleteItem(context.Language));
+
+            model.Active = false;
+            _appDbContext.Update(model);
             return _appDbContext.SaveChanges() > 0;
         }
-        
+
     }
 }
