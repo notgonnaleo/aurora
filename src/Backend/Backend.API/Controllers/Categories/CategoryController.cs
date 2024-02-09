@@ -24,11 +24,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get(Guid tenantId)
+        public ActionResult Get()
         {
             try
             {
-                return Ok(_Categorieservice.Get(tenantId));
+                return Ok(_Categorieservice.Get());
             }
             catch (Exception ex)
             {
@@ -39,11 +39,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid categoryId, Guid tenantId)
+        public ActionResult GetById(Guid categoryId)
         {
             try
             {
-                return Ok(_Categorieservice.GetById(categoryId,tenantId));
+                return Ok(_Categorieservice.GetById(categoryId));
             }
             catch (Exception ex)
             {
@@ -54,11 +54,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(Category category)
+        public ActionResult Add(Category category)
         {
             try
             {
-                return Ok(await _Categorieservice.Add(category));
+                return Ok(_Categorieservice.Add(category));
             }
             catch (Exception ex)
             {
@@ -69,11 +69,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(Category category)
+        public ActionResult Update(Category category)
         {
             try
             {
-                return Ok(await _Categorieservice.Update(category));
+                return Ok(_Categorieservice.Update(category));
             }
             catch (Exception ex)
             {
@@ -84,11 +84,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("GetCategoryAndSubCategories")]
-        public async Task<ActionResult> GetCategoryAndSubCategories(Guid tenantId)
+        public ActionResult GetCategoryAndSubCategories()
         {
             try
             {
-                return Ok(await _Categorieservice.GetCategoryAndSubCategories(tenantId));
+                return Ok(_Categorieservice.GetCategoryAndSubCategories());
             }
             catch (Exception ex)
             {
@@ -99,11 +99,11 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Delete")]
-        public async Task<ActionResult> Delete(Guid tenantId, Guid categoryId)
+        public ActionResult Delete(Guid categoryId)
         {
             try
             {
-                return Ok(await _Categorieservice.Delete(tenantId,categoryId));
+                return Ok(_Categorieservice.Delete(categoryId));
             }
             catch (Exception ex)
             {

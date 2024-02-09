@@ -27,19 +27,6 @@ namespace Backend.Domain.Entities.SubCategories
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
 
-        public SubCategory(SubCategory subCategory, Guid userId)
-        {
-            SubCategoryId = Guid.NewGuid();
-            TenantId = subCategory.TenantId;
-            SubCategoryName = subCategory.SubCategoryName;
-            CategoryId = subCategory.CategoryId;
-            CreatedBy = userId;
-            Created = DateTime.UtcNow;
-            Updated = null;
-            UpdatedBy = null;
-            Active = true;
-        }
-
         public void ValidateFields(LanguagesEnum language)
         {
             if (CategoryId.Equals(Guid.Empty))

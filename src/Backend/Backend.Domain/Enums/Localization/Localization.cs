@@ -28,6 +28,49 @@ namespace Backend.Infrastructure.Enums.Localization
                 }
                 return response;
             }
+            public static string ErrorDeleteItem(LanguagesEnum language)
+            {
+                string response = "";
+                switch (language)
+                {
+                    case LanguagesEnum.English:
+                        response = "Couldn't delete this item!";
+                        break;
+                    case LanguagesEnum.Portuguese:
+                        response = "Não foi possível deletar o item!";
+                        break;
+                }   
+                return response;
+            }
+            public static string ErrorWrongTenant(LanguagesEnum language)
+            {
+                string response = "";
+                switch (language)
+                {
+                    case LanguagesEnum.English:
+                        response = "This item is not from the current tenant, please change to the correct tenant.";
+                        break;
+                    case LanguagesEnum.Portuguese:
+                        response = "Este item não é do inquilino atual, por favor troque para o inquilino correto.";
+                        break;
+                }   
+                return response;
+            }
+
+            public static string ErrorItemNotFound(LanguagesEnum language)
+            {
+                string response = "";
+                switch (language)
+                {
+                    case LanguagesEnum.English:
+                        response = "Couldn't find item!";
+                        break;
+                    case LanguagesEnum.Portuguese:
+                        response = "Item não encontrado!";
+                        break;
+                }   
+                return response;
+            }
         }
 
         /// <summary>

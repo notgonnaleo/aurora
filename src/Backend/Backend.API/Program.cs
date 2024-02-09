@@ -32,6 +32,7 @@ builder.Services.AddScoped<AuthorizationService>();
 
 // Products
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<ProductMediaService>();
 
 //ProductsType
 builder.Services.AddScoped<ProductTypeService>();

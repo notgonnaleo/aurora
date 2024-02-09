@@ -91,8 +91,8 @@ namespace Backend.Infrastructure.Services.Products
         {
             var products = Get(tenantId);
             var types = _productType.Get();
-            var categories = _categoryService.Get(tenantId);
-            var subCategories = _subCategoryService.Get(tenantId);
+            var categories = _categoryService.Get();
+            var subCategories = _subCategoryService.Get();
             return products.Select(product => new ProductDetail
             {
                 TenantId = product.TenantId,
