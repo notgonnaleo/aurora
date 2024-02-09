@@ -40,9 +40,10 @@ namespace Frontend.Web.Services.Authentication
             return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession") != null;
         }
 
-        public async Task<UserSessionContext?> GetContext()
+        public async Task<UserSessionContext> GetContext()
         {
-            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            var response = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            return response ?? new UserSessionContext();
         }
 
         public async Task<bool> UpdateTenantInformationInContext(Tenant selectedTenant)
