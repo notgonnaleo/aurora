@@ -1,4 +1,6 @@
 ﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
+using Backend.Domain.Entities.Base;
+using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Authentication;
 using Backend.Infrastructure.Services.Authorization;
 using System;
@@ -20,5 +22,13 @@ namespace Backend.Infrastructure.Services.Base
         {
             return _userContextService.LoadContext();
         }
+
+        public void ValidateTenant(Guid tenantId)
+        {
+            var context = _userContextService.LoadContext();
+            if (tenantId != context.Tenant.Id) throw new Exception(Localization.GenericValidations.ErrorWrongTenant(context.Language));
+
+        }
+
     }
 }

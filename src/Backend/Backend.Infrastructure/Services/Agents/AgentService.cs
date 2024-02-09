@@ -9,122 +9,73 @@ using static Backend.Infrastructure.Enums.Modules.Methods;
 using Backend.Infrastructure.Context;
 using Backend.Domain.Entities.Agent;
 using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Infrastructure.Services.Base;
+using Backend.Infrastructure.Enums.Localization;
 
 
 namespace Backend.Infrastructure.Services.Agents
 {
-    public class AgentService
+    public class AgentService : Service
     {
 
         private readonly AppDbContext _appDbContext;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly UserContextService _userContextService;
 
-        public AgentService(AppDbContext appDbContext, IHttpContextAccessor httpContextAccessor, UserContextService userContextService)
+        public AgentService(AppDbContext appDbContext, UserContextService main) : base(main)
         {
             _appDbContext = appDbContext;
-            _httpContextAccessor = httpContextAccessor;
-            _userContextService = userContextService;
         }
 
-        public async Task<Agent> Add(Agent agent)
+        public Agent Add(Agent agent)
         {
-            try
-            {
-                var context = _userContextService.LoadContext();
-                agent.UserId = context.UserId;
-                agent.TenantId = context.Tenant.Id;
-                agent.Id = Guid.NewGuid();
-                agent.UserId = context.UserId;
-                agent.Created = DateTime.UtcNow;
-                agent.CreatedBy = context.UserId;
-                agent.Updated = DateTime.UtcNow;
-                agent.UpdatedBy = context.UserId;
-                _appDbContext.Agents.Add(agent);
-                _appDbContext.SaveChanges();
-                return agent;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public async Task<IEnumerable<Agent>> Get(Guid tenantId)
-        {
-            try
-            {
-                return _appDbContext.Agents
-                    .Where(x => x.TenantId == tenantId && x.Active == true)
-                    .ToList();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-        public async Task<Agent> GetById(Guid id, Guid tenantId)
-        {
-            try
-            {
-                return  _appDbContext.Agents
-                        .Where(x => x.Id == id && x.TenantId == tenantId).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-        public async Task<Agent> Update(Guid Id,Agent agents,Guid tenantId)
-        {
-            try
-            {
-                
-                var Agents = _appDbContext.Agents
-                        .Where(x => x.Id == Id && x.TenantId == tenantId).FirstOrDefault();
-
-                if (Agents == null)
-                {
-                    throw new ArgumentException("Não encontrado.");
-                }
-
-                Agents.Name = agents.Name;
-                Agents.Updated = DateTime.Now;
-                Agents.UpdatedBy = Guid.NewGuid();  
-                Agents.Active= true;
-
-                await _appDbContext.SaveChangesAsync();
-
-                return Agents;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
+            var context = LoadContext();
+            agent.TenantId = context.Tenant.Id;
+            agent.Id = Guid.NewGuid();
+            agent.UserId = context.UserId;
+            agent.Created = DateTime.UtcNow;
+            agent.CreatedBy = context.UserId;
+            agent.Updated = DateTime.UtcNow;
+            agent.UpdatedBy = context.UserId;
+            _appDbContext.Agents.Add(agent);
+            _appDbContext.SaveChanges();
+            return agent;
         }
 
-        public async Task<bool> Delete(Guid Id, Guid tenantId)
+        public IEnumerable<Agent> Get()
         {
-            try
-            {
-                Agent agents = _appDbContext.Agents.Where(x => x.Id == Id && x.TenantId == tenantId).First();
-                agents.Active = false;
+            var context = LoadContext();
+            return _appDbContext.Agents.Where(x => x.TenantId == context.Tenant.Id && x.Active == true).ToList();
+        }
 
-                _appDbContext.Update(agents);
-                var response = _appDbContext.SaveChanges();
+        public Agent? GetById(Guid id)
+        {
+            var context = LoadContext();
+            return _appDbContext.Agents.FirstOrDefault(x => x.Id == id && x.TenantId == context.Tenant.Id);
+        }
 
-                if (response <= 0)
-                    throw new Exception("Failed while trying to delete the item.");
+        public bool Update(Agent model)
+        {
+            var context = LoadContext();
+            ValidateTenant(model.TenantId);
+            model.Updated = DateTime.Now;
+            model.UpdatedBy = context.UserId;
+            model.Active = true;
 
-                return true;
-            }
-            catch (Exception ex)
-            {
+            return _appDbContext.SaveChanges() > 0;
+        }
 
-                throw ex;
-            }
+        public bool Delete(Guid Id)
+        {
+            var context = LoadContext();
+            Agent agents = _appDbContext.Agents.Where(x => x.Id == Id && x.TenantId == context.Tenant.Id).First();
+            agents.Active = false;
+
+            _appDbContext.Update(agents);
+            var response = _appDbContext.SaveChanges();
+
+            if (response <= 0)
+                throw new Exception(Localization.GenericValidations.ErrorDeleteItem(context.Language));
+
+            return true;
         }
     }
 }

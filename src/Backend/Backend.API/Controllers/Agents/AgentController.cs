@@ -8,12 +8,12 @@ namespace Backend.API.Controllers.Agents
 {
     [ApiController]
     [Route("Agents")]
-    public class AgentsController : ControllerBase
+    public class AgentController : ControllerBase
     {
         private readonly AgentService _agentService;
         private readonly UserContextService _userContextService;
 
-        public AgentsController(AgentService agentService, UserContextService userContextService)
+        public AgentController(AgentService agentService, UserContextService userContextService)
         {
             _agentService = agentService;
             _userContextService = userContextService;
@@ -22,89 +22,78 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(Agent agent)
+        public ActionResult Add(Agent agent)
         {
             try
             {
-                return Ok(await _agentService.Add(agent));
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
+                return Ok(_agentService.Add(agent));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get(Guid tenantId)
+        public ActionResult Get()
         {
             try
             {
-                return Ok(await _agentService.Get(tenantId));
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
+                return Ok(_agentService.Get());
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(ex.Message);
             }
         }
+
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid Id, Guid tenantId)
+        public ActionResult GetById(Guid id)
         {
             try
             {
-                return Ok(await _agentService.GetById(Id, tenantId));
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
+                return Ok(_agentService.GetById(id));
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                return BadRequest(ex.Message);
             }
         }
+
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(Guid Id,Agent agents,Guid tenantId)
+        public ActionResult Update(Agent model)
         {
             try
             {
-                var Agents = await _agentService.Update(Id, agents,tenantId);
+                var Agents = _agentService.Update(model);
 
                 return Ok(Agents);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return BadRequest(ex.Message);
             }
         }
+
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpDelete]
         [Route("Delete")]
-        public async Task<ActionResult> Delete(Guid Id, Guid tenantId)
+        public ActionResult Delete(Guid id)
         {
             try
             {
-                return Ok(await _agentService.Delete(Id,tenantId));
+                return Ok(_agentService.Delete(id));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return BadRequest(ex.Message);
             }
         }
 
