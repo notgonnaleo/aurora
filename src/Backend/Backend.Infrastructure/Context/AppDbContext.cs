@@ -34,6 +34,7 @@ namespace Backend.Infrastructure.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<ProductMedia> ProductMedia { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
 
     }
 }
