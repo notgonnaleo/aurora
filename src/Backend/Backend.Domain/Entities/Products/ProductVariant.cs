@@ -15,6 +15,9 @@ namespace Backend.Domain.Entities.Products
         public Guid TenantId { get; set; }
         public Guid ProductId { get; set; }
 
+        public string SKU { get; set; }
+        public string GTIN { get; set; }
+
         public string Name { get; set; }
         public string? Description { get; set; }
 
