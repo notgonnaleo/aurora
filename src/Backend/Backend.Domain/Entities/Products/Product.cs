@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -31,6 +32,8 @@ namespace Backend.Domain.Entities.Products
 
         public string Name { get; set; }
         public string? Description { get; set; }
+        public string? ColorHexCode { get; set; }
+        public string? ColorName { get; set; }
         public double Value { get; set; }
         public double? TotalWeight { get; set; }
         public double? LiquidWeight { get; set; }
@@ -51,9 +54,11 @@ namespace Backend.Domain.Entities.Products
             Id = Guid.NewGuid();
             TenantId = product.TenantId;
             SKU = product.SKU;
-            GTIN = product.GTIN;
+            GTIN = string.IsNullOrEmpty(product.GTIN) ? product.GTIN : "NO GTIN/SEM GTIN";
             Name = product.Name;
             Description = product.Description;
+            ColorHexCode = product.ColorHexCode;
+            ColorName = product.ColorName;
             ProductTypeId = product.ProductTypeId;
             Value = product.Value;
             TotalWeight = product.TotalWeight;

@@ -33,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Components\ProductVariants\Forms\" />
     <Folder Include="wwwroot\css\icons\tabler-icons\fonts\" />
   </ItemGroup>
 
