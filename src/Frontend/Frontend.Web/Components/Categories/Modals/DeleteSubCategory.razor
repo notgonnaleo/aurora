@@ -1,0 +1,64 @@
+﻿@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.SubCategories;
+@using Frontend.Web.Services.SubCategories;
+
+@inject NavigationManager navigator;
+@inject SubCategoryService _subCategoryService;
+
+<div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myModalLabel">
+                    Warning
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <h4>
+                    Delete sub-category?
+                </h4>
+                <p>
+                   Are you sure you would like to delete @SubCategoryModel.SubCategoryName?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                    Close
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteSubCategoryAction(SubCategoryModel.TenantId, SubCategoryModel.CategoryId, SubCategoryModel.SubCategoryId)">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="@backDrop"></div>
+
+@code
+{
+    public string? inlineStyle => ShowModal ? "display: block;" : "display: none;";
+    public string? modalClass => ShowModal ? "show" : null;
+    public string? backDrop => ShowModal ? "modal-backdrop fade show" : null;
+
+}
+
+@code
+{
+    public void CloseModal() => ShowModal = !ShowModal;
+}
+
+@code
+{
+    [Parameter] public bool ShowModal { get; set; }
+    [Parameter] public SubCategory SubCategoryModel { get; set; }
+}
+
+@code
+{
+    private async void DeleteSubCategoryAction(Guid tenantId, Guid categoryId, Guid subCategoryId)
+    {
+        if (await _subCategoryService.DeleteSubCategory(tenantId.ToString(), categoryId.ToString(), subCategoryId.ToString()))
+            navigator.NavigateTo("/categories", forceLoad: true);
+    }
+}

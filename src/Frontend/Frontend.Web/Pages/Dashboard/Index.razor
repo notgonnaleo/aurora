@@ -8,20 +8,10 @@
 <PageTitle>Aurora - Dashboard</PageTitle>
 <div class="container-fluid">
     <div class="card">
-        <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated TenantProfileName=@tenantProfile.Name/> 
-        @*TODO: Inves de mandar o nome manda o id e lá dentro a gente roda um get *@
+        <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated Tenant=@tenantProfile/> 
     </div>
 </div>
-@*
-    // CODE SMELLS:
-         * Um bom desenvolvedor vai notar que isso aqui tem uma chance fudida de dar merda,
-         * Ai voce vai me perguntar o porque, Simples: A gente ta usando o cache pra renderizar boa parte dos dados 
-         * O problema acontece quando o usuario decide cheretar a aba de aplicacao do navegador, e a gente simplesmente nao tem como controlar isso
-         * Se ele altera o nome do tenant logado na aba de aplicacao o novo nome vai ser exibido aqui.
-    // Como resolver isso:
-        * Pra toda requisicao feita pelo usuario, a gente tem que ter certeza de que ele ta validando as rotas de acesso dele.
-        * Graças a minha estupidez eu já fiz um middleware que valida isso em forma de atributo na controller das APIs.
-*@
+
 @code
 {
     private bool isAuthenticated = false;
@@ -32,14 +22,9 @@
         return await _authenticationService.IsUserLogged();
     }
 
-    // Ja sei caralho tive uma ideia foda
-    // ao inves de eu embucetar o nosso objeto de contexto eu posso simplesmente colocar a porra do id do tenant DENTRO do token jwt
-    // e ai eu so chamo um metodo pra desconverter o maldito e uso os dados dele aqui assim eu resolvo o code smells que tem nessa merda aqui
-    // mas isso eu so vou fazer depois que fizer essa tela funcionar do jeito que eu quero.
-    public async void GetTenantProfileName() // I HAVE NO FUCKING IDEA ON WHATS GOING ON
+    public async void GetTenantProfileName()
     {
-        var result = await _authenticationService.GetContext();
-        tenantProfile = result.Tenant;
+        tenantProfile = (await _authenticationService.GetContext()).Tenant;
         StateHasChanged();
     }
 

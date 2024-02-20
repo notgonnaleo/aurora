@@ -38,7 +38,7 @@ namespace Frontend.Web.Models.Client
         /// Build client HTTP Request header
         /// </summary>
         /// <returns>HTTP Header Settings</returns>
-        public async Task<HttpRequestHeader> BuildHttpRequestHeader(HttpMethod method, bool isPublic, string contentType)
+        public async Task<HttpRequestHeader> BuildHttpRequestHeader(HttpMethod method, bool isPublic, string? contentType)
         {
             HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _sessionProvider, _environmentHandler)
             {

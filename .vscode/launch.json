@@ -3,53 +3,28 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Frontend",
-            "type": "blazorwasm",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Frontend/Frontend.Web/bin/Debug/net6.0/Frontend.Web.dll",
-            "cwd": "${workspaceFolder}/src/Frontend/Frontend.Web",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
+    "configurations": [     
         {
             "name": "Backend",
-            "type": "coreclr",
+            "type": "dotnet",
             "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Backend/Backend.API/bin/Debug/net6.0/Backend.API.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/src/Backend/Backend.API",
-            "stopAtEntry": false,
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-                "uriFormat": "%s/swagger/index.html"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
+            "projectPath": "${workspaceFolder}/src/Backend/Backend.API/Backend.API.csproj"
+        },
+        {
+            "name": "Frontend",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/src/Frontend/Frontend.Web/Frontend.Web.csproj"
         }
     ],
     "compounds": [
         {
-          "name": "Aurora",
-          "configurations": ["Frontend", "Backend"],
+          "name": "Frontend & Backend",
+          "configurations": [
+            "Frontend",
+            "Backend"
+          ],
           "stopAll": true
         }
-    ],
+      ]
 }

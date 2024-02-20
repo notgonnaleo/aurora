@@ -1,0 +1,55 @@
+﻿<div class="accordion-item">
+    <h2 class="accordion-header" id="@($"heading{Item.Id}")">
+        <button class="accordion-button @(Item.IsCollapsed ? "collapsed" : "collapse show")"
+                    type="button"
+                    data-bs-toggle="collapse"
+                data-bs-target="@($"#collapse{Item.Id}")"
+                aria-expanded="@(Item.IsCollapsed ? "false" : "true")"
+                aria-controls="@($"collapse{Item.Id}")"
+        @onclick="(e => ToggleItem.InvokeAsync(Item.Id))">
+            @Item.Title
+                <div>
+                <a class=" p-2 cursor-pointer" @onclick="() => EditItem.InvokeAsync(Item.ItemId)">
+                        <i class="ti ti-edit"></i>
+                    </a>
+                </div>
+            </button>
+    </h2>
+    <div id="@($"collapse{Item.Id}")"
+        class="accordion-collapse collapse @(Item.IsCollapsed ? "collapse" : "collapse show")"
+        aria-labelledby="@($"heading{Item.Id}")"
+        data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+            @if (Item.Body is not null)
+                {
+                @foreach (var subItem in Item.Body)
+                    {
+                    <div class="hstack p-3 position-relative @(subItem.Equals(Item.Body.Last()) ? "" : "border-bottom")">
+                        @subItem.SubTitle
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div class="align-items-center">
+                        <small class="center">
+                            None items registered yet.
+                        </small>
+                    </div>
+                }
+            </div>
+    </div>
+</div>
+
+
+@code 
+{
+    [Parameter]
+    public AccordionItem Item { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ToggleItem { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> EditItem { get; set; }
+}

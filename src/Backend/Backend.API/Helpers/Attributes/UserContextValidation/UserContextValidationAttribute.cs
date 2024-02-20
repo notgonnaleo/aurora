@@ -14,6 +14,7 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
     {
         _cache = cache;
     }
+
     public override void OnActionExecuting(ActionExecutingContext context)
     {
         string tokenRequest = context.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer", "").Trim();     

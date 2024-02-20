@@ -34,6 +34,7 @@
   <ItemGroup>
     <Folder Include="Migrations\AppDbMigrations\" />
     <Folder Include="Migrations\AuthDbMigrations\" />
+    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

@@ -24,73 +24,91 @@ namespace Backend.API.Controllers.Categories
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public async Task<ActionResult> Get(Guid tenantId)
+        public ActionResult Get()
         {
             try
             {
-                return Ok(_Categorieservice.Get(tenantId));
+                return Ok(_Categorieservice.Get());
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public async Task<ActionResult> GetById(Guid categoryId, Guid tenantId)
+        public ActionResult GetById(Guid categoryId)
         {
             try
             {
-                return Ok(_Categorieservice.GetById(categoryId,tenantId));
+                return Ok(_Categorieservice.GetById(categoryId));
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(Category category)
+        public ActionResult Add(Category category)
         {
             try
             {
-                return Ok(await _Categorieservice.Add(category));
+                return Ok(_Categorieservice.Add(category));
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return BadRequest(ex.Message);
             }
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public async Task<ActionResult> Update(Category category, Guid categoryId)
+        public ActionResult Update(Category category)
         {
             try
             {
-                var Category = await _Categorieservice.Update(category, categoryId);
-
-                if (Category == null)
-                {
-                    return NotFound("The category searched does not exist or is invalid");
-                }
-
-                return Ok(Category);
+                return Ok(_Categorieservice.Update(category));
             }
             catch (Exception ex)
             {
-                // Registre o erro em um log ou trate de acordo com seus requisitos
-                return StatusCode(500,ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetCategoryAndSubCategories")]
+        public ActionResult GetCategoryAndSubCategories()
+        {
+            try
+            {
+                return Ok(_Categorieservice.GetCategoryAndSubCategories());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPut]
+        [Route("Delete")]
+        public ActionResult Delete(Guid categoryId)
+        {
+            try
+            {
+                return Ok(_Categorieservice.Delete(categoryId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

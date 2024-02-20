@@ -1,5 +1,126 @@
-﻿<h3>CategoryTable</h3>
+﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.SubCategories;
+@using Backend.Domain.Entities.Categories;
+@using Frontend.Web.Components.Layout.Accordion;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.SubCategories;
+@inject AuthenticationService _authenticationService;
+@inject CategoryService _categoryService;
+@inject SubCategoryService _subCategoryService;
+@inject NavigationManager _navigationManager;
 
-@code {
+<div class="row">
+    <div class="col-lg-12 d-flex align-items-stretch">
+        <div class="card-body">
+            @if (!showPlaceholder)
+            {
+                <div class="card w-100">
+                    <div class="accordion" id="accordionExample">
+                        <Frontend.Web.Components.Categories.Accordion.CategoryAccordion Categories="@items" ToggleAccordionItem="ToggleAccordionItem" EditCategory="EditCategory" />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <h1>Nothing here yet.. :(</h1>
+                <p>But we got cat pics take a look</p>
+                <img src="https://t4.ftcdn.net/jpg/02/66/72/41/360_F_266724172_Iy8gdKgMa7XmrhYYxLCxyhx6J7070Pr8.jpg">
+                <img src="https://cdn.theatlantic.com/thumbor/B7U27JF25tScMZkCe5Pl9EqXjao=/0x131:2555x1568/960x540/media/img/mt/2017/06/shutterstock_319985324/original.jpg">
+            }
+        </div>
+    </div>
+</div>
+
+@code
+{
+    public bool IsLoading = true;
+    public bool showPlaceholder = false;
+
+    private UserSessionContext userContext = new UserSessionContext();
+
+    private List<Category> categories = new List<Category>();
+    private List<SubCategory> subCategories = new List<SubCategory>();
+
+    private List<AccordionItem> items = new List<AccordionItem>();
+    private List<AccordionSubItem>? subItems = new List<AccordionSubItem>();
+}
+
+@code
+{
+    private void ToggleAccordionItem(int itemId)
+    {
+        var item = items.FirstOrDefault(i => i.Id == itemId);
+        if (item != null)
+        {
+            item.IsCollapsed = !item.IsCollapsed;
+        }
+    }
+}
+
+@code
+{
+    private void EditCategory(Guid categoryId) => _navigationManager.NavigateTo($"/categories/edit/{categoryId}");
+}
+
+@code
+{
+    private async Task<bool> LoadComponentData()
+    {
+        userContext = await _authenticationService.GetContext();
+        categories = (await GetCategoriesAndSubCategories(userContext.Tenant.Id.ToString()));
+        if (categories.Any())
+        {
+            subCategories = categories.SelectMany(x => x.SubCategories).ToList();
+            return true;
+        }
+        return false;
+    }
+
+    private async void BuildComponent()
+    {
+        items = new List<AccordionItem>();
+        int itemSequence = 0;
+        foreach (var category in categories)
+        {
+            if (!category.SubCategories.Any())
+            {
+                items.Add(new AccordionItem(itemSequence++, category.CategoryId, category.CategoryName, null));
+                continue;
+            }
+
+            var mappedAccordionSubItem = subCategories
+            .Where(x => x.CategoryId == category.CategoryId)
+            .SelectMany(x => new List<AccordionSubItem>
+            {
+                new AccordionSubItem
+                {
+                    SubItemId = x.SubCategoryId,
+                    SubTitle = x.SubCategoryName
+                }
+            }).ToList();
+            items.Add(new AccordionItem(itemSequence++, category.CategoryId, category.CategoryName, mappedAccordionSubItem));
+        }
+        IsLoading = false;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (await LoadComponentData())
+        {
+            BuildComponent();
+        }
+        else
+        {
+            IsLoading = false;
+            showPlaceholder = true;
+        }
+    }
+
+    public async Task<List<Category>> GetCategoriesAndSubCategories(string tenantId)
+    {
+        return (await _categoryService.GetCategoriesAndSubCategories(tenantId)).ToList();
+    }
 
 }
+

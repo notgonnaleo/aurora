@@ -17,7 +17,7 @@ namespace Backend.Infrastructure.Context
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,6 +33,7 @@ namespace Backend.Infrastructure.Context
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<ProductMedia> ProductMedia { get; set; }
 
     }
 }

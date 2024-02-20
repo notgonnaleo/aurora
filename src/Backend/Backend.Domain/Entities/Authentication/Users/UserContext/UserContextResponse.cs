@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Authentication.Users.Claims;
 using Backend.Domain.Entities.Authorization.UserRoutes;
+using Backend.Infrastructure.Enums.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Backend.Domain.Entities.Authentication.Users.UserContext
         public string Token { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
+        public LanguagesEnum Language { get; set; }
         public IEnumerable<Claim> Claims { get; set; }
         public IEnumerable<UserRoute> Levels { get; set; }
 

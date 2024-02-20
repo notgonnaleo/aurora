@@ -46,6 +46,7 @@ namespace Backend.Infrastructure.Services.Authorization
                     Token = userContext.Token,
                     Levels = userContext.Levels,
                     Tenant = userContext.Tenant,
+                    Language = userContext.Language,
                     Success = true,
                     Message = "Access granted."
                 };
