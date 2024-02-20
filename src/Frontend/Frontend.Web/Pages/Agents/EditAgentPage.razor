@@ -1,0 +1,15 @@
+﻿@page "/agents/edit/{agentId}"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Aurora - Edit Agent</PageTitle>
+<div class="container-fluid">
+    <Frontend.Web.Components.Agents.Forms.Edit.EditAgent agentId="@agentId" />
+    
+
+</div>
+
+@code
+{
+    [Parameter]
+    public string agentId { get; set; }
+}

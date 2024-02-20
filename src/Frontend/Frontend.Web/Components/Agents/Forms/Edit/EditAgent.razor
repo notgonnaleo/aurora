@@ -1,0 +1,65 @@
+﻿@using Backend.Domain.Entities.Agent;   
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Agents;
+@inject AgentService _agentService
+@inject NavigationManager navigator
+@inject AuthenticationService _authenticationService;
+
+
+<div>
+    <div class="card p-4">
+        <div class="row">
+            
+            <div class="col-md-9">
+                <form>
+                    <div class="row">
+                        <div class="mb-3 col-sm-3">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
+                        </div>
+                        
+                        
+                    </div>
+                   
+                    <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    [Parameter]
+    public string agentId { get; set; }
+
+    private Agent model = new Agent();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        model.TenantId = context.Tenant.Id;
+
+        var queryString = navigator.Uri.Split('/').Last();
+        model = await _agentService.GetAgent(model.TenantId.ToString(), agentId.ToString());
+    }
+
+    public async Task UpdateAgent()
+    {
+        try
+        {
+            
+
+            bool updated = await _agentService.UpdateAgent(model);
+            if (updated)
+            {
+                navigator.NavigateTo("/agents");
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+}

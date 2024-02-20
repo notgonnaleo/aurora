@@ -20,9 +20,19 @@ namespace Frontend.Web.Services.Agents
             return await _agentRepository.GetAgents(tenantId);
         }
 
+        public async Task<Agent> GetAgent(string tenantId, string agentId)
+        {
+            return await _agentRepository.GetAgent(tenantId, agentId);
+        }
+
         public async Task<Agent> CreateAgent(Agent agent)
         {
             return await _agentRepository.CreateAgent(agent);
+        }
+
+        public async Task<bool> UpdateAgent(Agent agent)
+        {
+            return await _agentRepository.UpdateAgent(agent);
         }
     }
 }
