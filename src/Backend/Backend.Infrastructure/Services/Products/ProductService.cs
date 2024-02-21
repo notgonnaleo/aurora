@@ -54,6 +54,7 @@ namespace Backend.Infrastructure.Services.Products
         {
             var context = LoadContext();
             product.TenantId = context.Tenant.Id; // QUESTION: Should we maintain this?
+            // conditional for sku
             product = new Product(product, context.UserId);
             product.ValidateFields(context.Language);
 

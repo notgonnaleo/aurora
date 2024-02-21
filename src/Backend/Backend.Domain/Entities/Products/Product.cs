@@ -53,7 +53,7 @@ namespace Backend.Domain.Entities.Products
         {
             Id = Guid.NewGuid();
             TenantId = product.TenantId;
-            SKU = product.SKU;
+            SKU = ValidateSKU(product, true);
             GTIN = string.IsNullOrEmpty(product.GTIN) ? product.GTIN : "NO GTIN/SEM GTIN";
             Name = product.Name;
             Description = product.Description;
@@ -68,6 +68,11 @@ namespace Backend.Domain.Entities.Products
             Updated = null;
             UpdatedBy = null;
             Active = true;
+        }
+
+        public string ValidateSKU(Product product, bool isAutoGenerateSKU)
+        {
+            return string.IsNullOrEmpty(product.SKU) && !isAutoGenerateSKU ? new SKU(product.Name, "typename", product.ColorName).SKUValue : product.SKU;
         }
 
         public void ValidateFields(LanguagesEnum language)
