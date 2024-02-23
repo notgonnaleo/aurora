@@ -49,6 +49,11 @@ else
                             <i class="ti ti-edit"></i>
                         </a>
                     </div>
+                    <div>
+                        <a class="bg-primary rounded-circle p-2 text-white d-inline-flex cursor-pointer" @onclick="() => CreateNewVariant(product)">
+                            teste pika
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,5 +75,15 @@ else
     private void Edit(ProductDetail product)
     {
         NavigationManager.NavigateTo($"/products/edit/{product.Id}");
+    }
+}
+
+@code {
+    [Parameter]
+    public EventCallback<ProductDetail> OnCreateNewVariant { get; set; }
+
+    private void CreateNewVariant(ProductDetail product)
+    {
+        OnCreateNewVariant.InvokeAsync(product);
     }
 }

@@ -1,0 +1,240 @@
+﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Products;
+@using Backend.Domain.Entities.SubCategories;
+@using Backend.Domain.Enums.Colors;
+@using Backend.Domain.Enums.MetricUnits;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Products;
+@using Frontend.Web.Services.SubCategories;
+@inject ProductService _productService
+@inject AuthenticationService _authenticationService
+@inject CategoryService _categoryService;
+@inject SubCategoryService _subCategoryService;
+@inject NavigationManager navigator
+
+<div>
+    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+</div>
+<div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
+    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    <div class="card-body p-2">
+        <form>
+            <div class="row">
+                <div class="accordion accordion-flush position-relative overflow-hidden @productAccordionHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseProductAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleProductAccordion>
+                                Basic Info
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @productAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-4">
+                                        <label for="sku" class="form-label">SKU</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled="@isAutoGenerateSKU">
+                                    </div>
+                                    <div class="mb-2 col-sm-8">
+                                        <label for="name" class="form-label">GTIN</label>
+                                        <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@model.GTIN">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAutoGenerateSKU">
+                                        <label>Auto generate SKU</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="name" placeholder="Your product name" @bind="@model.Name">
+                                    </div>
+                                </div>
+                                <div class="mb-2 col-sm-12">
+                                    <label for="description" class="form-label">Description</label>
+                                    <input type="text" class="form-control" id="description" placeholder="Small details of the product" @bind="@model.Description">
+                                </div>
+                                <div class="mb-2 col-sm-12">
+                                    <label for="value" class="form-label">Value</label>
+                                    <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@model.Value">
+                                </div>
+                                <div class="mb-3 col-sm-12">
+                                    <label for="productType" class="form-label">Product Type</label>
+                                    <select class="form-select" @bind="@model.ProductTypeId">
+                                        <option value="" disabled hidden selected>The type of your product</option>
+                                        <option value="1">Feedstock</option>
+                                        <option value="2">Intermediate Component</option>
+                                        <option value="3">Product</option>
+                                    </select>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <label for="colors" class="form-label">Color</label>
+                                        <select class="form-select" @bind="@model.ColorName">
+                                            <option value="" disabled hidden selected>Color of your product</option>
+                                            @foreach (var color in Colors.ColorList)
+                                            {
+                                                <option value="@color">@color</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <label for="metricUnits" class="form-label">Metric Unit</label>
+                                        <select class="form-select" @bind="@model.MetricUnitName">
+                                            <option value="" disabled hidden selected>Measure unit type</option>
+                                            @foreach (var unitType in MetricUnits.Measure.measurementUnitTypes)
+                                            {
+                                                <option value="@unitType">@unitType</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion accordion-flush position-relative overflow-hidden @weightAccordionHeaderToggle" id="accordionFlushExample">
+                <div class="accordion-item mb-3 shadow-none border rounded">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseWeightAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleWeightAccordion>
+                            Weight
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                        <div class="accordion-body px-3 fw-normal">
+                            <div class="row">
+                                <div class="mb-2 col-sm-6">
+                                    <label for="liquidWeight" class="form-label">Liquid Weight</label>
+                                    <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@model.LiquidWeight">
+                                </div>
+                                <div class="mb-2 col-sm-6">
+                                    <label for="totalWeight" class="form-label">Total Weight</label>
+                                    <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@model.TotalWeight">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <CascadingValue Value="@model.CategoryId">
+            <div class="row">
+                <div class="accordion accordion-flush position-relative overflow-hidden @categoryAccordionHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleCategoryAccordion>
+                                Categories
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-3 col-sm-12">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select class="form-select" @onchange="LoadSubCategories">
+                                            <option value="" disabled hidden selected>The category of your product</option>
+                                            @foreach (var category in categories)
+                                            {
+                                                <option value="@category.CategoryId">@category.CategoryName</option>
+
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-sm-12">
+                                        <label for="productType" class="form-label">Sub Category</label>
+                                        <select class="form-select" @bind="@model.SubCategoryId">
+                                            <option value="" disabled hidden selected>The sub category of your product</option>
+                                            @foreach (var subCategory in subCategories)
+                                            {
+                                                <option value="@subCategory.SubCategoryId">@subCategory.SubCategoryName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </CascadingValue>
+        </form>
+    </div>
+    <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+        <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
+    </div>
+</div>
+
+@code
+{
+    @*Category Accordion *@
+    private bool collapseCategoryAccordion = true;
+    private string? categoryAccordionHeaderToggle => collapseCategoryAccordion ? null : "collapsed";
+    private string? categoryAccordionToggle => collapseCategoryAccordion ? "collapse" : "collapse show";
+    private void ToggleCategoryAccordion() => collapseCategoryAccordion = !collapseCategoryAccordion;
+
+    @*Weight Accordion *@
+    private bool collapseWeightAccordion = true;
+    private string? weightAccordionHeaderToggle => collapseWeightAccordion ? null : "collapsed";
+    private string? weightAccordionToggle => collapseWeightAccordion ? "collapse" : "collapse show";
+    private void ToggleWeightAccordion() => collapseWeightAccordion = !collapseWeightAccordion;
+
+    @*Product Accordion *@
+    private bool collapseProductAccordion = true;
+    private string? productAccordionHeaderToggle => collapseProductAccordion ? null : "collapsed";
+    private string? productAccordionToggle => collapseProductAccordion ? "collapse" : "collapse show";
+    private void ToggleProductAccordion() => collapseProductAccordion = !collapseProductAccordion;
+}
+
+@code
+{
+    private Product model = new Product();
+    public async Task CreateProduct()
+    {
+        var context = await _authenticationService.GetContext();
+        model.TenantId = context.Tenant.Id;
+
+        if(model.SKU is null && isAutoGenerateSKU)
+        {
+            model.SKU = string.Empty;
+        }
+
+        Product newProduct = await _productService.CreateProduct(model);
+        if (newProduct != null && newProduct.Id != new Guid()) 
+            navigator.NavigateTo("/products", true);
+    }
+
+    private List<Category> categories = new List<Category>();
+    private List<SubCategory> subCategories = new List<SubCategory>();
+    public async Task GetCategories()
+    {
+        var context = await _authenticationService.GetContext();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+    }
+
+    private async Task LoadSubCategories(ChangeEventArgs args)
+    {
+        string selectedCategoryId = args.Value.ToString();
+        model.CategoryId = new Guid(selectedCategoryId); // Setting the selected category in the actual model
+        var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
+        subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
+    }
+
+    protected override async Task OnInitializedAsync() => GetCategories();
+}
+
+@code
+{
+    private bool isAutoGenerateSKU = false;
+    private void ToggleAutoGenerateSKU() => isAutoGenerateSKU = !isAutoGenerateSKU;
+}
+
+@code
+{
+    [Parameter] public Action ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+}
