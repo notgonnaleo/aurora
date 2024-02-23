@@ -2,6 +2,8 @@
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.SubCategories;
+using Backend.Domain.Enums.Colors;
+using Backend.Domain.Enums.MetricUnits;
 using Backend.Infrastructure.Enums.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
@@ -26,14 +28,14 @@ namespace Backend.Domain.Entities.Products
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
         public string SKU { get; set; }
         public string GTIN { get; set; }
 
         public string Name { get; set; }
         public string? Description { get; set; }
-        public string? ColorHexCode { get; set; }
         public string? ColorName { get; set; }
+        public string? MetricUnitName { get; set; }
+
         public double Value { get; set; }
         public double? TotalWeight { get; set; }
         public double? LiquidWeight { get; set; }
@@ -41,6 +43,7 @@ namespace Backend.Domain.Entities.Products
         public int ProductTypeId { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
+
 
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
@@ -53,12 +56,12 @@ namespace Backend.Domain.Entities.Products
         {
             Id = Guid.NewGuid();
             TenantId = product.TenantId;
-            SKU = ValidateSKU(product, true);
-            GTIN = string.IsNullOrEmpty(product.GTIN) ? product.GTIN : "NO GTIN/SEM GTIN";
+            SKU = ValidateSKU(product);
+            GTIN = string.IsNullOrEmpty(product.GTIN) ? product.GTIN : "NO GTIN";
             Name = product.Name;
             Description = product.Description;
-            ColorHexCode = product.ColorHexCode;
             ColorName = product.ColorName;
+            MetricUnitName = product.MetricUnitName;
             ProductTypeId = product.ProductTypeId;
             Value = product.Value;
             TotalWeight = product.TotalWeight;
@@ -70,9 +73,9 @@ namespace Backend.Domain.Entities.Products
             Active = true;
         }
 
-        public string ValidateSKU(Product product, bool isAutoGenerateSKU)
+        public string ValidateSKU(Product product)
         {
-            return string.IsNullOrEmpty(product.SKU) && !isAutoGenerateSKU ? new SKU(product.Name, "typename", product.ColorName).SKUValue : product.SKU;
+            return string.IsNullOrEmpty(product.SKU) ? new SKU(product.Name, product.ProductTypeId, product.ColorName).SKUValue : product.SKU;
         }
 
         public void ValidateFields(LanguagesEnum language)
@@ -81,9 +84,16 @@ namespace Backend.Domain.Entities.Products
             {
                 throw new Exception(Localization.ProductValidations.ErrorProductNegativeValue(language));
             }
+            if (!Colors.ColorList.Contains(ColorName))
+            {
+                throw new Exception("Color selected is not valid");
+            }
+            if (!MetricUnits.Measure.measurementUnitTypes.Contains(MetricUnitName))
+            {
+                throw new Exception("Metric unit selected is not valid");
+            }
         }
     }
-
 
     public class ProductDetail : Product
     {

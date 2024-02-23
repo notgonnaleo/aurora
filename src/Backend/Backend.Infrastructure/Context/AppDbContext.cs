@@ -24,7 +24,6 @@ namespace Backend.Infrastructure.Context
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.UseSerialColumns();
-
             AppDbMockDataSeeder.Seed(modelBuilder);
         }
 

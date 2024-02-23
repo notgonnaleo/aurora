@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Categories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,12 @@ namespace Backend.Domain.Entities.Products
 {
     public class ProductVariant : Model
     {
+        [Key]
         public Guid VariantId { get; set; }
+
+        [Required]
         public Guid TenantId { get; set; }
+        [Required]
         public Guid ProductId { get; set; }
 
         public string SKU { get; set; }
@@ -21,7 +26,6 @@ namespace Backend.Domain.Entities.Products
         public string Name { get; set; }
         public string? Description { get; set; }
 
-        public string? ColorHexCode { get; set; }
         public string? ColorName { get; set; }
 
         public double LiquidWeight { get; set; }
