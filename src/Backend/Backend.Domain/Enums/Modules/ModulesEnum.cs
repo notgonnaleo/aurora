@@ -149,6 +149,11 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string GetAllVariantByProduct = "ProductVariants/GetAllVariantByProduct";
                 }
             }
+
+            public static class POST
+            {
+                public static string AddProductVariant = "ProductVariant/Add";
+            }
         }
 
         /// <summary>
