@@ -188,7 +188,9 @@
 
         ProductVariant newProductVariant = await _productVariantService.CreateVariant(model);
         if (newProductVariant != null && newProductVariant.VariantId != new Guid())
-            navigator.NavigateTo("/products", true);
+        {
+            navigator.NavigateTo($"/products/edit/{model.ProductId}", true);
+        }
     }
 }
 

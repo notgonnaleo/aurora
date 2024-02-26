@@ -146,7 +146,7 @@ namespace Backend.Infrastructure.Enums.Modules
 
                 public static class GetAllVariantsByProduct
                 {
-                    public static string GetAllVariantByProduct = "ProductVariants/GetAllVariantByProduct";
+                    public static string GetAllVariantsByProductEndpoint = "GetAllVariantsByProduct";
                 }
             }
 

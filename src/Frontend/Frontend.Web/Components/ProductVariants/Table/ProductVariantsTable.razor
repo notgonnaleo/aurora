@@ -5,83 +5,107 @@
 @inject AuthenticationService _auth;
 
 <div class="card card-body">
-    <div class="table-responsive">
-        <table class="table search-table align-middle text-nowrap">
-            <thead class="header-item">
-                <tr>
-                    <th>
-                        <div class="n-chk align-self-center text-center">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input primary" id="contact-check-all">
-                                <label class="form-check-label" for="contact-check-all"></label>
-                                <span class="new-control-indicator"></span>
-                            </div>
-                        </div>
-                    </th>
-                    <th>SKU</th>
-                    <th>Name</th>
-                    <th>Color</th>
-                    <th>Liquid Weight</th>
-                    <th>Total Weight</th>
-                    <th>Value</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @*todo: add for each to loop the items from the new list here :D*@
-                <!-- start row -->
-                <tr class="search-items">
-                    <td>
-                        <div class="n-chk align-self-center text-center">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
-                                <label class="form-check-label" for="checkbox1"></label>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <img src="../assets/images/profile/user-1.jpg" alt="avatar" class="rounded-circle" width="35">
-                            <div class="ms-3">
-                                <div class="user-meta-info">
-                                    <h6 class="user-name mb-0" data-name="Emma Adams">Emma Adams</h6>
-                                    <span class="user-work fs-3" data-occupation="Web Developer">Web Developer</span>
+    <h5 class="card-title fw-semibold mb-4">Variants</h5>
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        @if (!(variants == null || variants.Count() == 0))
+        {
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap">
+                    <thead class="header-item">
+                        <tr>
+                            <th>
+                                <div class="n-chk align-self-center text-center">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
+                                        <label class="form-check-label" for="contact-check-all"></label>
+                                        <span class="new-control-indicator"></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="usr-email-addr" data-email="adams@mail.com">adams@mail.com</span>
-                    </td>
-                    <td>
-                        <span class="usr-location" data-location="Boston, USA">Boston, USA</span>
-                    </td>
-                    <td>
-                        <span class="usr-ph-no" data-phone="+1 (070) 123-4567">+91 (070) 123-4567</span>
-                    </td>
-                    <td>
-                        <div class="action-btn">
-                            <a class="text-primary edit">
-                                <i class="ti ti-eye fs-5"></i>
-                            </a>
-                            <a class="text-dark delete ms-2">
-                                <i class="ti ti-trash fs-5"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
-                <!-- end row -->
-            </tbody>
-        </table>
-    </div>
+                            </th>
+                            <th>Image</th>
+                            <th>SKU</th>
+                            <th>Name</th>
+                            <th>Color</th>
+                            <th>Liquid Weight</th>
+                            <th>Total Weight</th>
+                            <th>Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var variant in variants)
+                        {
+                            <!-- start row -->
+                            <tr class="search-items">
+                                <td>
+                                    <div class="n-chk align-self-center text-center">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
+                                            <label class="form-check-label" for="checkbox1"></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://img.freepik.com/fotos-gratis/feche-o-gato-fofo-dentro-de-casa_23-2148882585.jpg" alt="avatar" class="rounded-circle" width="35">
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="usr-email-addr" data-email="adams@mail.com">@variant.SKU</span>
+                                </td>
+                                <td>
+                                    <span class="usr-email-addr" data-email="adams@mail.com">@variant.Name</span>
+                                </td>
+                                <td>
+                                    <span class="usr-location" data-location="Boston, USA">@variant.ColorName</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@variant.LiquidWeight</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@variant.TotalWeight</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@variant.Value</span>
+                                </td>
+                                <td>
+                                    <div class="action-btn">
+                                        <a class="text-primary edit">
+                                            <i class="ti ti-eye fs-5"></i>
+                                        </a>
+                                        <a class="text-dark delete ms-2">
+                                            <i class="ti ti-trash fs-5"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- end row -->
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No variants created yet.</p>
+        }
+    }
 </div>
 
 @code {
+    public bool isLoading;
     public IEnumerable<ProductVariant> variants = null;
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         var context = await _auth.GetContext();
         variants = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), parentProductId);
+        isLoading = false;
     }
 }
 

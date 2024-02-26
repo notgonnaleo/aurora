@@ -31,7 +31,7 @@ namespace Frontend.Web.Repository.Products
                     ParameterValue = productId,
                 }
             };
-            var request = new RouteBuilder<ProductVariant>().SendMultiple(Endpoints.ProductVariants, GET.GetAllVariantsByProduct.GetAllVariantByProduct, parameters);
+            var request = new RouteBuilder<ProductVariant>().SendMultiple(Endpoints.ProductVariants, GET.GetAllVariantsByProduct.GetAllVariantsByProductEndpoint, parameters);
             return await _httpClientRepository.Get(request);
         }
         public async Task<ProductVariant> CreateProductVariant(ProductVariant variant)

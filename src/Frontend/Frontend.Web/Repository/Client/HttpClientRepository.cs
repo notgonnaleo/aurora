@@ -46,7 +46,7 @@ namespace Frontend.Web.Repository.Client
                 _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
                 return await _httpClient.GetFromJsonAsync<List<T>>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -68,7 +68,7 @@ namespace Frontend.Web.Repository.Client
                 _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
                 return await _httpClient.GetFromJsonAsync<T>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

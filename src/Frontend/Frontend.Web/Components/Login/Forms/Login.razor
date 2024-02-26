@@ -4,25 +4,31 @@
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager Navigator
 
-<div class="col-md-8 col-lg-6 col-xxl-3">
+<div class="col-md-8 col-lg-6 col-xxl-3 position-relative">
     <div class="card mb-0">
         <div class="card-body">
             <a class="text-nowrap logo-img text-center d-block py-3 w-100">
                 <h3 class="panel-title"><strong>Aurora</strong></h3>
             </a>
             <p class="text-center">Log in your account</p>
-            @if (logged)
+            @if (isLoading)
+            {
+                <div class="z-3 position absolute h-100 d-flex align-items-center justify-content-center">
+                    <Frontend.Web.Components.Loader.LoadingSpinner />
+                </div>
+            }
+            @if (logged.HasValue && logged.Value)
             {
                 <div class="alert alert-success fade-in" role="alert">
                     Success, redirecting to main page.
                 </div>
             }
-            @*else
+            else if(logged.HasValue && !logged.Value)
             {
-            <div class="alert alert-warning fade-in" role="alert">
-            Something went wrong.
-            </div>
-            }*@
+                <div class="alert alert-warning fade-in" role="alert">
+                    Something went wrong.
+                </div>
+            }
             <form>
                 <div class="mb-3">
                     <label for="username" class="form-label">Username</label>
@@ -39,9 +45,10 @@
 </div>
 @code
 {
-    public bool logged;
-    private LoginRequest model = new LoginRequest();
+    public bool isLoading;
 
+    public bool? logged;
+    private LoginRequest model = new LoginRequest();
     protected override async Task OnInitializedAsync()
     {
         bool isAuthenticated = await _authenticationService.IsUserLogged();
@@ -51,14 +58,15 @@
 
     public async Task<bool> SignIn()
     {
+        isLoading = true;
         logged = await _authenticationService.SignIn(model);
-        RedirectAfterSuccess(logged);
-        return logged;
+        RedirectAfterSuccess(logged.Value);
+        isLoading = false;
+        return logged.Value;
     }
     
     public void RedirectAfterSuccess(bool logged)
     {
         if (logged) Navigator.NavigateTo("/", true);
     }
-    
 }
