@@ -52,11 +52,11 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public ActionResult GetById(Guid id)
+        public ActionResult GetById(Guid tenantId,Guid agentId)
         {
             try
             {
-                return Ok(_agentService.GetById(id));
+                return Ok(_agentService.GetById(tenantId,agentId));
             }
             catch (Exception ex)
             {
@@ -71,9 +71,10 @@ namespace Backend.API.Controllers.Agents
         {
             try
             {
-                var Agents = _agentService.Update(model);
+                
+                return Ok(_agentService.Update(model));
 
-                return Ok(Agents);
+
 
             }
             catch (Exception ex)

@@ -1,11 +1,13 @@
 using Frontend.Web;
 using Frontend.Web.Models.Client;
+using Frontend.Web.Repository.Agents;
 using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Categories;
 using Frontend.Web.Repository.Client;
 using Frontend.Web.Repository.Products;
 using Frontend.Web.Repository.SubCategories;
 using Frontend.Web.Repository.TenantRepository;
+using Frontend.Web.Services.Agents;
 using Frontend.Web.Services.Authentication;
 using Frontend.Web.Services.Categories;
 using Frontend.Web.Services.Products;
@@ -37,5 +39,7 @@ builder.Services.AddScoped<SubCategoryRepository>();
 builder.Services.AddScoped<SubCategoryService>();
 builder.Services.AddScoped<ProductVariantRepository>();
 builder.Services.AddScoped<ProductVariantService>();
+builder.Services.AddScoped<AgentRepository>();
+builder.Services.AddScoped<AgentService>();
 
 await builder.Build().RunAsync();
