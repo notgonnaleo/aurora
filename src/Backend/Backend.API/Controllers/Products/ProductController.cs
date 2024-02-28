@@ -12,12 +12,10 @@ namespace Backend.API.Controllers.Products
     public class ProductController : ControllerBase
     {
         private readonly ProductService _productService;
-        private readonly UserContextService _userContextService;
 
-        public ProductController(ProductService productService, UserContextService userContextService)
+        public ProductController(ProductService productService)
         {
             _productService = productService;
-            _userContextService = userContextService;
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]

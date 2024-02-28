@@ -1,12 +1,13 @@
 ﻿@using Backend.Domain.Entities.Products;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
-@inject ProductService _productService
 @inject NavigationManager navigator
+@inject ProductService _productService
 @inject AuthenticationService _authenticationService;
 
 <div>
     <div class="card p-4">
+        <h5 class="card-title fw-semibold mb-4">Product details</h5>
         <div class="row">
             <div class="mb-3 col-md-3">
                 <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" alt="" class="card-img rounded-12">
@@ -16,29 +17,29 @@
                     <div class="row">
                         <div class="mb-3 col-sm-3">
                             <label for="username">SKU</label>
-                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled>
+                            <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@Model.SKU" disabled>
                         </div>
                         <div class="mb-3 col-sm-3">
                             <label for="username">GTIN</label>
-                            <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@model.GTIN" disabled>
+                            <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@Model.GTIN" disabled>
                         </div>
                         <div class="mb-3 col-sm-6">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
+                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@Model.Name">
                         </div>
                     </div>
                     <div class="row">
                         <div class="mb-3 col-sm-6">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" id="description" placeholder="Description" @bind="@model.Description">
+                            <input type="text" class="form-control" id="description" placeholder="Description" @bind="@Model.Description">
                         </div>
                         <div class="mb-3 col-sm-3">
                             <label for="value">Value</label>
-                            <input type="number" class="form-control" id="value" placeholder="Value" @bind="@model.Value">
+                            <input type="number" class="form-control" id="value" placeholder="Value" @bind="@Model.Value">
                         </div>
                         <div class="mb-3 col-sm-3">
                             <label for="productType">Product Type</label>
-                            <select class="form-select" @bind="@model.ProductTypeId">
+                            <select class="form-select" @bind="@Model.ProductTypeId">
                                 <option value="1">Feedstock</option>
                                 <option value="2">Intermediate Component</option>
                                 <option value="3">Product</option>
@@ -48,11 +49,11 @@
                     <div class="row">
                         <div class="mb-3 col-sm-3">
                             <label for="liquidWeight">LiquidWeight</label>
-                            <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@model.LiquidWeight">
+                            <input type="number" class="form-control" id="liquidWeight" placeholder="Liquid Weight" @bind="@Model.LiquidWeight">
                         </div>
                         <div class="mb-3 col-sm-3">
                             <label for="totalWeight">TotalWeight</label>
-                            <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@model.TotalWeight">
+                            <input type="number" class="form-control" id="totalWeight" placeholder="Total Weight" @bind="@Model.TotalWeight">
                         </div>
                     </div>
                     <button type="button" @onclick="UpdateProduct" class="btn btn-default float-right">Save</button>
@@ -64,30 +65,16 @@
 
 @code
 {
-    [Parameter]
-    public string productId { get; set; }
-
-    private Product model = new Product();
-
-    protected override async Task OnInitializedAsync()
-    {
-        var context = await _authenticationService.GetContext();
-        model.TenantId = context.Tenant.Id;
-
-        var queryString = navigator.Uri.Split('/').Last();
-        model = await _productService.GetProduct(model.TenantId.ToString(), productId.ToString());
-    }
-
     public async Task UpdateProduct()
     {
-        try
-        {
-            bool updated = await _productService.UpdateProduct(model);
-            if (updated) navigator.NavigateTo("/products");
-        }
-        catch(Exception ex)
-        {
-            throw;
-        }
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+        bool updated = await _productService.UpdateProduct(Model);
+        if (updated) navigator.NavigateTo(navigator.Uri, true);
     }
+}
+
+@code
+{
+    [Parameter] public Product Model { get; set; }
 }

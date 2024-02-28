@@ -28,6 +28,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
+        public static string ProductVariants = "ProductVariants";
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
         public static string Agents = "Agents";
@@ -132,6 +133,26 @@ namespace Backend.Infrastructure.Enums.Modules
             public static class PUT
             {
                 public static string UpdateProductType = "ProductTypes/Update";
+            }
+        }
+
+        public static class ProductVariants
+        {
+            public static class GET
+            {
+                public static string tenantId = "tenantId";
+                public static string productId = "productId";
+                public static string variantId = "variantId";
+
+                public static class GetAllVariantsByProduct
+                {
+                    public static string GetAllVariantsByProductEndpoint = "GetAllVariantsByProduct";
+                }
+            }
+
+            public static class POST
+            {
+                public static string AddProductVariant = "ProductVariant/Add";
             }
         }
 

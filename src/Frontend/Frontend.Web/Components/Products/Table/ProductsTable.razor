@@ -40,13 +40,23 @@ else
                 </div>
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
-                        <h6 class="fw-semibold fs-4 mb-0">
+                        <h6 class="fw-semibold fs-2 mb-0">
                             R$ @product.Value
                         </h6>
                     </div>
                     <div>
-                        <a class="bg-primary rounded-circle p-2 text-white d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
+                        <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
                             <i class="ti ti-edit"></i>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => CreateNewVariant(product)">
+                            Add variant
+                        </a>
+                    </div>
+                    <div>
+                        <a class="p-2 d-inline-flex cursor-pointer">
+                                <i class="ti ti-trash-x"></i>
                         </a>
                     </div>
                 </div>
@@ -70,5 +80,16 @@ else
     private void Edit(ProductDetail product)
     {
         NavigationManager.NavigateTo($"/products/edit/{product.Id}");
+    }
+}
+
+@code 
+{
+    [Parameter]
+    public EventCallback<ProductDetail> OnCreateNewVariant { get; set; }
+
+    private void CreateNewVariant(ProductDetail product)
+    {
+        OnCreateNewVariant.InvokeAsync(product);
     }
 }

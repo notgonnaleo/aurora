@@ -37,6 +37,9 @@ builder.Services.AddScoped<ProductMediaService>();
 //ProductsType
 builder.Services.AddScoped<ProductTypeService>();
 
+// ProductVariant
+builder.Services.AddScoped<ProductVariantService>();
+
 //Category
 builder.Services.AddScoped<CategoryService>();
 

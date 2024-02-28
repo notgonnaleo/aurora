@@ -3,6 +3,7 @@
     "Frontend.Web": {
       "commandName": "Project",
       "launchBrowser": true,
+      "hotReloadEnabled": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -27,6 +28,10 @@
         "ASPNETCORE_URLS": "https://localhost:7288;http://localhost:5012"
       },
       "distributionName": ""
+    },
+    "Watch": {
+      "commandName": "Project",
+      "commandLineArgs": "watch run debug --launch-profile Frontend.Web"
     }
   },
   "iisSettings": {

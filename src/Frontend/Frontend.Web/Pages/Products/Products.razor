@@ -1,33 +1,74 @@
 ﻿@page "/products"
+@using Backend.Domain.Entities.Products;
 
 <PageTitle>Aurora - Products</PageTitle>
 
 <aside class="right-sidebar @formCssClass">
-    <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm"/>
+    @if (isProductSidebar)
+    {
+        <Frontend.Web.Components.Products.Forms.Add.AddProduct 
+            CollapseRightSidebar=collapseProductForm 
+            ToggleRightSidebar="ToggleProductForm" 
+        />
+    }
+
+    @if (isVariantSidebar)
+    {
+        <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant 
+            CollapseRightSidebar=collapseProductVariantForm 
+            ToggleRightSidebar="ToggleProductVariantForm" 
+            ParentProductDetail="selectedParentProduct" 
+        />
+    }
 </aside>
 <div class="container-fluid">
     <div class="row">
         <div class="m-4">
-            <button class="btn btn-outline-primary" @onclick="ToggleForm">
+            <button class="btn btn-outline-primary" @onclick="ToggleProductForm">
                 @btnText
             </button>
         </div>
     </div>
     <div class="row">
-        <Frontend.Web.Components.Products.Table.ProductsTable />
+        <Frontend.Web.Components.Products.Table.ProductsTable 
+            OnCreateNewVariant="HandleCreateNewVariant" 
+        />
     </div>
 </div>
 
 @code
 {
-    private bool collapseForm = true;
-    private string? formCssClass => collapseForm ?  null : "show-menu";
-    private string? btnText => collapseForm ? "New" : "Hide menu";
+    private string? btnText = "New";
+    public string? formCssClass = null;
+    public bool isProductSidebar = false;
+    public bool isVariantSidebar = false;
 
-    private void ToggleForm()
-    {
-        collapseForm = !collapseForm;
+    private bool collapseProductForm = true;
+    private void ToggleProductForm(){
+        isProductSidebar = true;
+        isVariantSidebar = false;
+        collapseProductVariantForm = true; 
+        collapseProductForm = !collapseProductForm;
+        formCssClass = collapseProductForm ? null : "show-menu";
+        btnText = collapseProductForm ? "New" : "Hide menu";
+    }
+
+    private bool collapseProductVariantForm = true;
+    private void ToggleProductVariantForm(){
+        isProductSidebar = false;
+        isVariantSidebar = true;
+        collapseProductForm = true;
+        collapseProductVariantForm = !collapseProductVariantForm;
+        formCssClass = collapseProductVariantForm ? null : "show-menu";
     }
 }
 
-
+@code
+{
+    public ProductDetail? selectedParentProduct = null;
+    private void HandleCreateNewVariant(ProductDetail selectedProduct)
+    {
+        selectedParentProduct = selectedProduct;
+        ToggleProductVariantForm();
+    }
+}
