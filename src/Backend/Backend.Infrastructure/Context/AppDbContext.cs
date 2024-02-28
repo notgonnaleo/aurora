@@ -1,4 +1,4 @@
-﻿using Backend.Domain.Entities.Agent;
+﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
@@ -34,6 +34,7 @@ namespace Backend.Infrastructure.Context
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<ProductMedia> ProductMedia { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<AgentType> AgentTypes { get; set; }
 
     }
 }

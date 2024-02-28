@@ -46,7 +46,7 @@ namespace Backend.Infrastructure.Services.Products
         public Product? GetById(Guid tenantId, Guid productId)
         {
             return _appDbContext.Products
-                .Where(x => x.TenantId == tenantId && x.Id == productId && x.Active)
+                .Where(x => x.TenantId == tenantId && x.ProductId == productId && x.Active)
                 .FirstOrDefault();
         }
 
@@ -79,7 +79,7 @@ namespace Backend.Infrastructure.Services.Products
         {
             var context = LoadContext();
             Product product = _appDbContext.Products
-                .Where(x => x.Id == Id && x.TenantId == tenantId)
+                .Where(x => x.ProductId == Id && x.TenantId == tenantId)
                 .First();
 
             product.Active = false;
@@ -96,7 +96,7 @@ namespace Backend.Infrastructure.Services.Products
             return products.Select(product => new ProductDetail
             {
                 TenantId = product.TenantId,
-                Id = product.Id,
+                ProductId = product.ProductId,
                 ProductTypeId = product.ProductTypeId,
                 SKU = product.SKU,
                 GTIN = product.GTIN,

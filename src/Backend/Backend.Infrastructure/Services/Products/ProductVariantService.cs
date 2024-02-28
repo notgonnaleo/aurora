@@ -69,7 +69,7 @@ namespace Backend.Infrastructure.Services.Products
                     {
                         TenantId = model.TenantId,
                         VariantId = model.VariantId, 
-                        ProductId = parentProduct.Id,
+                        ProductId = parentProduct.ProductId,
                         SKU = new SKU(parentProduct.Name, parentProduct.ProductTypeId, model.ColorName).SKUValue,
                         GTIN = model.GTIN,
                         Name = model.Name,

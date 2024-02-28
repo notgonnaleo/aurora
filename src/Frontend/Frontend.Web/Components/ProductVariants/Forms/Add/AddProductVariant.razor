@@ -183,7 +183,7 @@
             model.SKU = string.Empty;
         }
         model.OverwriteValue = isOverwriteOriginalValue;
-        model.ProductId = ParentProductDetail.Id;
+        model.ProductId = ParentProductDetail.ProductId;
         model.GTIN = ParentProductDetail.GTIN;
 
         ProductVariant newProductVariant = await _productVariantService.CreateVariant(model);

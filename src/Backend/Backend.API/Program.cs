@@ -33,21 +33,18 @@ builder.Services.AddScoped<AuthorizationService>();
 // Products
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ProductMediaService>();
-
-//ProductsType
 builder.Services.AddScoped<ProductTypeService>();
-
-// ProductVariant
 builder.Services.AddScoped<ProductVariantService>();
 
-//Category
+// Category
 builder.Services.AddScoped<CategoryService>();
 
-//SubCategories
+// SubCategories
 builder.Services.AddScoped<SubCategoryService>();
 
-//Agent
+// Agent
 builder.Services.AddScoped<AgentService>();
+builder.Services.AddScoped<AgentTypeService>();
 
 // Memberships
 builder.Services.AddScoped<MembershipService>();
@@ -58,16 +55,11 @@ builder.Services.AddScoped<TenantService>();
 // User
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserContextService>();
-// Getting shot in the head seems to be the solution for all my problems
-// I really hate myself
 
 /*
  * HOW TO UPDATE AND GENERATE MIGRATIONS:
- * Alright, so if you are going to run migrations on this you will need to specify the context when running the 
- * "ef-core migrations" commands, and this not optional, you must do it. 
- * just type --context NameOfYourContext at the end of your dotnet ef migration or database update comnand and boom
- * you got it migration wrote up ready to be applied now.
- * dotnet ef migrations add coolname --context ContextName --output-dir FolderContext
+ * 1) dotnet ef migrations add "APP-SNAPSHOT" --context AppDbContext --output-dir Migrations/AppDbMigrations
+ * 2) dotnet ef database update --context AppDbContext --connection "CONNECTION_STRING"
  */
 
 // Application Context
@@ -139,8 +131,8 @@ builder.Services.AddAuthorization();
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

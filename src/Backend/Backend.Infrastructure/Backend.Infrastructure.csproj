@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repository\**" />
+    <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Repository\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
@@ -34,7 +40,6 @@
   <ItemGroup>
     <Folder Include="Migrations\AppDbMigrations\" />
     <Folder Include="Migrations\AuthDbMigrations\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
 </Project>

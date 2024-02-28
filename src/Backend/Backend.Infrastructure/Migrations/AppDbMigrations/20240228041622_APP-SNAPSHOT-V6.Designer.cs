@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240223030026_APP-SNAPSHOT-V2")]
-    partial class APPSNAPSHOTV2
+    [Migration("20240228041622_APP-SNAPSHOT-V6")]
+    partial class APPSNAPSHOTV6
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,12 +28,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Agent.Agent", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AgentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("AgentTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -56,9 +59,50 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("AgentId");
+
+                    b.HasIndex("AgentTypeId");
 
                     b.ToTable("Agent");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Agents.AgentType", b =>
+                {
+                    b.Property<int>("AgentTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("AgentTypeId"));
+
+                    b.Property<string>("AgentTypeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("AgentTypeId");
+
+                    b.ToTable("AgentType");
+
+                    b.HasData(
+                        new
+                        {
+                            AgentTypeId = 1,
+                            AgentTypeName = "Company"
+                        },
+                        new
+                        {
+                            AgentTypeId = 2,
+                            AgentTypeName = "Customer"
+                        },
+                        new
+                        {
+                            AgentTypeId = 3,
+                            AgentTypeName = "Employee"
+                        },
+                        new
+                        {
+                            AgentTypeId = 4,
+                            AgentTypeName = "Vendor"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Categories.Category", b =>
@@ -98,7 +142,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(992),
+                            Created = new DateTime(2024, 2, 28, 4, 16, 21, 815, DateTimeKind.Utc).AddTicks(709),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -226,14 +270,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("efed5621-0788-4ffe-ae6c-b2e71aaf41b0"),
+                            Id = new Guid("a0fb657a-0efc-4bf8-9234-7705bb6a92d1"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(1157),
+                            Created = new DateTime(2024, 2, 28, 4, 16, 21, 815, DateTimeKind.Utc).AddTicks(851),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
+                            MetricUnitName = "G",
                             Name = "Samsung Galaxy S4",
                             ProductTypeId = 3,
                             SKU = "202401",
@@ -244,13 +289,14 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            Id = new Guid("5924e606-b848-44bb-bb1e-936baa5bd8ba"),
+                            Id = new Guid("d3b23481-9e24-42e7-b08f-4c68ae9a9bc3"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(1164),
+                            Created = new DateTime(2024, 2, 28, 4, 16, 21, 815, DateTimeKind.Utc).AddTicks(858),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
+                            MetricUnitName = "G",
                             Name = "Motorola Moto E",
                             ProductTypeId = 3,
                             SKU = "202401",
@@ -329,7 +375,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<double>("LiquidWeight")
+                    b.Property<double?>("LiquidWeight")
                         .HasColumnType("double precision");
 
                     b.Property<string>("Name")
@@ -349,7 +395,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
-                    b.Property<double>("TotalWeight")
+                    b.Property<double?>("TotalWeight")
                         .HasColumnType("double precision");
 
                     b.Property<DateTime?>("Updated")
@@ -358,7 +404,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<double>("Value")
+                    b.Property<double?>("Value")
                         .HasColumnType("double precision");
 
                     b.HasKey("VariantId");
@@ -410,10 +456,21 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(1081),
+                            Created = new DateTime(2024, 2, 28, 4, 16, 21, 815, DateTimeKind.Utc).AddTicks(811),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Agent.Agent", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Agents.AgentType", "AgentType")
+                        .WithMany()
+                        .HasForeignKey("AgentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AgentType");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>

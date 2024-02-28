@@ -32,6 +32,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
         public static string Agents = "Agents";
+        public static string AgentTypes = "AgentTypes";
     }
 
     /// <summary>
@@ -136,6 +137,9 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static class ProductVariants
         {
             public static class GET
@@ -284,6 +288,5 @@ namespace Backend.Infrastructure.Enums.Modules
                 }
             }
         }
-
     }
 }

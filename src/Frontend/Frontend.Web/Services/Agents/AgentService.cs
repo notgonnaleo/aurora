@@ -1,4 +1,4 @@
-﻿using Backend.Domain.Entities.Agent;
+﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Products;
 using Frontend.Web.Repository.Agents;
 using Frontend.Web.Services.Products;
@@ -18,6 +18,11 @@ namespace Frontend.Web.Services.Agents
         public async Task<IEnumerable<Agent>> GetAgents(string tenantId)
         {
             return await _agentRepository.GetAgents(tenantId);
+        }
+
+        public async Task<IEnumerable<AgentType>> GetAgentTypes()
+        {
+            return await _agentRepository.GetAgentTypes();
         }
 
         public async Task<Agent> GetAgent(string tenantId, string agentId)
