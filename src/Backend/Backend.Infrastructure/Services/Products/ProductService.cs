@@ -53,7 +53,7 @@ namespace Backend.Infrastructure.Services.Products
         public async Task<Product> Add(Product product)
         {
             var context = LoadContext();
-            product.TenantId = context.Tenant.Id; // QUESTION: Should we maintain this?
+            product.TenantId = context.Tenant.Id;
             product = new Product(product, context.UserId);
             product.ValidateFields(context.Language);
 

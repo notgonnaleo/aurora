@@ -95,7 +95,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(162),
+                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(992),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -159,6 +159,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("ColorName")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
@@ -174,6 +177,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.Property<double?>("LiquidWeight")
                         .HasColumnType("double precision");
+
+                    b.Property<string>("MetricUnitName")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -217,10 +223,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d63ab158-5c64-4fcf-a12f-5a0c3849b0d5"),
+                            Id = new Guid("efed5621-0788-4ffe-ae6c-b2e71aaf41b0"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(306),
+                            ColorName = "Preto",
+                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(1157),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -234,9 +241,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            Id = new Guid("88d1faf4-1056-404d-b4be-f563bb44ed26"),
+                            Id = new Guid("5924e606-b848-44bb-bb1e-936baa5bd8ba"),
                             Active = true,
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(313),
+                            ColorName = "Azul-Marinho",
+                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(1164),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -293,6 +301,70 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.ToTable("ProductMedia");
                 });
 
+            modelBuilder.Entity("Backend.Domain.Entities.Products.ProductVariant", b =>
+                {
+                    b.Property<Guid>("VariantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ColorName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GTIN")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("LiquidWeight")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("OverwriteValue")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("TotalWeight")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("VariantId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductVariants");
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.SubCategories.SubCategory", b =>
                 {
                     b.Property<Guid>("SubCategoryId")
@@ -335,7 +407,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(270),
+                            Created = new DateTime(2024, 2, 23, 3, 0, 26, 773, DateTimeKind.Utc).AddTicks(1081),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -365,6 +437,17 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.ProductMedia", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Products.ProductVariant", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Products.Product", "Product")
                         .WithMany()
