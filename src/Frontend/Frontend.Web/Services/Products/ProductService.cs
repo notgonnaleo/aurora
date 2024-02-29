@@ -24,7 +24,7 @@ namespace Frontend.Web.Services.Products
             var product = await _productRepository.GetProduct(tenantId, productId);
             return new ProductDetail()
             {
-                Id = product.Id,
+                ProductId = product.ProductId,
                 Name = product.Name,
                 SKU = product.SKU,
                 Description = product.Description,

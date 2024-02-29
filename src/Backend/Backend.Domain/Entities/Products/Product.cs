@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Base;
+﻿using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.SubCategories;
@@ -24,10 +25,9 @@ namespace Backend.Domain.Entities.Products
         public Product() { }
 
         [Required]
-        public Guid TenantId { get; set; }
+        public Guid TenantId { get; set; }        
         [Key]
-        public Guid Id { get; set; }
-
+        public Guid ProductId { get; set; }
         public string SKU { get; set; }
         public string GTIN { get; set; }
 
@@ -43,8 +43,9 @@ namespace Backend.Domain.Entities.Products
         public int ProductTypeId { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
-
-
+        
+        [ForeignKey("AgentId")]
+        public virtual Agent? Agent { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
         [ForeignKey("SubCategoryId")]
@@ -54,7 +55,7 @@ namespace Backend.Domain.Entities.Products
 
         public Product(Product product, Guid userId)
         {
-            Id = Guid.NewGuid();
+            ProductId = Guid.NewGuid();
             TenantId = product.TenantId;
             SKU = ValidateSKU(product);
             GTIN = string.IsNullOrEmpty(product.GTIN) ? product.GTIN : "NO GTIN";

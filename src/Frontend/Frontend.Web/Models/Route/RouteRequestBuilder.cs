@@ -18,6 +18,18 @@ namespace Frontend.Web.Models.Route
         }
 
         /// <summary>
+        /// Send the request parameter or object with the selected module, parameterless.
+        /// </summary>
+        /// <param name="moduleEndpoint">Service module being accessed</param>
+        /// <param name="moduleMethod">Http REST method being executed</param>
+        /// <returns>Type of RouteBuilder<T> using the provided generic type.</returns>
+        public RouteBuilder<T> Send(string moduleEndpoint, string moduleMethod)
+        {
+            return new RouteBuilder<T>()
+                .BuildRoute(moduleEndpoint, moduleMethod);
+        }
+
+        /// <summary>
         /// Send the request parameter or object with the selected module, building the Route model for the request.
         /// </summary>
         /// <param name="moduleEndpoint">Service module being accessed</param>
@@ -101,6 +113,24 @@ namespace Frontend.Web.Models.Route
                 Endpoint = endpoint,
                 ActionName = actionName,
                 Parameters = parameters
+            };
+            return route;
+        }
+
+        /// <summary>
+        /// Build the route after receiving Send methods response.
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <param name="actionName"></param>
+        /// <param name="parameters"></param>
+        /// <param name="body"></param>
+        /// <returns></returns>
+        public RouteBuilder<T> BuildRoute(string endpoint, string actionName)
+        {
+            RouteBuilder<T> route = new RouteBuilder<T>()
+            {
+                Endpoint = endpoint,
+                ActionName = actionName,
             };
             return route;
         }
