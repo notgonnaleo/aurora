@@ -28,9 +28,6 @@ namespace Backend.Domain.Entities.Products
         public Guid TenantId { get; set; }        
         [Key]
         public Guid ProductId { get; set; }
-        [Required]
-        public Guid AgentId { get; set; }
-
         public string SKU { get; set; }
         public string GTIN { get; set; }
 
@@ -60,7 +57,6 @@ namespace Backend.Domain.Entities.Products
         {
             ProductId = Guid.NewGuid();
             TenantId = product.TenantId;
-            AgentId = product.AgentId;
             SKU = ValidateSKU(product);
             GTIN = string.IsNullOrEmpty(product.GTIN) ? product.GTIN : "NO GTIN";
             Name = product.Name;
