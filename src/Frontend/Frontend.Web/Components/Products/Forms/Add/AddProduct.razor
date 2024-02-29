@@ -50,18 +50,6 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="mb-2 col-sm-12 p-2">
-                                        <label for="colors" class="form-label">Company/Vendor</label>
-                                        <select class="form-select" @bind="@model.AgentId">
-                                            <option value="" disabled hidden selected>Select the company/vendor of this product.</option>
-                                            @foreach (var color in Colors.ColorList)
-                                            {
-                                                <option value="@color">@color</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="name" class="form-label">Name</label>
                                         <input type="text" class="form-control" id="name" placeholder="Your product name" @bind="@model.Name">
@@ -248,16 +236,6 @@
         model.CategoryId = new Guid(selectedCategoryId); // Setting the selected category in the actual model
         var matchedCategory = categories.Where(x => x.CategoryId == new Guid(selectedCategoryId)).ToList();
         subCategories = matchedCategory.SelectMany(x => x.SubCategories).ToList();
-    }
-}
-
-@code
-{
-    private List<Agent> vendors = new List<Agent>();
-    private async Task LoadCompaniesAndVendors()
-    {
-        var response = await _agentService.GetAgents(context.Tenant.Id.ToString());
-        vendors = response.Where(x => x.AgentTypeId == 4 /*Create enum ASAP*/).ToList();
     }
 }
 
