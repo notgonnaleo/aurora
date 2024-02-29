@@ -25,12 +25,6 @@ namespace Backend.Domain.Entities.Agents
         public int AgentTypeId { get; set; }
         public string? Name { get; set; }
 
-        /// <summary>
-        /// This property is going to tell if this agent is supposed to be the main agent
-        /// for the tenant in use at the moment.
-        /// </summary>
-        public bool IsPrimary { get; set; }
-
         [ForeignKey("AgentTypeId")]
         public virtual AgentType? AgentType { get; set; }
     }
