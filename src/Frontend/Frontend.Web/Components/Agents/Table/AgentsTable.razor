@@ -23,21 +23,27 @@ else
                 <div class="card-body pt-3 p-4">
                     <div>
                         <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(agent)">
-                            #@agent.Name
+                            CPF ou CNPJ fica aqui
                         </h6>
                     </div>
                     <div>
-                        <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">Active: @agent.Active </span>
+                        <span class="mb-2 badge rounded-pill font-small bg-info-subtle text-info">Vendor/Employee</span>
+                    </div>
+                    <div>
+                        <h6 class="fw-semibold fs-4 mb-2">
+                            @agent.Name
+                        </h6>
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
+
                         <div>
-                            <h6 class="fw-semibold fs-4 mb-0">
-                                Created: @agent.Created
-                            </h6>
+                            <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(agent)">
+                                <i class="ti ti-edit"></i>
+                            </a>
                         </div>
                         <div>
-                            <a class="bg-primary rounded-circle p-2 text-white d-inline-flex cursor-pointer" @onclick="() => Edit(agent)">
-                                <i class="ti ti-edit"></i>
+                            <a class="p-2 d-inline-flex cursor-pointer">
+                                <i class="ti ti-trash-x"></i>
                             </a>
                         </div>
                     </div>

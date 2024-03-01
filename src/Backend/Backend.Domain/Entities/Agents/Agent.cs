@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.Profiles;
 using Backend.Domain.Enums.Colors;
 using Backend.Domain.Enums.MetricUnits;
 using Backend.Infrastructure.Enums.Localization;
@@ -18,14 +19,22 @@ namespace Backend.Domain.Entities.Agents
     {
         [Key]
         public Guid AgentId { get; set; }
+
         [Required]
         public Guid TenantId { get; set; }
         public Guid? UserId { get; set; }
+
         [Required]
         public int AgentTypeId { get; set; }
         public string? Name { get; set; }
 
+        public Guid? ProfileId { get; set; }
+
         [ForeignKey("AgentTypeId")]
         public virtual AgentType? AgentType { get; set; }
+
+        [ForeignKey("ProfileId")]
+        public virtual Profile? Profile { get; set; }
+
     }
 }

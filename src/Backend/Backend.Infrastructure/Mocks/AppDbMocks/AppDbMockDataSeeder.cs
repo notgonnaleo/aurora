@@ -123,7 +123,8 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 new AgentType { AgentTypeId = 1, AgentTypeName = "Company" },
                 new AgentType { AgentTypeId = 2, AgentTypeName = "Customer" },
                 new AgentType { AgentTypeId = 3, AgentTypeName = "Employee" },
-                new AgentType { AgentTypeId = 4, AgentTypeName = "Vendor" }
+                new AgentType { AgentTypeId = 4, AgentTypeName = "Vendor" },
+                new AgentType { AgentTypeId = 5, AgentTypeName = "Physical Store" }
             );
         }
     }
