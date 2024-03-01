@@ -39,6 +39,7 @@ namespace Backend.Infrastructure.Services.Agents
             agent.CreatedBy = context.UserId;
             agent.Updated = DateTime.UtcNow;
             agent.UpdatedBy = context.UserId;
+            agent.Active = true;
             _appDbContext.Agents.Add(agent);
             _appDbContext.SaveChanges();
             return agent;
