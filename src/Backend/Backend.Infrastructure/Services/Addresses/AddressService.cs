@@ -58,7 +58,7 @@ namespace Backend.Infrastructure.Services.Addresses
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public bool DeleteAddres(Guid tenantId, Guid addressId)
+        public bool DeleteAddress(Guid tenantId, Guid addressId)
         {
             var context = LoadContext();
             var address = _appDbContext.Addresses
