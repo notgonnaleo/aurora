@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Base;
 using Backend.Domain.Enums.AddressTypes;
+using Backend.Infrastructure.Enums.Localization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,6 +18,7 @@ namespace Backend.Domain.Entities.Addresses
         public Guid AddressId { get; set; }
         public int AddressTypeId { get; set; }
 
+        public Guid TenantId { get; set; }
         public Guid AgentId { get; set; }
 
         /// <summary>
@@ -31,18 +33,42 @@ namespace Backend.Domain.Entities.Addresses
         public string City { get; set; }
         public string Region { get; set; }
         public string StreetName { get; set; }
-        public int StreetNumber { get; set; }
+        public string StreetNumber { get; set; }
 
         public string PostalCode { get; set; }
 
         public bool Primary { get; set; }
 
-        /// <summary>
-        /// Geocoding properties
-        /// </summary>
-        public Geocoding? Coordinates { get; set; }
-
         [ForeignKey("AgentId")]
         public Agent? Agent { get; set; }
+
+        public Address(Address address, Guid userId)
+        {
+            AddressId = Guid.NewGuid();
+            TenantId = address.TenantId;
+            AddressTypeId = address.AddressTypeId;
+            CountryName = address.CountryName;
+            CountryAlias = address.CountryAlias;
+            StateAlias = address.StateAlias;
+            StateName = address.StateName;
+            City = address.City;
+            Region = address.Region;
+            StreetName = address.StreetName;
+            StreetNumber = address.StreetNumber;
+            PostalCode = address.PostalCode;
+            Primary = address.Primary;
+            AgentId = address.AgentId;
+
+            CreatedBy = userId;
+            Created = DateTime.UtcNow;
+            Updated = null;
+            UpdatedBy = null;
+            Active = true;
+        }
+
+        public void ValidateFields(LanguagesEnum language)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

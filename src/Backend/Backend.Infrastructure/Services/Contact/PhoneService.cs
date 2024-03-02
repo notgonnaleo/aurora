@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Backend.Domain.Enums.AddressTypes
+namespace Backend.Infrastructure.Services.Contact
 {
-    public enum AddressType
+    internal class PhoneService
     {
-        Residence = 1,
-        Commercial = 2
     }
 }

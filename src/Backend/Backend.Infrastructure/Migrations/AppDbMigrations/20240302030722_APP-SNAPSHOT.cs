@@ -64,29 +64,21 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Agent",
+                name: "Profile",
                 columns: table => new
                 {
-                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProfileId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    AgentTypeId = table.Column<int>(type: "integer", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                    DisplayName = table.Column<string>(type: "text", nullable: true),
+                    FirstName = table.Column<string>(type: "text", nullable: true),
+                    LastName = table.Column<string>(type: "text", nullable: true),
+                    CNAE = table.Column<string>(type: "text", nullable: true),
+                    CNPJ = table.Column<string>(type: "text", nullable: true),
+                    CPF = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Agent", x => x.AgentId);
-                    table.ForeignKey(
-                        name: "FK_Agent_AgentType_AgentTypeId",
-                        column: x => x.AgentTypeId,
-                        principalTable: "AgentType",
-                        principalColumn: "AgentTypeId",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Profile", x => x.ProfileId);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,6 +103,116 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         column: x => x.CategoryId,
                         principalTable: "Category",
                         principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Agent",
+                columns: table => new
+                {
+                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    AgentTypeId = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    ProfileId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Agent", x => x.AgentId);
+                    table.ForeignKey(
+                        name: "FK_Agent_AgentType_AgentTypeId",
+                        column: x => x.AgentTypeId,
+                        principalTable: "AgentType",
+                        principalColumn: "AgentTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Agent_Profile_ProfileId",
+                        column: x => x.ProfileId,
+                        principalTable: "Profile",
+                        principalColumn: "ProfileId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Address",
+                columns: table => new
+                {
+                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddressTypeId = table.Column<int>(type: "integer", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CountryName = table.Column<string>(type: "text", nullable: false),
+                    CountryAlias = table.Column<string>(type: "text", nullable: false),
+                    StateAlias = table.Column<string>(type: "text", nullable: false),
+                    StateName = table.Column<string>(type: "text", nullable: false),
+                    City = table.Column<string>(type: "text", nullable: false),
+                    Region = table.Column<string>(type: "text", nullable: false),
+                    StreetName = table.Column<string>(type: "text", nullable: false),
+                    StreetNumber = table.Column<string>(type: "text", nullable: false),
+                    PostalCode = table.Column<string>(type: "text", nullable: false),
+                    Primary = table.Column<bool>(type: "boolean", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Address", x => x.AddressId);
+                    table.ForeignKey(
+                        name: "FK_Address_Agent_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "Agent",
+                        principalColumn: "AgentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Email",
+                columns: table => new
+                {
+                    EmailAddressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EmailAddress = table.Column<string>(type: "text", nullable: true),
+                    Primary = table.Column<bool>(type: "boolean", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Email", x => x.EmailAddressId);
+                    table.ForeignKey(
+                        name: "FK_Email_Agent_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "Agent",
+                        principalColumn: "AgentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Phone",
+                columns: table => new
+                {
+                    PhoneId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AreaCode = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Primary = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Phone", x => x.PhoneId);
+                    table.ForeignKey(
+                        name: "FK_Phone_Agent_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "Agent",
+                        principalColumn: "AgentId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -233,13 +335,14 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     { 1, "Company" },
                     { 2, "Customer" },
                     { 3, "Employee" },
-                    { 4, "Vendor" }
+                    { 4, "Vendor" },
+                    { 5, "Physical Store" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "CategoryId", "Active", "CategoryName", "Created", "CreatedBy", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1649), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5566), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "ProductType",
@@ -252,24 +355,78 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Profile",
+                columns: new[] { "ProfileId", "CNAE", "CNPJ", "CPF", "DisplayName", "FirstName", "LastName", "TenantId" },
+                values: new object[] { new Guid("bf489dd5-c2d6-444d-a761-4184b6471b96"), null, "1234556789", "9876544321", "Leonardo B.", "Leonardo", "Bruni", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5") });
+
+            migrationBuilder.InsertData(
+                table: "Agent",
+                columns: new[] { "AgentId", "Active", "AgentTypeId", "Created", "CreatedBy", "Name", "ProfileId", "TenantId", "Updated", "UpdatedBy", "UserId" },
+                values: new object[,]
+                {
+                    { new Guid("4c223cf3-a4ee-4bc3-82a0-763a73673114"), true, 4, null, null, "Fastcar AutoParts", null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null, null },
+                    { new Guid("a5c4423a-4e92-4f3d-a4eb-89f1cd1a03d7"), true, 2, null, null, "Simas Turbo Mecanica e Performance", null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null, null },
+                    { new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), true, 3, null, null, "Leo", new Guid("bf489dd5-c2d6-444d-a761-4184b6471b96"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null, null }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "Active", "AgentId", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("4cb47ac6-0ba3-4a69-a447-f6ba362617a5"), true, null, null, "Azul-Marinho", new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1808), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
+                values: new object[] { new Guid("c0d8c631-da37-4ef2-9b0b-072fa08ad076"), true, null, null, "Azul-Marinho", new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5818), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
 
             migrationBuilder.InsertData(
                 table: "SubCategory",
                 columns: new[] { "SubCategoryId", "Active", "CategoryId", "Created", "CreatedBy", "SubCategoryName", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1761), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5736), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+
+            migrationBuilder.InsertData(
+                table: "Address",
+                columns: new[] { "AddressId", "Active", "AddressTypeId", "AgentId", "City", "CountryAlias", "CountryName", "Created", "CreatedBy", "PostalCode", "Primary", "Region", "StateAlias", "StateName", "StreetName", "StreetNumber", "TenantId", "Updated", "UpdatedBy" },
+                values: new object[] { new Guid("6ac52fbb-db9b-4210-9160-aac4a39285c3"), true, 1, new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), "Atibaia", "BR", "Brazil", null, null, "12947320", true, "Sao Paulo/Braganca", "SP", "Sao Paulo", "Rua daora", "1337", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+
+            migrationBuilder.InsertData(
+                table: "Email",
+                columns: new[] { "EmailAddressId", "AgentId", "EmailAddress", "Primary", "TenantId" },
+                values: new object[,]
+                {
+                    { new Guid("5f26a4d5-e05f-4d07-ba3d-25324b567b00"), new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), "lbruni10@gmail.com", true, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5") },
+                    { new Guid("709d8de8-bdb0-4703-81d0-e8d3764ed263"), new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), "leo.bruni130@gmail.com", false, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5") }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Phone",
+                columns: new[] { "PhoneId", "AgentId", "AreaCode", "PhoneNumber", "Primary", "TenantId" },
+                values: new object[] { new Guid("7c6a7504-6747-4a5d-b2df-c43484371138"), new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), "55", "11955506737", true, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5") });
 
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "Active", "AgentId", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("b5a83549-f6eb-4da7-89a8-deaef46736d2"), true, null, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1800), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
+                values: new object[] { new Guid("c6f30b8b-4fa1-485a-a129-ceb707d75ca3"), true, null, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5802), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Address_AgentId",
+                table: "Address",
+                column: "AgentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Agent_AgentTypeId",
                 table: "Agent",
                 column: "AgentTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Agent_ProfileId",
+                table: "Agent",
+                column: "ProfileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Email_AgentId",
+                table: "Email",
+                column: "AgentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Phone_AgentId",
+                table: "Phone",
+                column: "AgentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_AgentId",
@@ -311,6 +468,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Address");
+
+            migrationBuilder.DropTable(
+                name: "Email");
+
+            migrationBuilder.DropTable(
+                name: "Phone");
+
+            migrationBuilder.DropTable(
                 name: "ProductMedia");
 
             migrationBuilder.DropTable(
@@ -330,6 +496,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             migrationBuilder.DropTable(
                 name: "AgentType");
+
+            migrationBuilder.DropTable(
+                name: "Profile");
 
             migrationBuilder.DropTable(
                 name: "Category");

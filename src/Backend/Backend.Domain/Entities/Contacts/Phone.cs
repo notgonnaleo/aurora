@@ -16,8 +16,8 @@ namespace Backend.Domain.Entities.Contacts
         public Guid TenantId { get; set; }
         public Guid AgentId { get; set; }
 
-        public string AreaCode { get; set; }
-        public string PhoneNumber { get; set; }
+        public string? AreaCode { get; set; }
+        public string? PhoneNumber { get; set; }
         public bool Primary { get; set; }
 
         [ForeignKey("AgentId")]

@@ -8,19 +8,21 @@ namespace Backend.Domain.Entities.Profiles
 {
     public class Profile
     {
+        public Guid TenantId { get; set; }
+
         /// <summary>
         /// Default profile information
         /// </summary>
         public Guid ProfileId { get; set; }
-        public string DisplayName { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string? DisplayName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
 
         /// <summary>
         /// Brazil profile commercial and public information
         /// </summary>
-        public string CNAE { get; set; }
-        public string CNPJ { get; set; }
-        public string CPF { get; set; }
+        public string? CNAE { get; set; }
+        public string? CNPJ { get; set; }
+        public string? CPF { get; set; }
     }
 }
