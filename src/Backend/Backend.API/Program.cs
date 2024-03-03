@@ -20,6 +20,8 @@ using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.SubCategories;
 using Backend.Infrastructure.Services.Agents;
+using Backend.Infrastructure.Services.Base;
+using Backend.Infrastructure.Services.Stocks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +53,10 @@ builder.Services.AddScoped<MembershipService>();
 
 // Tenants
 builder.Services.AddScoped<TenantService>();
+
+// Stock 
+builder.Services.AddScoped<StockService>();
+
 
 // User
 builder.Services.AddScoped<UserService>();

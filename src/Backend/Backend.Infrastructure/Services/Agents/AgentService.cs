@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Backend.Infrastructure.Enums.Modules.ModulesEnum;
 using Backend.Infrastructure.Context;
-using Backend.Domain.Entities.Agent;
+using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Enums.Localization;
@@ -26,7 +26,7 @@ namespace Backend.Infrastructure.Services.Agents
             _appDbContext = appDbContext;
         }
 
-        public Agent Add(Agent agent)
+        public Domain.Entities.Agents.Agent Add(Domain.Entities.Agents.Agent agent)
         {
             var context = LoadContext();
             agent.TenantId = context.Tenant.Id;
@@ -41,19 +41,19 @@ namespace Backend.Infrastructure.Services.Agents
             return agent;
         }
 
-        public IEnumerable<Agent> Get()
+        public IEnumerable<Domain.Entities.Agents.Agent> Get()
         {
             var context = LoadContext();
             return _appDbContext.Agents.Where(x => x.TenantId == context.Tenant.Id && x.Active == true).ToList();
         }
 
-        public Agent? GetById(Guid tenantId, Guid agentId)
+        public Domain.Entities.Agents.Agent? GetById(Guid tenantId, Guid agentId)
         {
             var context = LoadContext();
             return _appDbContext.Agents.FirstOrDefault(x => x.Id == agentId && x.TenantId == context.Tenant.Id);
         }
 
-        public bool Update(Agent model)
+        public bool Update(Domain.Entities.Agents.Agent model)
         {
             var context = LoadContext();
             ValidateTenant(model.TenantId);

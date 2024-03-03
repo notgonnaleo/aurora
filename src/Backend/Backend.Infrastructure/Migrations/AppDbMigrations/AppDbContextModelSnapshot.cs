@@ -23,7 +23,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
 
-            modelBuilder.Entity("Backend.Domain.Entities.Agent.Agent", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Agents.Agent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(162),
+                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7843),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -217,10 +217,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d63ab158-5c64-4fcf-a12f-5a0c3849b0d5"),
+                            Id = new Guid("a910ea5b-2d5a-4cc5-8093-1bf042c5504f"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(306),
+                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7975),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -234,9 +234,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            Id = new Guid("88d1faf4-1056-404d-b4be-f563bb44ed26"),
+                            Id = new Guid("393c064a-ac56-4c97-b9bc-97995a0157c1"),
                             Active = true,
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(313),
+                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7984),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -293,6 +293,60 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.ToTable("ProductMedia");
                 });
 
+            modelBuilder.Entity("Backend.Domain.Entities.Stock.Stock", b =>
+                {
+                    b.Property<Guid>("StockMovementId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("MovementDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("MovementStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MovementType")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("VariantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("StockMovementId");
+
+                    b.HasIndex("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Stock");
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.SubCategories.SubCategory", b =>
                 {
                     b.Property<Guid>("SubCategoryId")
@@ -335,7 +389,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 1, 14, 17, 36, 55, 685, DateTimeKind.Utc).AddTicks(270),
+                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7921),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -371,6 +425,25 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Stock.Stock", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
 
                     b.Navigation("Product");
                 });

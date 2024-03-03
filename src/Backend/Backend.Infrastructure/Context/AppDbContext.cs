@@ -1,7 +1,8 @@
-﻿using Backend.Domain.Entities.Agent;
+﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
+using Backend.Domain.Entities.Stock;
 using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Mocks.AppDbMocks;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ namespace Backend.Infrastructure.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<ProductMedia> ProductMedia { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
 
     }
 }

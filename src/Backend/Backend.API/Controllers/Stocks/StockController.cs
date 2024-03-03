@@ -1,32 +1,32 @@
-﻿using Backend.Domain.Entities.Agents;
-using Backend.Domain.Entities.Products;
-using Backend.Infrastructure.Services.Agents;
+﻿using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.Stock;
 using Backend.Infrastructure.Services.Authorization;
+using Backend.Infrastructure.Services.Stocks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.API.Controllers.Agents
+namespace Backend.API.Controllers.Stocks
 {
     [ApiController]
-    [Route("Agents")]
-    public class AgentController : ControllerBase
+    [Route("Stock")]
+    public class StockController : ControllerBase
     {
-        private readonly AgentService _agentService;
         private readonly UserContextService _userContextService;
+        private readonly StockService _stockService;
 
-        public AgentController(AgentService agentService, UserContextService userContextService)
+        public StockController(UserContextService userContextService, StockService stockService)
         {
-            _agentService = agentService;
             _userContextService = userContextService;
+            _stockService = stockService;
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public ActionResult Add(Domain.Entities.Agents.Agent agent)
+        public ActionResult Add(Stock stock)
         {
             try
             {
-                return Ok(_agentService.Add(agent));
+                return Ok(_stockService.Add(stock));
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace Backend.API.Controllers.Agents
         {
             try
             {
-                return Ok(_agentService.Get());
+                return Ok(_stockService.Get());
             }
             catch (Exception ex)
             {
@@ -52,11 +52,11 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]
-        public ActionResult GetById(Guid tenantId,Guid agentId)
+        public ActionResult GetById(Guid tenantId, Guid stockMovementId)
         {
             try
             {
-                return Ok(_agentService.GetById(tenantId,agentId));
+                return Ok(_stockService.GetById(tenantId, stockMovementId));
             }
             catch (Exception ex)
             {
@@ -67,12 +67,12 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Domain.Entities.Agents.Agent model)
+        public ActionResult Update(Domain.Entities.Stock.Stock model)
         {
             try
             {
-                
-                return Ok(_agentService.Update(model));
+
+                return Ok(_stockService.Update(model));
 
 
 
@@ -86,17 +86,16 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpDelete]
         [Route("Delete")]
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(Guid stockMovementId)
         {
             try
             {
-                return Ok(_agentService.Delete(id));
+                return Ok(_stockService.Delete(stockMovementId));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }
