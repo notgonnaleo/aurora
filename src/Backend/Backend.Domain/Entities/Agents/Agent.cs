@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.Contacts;
 using Backend.Domain.Entities.Profiles;
 using Backend.Domain.Enums.Colors;
 using Backend.Domain.Enums.MetricUnits;
@@ -36,5 +37,13 @@ namespace Backend.Domain.Entities.Agents
         [ForeignKey("ProfileId")]
         public virtual Profile? Profile { get; set; }
 
+    }
+
+    public class AgentDetail
+    {
+        public Agent? Agent { get; set; }
+        public Profile? AgentProfile { get; set; }
+        public IEnumerable<Phone> PhoneNumbers { get; set; }
+        public IEnumerable<Email> EmailAddresses { get; set; }
     }
 }
