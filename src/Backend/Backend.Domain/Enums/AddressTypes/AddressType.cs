@@ -8,7 +8,7 @@ namespace Backend.Domain.Enums.AddressTypes
 {
     public enum AddressType
     {
-        Residence = 0,
-        Commercial = 1
+        Residence = 1,
+        Commercial = 2
     }
 }
