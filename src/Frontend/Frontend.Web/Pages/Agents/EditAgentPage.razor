@@ -7,17 +7,32 @@
 @inject AuthenticationService _authenticationService;
 
 <PageTitle>Aurora - Edit Agent</PageTitle>
+
 <div class="container-fluid">
     <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
-
-    adicionar componente de profile que recebe profileid aq, caso profile id == null ou qlqr string.empty, mostrar 
-    msg "Criar perfil para o agente" e ai nois mostra o componente vazio pra ele criar.
+    <div class="card card-body">
+        @if (string.IsNullOrEmpty(Model.Agent.ProfileId.ToString()))
+        {
+            <a @onclick="ShowProfileComponent">Create agent profile</a>
+        }
+        @if (isProfileComponent)
+        {
+            <h1>Aqui vai o component massa</h1>
+        }
+    </div>
+    aqui mais embaixo vao pra adicionar coisas de contato no caso numero de telefone e email
 </div>
 
 @code
 {
     [Parameter]
     public string agentId { get; set; }
+}
+
+@code
+{
+    public bool isProfileComponent { get; set; }
+    public void ShowProfileComponent() => isProfileComponent = !isProfileComponent;
 }
 
 @code
@@ -29,4 +44,3 @@
         Model = await _agentService.GetAgentWithDetail(context.Tenant.Id.ToString(), agentId.ToString());
     }
 }
-
