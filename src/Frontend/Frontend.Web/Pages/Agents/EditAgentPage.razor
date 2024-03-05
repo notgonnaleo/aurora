@@ -1,5 +1,6 @@
 ﻿@page "/agents/edit/{agentId}"
 @using Backend.Domain.Entities.Agents;
+@using Backend.Domain.Entities.Contacts;
 @using Frontend.Web.Services.Agents;
 @using Frontend.Web.Services.Authentication;
 @inject NavigationManager NavigationManager
@@ -8,9 +9,13 @@
 
 <PageTitle>Aurora - Edit Agent</PageTitle>
 
+@* Make this a editable register page and create *@
+@* Probably its going to be two components idk  *@
+
 <div class="container-fluid">
     <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
     <div class="card card-body">
+        @* Finish this *@
         @if (string.IsNullOrEmpty(Model.Agent.ProfileId.ToString()))
         {
             <a @onclick="ShowProfileComponent">Create agent profile</a>
@@ -20,7 +25,102 @@
             <h1>Aqui vai o component massa</h1>
         }
     </div>
-    aqui mais embaixo vao pra adicionar coisas de contato no caso numero de telefone e email
+
+    @* Make this components and add modals *@
+    @* Emails *@
+    <div class="card card-body">
+        @if (isLoading)
+        {
+            <Frontend.Web.Components.Loader.LoadingSpinner />
+        }
+        else
+        {
+            @if (Model.EmailAddresses.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table search-table align-middle text-nowrap">
+                        <tbody>
+                            @foreach (var emailAddress in Model.EmailAddresses)
+                            {
+                                <!-- start row -->
+                                <tr class="search-items">
+                                    <td>
+                                        @emailAddress ? <h1> Primary mailing </h1> : @string.Empty;
+                                    </td>
+                                    <td>
+                                        <span class="usr-email-addr" id="@emailAddress.EmailAddressId">@emailAddress.EmailAddress</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn">
+                                            <a class="text-primary edit">
+                                                <i class="ti ti-eye fs-5"></i>
+                                            </a>
+                                            <a class="text-dark delete ms-2">
+                                                <i class="ti ti-trash fs-5"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- end row -->
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No emails created to this agent yet.</p>
+            }
+        }
+    </div>
+
+    @* Phone numbers  *@
+    <div class="card card-body">
+        @if (isLoading)
+        {
+            <Frontend.Web.Components.Loader.LoadingSpinner />
+        }
+        else
+        {
+            @if (Model.PhoneNumbers.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table search-table align-middle text-nowrap">
+                        <tbody>
+                            @foreach (var phoneNumber in Model.PhoneNumbers)
+                            {
+                                <!-- start row -->
+                                <tr class="search-items">
+                                    <td>
+                                        @phoneNumber ? <h1> Primary phone </h1> : @string.Empty;
+                                    </td>
+                                    <td>
+                                        <span class="usr-email-addr" id="@phoneNumber.PhoneId">@phoneNumber.PhoneNumber</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn">
+                                            <a class="text-primary edit">
+                                                <i class="ti ti-eye fs-5"></i>
+                                            </a>
+                                            <a class="text-dark delete ms-2">
+                                                <i class="ti ti-trash fs-5"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- end row -->
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No phone numbers created to this agent yet.</p>
+            }
+        }
+    </div>
+
 </div>
 
 @code
@@ -37,10 +137,14 @@
 
 @code
 {
+    public bool isLoading = true;
     public AgentDetail Model = new AgentDetail();
     protected override async Task OnInitializedAsync()
     {
+        // TODO CREATE THE NEW ROUTE HERE
+        isLoading = true;
         var context = await _authenticationService.GetContext();
         Model = await _agentService.GetAgentWithDetail(context.Tenant.Id.ToString(), agentId.ToString());
+        isLoading = false;
     }
 }

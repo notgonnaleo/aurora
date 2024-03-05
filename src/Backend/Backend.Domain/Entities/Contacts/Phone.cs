@@ -25,6 +25,8 @@ namespace Backend.Domain.Entities.Contacts
         [ForeignKey("AgentId")]
         public Agent? Agent { get; set; }
 
+        public Phone() { }
+
         public Phone(Phone phone, Guid userId)
         {
             PhoneId = Guid.NewGuid();

@@ -29,6 +29,7 @@ namespace Backend.Domain.Entities.Profiles
         public string? CNPJ { get; set; }
         public string? CPF { get; set; }
 
+        public Profile() { }
         public Profile(Profile profile, Guid userId)
         {
             ProfileId = Guid.NewGuid();

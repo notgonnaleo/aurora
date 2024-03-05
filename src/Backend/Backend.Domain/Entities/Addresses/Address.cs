@@ -42,6 +42,7 @@ namespace Backend.Domain.Entities.Addresses
         [ForeignKey("AgentId")]
         public Agent? Agent { get; set; }
 
+        public Address() { }
         public Address(Address address, Guid userId)
         {
             AddressId = Guid.NewGuid();
