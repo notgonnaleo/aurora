@@ -19,7 +19,6 @@ namespace Backend.Domain.Entities.Addresses
         public int AddressTypeId { get; set; }
 
         public Guid TenantId { get; set; }
-        public Guid AgentId { get; set; }
 
         /// <summary>
         /// Address information
@@ -40,7 +39,7 @@ namespace Backend.Domain.Entities.Addresses
         public bool Primary { get; set; }
 
         [ForeignKey("AgentId")]
-        public Agent? Agent { get; set; }
+        public Guid AgentId { get; set; }
 
         public Address() { }
         public Address(Address address, Guid userId)

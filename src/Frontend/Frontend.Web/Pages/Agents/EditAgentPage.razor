@@ -37,6 +37,53 @@
         }
     </div>
 
+    @* Phone numbers  *@
+    <div class="card card-body">
+        @if (isLoading)
+        {
+            <Frontend.Web.Components.Loader.LoadingSpinner />
+        }
+        else
+        {
+            @if (Model.Addresses.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table search-table align-middle text-nowrap">
+                        <tbody>
+                            @foreach (var address in Model.Addresses)
+                            {
+                                <!-- start row -->
+                                <tr class="search-items">
+                                    <td>
+                                        <p>@(address.Primary ? "Primary contact" : $"{string.Empty}")</p>
+                                    </td>
+                                    <td>
+                                        <span class="usr-email-addr" id="@address.AddressId">@address.City, @address.Region, @address.CountryName - @address.PostalCode</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn">
+                                            <a class="text-primary edit">
+                                                <i class="ti ti-eye fs-5"></i>
+                                            </a>
+                                            <a class="text-dark delete ms-2">
+                                                <i class="ti ti-trash fs-5"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- end row -->
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>No phone numbers created to this agent yet.</p>
+            }
+        }
+    </div>
+
     @* Make this components and add modals *@
     @* Emails *@
     <div class="card card-body">
@@ -106,7 +153,7 @@
                                         <p>@(phoneNumber.Primary ? "Primary contact" : $"{string.Empty}")</p>
                                     </td>
                                     <td>
-                                        <span class="usr-email-addr" id="@phoneNumber.PhoneId">@phoneNumber.PhoneNumber</span>
+                                        <span class="usr-email-addr" id="@phoneNumber.PhoneId">(+@phoneNumber.AreaCode) @phoneNumber.PhoneNumber</span>
                                     </td>
                                     <td>
                                         <div class="action-btn">

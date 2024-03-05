@@ -73,12 +73,13 @@ namespace Backend.Infrastructure.Services.Agents
         {
             var agent = _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.Active);
             agent.Profile = _appDbContext.Profiles.FirstOrDefault(x => x.ProfileId == agent.ProfileId && x.Active);
-            agent.AgentType = _appDbContext.AgentTypes.FirstOrDefault(x => x.AgentTypeId == agent.AgentTypeId);            
+            agent.AgentType = _appDbContext.AgentTypes.FirstOrDefault(x => x.AgentTypeId == agent.AgentTypeId);    
             return new AgentDetail
             {
                 Agent = agent,
                 PhoneNumbers = _appDbContext.Phones.Where(x => x.AgentId == agentId && x.Active),
-                EmailAddresses = _appDbContext.Emails.Where(x => x.AgentId == agentId && x.Active)
+                EmailAddresses = _appDbContext.Emails.Where(x => x.AgentId == agentId && x.Active),
+                Addresses = _appDbContext.Addresses.Where(x => x.AgentId == agentId && x.Active)
             };
         }
 
