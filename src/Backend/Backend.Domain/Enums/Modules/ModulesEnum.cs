@@ -263,6 +263,14 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
+                public static class GetAgentWithDetail
+                {
+                    public static string RouteName = "GetAgentWithDetail";
+                    public static class Args
+                    {
+                        public static string agentId = "agentId";
+                    }
+                }
                 public static class GetAgents
                 {
                     public static string tenantId = "tenantId";

@@ -17,7 +17,9 @@ namespace Backend.Domain.Entities.Profiles
         /// <summary>
         /// Default profile information
         /// </summary>
+        [Key]
         public Guid ProfileId { get; set; }
+
         public string? DisplayName { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

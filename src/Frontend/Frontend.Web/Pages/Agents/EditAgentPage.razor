@@ -14,15 +14,26 @@
 
 <div class="container-fluid">
     <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
+
     <div class="card card-body">
         @* Finish this *@
-        @if (string.IsNullOrEmpty(Model.Agent.ProfileId.ToString()))
+        @if (Model.Agent.ProfileId is null)
         {
+            isProfileComponent = false;
             <a @onclick="ShowProfileComponent">Create agent profile</a>
         }
+        else
+        {
+            <p>Componente de exibir/editar</p>
+            @Model.Agent.Profile.DisplayName
+            @Model.Agent.Profile.CNPJ
+            @Model.Agent.Profile.CNAE
+            @Model.Agent.Profile.CPF
+        }
+
         @if (isProfileComponent)
         {
-            <h1>Aqui vai o component massa</h1>
+            <p>Componente pra criar</p>
         }
     </div>
 
@@ -45,7 +56,7 @@
                                 <!-- start row -->
                                 <tr class="search-items">
                                     <td>
-                                        @emailAddress ? <h1> Primary mailing </h1> : @string.Empty;
+                                        <p>@(emailAddress.Primary.GetValueOrDefault() ? "Primary mailing" : $"{string.Empty}")</p>
                                     </td>
                                     <td>
                                         <span class="usr-email-addr" id="@emailAddress.EmailAddressId">@emailAddress.EmailAddress</span>
@@ -92,7 +103,7 @@
                                 <!-- start row -->
                                 <tr class="search-items">
                                     <td>
-                                        @phoneNumber ? <h1> Primary phone </h1> : @string.Empty;
+                                        <p>@(phoneNumber.Primary ? "Primary contact" : $"{string.Empty}")</p>
                                     </td>
                                     <td>
                                         <span class="usr-email-addr" id="@phoneNumber.PhoneId">@phoneNumber.PhoneNumber</span>
@@ -131,7 +142,7 @@
 
 @code
 {
-    public bool isProfileComponent { get; set; }
+    public bool isProfileComponent = false;
     public void ShowProfileComponent() => isProfileComponent = !isProfileComponent;
 }
 
@@ -141,10 +152,8 @@
     public AgentDetail Model = new AgentDetail();
     protected override async Task OnInitializedAsync()
     {
-        // TODO CREATE THE NEW ROUTE HERE
         isLoading = true;
-        var context = await _authenticationService.GetContext();
-        Model = await _agentService.GetAgentWithDetail(context.Tenant.Id.ToString(), agentId.ToString());
+        Model = await _agentService.GetAgentWithDetail(agentId.ToString());
         isLoading = false;
     }
 }

@@ -5,35 +5,37 @@
 @inject NavigationManager navigator;
 @inject AuthenticationService _authenticationService;
 
-<div>
-    <div class="card p-4">
+<div class="card p-4">
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
         <div class="row">
-            
             <div class="col-md-9">
-                <form>
+                <EditForm Model="Agent">
                     <div class="row">
-                        <div class="mb-3 col-sm-3">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@Agent.Name">
+                        <div class="mb-3 col-sm-12">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="Agent.Name">
                         </div>
-                        <div class="mb-3 col-sm-3">
-                            <div class="mb-3 col-sm-3">
-                                <label for="agentTypes" class="form-label">Agent Type</label>
-                                <select class="form-select" @bind="@Agent.AgentTypeId">
-                                    <option value="" disabled hidden selected>Update the agent type.</option>
-                                    @foreach (var agentType in agentTypes)
-                                    {
-                                        <option value="@agentType.AgentTypeId">@agentType.AgentTypeName</option>
-                                    }
-                                </select>
-                            </div>
+                        <div class="mb-3 col-sm-12">
+                            <label for="agentTypes" class="form-label">Agent Type</label>
+                            <select class="form-select" @bind="Agent.AgentTypeId">
+                                <option value="" disabled hidden selected>Update the agent type.</option>
+                                @foreach (var agentType in agentTypes)
+                                {
+                                    <option value="@agentType.AgentTypeId">@agentType.AgentTypeName</option>
+                                }
+                            </select>
                         </div>
                     </div>
                     <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save</button>
-                </form>
+                </EditForm>
             </div>
         </div>
-    </div>
+    }
 </div>
 
 
@@ -41,6 +43,8 @@
 {
     [Parameter]
     public Agent Agent { get; set; }
+
+    public bool isLoading;
 }
 
 @code
@@ -51,6 +55,17 @@
         var response = await _agentService.GetAgentTypes();
         agentTypes = response.ToList();
     }
+}
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        await GetAgentTypes();
+        isLoading = false;
+    }
+
 }
 
 @code

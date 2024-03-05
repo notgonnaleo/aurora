@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Agents;
+﻿using Backend.Domain.Entities.Addresses;
+using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Contacts;
 using Backend.Domain.Entities.Profiles;
@@ -42,8 +43,8 @@ namespace Backend.Domain.Entities.Agents
     public class AgentDetail
     {
         public Agent? Agent { get; set; }
-        public Profile? AgentProfile { get; set; }
         public IEnumerable<Phone> PhoneNumbers { get; set; }
         public IEnumerable<Email> EmailAddresses { get; set; }
+        public IEnumerable<Address> Addresses { get; set; }
     }
 }

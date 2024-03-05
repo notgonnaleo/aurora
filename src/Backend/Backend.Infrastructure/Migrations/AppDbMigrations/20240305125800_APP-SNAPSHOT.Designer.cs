@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240302030722_APP-SNAPSHOT")]
+    [Migration("20240305125800_APP-SNAPSHOT")]
     partial class APPSNAPSHOT
     {
         /// <inheritdoc />
@@ -99,7 +99,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasIndex("AgentId");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
 
                     b.HasData(
                         new
@@ -275,7 +275,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5566),
+                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(1782),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -286,7 +286,16 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("AgentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("EmailAddress")
@@ -298,16 +307,23 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
                     b.HasKey("EmailAddressId");
 
                     b.HasIndex("AgentId");
 
-                    b.ToTable("Email");
+                    b.ToTable("Emails");
 
                     b.HasData(
                         new
                         {
                             EmailAddressId = new Guid("5f26a4d5-e05f-4d07-ba3d-25324b567b00"),
+                            Active = false,
                             AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
                             EmailAddress = "lbruni10@gmail.com",
                             Primary = true,
@@ -316,6 +332,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         new
                         {
                             EmailAddressId = new Guid("709d8de8-bdb0-4703-81d0-e8d3764ed263"),
+                            Active = false,
                             AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
                             EmailAddress = "leo.bruni130@gmail.com",
                             Primary = false,
@@ -329,11 +346,20 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("AgentId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("AreaCode")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
@@ -344,16 +370,23 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
                     b.HasKey("PhoneId");
 
                     b.HasIndex("AgentId");
 
-                    b.ToTable("Phone");
+                    b.ToTable("Phones");
 
                     b.HasData(
                         new
                         {
                             PhoneId = new Guid("7c6a7504-6747-4a5d-b2df-c43484371138"),
+                            Active = false,
                             AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
                             AreaCode = "55",
                             PhoneNumber = "11955506737",
@@ -490,11 +523,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("c6f30b8b-4fa1-485a-a129-ceb707d75ca3"),
+                            ProductId = new Guid("932687cb-7393-4d02-a763-77ddcf7708db"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5802),
+                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2125),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -509,10 +542,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("c0d8c631-da37-4ef2-9b0b-072fa08ad076"),
+                            ProductId = new Guid("67a1bbf5-4d15-45f3-bafc-bffbdd390402"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5818),
+                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2141),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -640,6 +673,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("CNAE")
                         .HasColumnType("text");
 
@@ -648,6 +684,12 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.Property<string>("CPF")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("text");
@@ -661,14 +703,21 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ProfileId");
 
-                    b.ToTable("Profile");
+                    b.ToTable("Profiles");
 
                     b.HasData(
                         new
                         {
                             ProfileId = new Guid("bf489dd5-c2d6-444d-a761-4184b6471b96"),
+                            Active = false,
                             CNPJ = "1234556789",
                             CPF = "9876544321",
                             DisplayName = "Leonardo B.",
@@ -720,7 +769,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 2, 3, 7, 21, 987, DateTimeKind.Utc).AddTicks(5736),
+                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2054),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
