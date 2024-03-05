@@ -17,7 +17,7 @@
 
     <div class="card card-body">
         @* Finish this *@
-        @if (Model.Agent.ProfileId is null)
+        @if (Model.Agent.Profile is null)
         {
             isProfileComponent = false;
             <a @onclick="ShowProfileComponent">Create agent profile</a>
@@ -150,7 +150,7 @@
                                 <!-- start row -->
                                 <tr class="search-items">
                                     <td>
-                                        <p>@(phoneNumber.Primary ? "Primary contact" : $"{string.Empty}")</p>
+                                        <p>@(phoneNumber.Primary ? "Primary address" : $"{string.Empty}")</p>
                                     </td>
                                     <td>
                                         <span class="usr-email-addr" id="@phoneNumber.PhoneId">(+@phoneNumber.AreaCode) @phoneNumber.PhoneNumber</span>
