@@ -17,6 +17,7 @@
                 <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
                 @* Profile *@
                 <div class="row m-4">
+                    <h5 class="card-title fw-semibold mb-4">Profile info</h5>
                     @* Finish this *@
                     @if (Model.Agent?.Profile is null)
                     {
@@ -36,6 +37,9 @@
                         <div class="mb-3 col-sm-6">
                             <label for="profileName" class="form-label">Profile Name</label>
                             <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Model.Agent.Profile.DisplayName">
+                        </div>
+                        <div class="mb-3 col-sm-6">
+                            <button type="button" class="btn btn-default float-right">Save agent profile</button>
                         </div>
                     }
 

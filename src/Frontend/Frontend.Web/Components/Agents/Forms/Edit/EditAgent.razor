@@ -12,6 +12,7 @@
 else
 {
     <div class="row m-4">
+        <h5 class="card-title fw-semibold mb-4">Basic info</h5>
         @if (Agent is not null && !isLoading)
         {
             <EditForm Model="Agent">
@@ -29,7 +30,7 @@ else
                         }
                     </select>
                 </div>
-                <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save</button>
+                <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save basic info</button>
             </EditForm>
         }
         </div>
