@@ -1,0 +1,48 @@
+﻿@using Backend.Domain.Entities.Profiles;
+
+@* Profile *@
+<div class="row m-4">
+    <h5 class="card-title fw-semibold mb-4">Profile info</h5>
+    @* Finish this *@
+    @if (Profile is null)
+    {
+        isShowProfileComponent = false;
+        <a @onclick="ShowProfileComponent">Create agent profile</a>
+    }
+    else
+    {
+        <div class="mb-3 col-sm-6">
+            <label for="profileName" class="form-label">Profile Name</label>
+            <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Profile.DisplayName">
+        </div>
+        <div class="mb-3 col-sm-6">
+            <label for="cpf" class="form-label">CPF</label>
+            <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@Profile.CPF">
+        </div>
+        <div class="mb-3 col-sm-6">
+            <label for="profileName" class="form-label">Profile Name</label>
+            <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Profile.DisplayName">
+        </div>
+        <br />
+        <div class="mb-3 col-sm-6">
+            <button type="button" class="btn btn-default float-right">Save agent profile</button>
+        </div>
+    }
+
+    @if (isShowProfileComponent)
+    {
+        <p>Componente pra criar</p>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public Profile Profile  { get; set; }
+}
+
+@code
+{
+    public bool isShowProfileComponent = false;
+    public void ShowProfileComponent() => isShowProfileComponent = !isShowProfileComponent;
+}

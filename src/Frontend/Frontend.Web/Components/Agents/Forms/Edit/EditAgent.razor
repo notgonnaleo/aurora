@@ -12,16 +12,16 @@
 else
 {
     <div class="row m-4">
-        <h5 class="card-title fw-semibold mb-4">Basic info</h5>
         @if (Agent is not null && !isLoading)
         {
+            <h5 class="card-title fw-semibold">Basic info</h5>
             <EditForm Model="Agent">
                 <div class="mb-3 col-sm-12">
-                    <label for="name" class="form-label">Name</label>
+                    <label for="name">Name</label>
                     <input type="text" class="form-control" id="name" placeholder="Name" @bind="@Agent.Name">
                 </div>
                 <div class="mb-3 col-sm-12">
-                    <label for="agentTypes" class="form-label">Agent Type</label>
+                    <label for="agentTypes">Agent Type</label>
                     <select class="form-select" @bind="@Agent.AgentTypeId">
                         <option value="" disabled hidden selected>Update the agent type.</option>
                         @foreach (var agentType in agentTypes)

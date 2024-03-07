@@ -9,206 +9,39 @@
 
 <PageTitle>Aurora - Edit Agent</PageTitle>
 
-@* Agent basic info *@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-6 align-items-strech">
-            <div class="card w-100">
-                <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
-                @* Profile *@
-                <div class="row m-4">
-                    <h5 class="card-title fw-semibold mb-4">Profile info</h5>
-                    @* Finish this *@
-                    @if (Model.Agent?.Profile is null)
-                    {
-                        isProfileComponent = false;
-                        <a @onclick="ShowProfileComponent">Create agent profile</a>
-                    }
-                    else
-                    {
-                        <div class="mb-3 col-sm-6">
-                            <label for="profileName" class="form-label">Profile Name</label>
-                            <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Model.Agent.Profile.DisplayName">
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <label for="cpf" class="form-label">CPF</label>
-                            <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@Model.Agent.Profile.CPF">
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <label for="profileName" class="form-label">Profile Name</label>
-                            <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Model.Agent.Profile.DisplayName">
-                        </div>
-                        <div class="mb-3 col-sm-6">
-                            <button type="button" class="btn btn-default float-right">Save agent profile</button>
-                        </div>
-                    }
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-6 align-items-strech">
+                <div class="card w-100">
+                    @* Agent basic info *@
+                    <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
+                    @* Profile *@
+                    <Frontend.Web.Components.Profiles.Forms.Edit.EditProfile Profile="Model.Agent?.Profile" />
+                </div>
+            </div>
+            <div class="col-lg-6">
+                @* Phones *@
+                <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model.PhoneNumbers" />
 
-                    @if (isProfileComponent)
-                    {
-                        <p>Componente pra criar</p>
-                    }
-                </div>
+                @* Emails *@
+                <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model.EmailAddresses" />
             </div>
         </div>
-        <div class="col-lg-6">
-            @* Phone numbers  *@
-            <div class="row m-4">
-                <div class="card card-body">
-                @if (isLoading)
-                {
-                    <Frontend.Web.Components.Loader.LoadingSpinner />
-                }
-                else
-                {
-                    @if (Model.PhoneNumbers.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table search-table align-middle text-nowrap">
-                                <tbody>
-                                    @foreach (var phoneNumber in Model.PhoneNumbers)
-                                    {
-                                        <!-- start row -->
-                                        <tr class="search-items">
-                                            <td>
-                                                <p>@(phoneNumber.Primary ? "Primary address" : $"{string.Empty}")</p>
-                                            </td>
-                                            <td>
-                                                <span class="usr-email-addr" id="@phoneNumber.PhoneId">(+@phoneNumber.AreaCode) @phoneNumber.PhoneNumber</span>
-                                            </td>
-                                            <td class="text-end">
-                                                <div class="action-btn">
-                                                    <a class="text-primary edit">
-                                                        <i class="ti ti-eye fs-5"></i>
-                                                    </a>
-                                                    <a class="text-dark delete ms-2">
-                                                        <i class="ti ti-trash fs-5"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!-- end row -->
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <p>No phone numbers created to this agent yet.</p>
-                    }
-                }
-            </div>
-            </div>
-            @* Emails *@
-            <div class="row m-4">
-                <div class="card card-body">
-                    @if (isLoading)
-                    {
-                        <Frontend.Web.Components.Loader.LoadingSpinner />
-                    }
-                    else
-                    {
-                        @if (Model.EmailAddresses.Any())
-                        {
-                            <div class="table-responsive">
-                                <table class="table search-table align-middle text-nowrap">
-                                    <tbody>
-                                        @foreach (var emailAddress in Model.EmailAddresses)
-                                        {
-                                            <!-- start row -->
-                                            <tr class="search-items">
-                                                <td>
-                                                    <p>@(emailAddress.Primary.GetValueOrDefault() ? "Primary mailing" : $"{string.Empty}")</p>
-                                                </td>
-                                                <td>
-                                                    <span class="usr-email-addr" id="@emailAddress.EmailAddressId">@emailAddress.EmailAddress</span>
-                                                </td>
-                                                <td class="text-end">
-                                                    <div class="action-btn">
-                                                        <a class="text-primary edit">
-                                                            <i class="ti ti-eye fs-5"></i>
-                                                        </a>
-                                                        <a class="text-dark delete ms-2">
-                                                            <i class="ti ti-trash fs-5"></i>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <!-- end row -->
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-                        else
-                        {
-                            <p>No emails created to this agent yet.</p>
-                        }
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-    @* Address numbers  *@
-    <div class="row m-4">
-        <div class="card card-body">
-            @if (isLoading)
-            {
-                <Frontend.Web.Components.Loader.LoadingSpinner />
-            }
-            else
-            {
-                @if (Model.Addresses.Any())
-                {
-                    <div class="table-responsive">
-                        <table class="table search-table align-middle text-nowrap">
-                            <tbody>
-                                @foreach (var address in Model.Addresses)
-                                {
-                                    <!-- start row -->
-                                    <tr class="search-items">
-                                        <td>
-                                            <p>@(address.Primary ? "Primary contact" : $"{string.Empty}")</p>
-                                        </td>
-                                        <td>
-                                            <span class="usr-email-addr" id="@address.AddressId">@address.City, @address.Region, @address.CountryName - @address.PostalCode</span>
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="action-btn">
-                                                <a class="text-primary edit">
-                                                    <i class="ti ti-eye fs-5"></i>
-                                                </a>
-                                                <a class="text-dark delete ms-2">
-                                                    <i class="ti ti-trash fs-5"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <!-- end row -->
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-                else
-                {
-                    <p>No phone numbers created to this agent yet.</p>
-                }
-            }
-        </div>
-    </div>
+        @* Address numbers  *@
+        <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model.Addresses" />
+    }
 </div>
 
 @code
 {
     [Parameter]
     public string? agentId { get; set; }
-}
-
-@code
-{
-    public bool isProfileComponent = false;
-    public void ShowProfileComponent() => isProfileComponent = !isProfileComponent;
 }
 
 @code

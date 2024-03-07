@@ -1,0 +1,47 @@
+﻿@using Backend.Domain.Entities.Addresses;
+<div class="row">
+    <div class="card card-body">
+        @if (Addresses.Any())
+        {
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap">
+                    <tbody>
+                        @foreach (var address in Addresses)
+                        {
+                            <!-- start row -->
+                            <tr class="search-items">
+                                <td>
+                                    <p>@(address.Primary ? "Primary contact" : $"{string.Empty}")</p>
+                                </td>
+                                <td>
+                                    <span class="usr-email-addr" id="@address.AddressId">@address.City, @address.Region, @address.CountryName - @address.PostalCode</span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="action-btn">
+                                        <a class="text-primary edit">
+                                            <i class="ti ti-eye fs-5"></i>
+                                        </a>
+                                        <a class="text-dark delete ms-2">
+                                            <i class="ti ti-trash fs-5"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- end row -->
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No phone numbers created to this agent yet.</p>
+        }
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public IEnumerable<Address> Addresses { get; set; }
+}
