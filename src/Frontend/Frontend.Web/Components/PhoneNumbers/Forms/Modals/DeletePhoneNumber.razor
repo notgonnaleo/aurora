@@ -1,0 +1,63 @@
+﻿@using Backend.Domain.Entities.Categories;
+@using Frontend.Web.Services.Categories;
+
+@inject NavigationManager navigator;
+@inject CategoryService _categoryService;
+
+<div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myModalLabel">
+                    Warning
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <h4>
+                    Delete category?
+                </h4>
+                <p>
+                   Are you sure you would like to delete @CategoryModel.CategoryName?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                    Close
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(CategoryModel.TenantId, CategoryModel.CategoryId)">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="@backDrop"></div>
+
+@code
+{
+    public string? inlineStyle => ShowModal ? "display: block;" : "display: none;";
+    public string? modalClass => ShowModal ? "show" : null;
+    public string? backDrop => ShowModal ? "modal-backdrop fade show" : null;
+
+}
+
+@code
+{
+    public void CloseModal() => ShowModal = !ShowModal;
+}
+
+@code
+{
+    [Parameter] public bool ShowModal { get; set; }
+    [Parameter] public Category CategoryModel { get; set; }
+}
+
+@code
+{
+    private async void DeleteCategoryAction(Guid tenantId, Guid categoryId)
+    {
+        if(await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString()))
+            navigator.NavigateTo("/categories", forceLoad: true);
+    }
+}
