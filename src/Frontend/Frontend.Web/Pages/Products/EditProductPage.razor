@@ -1,10 +1,67 @@
 ﻿@page "/products/edit/{productId}"
+@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Products;
 @inject NavigationManager NavigationManager
+@inject ProductService _productService
+@inject AuthenticationService _authenticationService;
 
 <PageTitle>Aurora - Edit Product</PageTitle>
+<aside class="right-sidebar @formCssClass">
+@if (isVariantSidebar)
+{
+    <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseProductVariantForm
+        ToggleRightSidebar="ToggleProductVariantForm"
+        ParentProductDetail="@Model" 
+    />
+}
+</aside>
 <div class="container-fluid">
-    <Frontend.Web.Components.Products.Forms.Edit.EditProduct productId="@productId" />
+    <Frontend.Web.Components.Products.Forms.Edit.EditProduct 
+        Model="@Model"
+    />
+
+    <button class="btn btn-outline-primary" @onclick="ToggleProductVariantForm">
+        @btnText
+    </button>
+    <Frontend.Web.Components.ProductVariants.Table.ProductVariantsTable parentProductId="@productId" />
 </div>
+
+@code
+{
+    private string? btnText = "New";
+    public string? formCssClass = null;
+    public bool isVariantSidebar = false;
+
+    private bool collapseProductVariantForm = true;
+    private void ToggleProductVariantForm()
+    {
+        isVariantSidebar = true;
+        collapseProductVariantForm = !collapseProductVariantForm;
+        formCssClass = collapseProductVariantForm ? null : "show-menu";
+    }
+}
+
+@code
+{
+    public ProductDetail? selectedParentProduct = null;
+    private void HandleCreateNewVariant(ProductDetail selectedProduct)
+    {
+        selectedParentProduct = selectedProduct;
+        ToggleProductVariantForm();
+    }
+}
+
+@code
+{
+    private ProductDetail Model = new ProductDetail();
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+        Model = await _productService.GetProductWithDetails(Model.TenantId.ToString(), productId.ToString());
+    }
+}
 
 @code
 {

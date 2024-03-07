@@ -85,6 +85,7 @@ namespace Backend.Infrastructure.Services.Authentication
             var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JWTKeySettings:SecretKey").Value);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                // COLOCA DADOS DO USUARIO AQUI
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 Issuer = "https://localhost:7299/", // Application that will generate the token

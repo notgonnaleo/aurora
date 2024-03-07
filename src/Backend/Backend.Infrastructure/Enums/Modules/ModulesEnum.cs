@@ -12,7 +12,8 @@ namespace Backend.Infrastructure.Enums.Modules
         ProductTypes = 2,
         Category = 3,
         SubCategory = 4,
-        Agents = 5 
+        Agents = 5,
+        Stock = 6 
     }
 
     public class Endpoints
@@ -25,6 +26,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
         public static string Agents = "Agents";
+        public static string Stock = "Stock";
     }
 
     public class Methods
@@ -202,5 +204,49 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        public class Stock
+        {
+
+            public static class GET
+            {
+                public static class GetStocks
+                {
+                    public static string tenantId = "tenantId";
+                }
+                public static class GetStock
+                {
+                    public static string tenantId = "tenantId";
+                    public static string stockMovementId = "stockMovementId";
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddStock
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateStock
+                {
+                    public static string stockMovementId = "stockMovementId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteStock
+                {
+                    public static string StockMovementId = "StockMovementId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+
+        }
     }
 }

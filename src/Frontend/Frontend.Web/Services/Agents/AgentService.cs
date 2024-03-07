@@ -20,6 +20,12 @@ namespace Frontend.Web.Services.Agents
             return await _agentRepository.GetAgents(tenantId);
         }
 
+        public async Task<IEnumerable<AgentType>> GetAgentTypes()
+        {
+            return await _agentRepository.GetAgentTypes();
+        }
+
+        
         public async Task<Backend.Domain.Entities.Agents.Agent> GetAgent(string tenantId, string agentId)
         {
             return await _agentRepository.GetAgent(tenantId, agentId);

@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Categories;
+﻿using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.SubCategories;
@@ -22,6 +23,7 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
             SeedSubCategories(modelBuilder);
             SeedProducts(modelBuilder);
             SeedProductTypes(modelBuilder);
+            SeedAgentTypes(modelBuilder);
         }
 
         private static void SeedCategories(ModelBuilder modelBuilder)
@@ -65,12 +67,14 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 new Product
                 {
                     TenantId = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5"),
-                    Id = Guid.NewGuid(),
+                    ProductId = Guid.NewGuid(),
                     Name = "Samsung Galaxy S4",
                     Description = "Produto de teste gerado na migration - Aurora",
+                    ColorName = "Preto",
                     GTIN = "012345678910111213",
                     Active = true,
                     SKU = "202401",
+                    MetricUnitName = "G",
                     TotalWeight = 0.13,
                     LiquidWeight = 0.13,
                     Created = DateTime.UtcNow,
@@ -85,10 +89,12 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 new Product
                 {
                     TenantId = Guid.Parse("ae100414-8fbb-4286-839a-5bafc51a84fb"),
-                    Id = Guid.NewGuid(),
+                    ProductId = Guid.NewGuid(),
                     Name = "Motorola Moto E",
                     Description = "Produto de teste gerado na migration - SampleCompany",
+                    ColorName = "Azul-Marinho",
                     GTIN = "012345678910111213",
+                    MetricUnitName = "G",
                     Active = true,
                     SKU = "202401",
                     TotalWeight = 0,
@@ -109,6 +115,15 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 new ProductType { Id = 1, Name = "Feedstock", Description = "Crafting material", Active = true },
                 new ProductType { Id = 2, Name = "Intermediate Component", Description = "Intermediate Product/Crafting material", Active = true },
                 new ProductType { Id = 3, Name = "Product", Description = "Final Product", Active = true }
+            );
+        }
+        private static void SeedAgentTypes(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AgentType>().HasData(
+                new AgentType { AgentTypeId = 1, AgentTypeName = "Company" },
+                new AgentType { AgentTypeId = 2, AgentTypeName = "Customer" },
+                new AgentType { AgentTypeId = 3, AgentTypeName = "Employee" },
+                new AgentType { AgentTypeId = 4, AgentTypeName = "Vendor" }
             );
         }
     }

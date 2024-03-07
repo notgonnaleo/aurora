@@ -25,7 +25,6 @@ namespace Backend.Infrastructure.Context
         {
             modelBuilder.HasPostgresExtension("uuid-ossp");
             modelBuilder.UseSerialColumns();
-
             AppDbMockDataSeeder.Seed(modelBuilder);
         }
 
@@ -36,6 +35,8 @@ namespace Backend.Infrastructure.Context
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<ProductMedia> ProductMedia { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<AgentType> AgentTypes { get; set; }
 
     }
 }

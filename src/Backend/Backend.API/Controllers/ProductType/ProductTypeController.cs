@@ -13,12 +13,10 @@ namespace Backend.API.Controllers.ProductTypes
     public class ProductTypeController : ControllerBase
     {
         private readonly ProductTypeService _productTypeService;
-        private readonly UserContextService _userContextService;
 
-        public ProductTypeController(ProductTypeService productTypeService, UserContextService userContextService)
+        public ProductTypeController(ProductTypeService productTypeService)
         {
             _productTypeService = productTypeService;
-            _userContextService = userContextService;
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]

@@ -1,0 +1,127 @@
+﻿@using Backend.Domain.Entities.Stock;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Backend.Domain.Enums.MovementType;
+@using Frontend.Web.Services.Products;
+@using Backend.Domain.Entities.Products;
+@inject StockService _stockService;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
+@inject ProductService _productService
+
+<div class="card card-body ">
+    <h5 class="card-title fw-semibold mb-4">Stock</h5>
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        @if (!(stocks == null || stocks.Count() == 0))
+        {
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap table-fixed">
+                    <thead class="header-item">
+                        <tr>
+                            <th>
+                                <div class="n-chk align-self-center text-center">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
+                                        <label class="form-check-label" for="contact-check-all"></label>
+                                        <span class="new-control-indicator"></span>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>IdStock</th>
+                            <th>IdProduct</th>
+                            <th>ProductName</th>
+                            <th>Type Movement</th>
+                            <th>IdStatus</th>
+                            <th>Quantity</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stock in stocks)
+                        {
+                            <!-- start row -->
+                            <tr class="search-items">
+                                <td>
+                                    <div class="n-chk align-self-center text-center">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
+                                            <label class="form-check-label" for="checkbox1"></label>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <span class="usr-email-addr" data-email="adams@mail.com">@stock.StockMovementId</span>
+                                </td>
+                                <td >
+                                    
+                                    <span class="usr-email-addr" data-email="adams@mail.com">@stock.ProductId</span>
+                                    
+                                </td>
+                                <td>
+                                    @{
+                                       
+                                        if (product != null && product.ProductId == stock.ProductId)
+                                        {
+                                            <span class="usr-location" data-location="Boston, USA">@product.Name</span>
+                                        }
+                                     }
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.MovementType</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.MovementStatusId</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">Quantity</span>
+                                </td>
+                                <td>
+                                    <div class="action-btn">
+                                        <a class="text-primary edit">
+                                            <i class="ti ti-eye fs-5"></i>
+                                        </a>
+                                        <a class="text-dark delete ms-2">
+                                            <i class="ti ti-trash fs-5"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- end row -->
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No stock created yet.</p>
+        }
+    }
+</div>
+
+@code {
+    public bool isLoading;
+    public IEnumerable<Stock> stocks = new List<Stock>();
+    public Product product = new Product();
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var context = await _authenticationService.GetContext();
+        stocks = await _stockService.GetStock(context.Tenant.Id.ToString());
+        isLoading = false;
+        string productIdAsString = stocks.First().ProductId.ToString();
+
+        product = await _productService.GetProduct(context.Tenant.Id.ToString(), productIdAsString);
+        
+    }
+}
+
+    

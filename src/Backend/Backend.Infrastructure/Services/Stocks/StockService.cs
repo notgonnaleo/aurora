@@ -37,7 +37,7 @@ namespace Backend.Infrastructure.Services.Stocks
             stock.StockMovementId = Guid.NewGuid();
             var context = LoadContext();
             stock.TenantId = context.Tenant.Id;
-            stock.VariantId = Guid.NewGuid();
+           
             stock.UserId = context.UserId;
             stock.MovementDate = DateTime.Now;
             stock.CreatedBy = context.UserId;

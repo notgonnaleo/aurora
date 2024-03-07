@@ -18,20 +18,26 @@ namespace Backend.Domain.Entities.Stock
         public Guid StockMovementId { get; set; }
         [Required]
         public Guid TenantId { get; set; }
-        [Required]      
-        public Guid VariantId { get; set; }
         public Guid UserId { get; set; }
+        public int Quantity { get; set; }
         public DateTime? MovementDate { get; set; }
         public string? MovementType { get; set; }
         public int MovementStatusId { get; set; }
+         
 
 
-        public Guid Id { get; set; }
-        [ForeignKey("Id")]
-        public virtual Agent? Agent { get; set; }
+        //Chaves estrangeiras de outras tabelas 
+        [ForeignKey("VariantId")]
+        public Guid VariantId { get; set; }
+        
+        [ForeignKey("AgentId")]
+        public Guid AgentId { get; set; }
 
-        public Guid ProductId { get; set; }
         [ForeignKey("ProductId")]
-        public virtual Product? Product { get; set; }
+        public Guid ProductId { get; set; }
+        
+        
+
+
     }
 }

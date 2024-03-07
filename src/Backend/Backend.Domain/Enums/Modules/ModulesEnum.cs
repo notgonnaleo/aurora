@@ -28,9 +28,12 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
+        public static string ProductVariants = "ProductVariants";
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
         public static string Agents = "Agents";
+        public static string AgentTypes = "AgentTypes";
+        public static string Stock = "Stock";
     }
 
     /// <summary>
@@ -136,6 +139,29 @@ namespace Backend.Infrastructure.Enums.Modules
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public static class ProductVariants
+        {
+            public static class GET
+            {
+                public static string tenantId = "tenantId";
+                public static string productId = "productId";
+                public static string variantId = "variantId";
+
+                public static class GetAllVariantsByProduct
+                {
+                    public static string GetAllVariantsByProductEndpoint = "GetAllVariantsByProduct";
+                }
+            }
+
+            public static class POST
+            {
+                public static string AddProductVariant = "ProductVariant/Add";
+            }
+        }
+
+        /// <summary>
         ///  Categories custom endpoint methods
         /// </summary>
         public class Categories
@@ -171,7 +197,7 @@ namespace Backend.Infrastructure.Enums.Modules
                 public static string UpdateCategory = "Categories/Update";
             }
 
-            public static class DELETE 
+            public static class DELETE
             {
                 public static string tenantId = "tenantId";
                 public static string categoryId = "categoryId";
@@ -264,5 +290,50 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        public class Stock
+        {
+
+            public static class GET
+            {
+                public static class GetStocks
+                {
+                    public static string tenantId = "tenantId";
+                }
+                public static class GetStock
+                {
+                    public static string tenantId = "tenantId";
+                    public static string StockMovementId = "StockMovementId";
+                    public static string stockMovementId;
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddStock
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateStock
+                {
+                    public static string StockMovementId = "StockMovementId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteStock
+                {
+                    public static string StockMovementId = "StockMovementId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+
+        }
     }
 }

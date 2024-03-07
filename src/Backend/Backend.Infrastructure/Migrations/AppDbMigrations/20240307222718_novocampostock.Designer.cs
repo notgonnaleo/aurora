@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240302225955_Estoque")]
-    partial class Estoque
+    [Migration("20240307222718_novocampostock")]
+    partial class novocampostock
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,12 +28,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Agents.Agent", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("AgentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("AgentTypeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -56,9 +59,48 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("AgentId");
 
                     b.ToTable("Agent");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Agents.AgentType", b =>
+                {
+                    b.Property<int>("AgentTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("AgentTypeId"));
+
+                    b.Property<string>("AgentTypeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("AgentTypeId");
+
+                    b.ToTable("AgentType");
+
+                    b.HasData(
+                        new
+                        {
+                            AgentTypeId = 1,
+                            AgentTypeName = "Company"
+                        },
+                        new
+                        {
+                            AgentTypeId = 2,
+                            AgentTypeName = "Customer"
+                        },
+                        new
+                        {
+                            AgentTypeId = 3,
+                            AgentTypeName = "Employee"
+                        },
+                        new
+                        {
+                            AgentTypeId = 4,
+                            AgentTypeName = "Vendor"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Categories.Category", b =>
@@ -98,7 +140,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7843),
+                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9558),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -152,15 +194,21 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("AgentId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("ColorName")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -177,6 +225,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.Property<double?>("LiquidWeight")
                         .HasColumnType("double precision");
+
+                    b.Property<string>("MetricUnitName")
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -207,7 +258,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<double>("Value")
                         .HasColumnType("double precision");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("AgentId");
 
                     b.HasIndex("CategoryId");
 
@@ -220,13 +273,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a910ea5b-2d5a-4cc5-8093-1bf042c5504f"),
+                            ProductId = new Guid("c1258e0d-8c6e-4672-96d4-c1990d0546a6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7975),
+                            ColorName = "Preto",
+                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9698),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
+                            MetricUnitName = "G",
                             Name = "Samsung Galaxy S4",
                             ProductTypeId = 3,
                             SKU = "202401",
@@ -237,12 +292,14 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            Id = new Guid("393c064a-ac56-4c97-b9bc-97995a0157c1"),
+                            ProductId = new Guid("d2bf4203-53c8-448b-bf8a-647d84d7c409"),
                             Active = true,
-                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7984),
+                            ColorName = "Azul-Marinho",
+                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9704),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
+                            MetricUnitName = "G",
                             Name = "Motorola Moto E",
                             ProductTypeId = 3,
                             SKU = "202401",
@@ -296,6 +353,70 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.ToTable("ProductMedia");
                 });
 
+            modelBuilder.Entity("Backend.Domain.Entities.Products.ProductVariant", b =>
+                {
+                    b.Property<Guid>("VariantId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("ColorName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("GTIN")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double?>("LiquidWeight")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("OverwriteValue")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("SKU")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("TotalWeight")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<double?>("Value")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("VariantId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductVariants");
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.Stock.Stock", b =>
                 {
                     b.Property<Guid>("StockMovementId")
@@ -305,13 +426,13 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("Created")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("MovementDate")
@@ -325,6 +446,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
@@ -342,10 +466,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .HasColumnType("uuid");
 
                     b.HasKey("StockMovementId");
-
-                    b.HasIndex("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Stock");
                 });
@@ -392,7 +512,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 2, 22, 59, 55, 304, DateTimeKind.Utc).AddTicks(7921),
+                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9646),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -400,6 +520,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
                 {
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId");
+
                     b.HasOne("Backend.Domain.Entities.Categories.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
@@ -413,6 +537,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasOne("Backend.Domain.Entities.SubCategories.SubCategory", "SubCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId");
+
+                    b.Navigation("Agent");
 
                     b.Navigation("Category");
 
@@ -432,21 +558,13 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Backend.Domain.Entities.Stock.Stock", b =>
+            modelBuilder.Entity("Backend.Domain.Entities.Products.ProductVariant", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Backend.Domain.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Agent");
 
                     b.Navigation("Product");
                 });

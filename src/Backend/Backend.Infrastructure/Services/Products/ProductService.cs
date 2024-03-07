@@ -46,14 +46,14 @@ namespace Backend.Infrastructure.Services.Products
         public Product? GetById(Guid tenantId, Guid productId)
         {
             return _appDbContext.Products
-                .Where(x => x.TenantId == tenantId && x.Id == productId && x.Active)
+                .Where(x => x.TenantId == tenantId && x.ProductId == productId && x.Active)
                 .FirstOrDefault();
         }
 
         public async Task<Product> Add(Product product)
         {
             var context = LoadContext();
-            product.TenantId = context.Tenant.Id; // QUESTION: Should we maintain this?
+            product.TenantId = context.Tenant.Id;
             product = new Product(product, context.UserId);
             product.ValidateFields(context.Language);
 
@@ -79,7 +79,7 @@ namespace Backend.Infrastructure.Services.Products
         {
             var context = LoadContext();
             Product product = _appDbContext.Products
-                .Where(x => x.Id == Id && x.TenantId == tenantId)
+                .Where(x => x.ProductId == Id && x.TenantId == tenantId)
                 .First();
 
             product.Active = false;
@@ -96,7 +96,7 @@ namespace Backend.Infrastructure.Services.Products
             return products.Select(product => new ProductDetail
             {
                 TenantId = product.TenantId,
-                Id = product.Id,
+                ProductId = product.ProductId,
                 ProductTypeId = product.ProductTypeId,
                 SKU = product.SKU,
                 GTIN = product.GTIN,
