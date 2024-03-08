@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.Categories;
 
 namespace Backend.Domain.Entities.Stock
 {
@@ -39,8 +40,37 @@ namespace Backend.Domain.Entities.Stock
 
     public class StockDetail : Stock
     {
+        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; }
+
+        public Guid SubCategoryId { get; set; }
+        public string SubCategoryName { get; set; }
+
+        public string SKU { get; set; }
+        public string GTIN { get; set; }
+
         public string ProductName { get; set; }
+        public double ProductValue { get; set; }
+
         public string? VariantName { get; set; }
+
         public string AgentName { get; set; }
+
+        /*
+            "categoryName": "Eletronic",
+            "subCategoryName": "Smartphone",
+            "productTypeName": "Product",
+            "sku": "202401",
+            "gtin": "012345678910111213",
+            "name": "Samsung Galaxy S4",
+            "colorName": null,
+            "metricUnitName": null,
+            "value": 604.99,
+            "totalWeight": 0.13,
+            "liquidWeight": 0.13,
+            "productTypeId": 3,
+            "categoryId": "63cf51c6-e90e-4725-b6c3-1c40986d6847",
+            "subCategoryId": "cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6",
+         */
     }
 }

@@ -60,12 +60,11 @@ namespace Backend.Infrastructure.Services.Stocks
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
         {
             IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
-            IEnumerable<Product> products = _productService.Get(tenantId);
+            List<ProductDetail> products = _productService.GetProductsWithDetail(tenantId).ToList();
 
             return stock.Select(x => new StockDetail
             {
                 // CAMPOS DO OBJETO STOCK
-                // INICIO
                 UserId = x.UserId,
                 TenantId = x.TenantId,
                 VariantId = x.VariantId,
@@ -74,10 +73,10 @@ namespace Backend.Infrastructure.Services.Stocks
                 MovementStatusId = x.MovementStatusId,
                 Active = x.Active,
                 Quantity = x.Quantity,
-                // FIM
 
-                // CAMPOS DOS NOMES DE PRODUTO
+                // CAMPOS DE PRODUTO
                 ProductName = products.Where(y => y.ProductId == x.ProductId).First().Name,
+                ProductValue = products.Where(y => y.ProductId == x.ProductId).First().Value,
             });
         }
 
