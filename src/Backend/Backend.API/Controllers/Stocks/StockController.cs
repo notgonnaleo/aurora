@@ -49,6 +49,22 @@ namespace Backend.API.Controllers.Stocks
             }
         }
 
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetStockWithDetail")]
+        public ActionResult GetStockWithDetail(Guid tenantId)
+        {
+            try
+            {
+                return Ok(_stockService.GetStockWithDetail(tenantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("Find")]

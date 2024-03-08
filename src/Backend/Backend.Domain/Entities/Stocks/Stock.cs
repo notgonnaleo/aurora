@@ -35,9 +35,12 @@ namespace Backend.Domain.Entities.Stock
 
         [ForeignKey("ProductId")]
         public Guid ProductId { get; set; }
-        
-        
+    }
 
-
+    public class StockDetail : Stock
+    {
+        public string ProductName { get; set; }
+        public string? VariantName { get; set; }
+        public string AgentName { get; set; }
     }
 }

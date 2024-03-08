@@ -137,7 +137,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9558),
+                            Created = new DateTime(2024, 3, 8, 0, 17, 37, 431, DateTimeKind.Utc).AddTicks(8581),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -270,11 +270,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("c1258e0d-8c6e-4672-96d4-c1990d0546a6"),
+                            ProductId = new Guid("96b64186-95ae-4b5e-b1f7-e584693c32ad"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9698),
+                            Created = new DateTime(2024, 3, 8, 0, 17, 37, 431, DateTimeKind.Utc).AddTicks(8737),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -289,10 +289,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("d2bf4203-53c8-448b-bf8a-647d84d7c409"),
+                            ProductId = new Guid("726dbc74-9792-4782-8e61-c56125ebc5d9"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9704),
+                            Created = new DateTime(2024, 3, 8, 0, 17, 37, 431, DateTimeKind.Utc).AddTicks(8744),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -509,7 +509,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 7, 22, 27, 18, 617, DateTimeKind.Utc).AddTicks(9646),
+                            Created = new DateTime(2024, 3, 8, 0, 17, 37, 431, DateTimeKind.Utc).AddTicks(8697),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });

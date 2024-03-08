@@ -44,6 +44,7 @@ namespace Backend.Infrastructure.Services.Stocks
             stock.Created = DateTime.UtcNow;
             stock.Updated = null;
             stock.UpdatedBy = null;
+            stock.Active = true;
 
             _appDbContext.Stocks.Add(stock);
             _appDbContext.SaveChanges();
@@ -54,7 +55,30 @@ namespace Backend.Infrastructure.Services.Stocks
         {
             var context = LoadContext();
             return _appDbContext.Stocks.Where(x => x.TenantId == context.Tenant.Id && x.Active == true).ToList();
+        }
 
+        public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
+        {
+            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
+            IEnumerable<Product> products = _productService.Get(tenantId);
+
+            return stock.Select(x => new StockDetail
+            {
+                // CAMPOS DO OBJETO STOCK
+                // INICIO
+                UserId = x.UserId,
+                TenantId = x.TenantId,
+                VariantId = x.VariantId,
+                StockMovementId = x.StockMovementId,
+                ProductId = x.ProductId,
+                MovementStatusId = x.MovementStatusId,
+                Active = x.Active,
+                Quantity = x.Quantity,
+                // FIM
+
+                // CAMPOS DOS NOMES DE PRODUTO
+                ProductName = products.Where(y => y.ProductId == x.ProductId).First().Name,
+            });
         }
 
         public Domain.Entities.Stock.Stock? GetById(Guid tenantId, Guid stockMovementId)
