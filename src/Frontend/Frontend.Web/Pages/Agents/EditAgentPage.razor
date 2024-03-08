@@ -9,6 +9,20 @@
 
 <PageTitle>Aurora - Edit Agent</PageTitle>
 
+<aside class="right-sidebar @formCssClass">
+@if (isPhoneNumberSidebar)
+{
+    <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapsePhoneNumberForm
+        ToggleRightSidebar="TogglePhoneNumberForm" />
+}
+
+@if (isEmailSidebar)
+{
+        <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseEmailForm
+            ToggleRightSidebar="ToggleEmailForm" />
+}
+</aside>
+
 <div class="container-fluid">
     @if (isLoading)
     {
@@ -43,6 +57,38 @@
 {
     [Parameter]
     public string? agentId { get; set; }
+}
+
+@code
+{
+    private string? btnText = "New";
+    public string? formCssClass = null;
+
+    public bool isPhoneNumberSidebar = false;
+    public bool isEmailSidebar = false;
+
+    private bool collapsePhoneNumberForm = true;
+    private void TogglePhoneNumberForm()
+    {
+        isPhoneNumberSidebar = true;
+        isEmailSidebar = false;
+
+        collapseEmailForm = true;
+        collapsePhoneNumberForm = !collapsePhoneNumberForm;
+        formCssClass = collapsePhoneNumberForm ? null : "show-menu";
+        btnText = collapsePhoneNumberForm ? "New" : "Hide menu";
+    }
+
+    private bool collapseEmailForm = true;
+    private void ToggleEmailForm()
+    {
+        isPhoneNumberSidebar = false;
+        isEmailSidebar = true;
+
+        collapsePhoneNumberForm = true;
+        collapseEmailForm = !collapseEmailForm;
+        formCssClass = collapseEmailForm ? null : "show-menu";
+    }
 }
 
 @code
