@@ -94,8 +94,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasKey("AddressId");
 
-                    b.HasIndex("AgentId");
-
                     b.ToTable("Addresses");
 
                     b.HasData(
@@ -272,7 +270,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(1782),
+                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4721),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -520,11 +518,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("932687cb-7393-4d02-a763-77ddcf7708db"),
+                            ProductId = new Guid("d022496e-cbc3-4ca5-933d-85d032b2adf1"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2125),
+                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4863),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -539,10 +537,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("67a1bbf5-4d15-45f3-bafc-bffbdd390402"),
+                            ProductId = new Guid("dae5787c-b3af-4bbd-849f-bcbc3c0edde8"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2141),
+                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4871),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -766,21 +764,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2054),
+                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4824),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.Addresses.Address", b =>
-                {
-                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Agent");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Agents.Agent", b =>

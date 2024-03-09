@@ -18,6 +18,35 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 .Annotation("Npgsql:PostgresExtension:uuid-ossp", ",,");
 
             migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddressTypeId = table.Column<int>(type: "integer", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CountryName = table.Column<string>(type: "text", nullable: false),
+                    CountryAlias = table.Column<string>(type: "text", nullable: false),
+                    StateAlias = table.Column<string>(type: "text", nullable: false),
+                    StateName = table.Column<string>(type: "text", nullable: false),
+                    City = table.Column<string>(type: "text", nullable: false),
+                    Region = table.Column<string>(type: "text", nullable: false),
+                    StreetName = table.Column<string>(type: "text", nullable: false),
+                    StreetNumber = table.Column<string>(type: "text", nullable: false),
+                    PostalCode = table.Column<string>(type: "text", nullable: false),
+                    Primary = table.Column<bool>(type: "boolean", nullable: false),
+                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AgentType",
                 columns: table => new
                 {
@@ -141,41 +170,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
                         principalColumn: "ProfileId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Addresses",
-                columns: table => new
-                {
-                    AddressId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AddressTypeId = table.Column<int>(type: "integer", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AgentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CountryName = table.Column<string>(type: "text", nullable: false),
-                    CountryAlias = table.Column<string>(type: "text", nullable: false),
-                    StateAlias = table.Column<string>(type: "text", nullable: false),
-                    StateName = table.Column<string>(type: "text", nullable: false),
-                    City = table.Column<string>(type: "text", nullable: false),
-                    Region = table.Column<string>(type: "text", nullable: false),
-                    StreetName = table.Column<string>(type: "text", nullable: false),
-                    StreetNumber = table.Column<string>(type: "text", nullable: false),
-                    PostalCode = table.Column<string>(type: "text", nullable: false),
-                    Primary = table.Column<bool>(type: "boolean", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
-                    table.ForeignKey(
-                        name: "FK_Addresses_Agent_AgentId",
-                        column: x => x.AgentId,
-                        principalTable: "Agent",
-                        principalColumn: "AgentId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -343,6 +337,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Addresses",
+                columns: new[] { "AddressId", "Active", "AddressTypeId", "AgentId", "City", "CountryAlias", "CountryName", "Created", "CreatedBy", "PostalCode", "Primary", "Region", "StateAlias", "StateName", "StreetName", "StreetNumber", "TenantId", "Updated", "UpdatedBy" },
+                values: new object[] { new Guid("6ac52fbb-db9b-4210-9160-aac4a39285c3"), true, 1, new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), "Atibaia", "BR", "Brazil", null, null, "12947320", true, "Sao Paulo/Braganca", "SP", "Sao Paulo", "Rua daora", "1337", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+
+            migrationBuilder.InsertData(
                 table: "AgentType",
                 columns: new[] { "AgentTypeId", "AgentTypeName" },
                 values: new object[,]
@@ -357,7 +356,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "CategoryId", "Active", "CategoryName", "Created", "CreatedBy", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(1782), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4721), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "ProductType",
@@ -387,17 +386,12 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "Active", "AgentId", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("67a1bbf5-4d15-45f3-bafc-bffbdd390402"), true, null, null, "Azul-Marinho", new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2141), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
+                values: new object[] { new Guid("dae5787c-b3af-4bbd-849f-bcbc3c0edde8"), true, null, null, "Azul-Marinho", new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4871), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
 
             migrationBuilder.InsertData(
                 table: "SubCategory",
                 columns: new[] { "SubCategoryId", "Active", "CategoryId", "Created", "CreatedBy", "SubCategoryName", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2054), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
-
-            migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "AddressId", "Active", "AddressTypeId", "AgentId", "City", "CountryAlias", "CountryName", "Created", "CreatedBy", "PostalCode", "Primary", "Region", "StateAlias", "StateName", "StreetName", "StreetNumber", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("6ac52fbb-db9b-4210-9160-aac4a39285c3"), true, 1, new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"), "Atibaia", "BR", "Brazil", null, null, "12947320", true, "Sao Paulo/Braganca", "SP", "Sao Paulo", "Rua daora", "1337", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4824), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "Emails",
@@ -416,12 +410,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "Active", "AgentId", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("932687cb-7393-4d02-a763-77ddcf7708db"), true, null, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 3, 5, 12, 58, 0, 312, DateTimeKind.Utc).AddTicks(2125), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_AgentId",
-                table: "Addresses",
-                column: "AgentId");
+                values: new object[] { new Guid("d022496e-cbc3-4ca5-933d-85d032b2adf1"), true, null, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4863), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Agent_AgentTypeId",

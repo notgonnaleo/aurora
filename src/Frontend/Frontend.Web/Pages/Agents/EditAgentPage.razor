@@ -12,7 +12,7 @@
 <aside class="right-sidebar @formCssClass">
 @if (isPhoneNumberSidebar)
 {
-    <Frontend.Web.Components.Products.Forms.Add.AddProduct CollapseRightSidebar=collapsePhoneNumberForm
+    <Frontend.Web.Components.PhoneNumbers.Forms.Add.AddPhoneNumber CollapseRightSidebar=collapsePhoneNumberForm
         ToggleRightSidebar="TogglePhoneNumberForm" />
 }
 
@@ -21,9 +21,15 @@
         <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseEmailForm
             ToggleRightSidebar="ToggleEmailForm" />
 }
+@if (isAddressSidebar)
+{
+        <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseEmailForm
+            ToggleRightSidebar="ToggleAddressForm" />
+}
 </aside>
 
 <div class="container-fluid">
+    <button class="btn" type="button" @onclick="TogglePhoneNumberForm"> Botao pra adesionar tefelone :D</button>
     @if (isLoading)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
@@ -66,6 +72,7 @@
 
     public bool isPhoneNumberSidebar = false;
     public bool isEmailSidebar = false;
+    public bool isAddressSidebar = false;
 
     private bool collapsePhoneNumberForm = true;
     private void TogglePhoneNumberForm()
@@ -88,6 +95,17 @@
         collapsePhoneNumberForm = true;
         collapseEmailForm = !collapseEmailForm;
         formCssClass = collapseEmailForm ? null : "show-menu";
+    }
+
+    private bool collapseAddressForm = true;
+    private void ToggleAddressForm()
+    {
+        isPhoneNumberSidebar = false;
+        isEmailSidebar = true;
+
+        collapsePhoneNumberForm = true;
+        collapseAddressForm = !collapseAddressForm;
+        formCssClass = collapseAddressForm ? null : "show-menu";
     }
 }
 
