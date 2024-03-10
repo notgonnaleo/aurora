@@ -29,7 +29,6 @@
 </aside>
 
 <div class="container-fluid">
-    <button class="btn" type="button" @onclick="TogglePhoneNumberForm"> Botao pra adesionar tefelone :D</button>
     @if (isLoading)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
@@ -48,14 +47,43 @@
             </div>
             <div class="col-lg-6">
                 @* Phones *@
-                <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model.PhoneNumbers" />
+                <div class="row">
+                    <div class="card">
+                        <div class="m-2 col-sm-12">
+                            <div class="row">
+                                <div class="mb-2 col-sm-1">
+                                    <i class="ti ti-circle-plus cursor-pointer p-4" @onclick="TogglePhoneNumberForm">
+                                    </i>
+                                </div>
+                                <div class="mb-2 col-sm-11">
+                                    <p>Add new phone number</p>
+                               </div>
+                            </div>
+                        </div>
+                        <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model.PhoneNumbers" />
+                    </div>
+                </div>
 
                 @* Emails *@
-                <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model.EmailAddresses" />
+                <div class="row">
+                    <div class="card">
+                        <i class="ti ti-circle-plus cursor-pointer p-4" @onclick="ToggleEmailForm">
+                            <p>Add new Email address</p>
+                        </i>
+                        <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model.EmailAddresses" />
+                    </div>
+                </div>
             </div>
         </div>
         @* Address numbers  *@
-        <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model.Addresses" />
+        <div class="row">
+            <div class="card">
+                <i class="ti ti-circle-plus cursor-pointer p-4" @onclick="ToggleAddressForm">
+                    <p>Add new address</p>
+                </i>
+                <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model.Addresses" />
+            </div>
+        </div>
     }
 </div>
 
@@ -79,6 +107,7 @@
     {
         isPhoneNumberSidebar = true;
         isEmailSidebar = false;
+        isAddressSidebar = false;
 
         collapseEmailForm = true;
         collapsePhoneNumberForm = !collapsePhoneNumberForm;
@@ -91,6 +120,7 @@
     {
         isPhoneNumberSidebar = false;
         isEmailSidebar = true;
+        isAddressSidebar = false;
 
         collapsePhoneNumberForm = true;
         collapseEmailForm = !collapseEmailForm;
@@ -101,7 +131,8 @@
     private void ToggleAddressForm()
     {
         isPhoneNumberSidebar = false;
-        isEmailSidebar = true;
+        isEmailSidebar = false;
+        isAddressSidebar = true;
 
         collapsePhoneNumberForm = true;
         collapseAddressForm = !collapseAddressForm;

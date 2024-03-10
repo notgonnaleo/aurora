@@ -19,18 +19,18 @@
         <form>
             <div class="mb-2 col-sm-12">
                 <div class="row">
-                    <div class="mb-2 col-sm-6">
-                        <label for="colors" class="form-label">Area Code</label>
+                    <div class="mb-2 col-sm-3">
+                        <label for="colors" class="form-label">Area</label>
                         <select class="form-select" @bind="@phoneNumber.AreaCode">
-                            <option value="" disabled hidden selected>Color of your product</option>
+                            <option value="" disabled hidden selected>Area code</option>
                             @foreach (var areaCode in AreaCode.Codes)
                             {
                                 <option value="@areaCode">@areaCode</option>
                             }
                         </select>
                     </div>
-                    <div class="mb-2 col-sm-6">
-                        <label for="name" class="form-label">Phone Number</label>
+                    <div class="mb-2 col-sm-9">
+                        <label for="name" class="form-label">Number</label>
                         <input type="number" class="form-control" id="number" placeholder="XXXXX-XXXX" @bind="@phoneNumber.PhoneNumber">
                     </div>
                 </div>

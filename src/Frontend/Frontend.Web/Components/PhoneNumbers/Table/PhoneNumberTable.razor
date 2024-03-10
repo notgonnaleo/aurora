@@ -1,8 +1,7 @@
 ﻿@using Backend.Domain.Entities.Contacts;
 
 @* Phone numbers  *@
-<div class="row">
-    <div class="card card-body">
+<div class="card-body">
         @if (PhoneNumbers.Any())
         {
             <div class="table-responsive">
@@ -40,7 +39,6 @@
             <p>No phone numbers created to this agent yet.</p>
         }
     </div>
-</div>
 
 @code
 {

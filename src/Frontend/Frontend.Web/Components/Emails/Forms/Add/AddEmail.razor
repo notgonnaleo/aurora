@@ -1,12 +1,14 @@
 ﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
 @using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Contacts;
 @using Backend.Domain.Entities.SubCategories;
+@using Backend.Domain.Enums.AreaCodes;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Contacts;
 @using Frontend.Web.Services.SubCategories;
 @inject AuthenticationService _authenticationService
-@inject CategoryService _categoryService;
-@inject SubCategoryService _subCategoryService;
+@inject ContactService _contactService;
 @inject NavigationManager navigator
 
 <div>
@@ -15,70 +17,18 @@
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
         <form>
-            <div class="row">
-                <div class="accordion accordion-flush position-relative overflow-hidden @categoryAccordionHeaderToggle" id="accordionFlushExample">
-                    <div class="accordion-item mb-3 shadow-none border rounded">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleCategoryAccordion>
-                                Categories
-                            </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
-                            <div class="accordion-body px-3 fw-normal">
-                                <div class="row">
-                                    <div class="mb-2 col-sm-12">
-                                        <label for="sku" class="form-label">Category</label>
-                                        <input type="text" class="form-control" id="category" placeholder="Your category name" @bind="category.CategoryName">
-                                    </div>
-                                    <div class="mb-2 col-sm-6">
-                                        <button @onclick="CreateCategory" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                                            Save <i class="ti ti-device-floppy"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="mb-2 col-sm-12">
+                <div class="row">
+                    <div class="mb-2 col-sm-10">
+                        <label for="name" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" placeholder="email@address.com" @bind="emailAddress.EmailAddress">
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="accordion accordion-flush position-relative overflow-hidden @subCategoryAccordionHeaderToggle" id="accordionFlushExample">
-                    <div class="accordion-item mb-3 shadow-none border rounded">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseSubCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleSubCategoryAccordion>
-                                Sub-Categories
-                            </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse @collapseSubCategoryToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
-                            <div class="accordion-body px-3 fw-normal">
-                                <div class="row">
-                                    <div class="mb-3 col-sm-12">
-                                        <label for="category" class="form-label">Parent Category</label>
-                                        <select class="form-select" @onchange="SetSubCategories">
-                                            <option value="" disabled hidden selected> The selected category</option>
-                                            @foreach (var category in categories)
-                                            {
-                                                <option value="@category.CategoryId">@category.CategoryName</option>
-
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="mb-2 col-sm-12">
-                                        <label for="subcategory" class="form-label">Sub-Category</label>
-                                        <input type="text" class="form-control" id="subcategory" placeholder="Your sub-category name" @bind="subCategory.SubCategoryName">
-                                    </div>
-                                    <div class="mb-2 col-sm-6">
-                                        <button @onclick="CreateSubCategory" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                                            Save <i class="ti ti-device-floppy"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="mb-2 col-sm-6">
+                <button @onclick="CreateEmailAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                    Save <i class="ti ti-device-floppy"></i>
+                </button>
             </div>
         </form>
     </div>
@@ -86,77 +36,16 @@
 
 @code
 {
-    @*Category Accordion *@
-    private bool collapseCategoryAccordion = true;
-    private string? categoryAccordionHeaderToggle => collapseCategoryAccordion ? null : "collapsed";
-    private string? categoryAccordionToggle => collapseCategoryAccordion ? "collapse" : "collapse show";
-    private void ToggleCategoryAccordion() => collapseCategoryAccordion = !collapseCategoryAccordion;
-
-    @*Sub-Category Accordion *@
-    private bool collapseSubCategoryAccordion = true;
-    private string? subCategoryAccordionHeaderToggle => collapseSubCategoryAccordion ? null : "collapsed";
-    private string? collapseSubCategoryToggle => collapseSubCategoryAccordion ? "collapse" : "collapse show";
-    private void ToggleSubCategoryAccordion() => collapseSubCategoryAccordion = !collapseSubCategoryAccordion;
-}
-
-@code
-{
-    private Category category = new Category();
-    private SubCategory subCategory = new SubCategory();
-
-    public async Task CreateCategory()
-    {
-        try
-        {
-            var context = await _authenticationService.GetContext();
-            category.TenantId = context.Tenant.Id;
-            Category newCategory = await _categoryService.CreateCategory(category);
-
-            if (newCategory != null && newCategory.CategoryId != new Guid())
-                navigator.NavigateTo("/categories", true);
-        }
-        catch (Exception)
-        {
-
-            throw;
-        }
-    }
-
-    public async Task CreateSubCategory()
-    {
-        try
-        {
-            var context = await _authenticationService.GetContext();
-            subCategory.TenantId = context.Tenant.Id;
-            SubCategory newSubCategory = await _subCategoryService.CreateSubCategory(subCategory);
-
-            if (newSubCategory != null && newSubCategory.SubCategoryId != new Guid())
-                navigator.NavigateTo("/categories", true);
-        }
-        catch (Exception)
-        {
-            throw;
-        }
-    }
-}
-
-@code
-{
-    private List<Category> categories = new List<Category>();
-    private List<SubCategory> subCategories = new List<SubCategory>();
-    public async Task GetCategories()
+    private Email emailAddress = new Email();
+    public async Task CreateEmailAddress()
     {
         var context = await _authenticationService.GetContext();
-        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
-    }
+        emailAddress.TenantId = context.Tenant.Id;
+        Email response = await _contactService.CreateEmailAddress(emailAddress);
 
-    private async Task SetSubCategories(ChangeEventArgs args)
-    {
-        string selectedCategoryId = args.Value.ToString();
-        subCategory.CategoryId = new Guid(selectedCategoryId);
+        if (response != null && response.EmailAddressId != new Guid())
+            navigator.NavigateTo(navigator.Uri, true);
     }
-
-    protected override async Task OnInitializedAsync() => GetCategories();
 }
 
 @code
