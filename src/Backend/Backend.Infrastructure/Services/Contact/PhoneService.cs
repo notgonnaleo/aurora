@@ -35,15 +35,15 @@ namespace Backend.Infrastructure.Services.Contact
                 .FirstOrDefault();
         }
 
-        public Phone AddPhone(Phone phone)
+        public async Task<Phone> AddPhone(Phone phone)
         {
             var context = LoadContext();
             phone = new Phone(phone, context.UserId);
             phone.ValidateFields(context.Language);
 
             _appDbContext.Phones.Add(phone);
-            if (_appDbContext.SaveChanges() > 0)
-                return phone;
+            if(await _appDbContext.SaveChangesAsync() > 0)
+             return phone;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }

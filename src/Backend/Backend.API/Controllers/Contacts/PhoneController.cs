@@ -48,11 +48,11 @@ namespace Backend.API.Controllers.Phones
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public ActionResult AddPhone(Phone phone)
+        public async Task<ActionResult> AddPhone(Phone phone)
         {
             try
             {
-                return Ok(_phoneService.AddPhone(phone));
+                return Ok(await _phoneService.AddPhone(phone));
             }
             catch (Exception ex)
             {

@@ -6,8 +6,34 @@
     @* Finish this *@
     @if (Profile is null)
     {
-        isShowProfileComponent = false;
-        <a @onclick="ShowProfileComponent">Create agent profile</a>
+        @if (isShowProfileComponent)
+        {
+            <button type="button" class="btn btn-outline-danger mb-4" @onclick="ShowProfileComponent">
+                <i class="ti ti-x cursor-pointer p-2"></i> Cancel
+            </button>
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">Profile Name</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@NewProfile.DisplayName">
+            </div>
+            <div class="mb-3 col-sm-6">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CPF">
+            </div>
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">Profile Name</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@NewProfile.DisplayName">
+            </div>
+            <br />
+            <div class="mb-3 col-sm-6">
+                <button type="button" class="btn btn-default float-right">Save agent profile</button>
+            </div>
+        }
+        else
+        {
+            <button type="button" class="btn btn-outline-primary mb-4" @onclick="ShowProfileComponent">
+                <i class="ti ti-circle-plus cursor-pointer p-2"></i> Create agent profile
+            </button>
+        }
     }
     else
     {
@@ -28,17 +54,14 @@
             <button type="button" class="btn btn-default float-right">Save agent profile</button>
         </div>
     }
-
-    @if (isShowProfileComponent)
-    {
-        <p>Componente pra criar</p>
-    }
 </div>
 
 @code
 {
     [Parameter]
     public Profile Profile  { get; set; }
+
+    public Profile NewProfile = new Profile();
 }
 
 @code
