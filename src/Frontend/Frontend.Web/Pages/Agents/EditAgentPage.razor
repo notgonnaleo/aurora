@@ -29,6 +29,19 @@
 </aside>
 
 <div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
+            <li class="breadcrumb-item">
+                <a href="#" class="text-info d-flex align-items-center"><i class="ti ti-home fs-4 mt-1"></i></a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#" class="text-info">Library</a>
+            </li>
+            <li class="breadcrumb-item active text-info " aria-current="page">
+                Data
+            </li>
+        </ol>
+    </nav>
     @if (isLoading)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
