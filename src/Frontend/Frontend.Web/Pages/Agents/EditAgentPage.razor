@@ -49,15 +49,12 @@
                 @* Phones *@
                 <div class="row">
                     <div class="card">
-                        <div class="m-2 col-sm-12">
-                            <div class="row">
-                                <div class="mb-2 col-sm-1">
-                                    <i class="ti ti-circle-plus cursor-pointer p-4" @onclick="TogglePhoneNumberForm">
+                        <div class="col-sm-12">
+                            <div class="col-sm-2 p-4">
+                                <button type="button" class="btn btn-outline-primary" @onclick="TogglePhoneNumberForm">
+                                    <i class="ti ti-circle-plus cursor-pointer p-4">
                                     </i>
-                                </div>
-                                <div class="mb-2 col-sm-11">
-                                    <p>Add new phone number</p>
-                               </div>
+                                </button>
                             </div>
                         </div>
                         <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model.PhoneNumbers" />
@@ -67,9 +64,14 @@
                 @* Emails *@
                 <div class="row">
                     <div class="card">
-                        <i class="ti ti-circle-plus cursor-pointer p-4" @onclick="ToggleEmailForm">
-                            <p>Add new Email address</p>
-                        </i>
+                        <div class="col-sm-12">
+                            <div class="col-sm-2 p-4">
+                                <button type="button" class="btn btn-outline-primary" @onclick="ToggleEmailForm">
+                                    <i class="ti ti-circle-plus cursor-pointer p-4">
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
                         <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model.EmailAddresses" />
                     </div>
                 </div>
@@ -78,9 +80,14 @@
         @* Address numbers  *@
         <div class="row">
             <div class="card">
-                <i class="ti ti-circle-plus cursor-pointer p-4" @onclick="ToggleAddressForm">
-                    <p>Add new address</p>
-                </i>
+                <div class="col-sm-12">
+                    <div class="col-sm-2 p-4">
+                        <button type="button" class="btn btn-outline-primary" @onclick="ToggleAddressForm">
+                            <i class="ti ti-circle-plus cursor-pointer p-4">
+                            </i>
+                        </button>
+                    </div>
+                </div>
                 <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model.Addresses" />
             </div>
         </div>
