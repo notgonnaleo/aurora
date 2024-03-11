@@ -261,6 +261,8 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                     public static string agentId = "agentId";
                 }
+
+                
             }
 
             public static class POST

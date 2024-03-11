@@ -7,9 +7,9 @@
 
 @if (isAuthenticated)
 {
-    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="page-wrapper  @NavMenuCssClass " id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" >
         <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
-        <div class="body-wrapper">
+        <div   class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
             @Body
         </div>
@@ -17,7 +17,7 @@
 }
 else
 {
-    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="page-wrapper " data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" >
         @Body
     </div>
 }
@@ -54,3 +54,5 @@ else
         return await _authService.IsUserLogged();
     }
 }
+
+

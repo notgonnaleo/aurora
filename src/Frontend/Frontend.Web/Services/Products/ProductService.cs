@@ -25,6 +25,7 @@ namespace Frontend.Web.Services.Products
             return new ProductDetail()
             {
                 ProductId = product.ProductId,
+
                 Name = product.Name,
                 SKU = product.SKU,
                 Description = product.Description,

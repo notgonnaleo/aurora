@@ -75,8 +75,8 @@ namespace Backend.Infrastructure.Services.Stocks
                 Quantity = x.Quantity,
 
                 // CAMPOS DE PRODUTO
-                ProductName = products.Where(y => y.ProductId == x.ProductId).First().Name,
-                ProductValue = products.Where(y => y.ProductId == x.ProductId).First().Value,
+                ProductName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Name,
+                //ProductValue = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Value,
             });
         }
 

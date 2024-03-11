@@ -26,6 +26,14 @@ namespace Frontend.Web.Repository.Stocks
             return await response.Content.ReadFromJsonAsync<Stock>();
         }
 
+        public async Task<IEnumerable<StockDetail>> GetStockWithDetail(string tenantId)
+        {
+            var parameters = new RouteParameterRequest() { ParameterName = StockEnums.GET.GetStocks.tenantId, ParameterValue = tenantId };
+            var request = new RouteBuilder<StockDetail>().Send(Endpoints.Stock, Methods.Default.GET, parameters);
+            return await _httpClientRepository.Get(request);
+        }
+
+
         public async Task<IEnumerable<Stock>> GetStock(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = StockEnums.GET.GetStocks.tenantId, ParameterValue = tenantId };

@@ -154,7 +154,7 @@
 }
 
 [data-bs-theme=dark] {
-    --bs-body-color: #5A6A85;
+    --bs-body-color: #cae2f9;
     --bs-body-color-rgb: 90,106,133;
     --bs-body-bg: #212529;
     --bs-body-bg-rgb: 33,37,41;
@@ -226,6 +226,7 @@ body {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0,0,0,0)
 }
+
 
 hr {
     margin: 1rem 0;

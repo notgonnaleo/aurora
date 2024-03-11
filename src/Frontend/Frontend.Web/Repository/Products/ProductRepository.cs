@@ -23,6 +23,7 @@ namespace Frontend.Web.Services.Products
             var request = new RouteBuilder<ProductDetail>().Send(Endpoints.Products, Methods.Default.GET, parameters);
             return await _httpClientRepository.Get(request);
         }
+
         public async Task<Product> GetProduct(string tenantId, string productId)
         {
             var parameters = new List<RouteParameterRequest>()

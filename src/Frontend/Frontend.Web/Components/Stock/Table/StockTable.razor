@@ -19,7 +19,7 @@
     }
     else
     {
-        @if (!(stocks == null || stocks.Count() == 0))
+        @if (!(Model == null || Model.Count() == 0))
         {
             <div class="table-responsive">
                 <table class="table search-table align-middle text-nowrap table-fixed">
@@ -44,7 +44,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var stock in stocks)
+                        @foreach (var stock in Model)
                         {
                             <!-- start row -->
                             <tr class="search-items">
@@ -60,19 +60,15 @@
                                 <td>
                                     <span class="usr-email-addr" data-email="adams@mail.com">@stock.StockMovementId</span>
                                 </td>
-                                <td >
-                                    
+                                <td>
+
                                     <span class="usr-email-addr" data-email="adams@mail.com">@stock.ProductId</span>
-                                    
+
                                 </td>
                                 <td>
-                                    @{
-                                       
-                                        if (product != null && product.ProductId == stock.ProductId)
-                                        {
-                                            <span class="usr-location" data-location="Boston, USA">@product.Name</span>
-                                        }
-                                     }
+
+                                    <span class="usr-location" data-location="Boston, USA">@stock.ProductName</span>
+
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.MovementType</span>
@@ -81,7 +77,7 @@
                                     <span class="usr-ph-no">@stock.MovementStatusId</span>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no">Quantity</span>
+                                    <span class="usr-ph-no">@stock.Quantity</span>
                                 </td>
                                 <td>
                                     <div class="action-btn">
@@ -94,7 +90,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <!-- end row -->
+                            
                         }
                     </tbody>
                 </table>
@@ -109,19 +105,15 @@
 
 @code {
     public bool isLoading;
-    public IEnumerable<Stock> stocks = new List<Stock>();
-    public Product product = new Product();
+    public IEnumerable<StockDetail> Model = new List<StockDetail>();
+
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        stocks = await _stockService.GetStock(context.Tenant.Id.ToString());
+        Model = await _stockService.GetStockWithDetail(context.Tenant.Id.ToString());
         isLoading = false;
-        string productIdAsString = stocks.First().ProductId.ToString();
 
-        product = await _productService.GetProduct(context.Tenant.Id.ToString(), productIdAsString);
-        
     }
 }
 
-    
