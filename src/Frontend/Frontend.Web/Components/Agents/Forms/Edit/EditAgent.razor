@@ -68,6 +68,6 @@ else
     public async Task UpdateAgent()
     {
         bool updated = await _agentService.UpdateAgent(Agent);
-        if (updated) navigator.NavigateTo(navigator.BaseUri, true);
+        if (updated) navigator.NavigateTo(navigator.Uri, true);
     }
 }

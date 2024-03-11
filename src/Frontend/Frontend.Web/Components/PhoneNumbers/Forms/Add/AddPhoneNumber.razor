@@ -52,11 +52,17 @@
     {
         var context = await _authenticationService.GetContext();
         phoneNumber.TenantId = context.Tenant.Id;
+        phoneNumber.AgentId = AgentId;
         Phone response = await _contactService.CreatePhone(phoneNumber);
 
         if (response != null && response.PhoneId != new Guid())
             navigator.NavigateTo(navigator.Uri, true);
     }
+}
+
+@code
+{
+    [Parameter] public Guid AgentId { get; set; }
 }
 
 @code

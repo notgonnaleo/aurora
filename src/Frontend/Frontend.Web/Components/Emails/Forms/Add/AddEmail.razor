@@ -41,11 +41,17 @@
     {
         var context = await _authenticationService.GetContext();
         emailAddress.TenantId = context.Tenant.Id;
+        emailAddress.AgentId = AgentId;
         Email response = await _contactService.CreateEmailAddress(emailAddress);
 
         if (response != null && response.EmailAddressId != new Guid())
             navigator.NavigateTo(navigator.Uri, true);
     }
+}
+
+@code
+{
+    [Parameter] public Guid AgentId { get; set; }
 }
 
 @code

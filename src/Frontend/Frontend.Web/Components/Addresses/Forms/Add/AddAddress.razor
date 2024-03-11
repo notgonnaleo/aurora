@@ -111,6 +111,11 @@
 
 @code
 {
+    [Parameter] public Guid AgentId { get; set; }
+}
+
+@code
+{
     [Parameter] public Action ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
 }

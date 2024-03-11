@@ -42,8 +42,8 @@ namespace Backend.Infrastructure.Services.Profiles
             profile.ValidateFields(context.Language);
 
             _appDbContext.Profiles.Add(profile);
-            if (_appDbContext.SaveChanges() > 0)
-                return profile;
+            _appDbContext.SaveChanges();
+            return profile;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }

@@ -13,18 +13,18 @@
 @if (isPhoneNumberSidebar)
 {
     <Frontend.Web.Components.PhoneNumbers.Forms.Add.AddPhoneNumber CollapseRightSidebar=collapsePhoneNumberForm
-        ToggleRightSidebar="TogglePhoneNumberForm" />
+        ToggleRightSidebar="TogglePhoneNumberForm" AgentId="Model.Agent.AgentId" />
 }
 
 @if (isEmailSidebar)
 {
         <Frontend.Web.Components.Emails.Forms.Add.AddEmail CollapseRightSidebar=collapseEmailForm
-            ToggleRightSidebar="ToggleEmailForm" />
+            ToggleRightSidebar="ToggleEmailForm" AgentId="Model.Agent.AgentId" />
 }
 @if (isAddressSidebar)
 {
         <Frontend.Web.Components.Addresses.Forms.Add.AddAddress CollapseRightSidebar=collapseEmailForm
-            ToggleRightSidebar="ToggleAddressForm" />
+            ToggleRightSidebar="ToggleAddressForm" AgentId="Model.Agent.AgentId" />
 }
 </aside>
 

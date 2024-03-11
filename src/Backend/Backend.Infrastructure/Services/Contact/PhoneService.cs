@@ -35,14 +35,14 @@ namespace Backend.Infrastructure.Services.Contact
                 .FirstOrDefault();
         }
 
-        public async Task<Phone> AddPhone(Phone phone)
+        public Phone AddPhone(Phone phone)
         {
             var context = LoadContext();
             phone = new Phone(phone, context.UserId);
             phone.ValidateFields(context.Language);
 
             _appDbContext.Phones.Add(phone);
-            if(await _appDbContext.SaveChangesAsync() > 0)
+            _appDbContext.SaveChanges();
              return phone;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));

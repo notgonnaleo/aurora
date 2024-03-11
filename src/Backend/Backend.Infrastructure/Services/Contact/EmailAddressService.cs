@@ -42,8 +42,8 @@ namespace Backend.Infrastructure.Services.Contact
             email.ValidateFields(context.Language);
 
             _appDbContext.Emails.Add(email);
-            if (_appDbContext.SaveChanges() > 0)
-                return email;
+            _appDbContext.SaveChanges();
+            return email;
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
