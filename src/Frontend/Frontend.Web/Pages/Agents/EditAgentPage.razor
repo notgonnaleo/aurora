@@ -70,7 +70,7 @@
                                 </button>
                             </div>
                         </div>
-                        <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model.PhoneNumbers" />
+                        <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model?.PhoneNumbers" />
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@
                                 </button>
                             </div>
                         </div>
-                        <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model.EmailAddresses" />
+                        <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model?.EmailAddresses" />
                     </div>
                 </div>
             </div>
@@ -101,12 +101,13 @@
                         </button>
                     </div>
                 </div>
-                <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model.Addresses" />
+                <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model?.Addresses" />
             </div>
         </div>
     }
 </div>
 
+<Frontend.Web.Components.PhoneNumbers.Forms.Modals.DeletePhoneNumber ShowModal="ShowModal" PhoneNumber="selectedPhoneNumber" />
 @code
 {
     [Parameter]
@@ -157,6 +158,15 @@
         collapsePhoneNumberForm = true;
         collapseAddressForm = !collapseAddressForm;
         formCssClass = collapseAddressForm ? null : "show-menu";
+    }
+}
+
+@code
+{
+    public bool ShowPhoneNumberModel = false;
+    public void HandlePhoneNumberModel(bool response)
+    {
+        ShowPhoneNumberModel = response;
     }
 }
 

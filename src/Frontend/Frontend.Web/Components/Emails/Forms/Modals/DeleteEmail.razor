@@ -1,4 +1,5 @@
 ﻿@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Contacts;
 @using Frontend.Web.Services.Categories;
 
 @inject NavigationManager navigator;
@@ -18,14 +19,14 @@
                     Delete category?
                 </h4>
                 <p>
-                   Are you sure you would like to delete @CategoryModel.CategoryName?
+                    Are you sure you would like to delete @PhoneNumber.PhoneNumber?
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(CategoryModel.TenantId, CategoryModel.CategoryId)">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
                     Confirm
                 </button>
             </div>
@@ -50,14 +51,5 @@
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
-    [Parameter] public Category CategoryModel { get; set; }
-}
-
-@code
-{
-    private async void DeleteCategoryAction(Guid tenantId, Guid categoryId)
-    {
-        if(await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString()))
-            navigator.NavigateTo("/categories", forceLoad: true);
-    }
+    [Parameter] public Phone PhoneNumber { get; set; }
 }
