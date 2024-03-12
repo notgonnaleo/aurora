@@ -16,32 +16,66 @@
 </div>
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
-        <form>
-            <div class="mb-2 col-sm-12">
-                <div class="row">
-                    <div class="mb-2 col-sm-4">
-                        <label for="colors" class="form-label">Area</label>
-                        <select class="form-select" @bind="@phoneNumber.AreaCode">
-                            <option value="" disabled hidden selected>Area code</option>
-                            @foreach (var areaCode in AreaCode.Codes)
-                            {
-                                <option value="@areaCode">@areaCode</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="mb-2 col-sm-8">
-                        <label for="name" class="form-label">Number</label>
-                        <input type="number" class="form-control" id="number" placeholder="XXXXX-XXXX" @bind="@phoneNumber.PhoneNumber">
+        @if(Model is null)
+        {
+            // Create
+            <form>
+                <div class="mb-2 col-sm-12">
+                    <div class="row">
+                        <div class="mb-2 col-sm-4">
+                            <label for="colors" class="form-label">Area</label>
+                            <select class="form-select" @bind="@phoneNumber.AreaCode">
+                                <option value="" disabled hidden selected>Area code</option>
+                                @foreach (var areaCode in AreaCode.Codes)
+                                {
+                                    <option value="@areaCode">@areaCode</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-2 col-sm-8">
+                            <label for="name" class="form-label">Number</label>
+                            <input type="number" class="form-control" id="number" placeholder="XXXXX-XXXX" @bind="@phoneNumber.PhoneNumber">
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="mb-2 col-sm-6">
-                <button @onclick="CreatePhoneNumber" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                    Save <i class="ti ti-device-floppy"></i>
-                </button>
-            </div>
-        </form>
+                <div class="mb-2 col-sm-6">
+                    <button @onclick="CreatePhoneNumber" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                        Save <i class="ti ti-device-floppy"></i>
+                    </button>
+                </div>
+            </form>
+        }
+        else
+        {
+            // Edit
+            <form>
+                <div class="mb-2 col-sm-12">
+                    <div class="row">
+                        <div class="mb-2 col-sm-4">
+                            <label for="colors" class="form-label">Area</label>
+                            <select class="form-select" @bind="@Model.AreaCode">
+                                <option value="" disabled hidden selected>Area code</option>
+                                @foreach (var areaCode in AreaCode.Codes)
+                                {
+                                    <option value="@areaCode">@areaCode</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-2 col-sm-8">
+                            <label for="name" class="form-label">Number</label>
+                            <input type="number" class="form-control" id="number" placeholder="XXXXX-XXXX" @bind="@Model.PhoneNumber">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-2 col-sm-6">
+                    <button @onclick="UpdatePhoneNumber" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                        Save <i class="ti ti-device-floppy"></i>
+                    </button>
+                </div>
+            </form>
+        }
     </div>
 </div>
 
@@ -54,9 +88,23 @@
         phoneNumber.TenantId = context.Tenant.Id;
         phoneNumber.AgentId = AgentId;
         Phone response = await _contactService.CreatePhone(phoneNumber);
-
         if (response != null && response.PhoneId != new Guid())
             navigator.NavigateTo(navigator.Uri, true);
+    }
+
+    public async Task UpdatePhoneNumber()
+    {
+        if(Model is not null)
+        {
+            var context = await _authenticationService.GetContext();
+            Model.TenantId = context.Tenant.Id;
+            Model.AgentId = AgentId;
+            if (await _contactService.UpdatePhone(Model))
+            {
+                navigator.NavigateTo(navigator.Uri, true);
+            }
+        }
+
     }
 }
 
@@ -69,4 +117,6 @@
 {
     [Parameter] public Action ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
+
+    [Parameter] public Phone? Model { get; set; }
 }

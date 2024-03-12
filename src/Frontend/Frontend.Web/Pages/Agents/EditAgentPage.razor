@@ -13,7 +13,7 @@
 @if (isPhoneNumberSidebar)
 {
     <Frontend.Web.Components.PhoneNumbers.Forms.Add.AddPhoneNumber CollapseRightSidebar=collapsePhoneNumberForm
-        ToggleRightSidebar="TogglePhoneNumberForm" AgentId="Model.Agent.AgentId" />
+        ToggleRightSidebar="TogglePhoneNumberForm" AgentId="Model.Agent.AgentId" Model="selectedPhoneNumber" />
 }
 
 @if (isEmailSidebar)
@@ -70,7 +70,7 @@
                                 </button>
                             </div>
                         </div>
-                        <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model?.PhoneNumbers" ShowModal="ShowPhoneModal" />
+                        <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model?.PhoneNumbers" ShowModal="ShowPhoneModal" SelectedItem="EditPhoneNumber" />
                     </div>
                 </div>
 
@@ -111,6 +111,15 @@
 {
     [Parameter]
     public string? agentId { get; set; }
+}
+
+@code
+{
+    Phone? selectedPhoneNumber = null;
+    public void EditPhoneNumber(Phone selectedItem)
+    {
+        selectedPhoneNumber = selectedItem;
+    }
 }
 
 @code

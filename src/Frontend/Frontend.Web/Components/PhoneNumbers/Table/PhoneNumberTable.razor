@@ -22,8 +22,8 @@
                                     <a class="text-primary edit">
                                         <i class="ti ti-eye fs-5"></i>
                                     </a>
-                                    <a class="text-dark delete ms-2">
-                                    <i class="ti ti-trash fs-5" @onclick="() => DeletePhoneNumberModalAction(phoneNumber)"></i>
+                                    <a class="text-dark delete ms-2" @onclick="() => EditItem(phoneNumber)">
+                                    <i class="ti ti-trash fs-5" @onclick="() => DeleteModalAction(phoneNumber)"></i>
                                     </a>
                                 </div>
                             </td>
@@ -47,7 +47,7 @@
 @code
 {
     Phone? selectedPhoneNumber = null;
-    public void DeletePhoneNumberModalAction(Phone phoneNumber)
+    public void DeleteModalAction(Phone phoneNumber)
     {
         ShowModal = true;
         selectedPhoneNumber = phoneNumber;
@@ -61,4 +61,12 @@
 
     [Parameter]
     public  IEnumerable<Phone> PhoneNumbers { get; set; }
+
+    [Parameter]
+    public EventCallback<Phone> SelectedItem { get; set; }
+
+    private void EditItem(Phone item)
+    {
+        SelectedItem.InvokeAsync(item);
+    }
 }
