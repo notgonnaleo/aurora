@@ -2,46 +2,63 @@
 
 @* Phone numbers  *@
 <div class="card-body">
-        @if (PhoneNumbers.Any())
-        {
-            <div class="table-responsive">
-                <table class="table search-table align-middle text-nowrap">
-                    <tbody>
-                        @foreach (var phoneNumber in PhoneNumbers)
-                        {
-                            <!-- start row -->
-                            <tr class="search-items">
-                                <td>
-                                    <p>@(phoneNumber.Primary ? "Primary address" : $"{string.Empty}")</p>
-                                </td>
-                                <td>
-                                    <span class="usr-email-addr" id="@phoneNumber.PhoneId">(+@phoneNumber.AreaCode) @phoneNumber.PhoneNumber</span>
-                                </td>
-                                <td class="text-end">
-                                    <div class="action-btn">
-                                        <a class="text-primary edit">
-                                            <i class="ti ti-eye fs-5"></i>
-                                        </a>
-                                        <a class="text-dark delete ms-2">
-                                            <i class="ti ti-trash fs-5"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- end row -->
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
-        else
-        {
-            <p>No phone numbers created to this agent yet.</p>
-        }
-    </div>
+    @if (PhoneNumbers.Any())
+    {
+        <div class="table-responsive">
+            <table class="table search-table align-middle text-nowrap">
+                <tbody>
+                    @foreach (var phoneNumber in PhoneNumbers)
+                    {
+                        <!-- start row -->
+                        <tr class="search-items">
+                            <td>
+                                <p>@(phoneNumber.Primary ? "Primary address" : $"{string.Empty}")</p>
+                            </td>
+                            <td>
+                                <span class="usr-email-addr" id="@phoneNumber.PhoneId">(+@phoneNumber.AreaCode) @phoneNumber.PhoneNumber</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-btn">
+                                    <a class="text-primary edit">
+                                        <i class="ti ti-eye fs-5"></i>
+                                    </a>
+                                    <a class="text-dark delete ms-2">
+                                    <i class="ti ti-trash fs-5" @onclick="() => DeletePhoneNumberModalAction(phoneNumber)"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- end row -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No phone numbers created to this agent yet.</p>
+    }
+</div>
+@if(selectedPhoneNumber is not null)
+{
+    <Frontend.Web.Components.PhoneNumbers.Modals.DeletePhoneNumber ShowModal="ShowModal" Model="selectedPhoneNumber" />
+}
 
 @code
 {
+    Phone? selectedPhoneNumber = null;
+    public void DeletePhoneNumberModalAction(Phone phoneNumber)
+    {
+        ShowModal = true;
+        selectedPhoneNumber = phoneNumber;
+    }
+}
+
+@code
+{
+    [Parameter]
+    public bool ShowModal { get; set; } = false;
+
     [Parameter]
     public  IEnumerable<Phone> PhoneNumbers { get; set; }
 }

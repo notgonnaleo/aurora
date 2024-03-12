@@ -21,7 +21,7 @@
                                         <i class="ti ti-eye fs-5"></i>
                                     </a>
                                     <a class="text-dark delete ms-2">
-                                        <i class="ti ti-trash fs-5"></i>
+                                        <i class="ti ti-trash fs-5" @onclick="() => DeleteModalAction(address)"></i>
                                     </a>
                                 </div>
                             </td>
@@ -37,9 +37,25 @@
         <p>No phone numbers created to this agent yet.</p>
     }
 </div>
+@if (selectedAddress is not null)
+{
+    <Frontend.Web.Components.Addresses.Modals.DeleteAddress Model="selectedAddress" ShowModal="ShowModal" />
+}
 
+@code
+{
+    Address? selectedAddress = null;
+    public void DeleteModalAction(Address address)
+    {
+        ShowModal = true;
+        selectedAddress = address;
+    }
+}
 @code
 {
     [Parameter]
     public IEnumerable<Address> Addresses { get; set; }
+
+    [Parameter]
+    public bool ShowModal { get; set; }
 }

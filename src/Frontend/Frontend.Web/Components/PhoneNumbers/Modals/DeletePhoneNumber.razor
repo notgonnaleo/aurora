@@ -1,8 +1,10 @@
 ﻿@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Contacts;
 @using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Contacts;
 
 @inject NavigationManager navigator;
-@inject CategoryService _categoryService;
+@inject ContactService _contactService;
 
 <div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -15,17 +17,14 @@
             </div>
             <div class="modal-body">
                 <h4>
-                    Delete category?
+                    Delete @Model.PhoneNumber?
                 </h4>
-                <p>
-                   Are you sure you would like to delete @CategoryModel.CategoryName?
-                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(CategoryModel.TenantId, CategoryModel.CategoryId)">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
                     Confirm
                 </button>
             </div>
@@ -50,14 +49,5 @@
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
-    [Parameter] public Category CategoryModel { get; set; }
-}
-
-@code
-{
-    private async void DeleteCategoryAction(Guid tenantId, Guid categoryId)
-    {
-        if(await _categoryService.DeleteCategory(tenantId.ToString(), categoryId.ToString()))
-            navigator.NavigateTo("/categories", forceLoad: true);
-    }
+    [Parameter] public Phone Model { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿@using Backend.Domain.Entities.Categories;
+﻿@using Backend.Domain.Entities.Addresses;
+@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Contacts;
 @using Frontend.Web.Services.Categories;
 @using Frontend.Web.Services.Contacts;
 
@@ -16,17 +18,14 @@
             </div>
             <div class="modal-body">
                 <h4>
-                    Delete category?
+                    Delete @Model.City?
                 </h4>
-                <p>
-                   Are you sure you would like to delete @CategoryModel.CategoryName?
-                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteCategoryAction(CategoryModel.TenantId, CategoryModel.CategoryId)">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
                     Confirm
                 </button>
             </div>
@@ -51,14 +50,5 @@
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
-    [Parameter] public Category CategoryModel { get; set; }
-}
-
-@code
-{
-    private async void DeleteCategoryAction(Guid tenantId, Guid categoryId)
-    {
-        if (await _contactService.DeleteCategory(tenantId.ToString(), categoryId.ToString()))
-            navigator.NavigateTo("/categories", forceLoad: true);
-    }
+    [Parameter] public Address Model { get; set; }
 }
