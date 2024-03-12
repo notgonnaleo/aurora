@@ -1,0 +1,15 @@
+﻿@page "/stock/edit/{StockMovementId}"
+@inject NavigationManager NavigationManager
+
+<PageTitle>Aurora - Edit Stock</PageTitle>
+<div class="container-fluid">
+    <Frontend.Web.Components.Stock.Forms.Edit.EditStock StockMovementId="@StockMovementId"/>
+    
+    
+</div>
+
+@code
+{
+    [Parameter]
+    public string StockMovementId { get; set; }
+}

@@ -8,8 +8,9 @@
 @using Backend.Domain.Entities.Products;
 @inject StockService _stockService;
 @inject AuthenticationService _authenticationService;
-@inject NavigationManager navigator;
-@inject ProductService _productService
+@inject NavigationManager NavigationManager;
+@inject ProductService _productService;
+
 
 <div class="card card-body ">
     <h5 class="card-title fw-semibold mb-4">Stock</h5>
@@ -81,16 +82,17 @@
                                 </td>
                                 <td>
                                     <div class="action-btn">
-                                        <a class="text-primary edit">
-                                            <i class="ti ti-eye fs-5"></i>
+                                        <a class="text-primary edit" @onclick="() => Edit(stock)">
+                                            <i class="ti ti-eye fs-5" ></i>
+                                            
                                         </a>
-                                        <a class="text-dark delete ms-2">
+                                        <a class=" text-dark delete ms-2">
                                             <i class="ti ti-trash fs-5"></i>
                                         </a>
                                     </div>
                                 </td>
                             </tr>
-                            
+
                         }
                     </tbody>
                 </table>
@@ -115,5 +117,12 @@
         isLoading = false;
 
     }
+
+    private void Edit(StockDetail stock)
+    {
+        NavigationManager.NavigateTo($"/stock/edit/{stock.StockMovementId}");
+    }
+
+
 }
 

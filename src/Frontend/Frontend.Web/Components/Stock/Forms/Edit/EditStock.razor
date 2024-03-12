@@ -1,0 +1,83 @@
+﻿@using Backend.Domain.Entities.Stock;   
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Stocks;
+@inject StockService _stockService
+@inject NavigationManager navigator
+@inject AuthenticationService _authenticationService;
+
+
+<div>
+    <div class="card p-4">
+        <h5 class="card-title fw-semibold mb-4">Stock details</h5>
+        <div class="row">
+            <div class="col-md-9">
+                <form>
+                    <div class="row">
+                        <div class="mb-3 col-sm-3">
+                            <label for="productId">Product ID</label>
+                            <input type="text" class="form-control" id="productId" placeholder="Product ID" @bind="@Model.ProductId">
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="productName">Stock ID</label>
+                            <input type="text" class="form-control" id="productName" placeholder="Product Name" @bind="@Model.StockMovementId">
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="movementType">Movement Type</label>
+                            <input type="text" class="form-control" id="movementType" placeholder="Movement Type" @bind="@Model.MovementType">
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="movementStatusId"> Status ID</label>
+                            <input type="text" class="form-control" id="movementStatusId" placeholder="Movement Status ID" @bind="@Model.MovementStatusId">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-sm-3">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@Model.Quantity">
+                        </div>
+                        <!-- Adicione mais campos conforme necessário para editar os detalhes do estoque -->
+                    </div>
+                    <button type="button" @onclick="UpdateStock" class="btn btn-default float-right">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code
+{
+    [Parameter]
+    public string StockMovementId { get; set; }
+
+    private Stock Model = new Stock();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+
+        var queryString = navigator.Uri.Split('/').Last();
+        Model = await _stockService.GetById(Model.TenantId.ToString(), StockMovementId.ToString());
+    }
+
+    public async Task UpdateStock()
+    {
+        try
+        {
+            bool updated = await _stockService.UpdateStock(Model);
+            if (updated)
+            {
+                navigator.NavigateTo("/stock");
+            }
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+}
+
+
