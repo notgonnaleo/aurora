@@ -304,7 +304,7 @@ namespace Backend.Infrastructure.Enums.Modules
                 public static class GetStock
                 {
                     public static string tenantId = "tenantId";
-                    public static string StockMovementId = "StockMovementId";
+                    public static string stockMovementId = "StockMovementId";
                     
                 }
             }
