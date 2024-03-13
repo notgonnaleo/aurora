@@ -1,5 +1,5 @@
 ﻿using Frontend.Web.Repository.Stocks;
-using Backend.Domain.Entities.Stock;
+using Backend.Domain.Entities.Stocks;
 using Frontend.Web.Repository.Agents;
 using Backend.Domain.Entities.Products;
 using Frontend.Web.Services.Products;
@@ -17,7 +17,7 @@ namespace Frontend.Web.Services.Stocks
             _productRepository = productRepository;
         }
 
-        public async Task<Backend.Domain.Entities.Stock.Stock> CreateStock(Backend.Domain.Entities.Stock.Stock stock)
+        public async Task<Backend.Domain.Entities.Stocks.Stock> CreateStock(Backend.Domain.Entities.Stocks.Stock stock)
         {
             return await _stockRepository.CreateStock(stock);
         }
@@ -46,17 +46,17 @@ namespace Frontend.Web.Services.Stocks
         }
 
 
-        public async Task<IEnumerable<Backend.Domain.Entities.Stock.Stock>> GetStock(string tenantId)
+        public async Task<IEnumerable<Backend.Domain.Entities.Stocks.Stock>> GetStocks(string tenantId)
         {
-            return await _stockRepository.GetStock(tenantId);
+            return await _stockRepository.GetStocks(tenantId);
         }
 
-        public async Task<Backend.Domain.Entities.Stock.Stock> GetById(string tenantId, string stockMovementId)
+        public async Task<Backend.Domain.Entities.Stocks.Stock> GetStock(string tenantId, string stockMovementId)
         {
-            return await _stockRepository.GetById(tenantId, stockMovementId);
+            return await _stockRepository.GetStock(tenantId, stockMovementId);
         }
 
-        public async Task<bool> UpdateStock(Backend.Domain.Entities.Stock.Stock stock)
+        public async Task<bool> UpdateStock(Backend.Domain.Entities.Stocks.Stock stock)
         {
             return await _stockRepository.UpdateStock(stock);
         }

@@ -1,9 +1,11 @@
-﻿@using Backend.Domain.Entities.Stock;   
+﻿@using Backend.Domain.Entities.Stocks;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Stocks;
+@using Backend.Domain.Enums.MovementType;
 @inject StockService _stockService
 @inject NavigationManager navigator
 @inject AuthenticationService _authenticationService;
+
 
 
 <div>
@@ -12,32 +14,64 @@
         <div class="row">
             <div class="col-md-9">
                 <form>
-                    <div class="row">
-                        <div class="mb-3 col-sm-3">
-                            <label for="productId">Product ID</label>
-                            <input type="text" class="form-control" id="productId" placeholder="Product ID" @bind="@Model.ProductId">
+                    @if (Model is null && isLoading)
+                    {
+                        <Frontend.Web.Components.Loader.LoadingSpinner />
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="mb-3 col-sm-3">
+                                <label for="ProductId">Product ID</label>
+                                <input type="text" class="form-control" id="ProductId" placeholder="Product ID" @bind="@Model.ProductId" disabled>
+                            </div>
+                            <div class="mb-3 col-sm-3">
+                                <label for="StockMovementId">Stock ID</label>
+                                <input type="text" class="form-control" id="StockMovementId" placeholder="StockMovementId" @bind="@Model.StockMovementId" disabled>
+                            </div>
+                            <div class="mb-3 col-sm-3">
+                                <label for="VariantId">Variant ID</label>
+                                <input type="text" class="form-control" id="VariantId" placeholder="VariantId" @bind="@Model.VariantId" disabled>
+                            </div>
+                            <div class="mb-3 col-sm-3">
+                                <label for="AgentId">Agent ID</label>
+                                <input type="text" class="form-control" id="AgentId" placeholder="AgenttId" @bind="@Model.AgentId" disabled>
+                            </div>
+
+                            <div class="mb-3 col-sm-12">
+                                <label for="movementType" class="form-label">Movement Type</label>
+                                <select class="form-select" @bind="@Model.MovementType">
+                                    <option value="" disabled hidden selected> Movement</option>
+                                    @foreach (var movement in MovementTypes.Movementtype)
+                                    {
+                                        <option value="@movement">@movement</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-sm-12">
+                                <label for="movementStatusId" class="form-label">MovementStatus</label>
+                                <select class="form-select" @bind="@Model.MovementStatusId">
+                                    <option value="" disabled hidden selected>Status</option>
+                                    <option value="1">Available</option>
+                                    <option value="2">replacement</option>
+                                    <option value="3">sold off</option>
+                                    <option value="4">reserved</option>
+                                </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-3 col-sm-3">
+                                    <label for="Quantity">Quantity</label>
+                                    <input type="number" class="form-control" id="Quantity" placeholder="Quantity" @bind="@Model.Quantity">
+                                </div>
+                                <!-- Adicione mais campos conforme necessário para editar os detalhes do estoque -->
+                            </div>
+
                         </div>
-                        <div class="mb-3 col-sm-3">
-                            <label for="productName">Stock ID</label>
-                            <input type="text" class="form-control" id="productName" placeholder="Product Name" @bind="@Model.StockMovementId">
-                        </div>
-                        <div class="mb-3 col-sm-3">
-                            <label for="movementType">Movement Type</label>
-                            <input type="text" class="form-control" id="movementType" placeholder="Movement Type" @bind="@Model.MovementType">
-                        </div>
-                        <div class="mb-3 col-sm-3">
-                            <label for="movementStatusId"> Status ID</label>
-                            <input type="text" class="form-control" id="movementStatusId" placeholder="Movement Status ID" @bind="@Model.MovementStatusId">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="mb-3 col-sm-3">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@Model.Quantity">
-                        </div>
-                        <!-- Adicione mais campos conforme necessário para editar os detalhes do estoque -->
-                    </div>
-                    <button type="button" @onclick="UpdateStock" class="btn btn-default float-right">Update</button>
+
+                        <button type="button" @onclick="UpdateStock" class="btn btn-default float-right">Update</button>
+                    }
                 </form>
             </div>
         </div>
@@ -50,17 +84,20 @@
 @code
 {
     [Parameter]
-    public string StockMovementId { get; set; }
+    public Backend.Domain.Entities.Stocks.Stock Model { get; set; }
 
-    private Stock Model = new Stock();
+    public bool isLoading;
+
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
 
         var queryString = navigator.Uri.Split('/').Last();
-        Model = await _stockService.GetById(Model.TenantId.ToString(), StockMovementId.ToString());
+        Model = await _stockService.GetStock(Model.TenantId.ToString(), Model.StockMovementId.ToString());
+        isLoading = false;
     }
 
     public async Task UpdateStock()

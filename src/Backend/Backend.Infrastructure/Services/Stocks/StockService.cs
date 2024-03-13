@@ -1,5 +1,5 @@
 ﻿using Backend.Domain.Entities.Products;
-using Backend.Domain.Entities.Stock;
+using Backend.Domain.Entities.Stocks;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Agents;
@@ -80,13 +80,13 @@ namespace Backend.Infrastructure.Services.Stocks
             });
         }
 
-        public Domain.Entities.Stock.Stock? GetById(Guid tenantId, Guid stockMovementId)
+        public Domain.Entities.Stocks.Stock? GetById(Guid tenantId, Guid stockMovementId)
         {
             var context = LoadContext();
             return _appDbContext.Stocks.FirstOrDefault(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id);
         }
 
-        public bool Update(Domain.Entities.Stock.Stock model)
+        public bool Update(Domain.Entities.Stocks.Stock model)
         {
             var context = LoadContext();
             ValidateTenant(model.TenantId);

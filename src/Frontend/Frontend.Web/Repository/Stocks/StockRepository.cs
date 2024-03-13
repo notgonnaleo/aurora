@@ -1,4 +1,4 @@
-﻿using Backend.Domain.Entities.Stock;
+﻿using Backend.Domain.Entities.Stocks;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
@@ -34,14 +34,14 @@ namespace Frontend.Web.Repository.Stocks
         }
 
 
-        public async Task<IEnumerable<Stock>> GetStock(string tenantId)
+        public async Task<IEnumerable<Stock>> GetStocks(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = StockEnums.GET.GetStocks.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Stock>().Send(Endpoints.Stock, Methods.Default.GET, parameters);
             return await _httpClientRepository.Get(request);
         }
 
-        public async Task<Stock> GetById(string tenantId, string stockMovementId)
+        public async Task<Stock> GetStock(string tenantId, string stockMovementId)
         {
             var parameters = new List<RouteParameterRequest>()
             {

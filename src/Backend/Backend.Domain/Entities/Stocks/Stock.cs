@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Categories;
 
-namespace Backend.Domain.Entities.Stock
+namespace Backend.Domain.Entities.Stocks
 {
     [Table("Stock")]
     public class Stock : Model

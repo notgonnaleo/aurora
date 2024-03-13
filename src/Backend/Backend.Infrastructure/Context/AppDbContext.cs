@@ -2,7 +2,7 @@
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
-using Backend.Domain.Entities.Stock;
+using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Mocks.AppDbMocks;
 using Microsoft.EntityFrameworkCore;

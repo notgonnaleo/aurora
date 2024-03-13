@@ -1,5 +1,5 @@
 ﻿using Backend.Domain.Entities.Products;
-using Backend.Domain.Entities.Stock;
+using Backend.Domain.Entities.Stocks;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Stocks;
 using Microsoft.AspNetCore.Mvc;
@@ -83,7 +83,7 @@ namespace Backend.API.Controllers.Stocks
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Domain.Entities.Stock.Stock model)
+        public ActionResult Update(Domain.Entities.Stocks.Stock model)
         {
             try
             {

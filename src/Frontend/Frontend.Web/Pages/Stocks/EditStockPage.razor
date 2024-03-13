@@ -1,10 +1,19 @@
 ﻿@page "/stock/edit/{StockMovementId}"
+@using Backend.Domain.Entities.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Stocks;
 @inject NavigationManager NavigationManager
+@inject AuthenticationService _authenticationService;
+@inject StockService _stockService;
 
 <PageTitle>Aurora - Edit Stock</PageTitle>
 <div class="container-fluid">
-    <Frontend.Web.Components.Stock.Forms.Edit.EditStock StockMovementId="@StockMovementId"/>
+    <Frontend.Web.Components.Stock.Forms.Edit.EditStock Model="@Model"/>
     
+    <div class="row ">
+        <Frontend.Web.Components.Stock.Table.StockTable />
+    </div>
     
 </div>
 
@@ -13,3 +22,23 @@
     [Parameter]
     public string StockMovementId { get; set; }
 }
+
+@code
+{
+
+
+    public Backend.Domain.Entities.Stocks.Stock Model = new Backend.Domain.Entities.Stocks.Stock();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+
+        
+        Model = await _stockService.GetStock(Model.TenantId.ToString(), StockMovementId.ToString());
+    }
+
+    
+}
+
