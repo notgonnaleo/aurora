@@ -17,11 +17,11 @@
                         </td>
                         <td class="text-end">
                             <div class="action-btn">
-                                <a class="text-primary edit">
+                                <a class="text-primary edit" @onclick="() => EditItem(emailAddress)">
                                     <i class="ti ti-eye fs-5"></i>
                                 </a>
-                                <a class="text-dark delete ms-2">
-                                        <i class="ti ti-trash fs-5" @onclick="() => DeleteModalAction(emailAddress)"></i>
+                                <a class="text-dark delete ms-2" @onclick="() => DeleteModalAction(emailAddress)">
+                                    <i class="ti ti-trash fs-5"></i>
                                 </a>
                             </div>
                         </td>
@@ -53,10 +53,22 @@ else
     }
 }
 
-@code{
+@code
+{
     [Parameter]
     public IEnumerable<Email> EmailAddresses { get; set; }
 
     [Parameter]
     public bool ShowModal { get; set; }
+
+    [Parameter]
+    public EventCallback<Email> SelectedItem { get; set; }
+}
+
+@code
+{
+    private void EditItem(Email selectedEmail)
+    {
+        SelectedItem.InvokeAsync(selectedEmail);
+    }
 }

@@ -18,6 +18,7 @@
 
 @if (isEmailSidebar)
 {
+    @*TODO: Add the selected email here when we are going to edit it - Like its with the phonenumber above*@
         <Frontend.Web.Components.Emails.Forms.Add.AddEmail CollapseRightSidebar=collapseEmailForm
             ToggleRightSidebar="ToggleEmailForm" AgentId="Model.Agent.AgentId" />
 }
@@ -79,13 +80,13 @@
                     <div class="card">
                         <div class="col-sm-12">
                             <div class="col-sm-2 p-4">
-                                <button type="button" class="btn btn-outline-primary" @onclick="ToggleEmailForm">
+                                <button type="button" class="btn btn-outline-primary" @onclick="AddEmail">
                                     <i class="ti ti-circle-plus cursor-pointer p-4">
                                     </i>
                                 </button>
                             </div>
                         </div>
-                        <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model?.EmailAddresses" ShowModal="ShowEmailModal" />
+                        <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model?.EmailAddresses" ShowModal="ShowEmailModal" SelectedItem="EditEmail"/>
                     </div>
                 </div>
             </div>
@@ -126,6 +127,22 @@
     {
         selectedPhoneNumber = null;
         TogglePhoneNumberForm();
+    }
+}
+
+@code
+{
+    Email? selectedEmail = null;
+    public void EditEmail(Email selectedItem)
+    {
+        selectedEmail = selectedItem;
+        ToggleEmailForm();
+    }
+
+    public void AddEmail()
+    {
+        selectedEmail = null;
+        ToggleEmailForm();
     }
 }
 
