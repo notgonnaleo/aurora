@@ -7,7 +7,7 @@
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService;
 
-<PageTitle>Aurora - Edit Agent</PageTitle>
+<PageTitle>Aurora - Edit</PageTitle>
 
 <aside class="right-sidebar @formCssClass">
 @if (isPhoneNumberSidebar)
@@ -64,7 +64,7 @@
                     <div class="card">
                         <div class="col-sm-12">
                             <div class="col-sm-2 p-4">
-                                <button type="button" class="btn btn-outline-primary" @onclick="TogglePhoneNumberForm">
+                                <button type="button" class="btn btn-outline-primary" @onclick="AddPhoneNumber">
                                     <i class="ti ti-circle-plus cursor-pointer p-4">
                                     </i>
                                 </button>
@@ -119,6 +119,13 @@
     public void EditPhoneNumber(Phone selectedItem)
     {
         selectedPhoneNumber = selectedItem;
+        TogglePhoneNumberForm();
+    }
+
+    public void AddPhoneNumber()
+    {
+        selectedPhoneNumber = null;
+        TogglePhoneNumberForm();
     }
 }
 

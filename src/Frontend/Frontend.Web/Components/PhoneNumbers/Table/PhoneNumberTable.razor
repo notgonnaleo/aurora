@@ -20,10 +20,10 @@
                             <td class="text-end">
                                 <div class="action-btn">
                                     <a class="text-primary edit">
-                                        <i class="ti ti-eye fs-5"></i>
+                                        <i class="ti ti-eye fs-5" @onclick="() => EditItem(phoneNumber)"></i>
                                     </a>
-                                    <a class="text-dark delete ms-2" @onclick="() => EditItem(phoneNumber)">
-                                    <i class="ti ti-trash fs-5" @onclick="() => DeleteModalAction(phoneNumber)"></i>
+                                    <a class="text-dark delete ms-2">
+                                        <i class="ti ti-trash fs-5" @onclick="() => DeleteModalAction(phoneNumber)"></i>
                                     </a>
                                 </div>
                             </td>
@@ -65,8 +65,8 @@
     [Parameter]
     public EventCallback<Phone> SelectedItem { get; set; }
 
-    private void EditItem(Phone item)
+    private void EditItem(Phone phoneNumber)
     {
-        SelectedItem.InvokeAsync(item);
+        SelectedItem.InvokeAsync(phoneNumber);
     }
 }
