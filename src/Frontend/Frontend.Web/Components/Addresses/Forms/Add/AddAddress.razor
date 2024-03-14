@@ -13,61 +13,117 @@
 @inject NavigationManager navigator
 
 <div>
-    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+    <i class="ti ti-x cursor-pointer m-2" @onclick="ToggleRightSidebar"></i>
 </div>
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
         <form>
-            <div class="row">
-                <div class="mb-3 col-sm-12">
-                    <label for="country" class="form-label">Country</label>
-                    <select class="form-select" @onchange="SetState">
-                        <option value="" disabled hidden selected> The selected category</option>
-                        @foreach (var country in CountriesList.countriesNames)
-                        {
-                            <option value="@country.CountryId">@country.CountryName</option>
-                        }
-                    </select>
+            @if(Model is null)
+            {
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="country" class="form-label">Country</label>
+                        <select class="form-select" @onchange="SetState">
+                            <option value="" disabled hidden selected> The selected category</option>
+                            @foreach (var country in CountriesList.countriesNames)
+                            {
+                                <option value="@country.CountryId">@country.CountryName</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="mb-3 col-sm-12">
-                    <label for="state" class="form-label">State</label>
-                    <select class="form-select" @onchange="SetCities">
-                        <option value="" disabled hidden selected> The selected category</option>
-                        @foreach (var state in states)
-                        {
-                            <option value="@state.StateId">@state.StateName</option>
-                        }
-                    </select>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">State</label>
+                        <select class="form-select" @onchange="SetCities">
+                            <option value="" disabled hidden selected> The selected category</option>
+                            @foreach (var state in states)
+                            {
+                                <option value="@state.StateId">@state.StateName</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="mb-3 col-sm-12">
-                    <label for="state" class="form-label">City</label>
-                    <select class="form-select" @bind="address.City">
-                        <option value="" disabled hidden selected> The selected category</option>
-                        @foreach (var city in cities)
-                        {
-                            <option value="@city.CityId">@city.CityName</option>
-                        }
-                    </select>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">City</label>
+                        <select class="form-select" @bind="address.City">
+                            <option value="" disabled hidden selected> The selected category</option>
+                            @foreach (var city in cities)
+                            {
+                                <option value="@city.CityId">@city.CityName</option>
+                            }
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="mb-3 col-sm-12">
-                    <label for="postalCode" class="form-label">Postal Code</label>
-                    <input  id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="address.PostalCode"></input>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="address.PostalCode"></input>
+                    </div>
                 </div>
-            </div>
-            @* Adicionar: Region, StreetNumber, StreetName, CountryAlias, StateAlias *@
-            <div class="row">
-                <div class="mb-2 col-sm-6">
-                    <button @onclick="CreateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                        Save <i class="ti ti-device-floppy"></i>
-                    </button>
+                @* Adicionar: Region, StreetNumber, StreetName, CountryAlias, StateAlias *@
+                <div class="row">
+                    <div class="mb-2 col-sm-6">
+                        <button @onclick="CreateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                            Save <i class="ti ti-device-floppy"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="country" class="form-label">Country</label>
+                        <select class="form-select" @onchange="SetState">
+                            <option value="@Model.CountryName" disabled hidden selected>@Model.CountryName</option>
+                            @foreach (var country in CountriesList.countriesNames)
+                            {
+                                <option value="@country.CountryId">@country.CountryName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">State</label>
+                        <select class="form-select" @onchange="SetCities">
+                            <option value="@Model.StateName" disabled hidden selected>@Model.StateName</option>
+                            @foreach (var state in states)
+                            {
+                                <option value="@state.StateId">@state.StateName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">City</label>
+                        <select class="form-select" @bind="Model.City">
+                            <option value="@Model.City" disabled hidden selected>@Model.City</option>
+                            @foreach (var city in cities)
+                            {
+                                <option value="@city.CityId">@city.CityName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="Model.PostalCode"></input>
+                    </div>
+                </div>
+                @* Adicionar: Region, StreetNumber, StreetName, CountryAlias, StateAlias *@
+                <div class="row">
+                    <div class="mb-2 col-sm-6">
+                        <button @onclick="CreateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                            Save <i class="ti ti-device-floppy"></i>
+                        </button>
+                    </div>
+                </div>
+            }
         </form>
     </div>
 </div>
@@ -80,17 +136,35 @@
 
     private void SetState(ChangeEventArgs args)
     {
-        countryId = Int32.Parse(args.Value.ToString());
-        address.CountryName = Geolocation.CountriesList.countriesNames.FirstOrDefault(x => x.CountryId == countryId).CountryName;
-        states = Geolocation.GetStatesBySelectedCountry(countryId);
+        if(Model is not null)
+        {
+            countryId = Geolocation.CountriesList.countriesNames.FirstOrDefault(x => x.CountryName == Model.CountryName).CountryId;
+            address.CountryName = Model.CountryName;
+            states = Geolocation.GetStatesBySelectedCountry(countryId);
+        }
+        else
+        {
+            countryId = Int32.Parse(args.Value.ToString());
+            address.CountryName = Geolocation.CountriesList.countriesNames.FirstOrDefault(x => x.CountryId == countryId).CountryName;
+            states = Geolocation.GetStatesBySelectedCountry(countryId);
+        }
     }
 
     List<City> cities = new List<City>();
     private void SetCities(ChangeEventArgs args)
     {
-        stateId = Int32.Parse(args.Value.ToString());
-        address.StateName = Geolocation.StatesList.statesNames.FirstOrDefault(x => x.CountryId == countryId && x.StateId == stateId).StateName;
-        cities = Geolocation.GetCitiesBySelectedCountryAndState(countryId, stateId);
+        if(Model is not null)
+        {
+            stateId = Int32.Parse(args.Value.ToString());
+            address.StateName = Geolocation.StatesList.statesNames.FirstOrDefault(x => x.CountryId == countryId && x.StateId == stateId).StateName;
+            cities = Geolocation.GetCitiesBySelectedCountryAndState(countryId, stateId);
+        }
+        else
+        {
+            stateId = Int32.Parse(args.Value.ToString());
+            address.StateName = Geolocation.StatesList.statesNames.FirstOrDefault(x => x.CountryId == countryId && x.StateId == stateId).StateName;
+            cities = Geolocation.GetCitiesBySelectedCountryAndState(countryId, stateId);
+        }
     }
 }
 
@@ -112,6 +186,7 @@
 @code
 {
     [Parameter] public Guid AgentId { get; set; }
+    [Parameter] public Address Model { get; set; }
 }
 
 @code
