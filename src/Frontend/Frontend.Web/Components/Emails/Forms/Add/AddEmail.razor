@@ -17,19 +17,38 @@
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
         <form>
-            <div class="mb-2 col-sm-12">
-                <div class="row">
-                    <div class="mb-2 col-sm-10">
-                        <label for="name" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="email" placeholder="email@address.com" @bind="emailAddress.EmailAddress">
+            @if(Model is null)
+            {
+                <div class="mb-2 col-sm-12">
+                    <div class="row">
+                        <div class="mb-2 col-sm-10">
+                            <label for="name" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="email@address.com" @bind="emailAddress.EmailAddress">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="mb-2 col-sm-6">
-                <button @onclick="CreateEmailAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                    Save <i class="ti ti-device-floppy"></i>
-                </button>
-            </div>
+                <div class="mb-2 col-sm-6">
+                    <button @onclick="CreateEmailAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                        Save <i class="ti ti-device-floppy"></i>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="mb-2 col-sm-12">
+                    <div class="row">
+                        <div class="mb-2 col-sm-10">
+                            <label for="name" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="email@address.com" @bind="Model.EmailAddress">
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-2 col-sm-6">
+                    <button @onclick="UpdateEmailAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                        Save <i class="ti ti-device-floppy"></i>
+                    </button>
+                </div>
+            }
         </form>
     </div>
 </div>
@@ -47,11 +66,21 @@
         if (response != null && response.EmailAddressId != new Guid())
             navigator.NavigateTo(navigator.Uri, true);
     }
+
+    public async Task UpdateEmailAddress()
+    {
+        var context = await _authenticationService.GetContext();
+        emailAddress.TenantId = context.Tenant.Id;
+        emailAddress.AgentId = AgentId;
+        if (await _contactService.UpdateEmailAddress(emailAddress))
+            navigator.NavigateTo(navigator.Uri, true);
+    }
 }
 
 @code
 {
     [Parameter] public Guid AgentId { get; set; }
+    [Parameter] public Email Model { get; set; }
 }
 
 @code
