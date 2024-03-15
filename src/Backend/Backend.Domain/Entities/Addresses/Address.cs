@@ -23,20 +23,22 @@ namespace Backend.Domain.Entities.Addresses
         /// <summary>
         /// Address information
         /// </summary>
-        public string CountryName { get; set; }
-        public string CountryAlias { get; set; }
+        public int? CountryId { get; set; }
+        public string? CountryName { get; set; }
 
-        public string StateAlias { get; set; }
-        public string StateName { get; set; }
+        public int? StateId { get; set; }
+        public string? StateName { get; set; }
 
-        public string City { get; set; }
-        public string Region { get; set; }
-        public string StreetName { get; set; }
-        public string StreetNumber { get; set; }
+        public int? CityId { get; set; }
+        public string? CityName { get; set; }
 
-        public string PostalCode { get; set; }
+        public string? Reference { get; set; }
+        public string? StreetName { get; set; }
+        public string? StreetNumber { get; set; }
 
-        public bool Primary { get; set; }
+        public string? PostalCode { get; set; }
+
+        public bool? Primary { get; set; }
 
         [ForeignKey("AgentId")]
         public Guid AgentId { get; set; }
@@ -47,12 +49,10 @@ namespace Backend.Domain.Entities.Addresses
             AddressId = Guid.NewGuid();
             TenantId = address.TenantId;
             AddressTypeId = address.AddressTypeId;
-            CountryName = address.CountryName;
-            CountryAlias = address.CountryAlias;
-            StateAlias = address.StateAlias;
-            StateName = address.StateName;
-            City = address.City;
-            Region = address.Region;
+            CountryId = address.CountryId;
+            StateId = address.StateId;
+            CityId = address.CityId;
+            Reference = address.Reference;
             StreetName = address.StreetName;
             StreetNumber = address.StreetNumber;
             PostalCode = address.PostalCode;
@@ -66,9 +66,12 @@ namespace Backend.Domain.Entities.Addresses
             Active = true;
         }
 
-        public void ValidateFields(LanguagesEnum language)
+        public void ValidateFields()
         {
-            throw new NotImplementedException();
+            if (CountryId is null && CountryName is null)
+            {
+                throw new Exception("Country was not provided");
+            }
         }
     }
 }

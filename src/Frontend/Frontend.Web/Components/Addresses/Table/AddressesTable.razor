@@ -10,10 +10,10 @@
                         <!-- start row -->
                         <tr class="search-items">
                             <td>
-                                <p>@(address.Primary ? "Primary contact" : $"{string.Empty}")</p>
+                                <p>@(address.Primary ?? false ? "Primary contact" : $"{string.Empty}")</p>
                             </td>
                             <td>
-                                <span class="usr-email-addr" id="@address.AddressId">@address.City, @address.Region, @address.CountryName - @address.PostalCode</span>
+                                <span class="usr-email-addr" id="@address.AddressId">@address.CityName, @address.CountryName - @address.PostalCode</span>
                             </td>
                             <td class="text-end">
                                 <div class="action-btn">

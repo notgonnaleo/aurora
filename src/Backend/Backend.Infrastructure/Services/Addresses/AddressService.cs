@@ -38,9 +38,8 @@ namespace Backend.Infrastructure.Services.Addresses
         {
             var context = LoadContext();
             address = new Address(address, context.UserId);
-            address.ValidateFields(context.Language);
-
             _appDbContext.Addresses.Add(address);
+            address.ValidateFields();
             if (_appDbContext.SaveChanges() > 0)
                 return address;
 
@@ -52,8 +51,7 @@ namespace Backend.Infrastructure.Services.Addresses
             var context = LoadContext();
             address.Updated = DateTime.UtcNow;
             address.UpdatedBy = context.UserId;
-            address.ValidateFields(context.Language);
-
+            address.ValidateFields();
             _appDbContext.Update(address);
             return _appDbContext.SaveChanges() > 0;
         }

@@ -56,7 +56,7 @@
                     <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
                     <div class="border-bottom"></div>
                     @* Profile *@
-                    <Frontend.Web.Components.Profiles.Forms.Edit.EditProfile Profile="Model.Agent?.Profile" />
+                    <Frontend.Web.Components.Profiles.Forms.Edit.EditProfile Profile="Model.Agent?.Profile" AgentId="Model.Agent.AgentId" AgentTypeId="Model.Agent.AgentTypeId"/>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -96,7 +96,7 @@
             <div class="card">
                 <div class="col-sm-12">
                     <div class="col-sm-2 p-4">
-                        <button type="button" class="btn btn-outline-primary" @onclick="ToggleAddressForm">
+                        <button type="button" class="btn btn-outline-primary" @onclick="AddAddress">
                             <i class="ti ti-circle-plus cursor-pointer p-4">
                             </i>
                         </button>

@@ -30,9 +30,9 @@ namespace Backend.Domain.Enums.Geolocation
             public string CityName { get; set; }
         }
 
-        public static class CountriesList
+        public static class Countries
         {
-            public static List<Country> countriesNames = new List<Country>() 
+            public static List<Country> List = new List<Country>() 
             { 
                 new Country()
                 {
@@ -41,9 +41,9 @@ namespace Backend.Domain.Enums.Geolocation
                 },
             };
         }
-        public static class StatesList
+        public static class States
         {
-            public static List<State> statesNames = new List<State>()
+            public static List<State> List = new List<State>()
             {
                 new State()
                 {
@@ -59,9 +59,9 @@ namespace Backend.Domain.Enums.Geolocation
                 }
             };
         }
-        public static class CitiesList
+        public static class Cities
         {
-            public static List<City> citiesNames = new List<City>()
+            public static List<City> List = new List<City>()
             {
                 new City()
                 {
@@ -82,14 +82,14 @@ namespace Backend.Domain.Enums.Geolocation
 
         public static List<State> GetStatesBySelectedCountry(int countryId)
         {
-            return StatesList.statesNames
+            return States.List
                 .Where(x => x.CountryId == countryId)
                 .ToList();
         }
 
         public static List<City> GetCitiesBySelectedCountryAndState(int countryId, int stateId)
         {
-            return CitiesList.citiesNames
+            return Cities.List
                 .Where(x => x.CountryId == countryId && 
                 x.StateId == stateId)
                 .ToList();

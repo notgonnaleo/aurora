@@ -33,7 +33,7 @@ else
                 <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save basic info</button>
             </EditForm>
         }
-        </div>
+    </div>
 }
 
 @code
@@ -67,7 +67,11 @@ else
 {
     public async Task UpdateAgent()
     {
-        bool updated = await _agentService.UpdateAgent(Agent);
-        if (updated) navigator.NavigateTo(navigator.Uri, true);
+        // Objeto de navegacao ta atualizando o registro na agenttypes por isso ta dando merda - arrumar 
+        Agent.AgentType = agentTypes.FirstOrDefault(x => x.AgentTypeId == Agent.AgentTypeId);
+        if (await _agentService.UpdateAgent(Agent))
+        {
+            navigator.NavigateTo(navigator.Uri, true);
+        }
     }
 }

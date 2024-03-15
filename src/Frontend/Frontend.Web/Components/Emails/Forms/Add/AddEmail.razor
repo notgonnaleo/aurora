@@ -70,9 +70,9 @@
     public async Task UpdateEmailAddress()
     {
         var context = await _authenticationService.GetContext();
-        emailAddress.TenantId = context.Tenant.Id;
-        emailAddress.AgentId = AgentId;
-        if (await _contactService.UpdateEmailAddress(emailAddress))
+        Model.TenantId = context.Tenant.Id;
+        Model.AgentId = AgentId;
+        if (await _contactService.UpdateEmailAddress(Model))
             navigator.NavigateTo(navigator.Uri, true);
     }
 }

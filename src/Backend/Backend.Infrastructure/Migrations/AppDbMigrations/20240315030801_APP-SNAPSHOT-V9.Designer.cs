@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240309194926_APP-SNAPSHOT")]
-    partial class APPSNAPSHOT
+    [Migration("20240315030801_APP-SNAPSHOT-V9")]
+    partial class APPSNAPSHOTV9
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,16 +41,16 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid>("AgentId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("City")
-                        .IsRequired()
+                    b.Property<int?>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CityName")
                         .HasColumnType("text");
 
-                    b.Property<string>("CountryAlias")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("CountryName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Created")
@@ -60,30 +60,24 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("PostalCode")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("Primary")
+                    b.Property<bool?>("Primary")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Region")
-                        .IsRequired()
+                    b.Property<string>("Reference")
                         .HasColumnType("text");
 
-                    b.Property<string>("StateAlias")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int?>("StateId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("StateName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("StreetName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("StreetNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("TenantId")
@@ -106,15 +100,16 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             Active = true,
                             AddressTypeId = 1,
                             AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
-                            City = "Atibaia",
-                            CountryAlias = "BR",
+                            CityId = 1,
+                            CityName = "Atibaia",
+                            CountryId = 1,
                             CountryName = "Brazil",
                             PostalCode = "12947320",
                             Primary = true,
-                            Region = "Sao Paulo/Braganca",
-                            StateAlias = "SP",
+                            Reference = "1350",
+                            StateId = 1,
                             StateName = "Sao Paulo",
-                            StreetName = "Rua daora",
+                            StreetName = "Avenida Paulista",
                             StreetNumber = "1337",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -273,7 +268,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4721),
+                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(7873),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -521,11 +516,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("d022496e-cbc3-4ca5-933d-85d032b2adf1"),
+                            ProductId = new Guid("21b642f7-fcf0-45f8-9628-cf5cb74bf49f"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4863),
+                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(8042),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -540,10 +535,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("dae5787c-b3af-4bbd-849f-bcbc3c0edde8"),
+                            ProductId = new Guid("687b04ff-20e1-446a-8846-91b62821670d"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4871),
+                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(8049),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -767,7 +762,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 9, 19, 49, 26, 327, DateTimeKind.Utc).AddTicks(4824),
+                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(7966),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
