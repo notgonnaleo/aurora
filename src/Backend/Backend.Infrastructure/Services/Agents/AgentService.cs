@@ -39,6 +39,7 @@ namespace Backend.Infrastructure.Services.Agents
             agent.CreatedBy = context.UserId;
             agent.Updated = DateTime.UtcNow;
             agent.UpdatedBy = context.UserId;
+            agent.Active = true;
             _appDbContext.Agents.Add(agent);
             _appDbContext.SaveChanges();
             return agent;
@@ -52,6 +53,9 @@ namespace Backend.Infrastructure.Services.Agents
 
         public Agent? GetById(Guid tenantId, Guid agentId)
         {
+            if(tenantId == Guid.Empty || agentId == Guid.Empty)
+                return null;
+
             var context = LoadContext();
             ValidateTenant(tenantId);
             return _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.TenantId == context.Tenant.Id);
@@ -66,6 +70,20 @@ namespace Backend.Infrastructure.Services.Agents
             model.Active = true;
             _appDbContext.Update(model);
             return _appDbContext.SaveChanges() > 0;
+        }
+
+        public AgentDetail GetAgentDetails(Guid agentId)
+        {
+            var agent = _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.Active);
+            agent.AgentType = _appDbContext.AgentTypes.FirstOrDefault(x => x.AgentTypeId == agent.AgentTypeId);    
+            return new AgentDetail
+            {
+                Agent = agent,
+                Profile = _appDbContext.Profiles.FirstOrDefault(x => x.AgentId == agent.AgentId && x.Active),
+                PhoneNumbers = _appDbContext.Phones.Where(x => x.AgentId == agentId && x.Active),
+                EmailAddresses = _appDbContext.Emails.Where(x => x.AgentId == agentId && x.Active),
+                Addresses = _appDbContext.Addresses.Where(x => x.AgentId == agentId && x.Active)
+            };
         }
 
         public bool Delete(Guid Id)

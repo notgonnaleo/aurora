@@ -20,6 +20,9 @@ using Backend.Domain.Entities.SubCategories;
 using Backend.Infrastructure.Services.Categories;
 using Backend.Infrastructure.Services.SubCategories;
 using Backend.Infrastructure.Services.Agents;
+using Backend.Infrastructure.Services.Contact;
+using Backend.Infrastructure.Services.Addresses;
+using Backend.Infrastructure.Services.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +58,12 @@ builder.Services.AddScoped<TenantService>();
 // User
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserContextService>();
+
+// Contact
+builder.Services.AddScoped<PhoneService>();
+builder.Services.AddScoped<EmailAddressService>();
+builder.Services.AddScoped<AddressService>();
+builder.Services.AddScoped<ProfileService>();
 
 /*
  * HOW TO UPDATE AND GENERATE MIGRATIONS:

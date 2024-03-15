@@ -1,0 +1,71 @@
+﻿@using Backend.Domain.Entities.Addresses;
+<div class="card-body">
+    @if (Addresses.Any())
+    {
+        <div class="table-responsive">
+            <table class="table search-table align-middle text-nowrap">
+                <tbody>
+                    @foreach (var address in Addresses)
+                    {
+                        <!-- start row -->
+                        <tr class="search-items">
+                            <td>
+                                <p>@(address.Primary ?? false ? "Primary contact" : $"{string.Empty}")</p>
+                            </td>
+                            <td>
+                                <span class="usr-email-addr" id="@address.AddressId">@address.CityName, @address.CountryName - @address.PostalCode</span>
+                            </td>
+                            <td class="text-end">
+                                <div class="action-btn">
+                                    <a class="text-primary edit" @onclick="() => EditItem(address)">
+                                        <i class="ti ti-eye fs-5"></i>
+                                    </a>
+                                    <a class="text-dark delete ms-2" @onclick="() => DeleteModalAction(address)">
+                                        <i class="ti ti-trash fs-5"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- end row -->
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p>No phone numbers created to this agent yet.</p>
+    }
+</div>
+@if (selectedAddress is not null)
+{
+    <Frontend.Web.Components.Addresses.Modals.DeleteAddress Model="selectedAddress" ShowModal="ShowModal" />
+}
+
+@code
+{
+    Address? selectedAddress = null;
+    public void DeleteModalAction(Address address)
+    {
+        ShowModal = true;
+        selectedAddress = address;
+    }
+}
+@code
+{
+    [Parameter]
+    public IEnumerable<Address> Addresses { get; set; }
+
+    [Parameter]
+    public bool ShowModal { get; set; }
+}
+@code
+{
+    [Parameter]
+    public EventCallback<Address> SelectedItem { get; set; }
+
+    private void EditItem(Address selectedAdress)
+    {
+        SelectedItem.InvokeAsync(selectedAdress);
+    }
+}

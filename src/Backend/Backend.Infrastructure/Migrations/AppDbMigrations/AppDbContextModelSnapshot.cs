@@ -23,6 +23,95 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "uuid-ossp");
             NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
 
+            modelBuilder.Entity("Backend.Domain.Entities.Addresses.Address", b =>
+                {
+                    b.Property<Guid>("AddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("AddressTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("CityId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CityName")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CountryName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("Primary")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("StateId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StateName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StreetName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("StreetNumber")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("AddressId");
+
+                    b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            AddressId = new Guid("6ac52fbb-db9b-4210-9160-aac4a39285c3"),
+                            Active = true,
+                            AddressTypeId = 1,
+                            AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
+                            CityId = 1,
+                            CityName = "Atibaia",
+                            CountryId = 1,
+                            CountryName = "Brazil",
+                            PostalCode = "12947320",
+                            Primary = true,
+                            Reference = "1350",
+                            StateId = 1,
+                            StateName = "Sao Paulo",
+                            StreetName = "Avenida Paulista",
+                            StreetNumber = "1337",
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        });
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.Agents.Agent", b =>
                 {
                     b.Property<Guid>("AgentId")
@@ -61,6 +150,32 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasIndex("AgentTypeId");
 
                     b.ToTable("Agent");
+
+                    b.HasData(
+                        new
+                        {
+                            AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
+                            Active = true,
+                            AgentTypeId = 2,
+                            Name = "Olheiras Clinica Oftalmologica",
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        },
+                        new
+                        {
+                            AgentId = new Guid("4c223cf3-a4ee-4bc3-82a0-763a73673114"),
+                            Active = true,
+                            AgentTypeId = 2,
+                            Name = "Fastcar AutoParts",
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        },
+                        new
+                        {
+                            AgentId = new Guid("a5c4423a-4e92-4f3d-a4eb-89f1cd1a03d7"),
+                            Active = true,
+                            AgentTypeId = 2,
+                            Name = "Speed Turbo Mecanica e Performance",
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        });
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Agents.AgentType", b =>
@@ -99,6 +214,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         {
                             AgentTypeId = 4,
                             AgentTypeName = "Vendor"
+                        },
+                        new
+                        {
+                            AgentTypeId = 5,
+                            AgentTypeName = "Physical Store"
                         });
                 });
 
@@ -139,7 +259,122 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1649),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4056),
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        });
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Contacts.Email", b =>
+                {
+                    b.Property<Guid>("EmailAddressId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("text");
+
+                    b.Property<bool?>("Primary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("EmailAddressId");
+
+                    b.HasIndex("AgentId");
+
+                    b.ToTable("Emails");
+
+                    b.HasData(
+                        new
+                        {
+                            EmailAddressId = new Guid("5f26a4d5-e05f-4d07-ba3d-25324b567b00"),
+                            Active = false,
+                            AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
+                            EmailAddress = "lbruni10@gmail.com",
+                            Primary = true,
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        },
+                        new
+                        {
+                            EmailAddressId = new Guid("709d8de8-bdb0-4703-81d0-e8d3764ed263"),
+                            Active = false,
+                            AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
+                            EmailAddress = "leo.bruni130@gmail.com",
+                            Primary = false,
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        });
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Contacts.Phone", b =>
+                {
+                    b.Property<Guid>("PhoneId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AreaCode")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Primary")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PhoneId");
+
+                    b.HasIndex("AgentId");
+
+                    b.ToTable("Phones");
+
+                    b.HasData(
+                        new
+                        {
+                            PhoneId = new Guid("7c6a7504-6747-4a5d-b2df-c43484371138"),
+                            Active = false,
+                            AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
+                            AreaCode = "55",
+                            PhoneNumber = "11955506737",
+                            Primary = true,
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -272,11 +507,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("b5a83549-f6eb-4da7-89a8-deaef46736d2"),
+                            ProductId = new Guid("f1894002-ddad-4c40-b6af-6413c1904427"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1800),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4242),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -291,10 +526,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("4cb47ac6-0ba3-4a69-a447-f6ba362617a5"),
+                            ProductId = new Guid("9564bf79-ab37-48dc-809b-34fd9572e85c"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1808),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4251),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -416,6 +651,70 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.ToTable("ProductVariants");
                 });
 
+            modelBuilder.Entity("Backend.Domain.Entities.Profiles.Profile", b =>
+                {
+                    b.Property<Guid>("ProfileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("AgentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CNAE")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CNPJ")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CPF")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProfileId");
+
+                    b.ToTable("Profiles");
+
+                    b.HasData(
+                        new
+                        {
+                            ProfileId = new Guid("bf489dd5-c2d6-444d-a761-4184b6471b96"),
+                            Active = true,
+                            AgentId = new Guid("4c223cf3-a4ee-4bc3-82a0-763a73673114"),
+                            CNPJ = "1234556789",
+                            CPF = "9876544321",
+                            DisplayName = "Leonardo B.",
+                            FirstName = "Leonardo",
+                            LastName = "Bruni",
+                            TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
+                        });
+                });
+
             modelBuilder.Entity("Backend.Domain.Entities.SubCategories.SubCategory", b =>
                 {
                     b.Property<Guid>("SubCategoryId")
@@ -458,7 +757,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 2, 29, 23, 9, 24, 525, DateTimeKind.Utc).AddTicks(1761),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4184),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -473,6 +772,28 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .IsRequired();
 
                     b.Navigation("AgentType");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Contacts.Email", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Contacts.Phone", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>

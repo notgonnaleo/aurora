@@ -19,10 +19,6 @@
                     <InputText class="form-control" id="name" placeholder="Agent Name" @bind-Value="@agent.Name" />
                 </div>
             </div>
-            <div class="mb-2 col-sm-12">
-                <label for="active" class="form-label">Active</label>
-                <InputCheckbox class="form-check-input" id="active" @bind-Value="@agent.Active" />
-            </div>
             <div class="mb-2 col-sm-12 p-2">
                 <label for="colors" class="form-label">Agent Type</label>
                 <select class="form-select" @bind="@agent.AgentTypeId">
@@ -45,19 +41,11 @@
     private Agent agent = new Agent();
     private async Task CreateAgent()
     {
-        try
-        {
-            var context = await _authenticationService.GetContext();
-            agent.TenantId = context.Tenant.Id;
-            Agent newAgent = await _agentService.CreateAgent(agent);
-            if (newAgent is not null && newAgent.AgentId != Guid.Empty)
-                navigator.NavigateTo(navigator.Uri, true);
-        }
-        catch (Exception ex)
-        {
-            // Handle exceptions appropriately
-            throw;
-        }
+        var context = await _authenticationService.GetContext();
+        agent.TenantId = context.Tenant.Id;
+        Agent newAgent = await _agentService.CreateAgent(agent);
+        if (newAgent is not null && newAgent.AgentId != Guid.Empty)
+            navigator.NavigateTo(navigator.Uri, true);
     }
 }
 

@@ -1,15 +1,242 @@
 ﻿@page "/agents/edit/{agentId}"
+@using Backend.Domain.Entities.Addresses;
+@using Backend.Domain.Entities.Agents;
+@using Backend.Domain.Entities.Contacts;
+@using Frontend.Web.Services.Agents;
+@using Frontend.Web.Services.Authentication;
 @inject NavigationManager NavigationManager
+@inject AgentService _agentService
+@inject AuthenticationService _authenticationService;
 
-<PageTitle>Aurora - Edit Agent</PageTitle>
+<PageTitle>Aurora - Edit</PageTitle>
+
+<aside class="right-sidebar @formCssClass">
+@if (isPhoneNumberSidebar)
+{
+    <Frontend.Web.Components.PhoneNumbers.Forms.Add.AddPhoneNumber CollapseRightSidebar=collapsePhoneNumberForm
+        ToggleRightSidebar="TogglePhoneNumberForm" AgentId="Model.Agent.AgentId" Model="selectedPhoneNumber" />
+}
+
+@if (isEmailSidebar)
+{
+        <Frontend.Web.Components.Emails.Forms.Add.AddEmail CollapseRightSidebar=collapseEmailForm
+            ToggleRightSidebar="ToggleEmailForm" AgentId="Model.Agent.AgentId" Model="selectedEmail"/>
+}
+@if (isAddressSidebar)
+{
+        <Frontend.Web.Components.Addresses.Forms.Add.AddAddress CollapseRightSidebar=collapseEmailForm
+            ToggleRightSidebar="ToggleAddressForm" AgentId="Model.Agent.AgentId" Model="selectedAddress"/>
+}
+</aside>
+
 <div class="container-fluid">
-    <Frontend.Web.Components.Agents.Forms.Edit.EditAgent agentId="@agentId" />
-    
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
+            <li class="breadcrumb-item">
+                <a href="#" class="text-info d-flex align-items-center"><i class="ti ti-home fs-4 mt-1"></i></a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#" class="text-info">Library</a>
+            </li>
+            <li class="breadcrumb-item active text-info " aria-current="page">
+                Data
+            </li>
+        </ol>
+    </nav>
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-lg-6 align-items-strech">
+                <div class="card w-100">
+                    @* Agent basic info *@
+                    <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
+                    <div class="border-bottom"></div>
+                    @* Profile *@
+                    <Frontend.Web.Components.Profiles.Forms.Edit.EditProfile Profile="Model?.Profile" AgentId="Model.Agent.AgentId" AgentTypeId="Model.Agent.AgentTypeId"/>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                @* Phones *@
+                <div class="row">
+                    <div class="card">
+                        <div class="col-sm-12">
+                            <div class="col-sm-2 p-4">
+                                <button type="button" class="btn btn-outline-primary" @onclick="AddPhoneNumber">
+                                    <i class="ti ti-circle-plus cursor-pointer p-4">
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
+                        <Frontend.Web.Components.PhoneNumbers.Table.PhoneNumberTable PhoneNumbers="Model?.PhoneNumbers" ShowModal="ShowPhoneModal" SelectedItem="EditPhoneNumber" />
+                    </div>
+                </div>
 
+                @* Emails *@
+                <div class="row">
+                    <div class="card">
+                        <div class="col-sm-12">
+                            <div class="col-sm-2 p-4">
+                                <button type="button" class="btn btn-outline-primary" @onclick="AddEmail">
+                                    <i class="ti ti-circle-plus cursor-pointer p-4">
+                                    </i>
+                                </button>
+                            </div>
+                        </div>
+                        <Frontend.Web.Components.Emails.Table.EmailTable EmailAddresses="Model?.EmailAddresses" ShowModal="ShowEmailModal" SelectedItem="EditEmail"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* Address numbers  *@
+        <div class="row">
+            <div class="card">
+                <div class="col-sm-12">
+                    <div class="col-sm-2 p-4">
+                        <button type="button" class="btn btn-outline-primary" @onclick="AddAddress">
+                            <i class="ti ti-circle-plus cursor-pointer p-4">
+                            </i>
+                        </button>
+                    </div>
+                </div>
+                <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model?.Addresses" ShowModal="ShowAddressModal" SelectedItem="EditAddress"/>
+            </div>
+        </div>
+    }
 </div>
 
 @code
 {
     [Parameter]
-    public string agentId { get; set; }
+    public string? agentId { get; set; }
+}
+
+@code
+{
+    Phone? selectedPhoneNumber = null;
+    public void EditPhoneNumber(Phone selectedItem)
+    {
+        selectedPhoneNumber = selectedItem;
+        TogglePhoneNumberForm();
+    }
+
+    public void AddPhoneNumber()
+    {
+        selectedPhoneNumber = null;
+        TogglePhoneNumberForm();
+    }
+}
+
+@code
+{
+    Email? selectedEmail = null;
+    public void EditEmail(Email selectedItem)
+    {
+        selectedEmail = selectedItem;
+        ToggleEmailForm();
+    }
+
+    public void AddEmail()
+    {
+        selectedEmail = null;
+        ToggleEmailForm();
+    }
+}
+
+@code
+{
+    Address? selectedAddress = null;
+    public void EditAddress(Address selectedItem)
+    {
+        selectedAddress = selectedItem;
+        ToggleAddressForm();
+    }
+    public void AddAddress()
+    {
+        selectedAddress = null;
+        ToggleAddressForm();
+    }
+}
+
+@code
+{
+    public bool ShowPhoneModal;
+    public bool ShowAddressModal;
+    public bool ShowEmailModal;
+}
+
+@code
+{
+    private string? btnText = "New";
+    public string? formCssClass = null;
+
+    public bool isPhoneNumberSidebar = false;
+    public bool isEmailSidebar = false;
+    public bool isAddressSidebar = false;
+
+    private bool collapsePhoneNumberForm = true;
+    private void TogglePhoneNumberForm()
+    {
+        ShowPhoneModal = false;
+        ShowAddressModal = false;
+        ShowEmailModal = false;
+
+        isPhoneNumberSidebar = true;
+        isEmailSidebar = false;
+        isAddressSidebar = false;
+
+        collapseEmailForm = true;
+        collapsePhoneNumberForm = !collapsePhoneNumberForm;
+        formCssClass = collapsePhoneNumberForm ? null : "show-menu";
+        btnText = collapsePhoneNumberForm ? "New" : "Hide menu";
+    }
+
+    private bool collapseEmailForm = true;
+    private void ToggleEmailForm()
+    {
+        ShowPhoneModal = false;
+        ShowAddressModal = false;
+        ShowEmailModal = false;
+
+        isPhoneNumberSidebar = false;
+        isEmailSidebar = true;
+        isAddressSidebar = false;
+
+        collapsePhoneNumberForm = true;
+        collapseEmailForm = !collapseEmailForm;
+        formCssClass = collapseEmailForm ? null : "show-menu";
+    }
+
+    private bool collapseAddressForm = true;
+    private void ToggleAddressForm()
+    {
+        ShowPhoneModal = false;
+        ShowAddressModal = false;
+        ShowEmailModal = false;
+
+        isPhoneNumberSidebar = false;
+        isEmailSidebar = false;
+        isAddressSidebar = true;
+
+        collapsePhoneNumberForm = true;
+        collapseAddressForm = !collapseAddressForm;
+        formCssClass = collapseAddressForm ? null : "show-menu";
+    }
+}
+
+@code
+{
+    public bool isLoading = true;
+    public AgentDetail Model = new AgentDetail();
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        if (!string.IsNullOrEmpty(agentId)){
+            Model = await _agentService.GetAgentWithDetail(agentId.ToString());
+        }
+        isLoading = false;
+    }
 }

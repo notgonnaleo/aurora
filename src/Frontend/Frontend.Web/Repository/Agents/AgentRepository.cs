@@ -30,6 +30,13 @@ namespace Frontend.Web.Repository.Agents
             return await _httpClientRepository.Get(request);
         }
 
+        public async Task<AgentDetail> GetAgentWithDetail(string agentId)
+        {
+            var parameters = new RouteParameterRequest() { ParameterName = AgentsEnums.GET.GetAgentWithDetail.Args.agentId, ParameterValue = agentId };
+            var request = new RouteBuilder<AgentDetail>().Send(Endpoints.Agents, Methods.Agents.GET.GetAgentWithDetail.RouteName, parameters);
+            return await _httpClientRepository.GetById(request);
+        }
+
         public async Task<IEnumerable<AgentType>> GetAgentTypes()
         {
             var request = new RouteBuilder<AgentType>().Send(Endpoints.AgentTypes, Methods.Default.GET);

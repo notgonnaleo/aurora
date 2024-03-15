@@ -1,0 +1,54 @@
+﻿@using Backend.Domain.Entities.Addresses;
+@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Contacts;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Contacts;
+
+@inject NavigationManager navigator;
+@inject ContactService _contactService;
+
+<div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myModalLabel">
+                    Warning
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <h4>
+                    Delete @Model.CityName?
+                </h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                    Close
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="@backDrop"></div>
+
+@code
+{
+    public string? inlineStyle => ShowModal ? "display: block;" : "display: none;";
+    public string? modalClass => ShowModal ? "show" : null;
+    public string? backDrop => ShowModal ? "modal-backdrop fade show" : null;
+
+}
+
+@code
+{
+    public void CloseModal() => ShowModal = !ShowModal;
+}
+
+@code
+{
+    [Parameter] public bool ShowModal { get; set; }
+    [Parameter] public Address Model { get; set; }
+}

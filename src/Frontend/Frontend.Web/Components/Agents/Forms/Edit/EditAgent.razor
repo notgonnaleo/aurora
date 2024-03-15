@@ -1,65 +1,77 @@
 ﻿@using Backend.Domain.Entities.Agents;   
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Agents;
-@inject AgentService _agentService
-@inject NavigationManager navigator
+@inject AgentService _agentService;
+@inject NavigationManager navigator;
 @inject AuthenticationService _authenticationService;
 
-
-<div>
-    <div class="card p-4">
-        <div class="row">
-            
-            <div class="col-md-9">
-                <form>
-                    <div class="row">
-                        <div class="mb-3 col-sm-3">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Name" @bind="@model.Name">
-                        </div>
-                        
-                        
-                    </div>
-                   
-                    <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save</button>
-                </form>
-            </div>
-        </div>
+@if (isLoading)
+{
+    <Frontend.Web.Components.Loader.LoadingSpinner />
+}
+else
+{
+    <div class="row m-4">
+        @if (Agent is not null && !isLoading)
+        {
+            <h5 class="card-title fw-semibold">Basic info</h5>
+            <EditForm Model="Agent">
+                <div class="mb-3 col-sm-12">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Name" @bind="@Agent.Name">
+                </div>
+                <div class="mb-3 col-sm-12">
+                    <label for="agentTypes">Agent Type</label>
+                    <select class="form-select" @bind="@Agent.AgentTypeId">
+                        <option value="" disabled hidden selected>Update the agent type.</option>
+                        @foreach (var agentType in agentTypes)
+                        {
+                            <option value="@agentType.AgentTypeId">@agentType.AgentTypeName</option>
+                        }
+                    </select>
+                </div>
+                <button type="button" @onclick="UpdateAgent" class="btn btn-default float-right">Save basic info</button>
+            </EditForm>
+        }
     </div>
-</div>
-
+}
 
 @code
 {
     [Parameter]
-    public string agentId { get; set; }
+    public Agent? Agent { get; set; }
+    public bool isLoading;
+}
 
-    private Agent model = new Agent();
+@code
+{
+    public List<AgentType> agentTypes = new List<AgentType>();
+    public async Task GetAgentTypes()
+    {
+        var response = await _agentService.GetAgentTypes();
+        agentTypes = response.ToList();
+    }
+}
 
+@code
+{
     protected override async Task OnInitializedAsync()
     {
-        var context = await _authenticationService.GetContext();
-        model.TenantId = context.Tenant.Id;
-
-        var queryString = navigator.Uri.Split('/').Last();
-        model = await _agentService.GetAgent(model.TenantId.ToString(), agentId.ToString());
+        isLoading = true;
+        await GetAgentTypes();
+        isLoading = false;
     }
+}
 
+@code
+{
     public async Task UpdateAgent()
     {
-        try
+        // Objeto de navegacao ta atualizando o registro na agenttypes por isso ta dando merda - arrumar 
+        Agent.AgentType = agentTypes.FirstOrDefault(x => x.AgentTypeId == Agent.AgentTypeId);
+        if (await _agentService.UpdateAgent(Agent))
         {
-            
-
-            bool updated = await _agentService.UpdateAgent(model);
-            if (updated)
-            {
-                navigator.NavigateTo("/agents");
-            }
-        }
-        catch (Exception ex)
-        {
-            throw;
+            navigator.NavigateTo(navigator.Uri, true);
         }
     }
 }

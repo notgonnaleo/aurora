@@ -74,8 +74,6 @@ namespace Backend.API.Controllers.Agents
                 
                 return Ok(_agentService.Update(model));
 
-
-
             }
             catch (Exception ex)
             {
@@ -98,5 +96,19 @@ namespace Backend.API.Controllers.Agents
             }
         }
 
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetAgentWithDetail")]
+        public ActionResult GetAgentWithDetail(Guid agentId)
+        {
+            try
+            {
+                return Ok(_agentService.GetAgentDetails(agentId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
