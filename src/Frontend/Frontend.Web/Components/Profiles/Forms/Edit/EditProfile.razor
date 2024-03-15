@@ -21,20 +21,18 @@
                 <label for="profileName" class="form-label">Profile Name/Display Name</label>
                 <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@NewProfile.DisplayName">
             </div>
-            <div class="mb-3 col-sm-12">
-                <div class="mb-3 col-sm-6">
-                    <label for="cpf" class="form-label">CPF</label>
-                    <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CPF">
-                </div>
-            @if (AgentTypeId == (int)AgentTypes.Company || AgentTypeId == (int)AgentTypes.Vendor || AgentTypeId == (int)AgentTypes.Physical_Store)
+            <div class="mb-3 col-sm-6">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CPF">
+            </div>
+            @if (AgentTypeId != (int)AgentTypes.Employee)
             {
                 <div class="mb-3 col-sm-6">
                     <label for="cpf" class="form-label">CNPJ</label>
                     <input type="text" class="form-control" id="cnpj" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CNPJ">
                 </div>
             }
-            </div>
-            @if (AgentTypeId == (int)AgentTypes.Company || AgentTypeId == (int)AgentTypes.Vendor || AgentTypeId == (int)AgentTypes.Physical_Store)
+            @if (AgentTypeId != (int)AgentTypes.Employee)
             {
                 <div class="mb-3 col-sm-12">
                     <label for="CNAE" class="form-label">CNAE</label>
@@ -47,15 +45,13 @@
                     </select>
                 </div>
             }
-            <div class="mb-3 col-sm-12">
-                <div class="mb-3 col-sm-6">
-                    <label for="profileName" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@NewProfile.FirstName">
-                </div>
-                <div class="mb-3 col-sm-6">
-                    <label for="profileName" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@NewProfile.LastName">
-                </div>
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@NewProfile.FirstName">
+            </div>
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@NewProfile.LastName">
             </div>
             <div class="mb-3 col-sm-6">
                 <button type="button" class="btn btn-default float-right" @onclick="CreateProfile">Save agent profile</button>
@@ -70,7 +66,7 @@
     }
     else
     {
-        <div class="mb-3 col-sm-6">
+        <div class="mb-3 col-sm-12">
             <label for="profileName" class="form-label">Profile Name</label>
             <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Profile.DisplayName">
         </div>
@@ -78,14 +74,14 @@
             <label for="cpf" class="form-label">CPF</label>
             <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@Profile.CPF">
         </div>
-        @if (AgentTypeId == (int)AgentTypes.Company || AgentTypeId == (int)AgentTypes.Vendor || AgentTypeId == (int)AgentTypes.Physical_Store)
+        @if (AgentTypeId != (int)AgentTypes.Employee)
         {
             <div class="mb-3 col-sm-6">
                 <label for="cpf" class="form-label">CNPJ</label>
-                <input type="text" class="form-control" id="cnpj" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CNPJ">
+                <input type="text" class="form-control" id="cnpj" placeholder="XXX.XXX.XXX-XX" @bind="@Profile.CNPJ">
             </div>
         }
-        @if (AgentTypeId == (int)AgentTypes.Company || AgentTypeId == (int)AgentTypes.Vendor || AgentTypeId == (int)AgentTypes.Physical_Store)
+        @if (AgentTypeId != (int)AgentTypes.Employee)
         {
             <div class="mb-3 col-sm-12">
                 <label for="CNAE" class="form-label">CNAE</label>
@@ -98,15 +94,13 @@
                 </select>
             </div>
         }
-        <div class="mb-3 col-sm-12">
-            <div class="mb-3 col-sm-6">
-                <label for="profileName" class="form-label">First Name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@Profile.FirstName">
-            </div>
-            <div class="mb-3 col-sm-6">
-                <label for="profileName" class="form-label">Last Name</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@Profile.LastName">
-            </div>
+        <div class="mb-3 col-sm-6">
+            <label for="profileName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@Profile.FirstName">
+        </div>
+        <div class="mb-3 col-sm-6">
+            <label for="profileName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@Profile.LastName">
         </div>
         <div class="mb-3 col-sm-6">
             <button type="button" class="btn btn-default float-right" @onclick="UpdateProfile">Save agent profile</button>
@@ -133,10 +127,12 @@
     {
         var context = await _authenticationService.GetContext();
         NewProfile.TenantId = context.Tenant.Id;
-        Profile response = await _contactService.CreateProfile(NewProfile);
-
-        if (response != null && response.ProfileId != new Guid())
+        NewProfile.AgentId = AgentId;
+        var response = await _contactService.CreateProfile(NewProfile);
+        if (response is not null)
+        {
             navigator.NavigateTo(navigator.Uri, true);
+        }
     }
 }
 
@@ -146,8 +142,11 @@
     {
         var context = await _authenticationService.GetContext();
         Profile.TenantId = context.Tenant.Id;
+        Profile.AgentId = AgentId;
         if (await _contactService.UpdateProfile(Profile))
+        {
             navigator.NavigateTo(navigator.Uri, true);
+        }
     }
 }
 

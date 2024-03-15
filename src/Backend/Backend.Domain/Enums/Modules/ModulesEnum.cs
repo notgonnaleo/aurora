@@ -464,11 +464,18 @@ namespace Backend.Infrastructure.Enums.Modules
 
             public static class PUT
             {
+                public static class SetAgentProfile
+                {
+                    public static string EndpointName = "SetAgentProfile";
+
+                }
+
                 public static class UpdateProfile
                 {
                     public static string profileId = "profileId";
                     public static string tenantId = "tenantId";
                 }
+
             }
 
             public static class DELETE

@@ -60,18 +60,18 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<bool> DeleteProfile(string tenantId, string profileId)
             {
                 var parameters = new List<RouteParameterRequest>()
-            {
-                new RouteParameterRequest()
                 {
-                    ParameterName = Methods.Profiles.DELETE.DeleteProfile.tenantId,
-                    ParameterValue = tenantId,
-                },
-                new RouteParameterRequest()
-                {
-                    ParameterName = Methods.Profiles.DELETE.DeleteProfile.profileId,
-                    ParameterValue = profileId,
-                }
-            };
+                    new RouteParameterRequest()
+                    {
+                        ParameterName = Methods.Profiles.DELETE.DeleteProfile.tenantId,
+                        ParameterValue = tenantId,
+                    },
+                    new RouteParameterRequest()
+                    {
+                        ParameterName = Methods.Profiles.DELETE.DeleteProfile.profileId,
+                        ParameterValue = profileId,
+                    }
+                };
                 var request = new RouteBuilder<Profile>().SendMultiple(Endpoints.Profiles, Methods.Default.DELETE, parameters);
                 return await _httpClientRepository.Put(request);
             }

@@ -30,19 +30,15 @@ namespace Backend.Domain.Entities.Agents
         public int AgentTypeId { get; set; }
         public string? Name { get; set; }
 
-        public Guid? ProfileId { get; set; }
 
         [ForeignKey("AgentTypeId")]
         public virtual AgentType? AgentType { get; set; }
-
-        [ForeignKey("ProfileId")]
-        public virtual Profile? Profile { get; set; }
-
     }
 
     public class AgentDetail
     {
         public Agent? Agent { get; set; }
+        public Profile Profile { get; set; }
         public IEnumerable<Phone> PhoneNumbers { get; set; }
         public IEnumerable<Email> EmailAddresses { get; set; }
         public IEnumerable<Address> Addresses { get; set; }

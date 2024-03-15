@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Addresses;
+using Backend.Domain.Enums.Geolocation;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Authorization;
@@ -38,6 +39,13 @@ namespace Backend.Infrastructure.Services.Addresses
         {
             var context = LoadContext();
             address = new Address(address, context.UserId);
+
+            if (address.CountryId != null && address.StateId != null)
+            {
+                address.CountryName = Geolocation.Countries.List.FirstOrDefault(x => x.CountryId == address.CountryId)!.CountryName;
+                address.StateName = Geolocation.States.List.FirstOrDefault(x => x.StateId == address.StateId)!.StateName;
+            }
+
             _appDbContext.Addresses.Add(address);
             address.ValidateFields();
             if (_appDbContext.SaveChanges() > 0)

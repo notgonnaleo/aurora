@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Profiles;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Enums.Localization;
+using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using System;
@@ -14,11 +15,13 @@ namespace Backend.Infrastructure.Services.Profiles
     public class ProfileService : Service
     {
         private readonly AppDbContext _appDbContext;
+        private readonly AgentService _agentService;
 
-        public ProfileService(AppDbContext appDbContext, UserContextService main)
+        public ProfileService(AppDbContext appDbContext, AgentService agentService, UserContextService main)
             : base(main)
         {
             _appDbContext = appDbContext;
+            _agentService = agentService;
         }
 
         public IEnumerable<Profile> GetProfiles(Guid tenantId)

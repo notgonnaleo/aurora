@@ -12,6 +12,7 @@ namespace Backend.Domain.Entities.Profiles
 {
     public class Profile : Model
     {
+        [Required]
         public Guid TenantId { get; set; }
 
         /// <summary>
@@ -19,6 +20,7 @@ namespace Backend.Domain.Entities.Profiles
         /// </summary>
         [Key]
         public Guid ProfileId { get; set; }
+        public Guid? AgentId { get; set; }
 
         public string? DisplayName { get; set; }
         public string? FirstName { get; set; }
@@ -35,6 +37,7 @@ namespace Backend.Domain.Entities.Profiles
         public Profile(Profile profile, Guid userId)
         {
             ProfileId = Guid.NewGuid();
+            AgentId = profile.AgentId;
             TenantId = profile.TenantId;
             DisplayName = profile.DisplayName;
             FirstName = profile.FirstName;

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240315030801_APP-SNAPSHOT-V9")]
-    partial class APPSNAPSHOTV9
+    [Migration("20240315195108_APP-SNAPSHOT")]
+    partial class APPSNAPSHOT
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,9 +136,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ProfileId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uuid");
 
@@ -155,8 +152,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasIndex("AgentTypeId");
 
-                    b.HasIndex("ProfileId");
-
                     b.ToTable("Agent");
 
                     b.HasData(
@@ -164,16 +159,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         {
                             AgentId = new Guid("ca7f59ef-02aa-45f0-af27-91da78da253f"),
                             Active = true,
-                            AgentTypeId = 3,
-                            Name = "Leo",
-                            ProfileId = new Guid("bf489dd5-c2d6-444d-a761-4184b6471b96"),
+                            AgentTypeId = 2,
+                            Name = "Olheiras Clinica Oftalmologica",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         },
                         new
                         {
                             AgentId = new Guid("4c223cf3-a4ee-4bc3-82a0-763a73673114"),
                             Active = true,
-                            AgentTypeId = 4,
+                            AgentTypeId = 2,
                             Name = "Fastcar AutoParts",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         },
@@ -182,7 +176,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             AgentId = new Guid("a5c4423a-4e92-4f3d-a4eb-89f1cd1a03d7"),
                             Active = true,
                             AgentTypeId = 2,
-                            Name = "Simas Turbo Mecanica e Performance",
+                            Name = "Speed Turbo Mecanica e Performance",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -268,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(7873),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4056),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -516,11 +510,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("21b642f7-fcf0-45f8-9628-cf5cb74bf49f"),
+                            ProductId = new Guid("f1894002-ddad-4c40-b6af-6413c1904427"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(8042),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4242),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -535,10 +529,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("687b04ff-20e1-446a-8846-91b62821670d"),
+                            ProductId = new Guid("9564bf79-ab37-48dc-809b-34fd9572e85c"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(8049),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4251),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -669,6 +663,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
+                    b.Property<Guid?>("AgentId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("CNAE")
                         .HasColumnType("text");
 
@@ -710,7 +707,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         new
                         {
                             ProfileId = new Guid("bf489dd5-c2d6-444d-a761-4184b6471b96"),
-                            Active = false,
+                            Active = true,
+                            AgentId = new Guid("4c223cf3-a4ee-4bc3-82a0-763a73673114"),
                             CNPJ = "1234556789",
                             CPF = "9876544321",
                             DisplayName = "Leonardo B.",
@@ -762,7 +760,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 15, 3, 8, 1, 714, DateTimeKind.Utc).AddTicks(7966),
+                            Created = new DateTime(2024, 3, 15, 19, 51, 7, 917, DateTimeKind.Utc).AddTicks(4184),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -776,13 +774,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Backend.Domain.Entities.Profiles.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId");
-
                     b.Navigation("AgentType");
-
-                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Contacts.Email", b =>

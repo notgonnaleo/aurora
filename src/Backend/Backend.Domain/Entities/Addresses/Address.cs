@@ -50,8 +50,11 @@ namespace Backend.Domain.Entities.Addresses
             TenantId = address.TenantId;
             AddressTypeId = address.AddressTypeId;
             CountryId = address.CountryId;
+            CountryName = address.CountryName;
             StateId = address.StateId;
+            StateName = address.StateName;
             CityId = address.CityId;
+            CityName = address.CityName;
             Reference = address.Reference;
             StreetName = address.StreetName;
             StreetNumber = address.StreetNumber;

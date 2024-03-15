@@ -143,9 +143,8 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 {
                     AgentId = Guid.Parse("ca7f59ef-02aa-45f0-af27-91da78da253f"),
                     TenantId = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5"),
-                    Name = "Leo", 
-                    ProfileId = Guid.Parse("bf489dd5-c2d6-444d-a761-4184b6471b96"),
-                    AgentTypeId = 3,
+                    Name = "Olheiras Clinica Oftalmologica", 
+                    AgentTypeId = 2,
                     Active = true,
                 },
                 new Agent
@@ -153,14 +152,14 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                     AgentId = Guid.Parse("4c223cf3-a4ee-4bc3-82a0-763a73673114"),
                     TenantId = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5"),
                     Name = "Fastcar AutoParts",
-                    AgentTypeId = 4,
+                    AgentTypeId = 2,
                     Active = true,
                 },
                 new Agent
                 {
                     AgentId = Guid.Parse("a5c4423a-4e92-4f3d-a4eb-89f1cd1a03d7"),
                     TenantId = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5"),
-                    Name = "Simas Turbo Mecanica e Performance",
+                    Name = "Speed Turbo Mecanica e Performance",
                     AgentTypeId = 2,
                     Active = true,
                 }
@@ -237,12 +236,14 @@ namespace Backend.Infrastructure.Mocks.AppDbMocks
                 {
                     TenantId = Guid.Parse("cabaa57a-37ff-4871-be7d-0187ed3534a5"),
                     ProfileId = Guid.Parse("bf489dd5-c2d6-444d-a761-4184b6471b96"),
+                    AgentId = Guid.Parse("4c223cf3-a4ee-4bc3-82a0-763a73673114"),
                     CNAE = null,
                     CNPJ = "1234556789",
                     CPF = "9876544321",
                     DisplayName = "Leonardo B.",
                     FirstName = "Leonardo",
                     LastName = "Bruni",
+                    Active = true
                 }
             );
         }
