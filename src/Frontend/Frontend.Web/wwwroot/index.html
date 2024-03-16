@@ -10,15 +10,25 @@
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 
-<body >
+<body>
     <div id="app">
-        <div class="overflow-hidden center">
+        <div class="center-screen">
             <svg viewBox="25 25 50 50">
                 <circle r="20" cy="50" cx="50"></circle>
             </svg>
         </div>
-
     </div>
+
+    <style>
+        .center-screen 
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+        }
+    </style>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
