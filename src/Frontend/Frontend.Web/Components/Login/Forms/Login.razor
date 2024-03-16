@@ -23,7 +23,7 @@
                     Success, redirecting to main page.
                 </div>
             }
-            else if(logged.HasValue && !logged.Value)
+            else if (logged.HasValue && !logged.Value)
             {
                 <div class="alert alert-warning fade-in" role="alert">
                     Something went wrong.
@@ -58,6 +58,10 @@
 
     public async Task<bool> SignIn()
     {
+        if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
+        {
+            throw new Exception("Fields are empty");
+        }
         isLoading = true;
         logged = await _authenticationService.SignIn(model);
         RedirectAfterSuccess(logged.Value);

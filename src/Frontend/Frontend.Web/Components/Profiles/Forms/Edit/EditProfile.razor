@@ -1,0 +1,157 @@
+﻿@using Backend.Domain.Entities.Profiles;
+@using Backend.Domain.Enums.Agents;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Contacts;
+@inject AuthenticationService _authenticationService;
+@inject ContactService _contactService;
+@inject NavigationManager navigator;
+
+@* Profile *@
+<div class="row m-4">
+    <h5 class="card-title fw-semibold mb-4">Profile info</h5>
+    @* Finish this *@
+    @if (Profile is null)
+    {
+        @if (isShowProfileComponent)
+        {
+            <button type="button" class="btn btn-outline-danger mb-4" @onclick="ShowProfileComponent">
+                <i class="ti ti-x cursor-pointer p-2"></i> Cancel
+            </button>
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">Profile Name/Display Name</label>
+                <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@NewProfile.DisplayName">
+            </div>
+            <div class="mb-3 col-sm-6">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CPF">
+            </div>
+            @if (AgentTypeId != (int)AgentTypes.Employee)
+            {
+                <div class="mb-3 col-sm-6">
+                    <label for="cpf" class="form-label">CNPJ</label>
+                    <input type="text" class="form-control" id="cnpj" placeholder="XXX.XXX.XXX-XX" @bind="@NewProfile.CNPJ">
+                </div>
+            }
+            @if (AgentTypeId != (int)AgentTypes.Employee)
+            {
+                <div class="mb-3 col-sm-12">
+                    <label for="CNAE" class="form-label">CNAE</label>
+                    <select class="form-select" @bind="@NewProfile.CNAE">
+                        <option value="" disabled hidden selected>Select a proper CNAE for this company</option>
+                        @foreach (var cnae in CNAES.List)
+                        {
+                            <option value="@cnae.CnaeId">@cnae.CnaeId - @cnae.CnaeDescription</option>
+                        }
+                    </select>
+                </div>
+            }
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@NewProfile.FirstName">
+            </div>
+            <div class="mb-3 col-sm-6">
+                <label for="profileName" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@NewProfile.LastName">
+            </div>
+            <div class="mb-3 col-sm-6">
+                <button type="button" class="btn btn-default float-right" @onclick="CreateProfile">Save agent profile</button>
+            </div>
+        }
+        else
+        {
+            <button type="button" class="btn btn-outline-primary mb-4" @onclick="ShowProfileComponent">
+                <i class="ti ti-circle-plus cursor-pointer p-2"></i> Create agent profile
+            </button>
+        }
+    }
+    else
+    {
+        <div class="mb-3 col-sm-12">
+            <label for="profileName" class="form-label">Profile Name</label>
+            <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Profile.DisplayName">
+        </div>
+        <div class="mb-3 col-sm-6">
+            <label for="cpf" class="form-label">CPF</label>
+            <input type="text" class="form-control" id="cpf" placeholder="XXX.XXX.XXX-XX" @bind="@Profile.CPF">
+        </div>
+        @if (AgentTypeId != (int)AgentTypes.Employee)
+        {
+            <div class="mb-3 col-sm-6">
+                <label for="cpf" class="form-label">CNPJ</label>
+                <input type="text" class="form-control" id="cnpj" placeholder="XXX.XXX.XXX-XX" @bind="@Profile.CNPJ">
+            </div>
+        }
+        @if (AgentTypeId != (int)AgentTypes.Employee)
+        {
+            <div class="mb-3 col-sm-12">
+                <label for="CNAE" class="form-label">CNAE</label>
+                <select class="form-select" @bind="@Profile.CNAE">
+                    <option value="" disabled hidden selected>Select a proper CNAE for this company</option>
+                    @foreach (var cnae in CNAES.List)
+                    {
+                        <option value="@cnae.CnaeId">@cnae.CnaeId - @cnae.CnaeDescription</option>
+                    }
+                </select>
+            </div>
+        }
+        <div class="mb-3 col-sm-6">
+            <label for="profileName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@Profile.FirstName">
+        </div>
+        <div class="mb-3 col-sm-6">
+            <label for="profileName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@Profile.LastName">
+        </div>
+        <div class="mb-3 col-sm-6">
+            <button type="button" class="btn btn-default float-right" @onclick="UpdateProfile">Save agent profile</button>
+        </div>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public Profile Profile { get; set; }
+
+    [Parameter]
+    public Guid AgentId { get; set; }
+
+    [Parameter]
+    public int AgentTypeId { get; set; }
+}
+
+@code
+{
+    public Profile NewProfile = new Profile();
+    public async Task CreateProfile()
+    {
+        var context = await _authenticationService.GetContext();
+        NewProfile.TenantId = context.Tenant.Id;
+        NewProfile.AgentId = AgentId;
+        var response = await _contactService.CreateProfile(NewProfile);
+        if (response is not null)
+        {
+            navigator.NavigateTo(navigator.Uri, true);
+        }
+    }
+}
+
+@code
+{
+    public async Task UpdateProfile()
+    {
+        var context = await _authenticationService.GetContext();
+        Profile.TenantId = context.Tenant.Id;
+        Profile.AgentId = AgentId;
+        if (await _contactService.UpdateProfile(Profile))
+        {
+            navigator.NavigateTo(navigator.Uri, true);
+        }
+    }
+}
+
+@code
+{
+    public bool isShowProfileComponent = false;
+    public void ShowProfileComponent() => isShowProfileComponent = !isShowProfileComponent;
+}

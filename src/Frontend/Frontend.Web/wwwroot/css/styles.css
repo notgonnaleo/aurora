@@ -453,6 +453,10 @@ tbody, td, tfoot, th, thead, tr {
     border-width: 0
 }
 
+p {
+    color: var(--bs-heading-color, inherit);
+}
+
 label {
     display: inline-block
 }

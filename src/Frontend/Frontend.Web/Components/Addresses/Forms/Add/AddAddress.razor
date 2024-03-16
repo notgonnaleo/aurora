@@ -1,0 +1,277 @@
+﻿@using Backend.Domain.Entities.Addresses;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.SubCategories;
+@using Backend.Domain.Enums.Geolocation;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Contacts;
+@using Frontend.Web.Services.SubCategories;
+@using static Backend.Domain.Enums.Geolocation.Geolocation;
+@inject AuthenticationService _authenticationService
+@inject ContactService _contactService;
+@inject NavigationManager navigator
+
+<div>
+    <i class="ti ti-x cursor-pointer m-2" @onclick="ToggleRightSidebar"></i>
+</div>
+<div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
+    <div class="card-body p-2">
+        <form>
+            @if(Model is null)
+            {
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="country" class="form-label">Country</label>
+                        <select class="form-select" @onchange="SetState">
+                            <option value="" disabled hidden selected> The selected category</option>
+                            @foreach (var country in Countries.List)
+                            {
+                                <option value="@country.CountryId">@country.CountryName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">State</label>
+                        <select class="form-select" @onchange="SetCities">
+                            <option value="" disabled hidden selected> The selected category</option>
+                            @foreach (var state in states)
+                            {
+                                <option value="@state.StateId">@state.StateName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">City</label>
+                        <select class="form-select" @bind="address.CityId">
+                            <option value="" disabled hidden selected> The selected category</option>
+                            @foreach (var city in cities)
+                            {
+                                <option value="@city.CityId">@city.CityName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="mb-3 col-sm-6">
+                        <label for="streetName" class="form-label">Street Name</label>
+                        <input id="streetName" type="text" class="form-control" placeholder="St. Lucas Nogueira" @bind="address.StreetName"></input>
+                    </div>
+
+                    <div class="mb-3 col-sm-6">
+                        <label for="streetNumber" class="form-label">Street Number</label>
+                        <input id="streetNumber" type="text" class="form-control" placeholder="12345" @bind="address.StreetNumber"></input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="address.PostalCode"></input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="reference" class="form-label">Reference</label>
+                        <input id="reference" type="text" class="form-control" placeholder="Ex: Next to a gas station" @bind="address.Reference"></input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-2 col-sm-12 p-2">
+                        <label>Primary Address</label>
+                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @bind="address.Primary">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-2 col-sm-6">
+                        <button @onclick="CreateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                            Save <i class="ti ti-device-floppy"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="country" class="form-label">Country</label>
+                        <select class="form-select" @onchange="SetState">
+                            <option value="@Model.CountryName" disabled hidden selected>@Model.CountryName</option>
+                            @foreach (var country in Countries.List)
+                            {
+                                <option value="@country.CountryId">@country.CountryName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">State</label>
+                        <select class="form-select" @onchange="SetCities">
+                            <option value="@Model.StateName" disabled hidden selected>@Model.StateName</option>
+                            @foreach (var state in states)
+                            {
+                                <option value="@state.StateId">@state.StateName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="state" class="form-label">City</label>
+                        <select class="form-select" @bind="Model.CityId">
+                            <option value="@Model.CityId" disabled hidden selected>@Model.CityName</option>
+                            @foreach (var city in cities)
+                            {
+                                <option value="@city.CityId">@city.CityName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="Model.PostalCode"></input>
+                    </div>
+                </div>
+                <div class="row col-sm-12">
+                    <div class="mb-3 col-sm-6">
+                        <label for="streetName" class="form-label">Street Name</label>
+                        <input id="streetName" type="text" class="form-control" placeholder="St. Lucas Nogueira" @bind="Model.StreetName"></input>
+                    </div>
+
+                    <div class="mb-3 col-sm-6">
+                        <label for="streetNumber" class="form-label">Street Number</label>
+                        <input id="streetNumber" type="text" class="form-control" placeholder="12345" @bind="Model.StreetNumber"></input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="Model.PostalCode"></input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-sm-12">
+                        <label for="reference" class="form-label">Reference</label>
+                        <input id="reference" type="text" class="form-control" placeholder="Ex: Next to a gas station" @bind="Model.Reference"></input>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-2 col-sm-12 p-2">
+                        <label>Primary Address</label>
+                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @bind="Model.Primary">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-2 col-sm-6">
+                        <button @onclick="UpdateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
+                            Save <i class="ti ti-device-floppy"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+@code
+{
+    List<State> states = new List<State>();
+    private void SetState(ChangeEventArgs args)
+    {
+        if(Model is not null)
+        {
+            Model.CountryId = Int32.Parse(args.Value.ToString());
+            if (Model.CountryId is not null)
+            {
+                Model.CountryName = Geolocation.Countries.List.FirstOrDefault(x => x.CountryId == Model.CountryId)!.CountryName;
+                states = Geolocation.GetStatesBySelectedCountry(Model.CountryId.Value);
+            }
+        }
+        else
+        {
+            address.CountryId = Int32.Parse(args.Value.ToString());
+            if (address.CountryId is not null)
+            {
+                address.CountryName = Geolocation.Countries.List.FirstOrDefault(x => x.CountryId == address.CountryId)!.CountryName;
+                states = Geolocation.GetStatesBySelectedCountry(address.CountryId.Value);
+            }
+        }
+
+    }
+
+    List<City> cities = new List<City>();
+    private void SetCities(ChangeEventArgs args)
+    {
+        if (Model is not null)
+        {
+            Model.StateId = Int32.Parse(args.Value.ToString());
+            if (Model.StateId is not null)
+            {
+                Model.StateName = Geolocation.States.List.FirstOrDefault(x => x.CountryId == Model.CountryId && x.StateId == Model.StateId)!.StateName;
+                cities = Geolocation.GetCitiesBySelectedCountryAndState(Model.CountryId!.Value, Model.StateId.Value);
+            }
+        }
+        else
+        {
+            address.StateId = Int32.Parse(args.Value.ToString());
+            if (address.StateId is not null)
+            {
+                address.StateName = Geolocation.States.List.FirstOrDefault(x => x.CountryId == address.CountryId && x.StateId == address.StateId)!.StateName;
+                cities = Geolocation.GetCitiesBySelectedCountryAndState(address.CountryId!.Value, address.StateId.Value);
+            }
+        }
+
+    }
+}
+
+@code
+{
+    private Address address = new Address();
+
+    public async Task CreateAddress()
+    {
+        var context = await _authenticationService.GetContext();
+        address.TenantId = context.Tenant.Id;
+        address.AgentId = AgentId;
+        if(address.CityId is not null)
+        {
+            address.CityName = Geolocation.Cities.List.FirstOrDefault(x => x.CityId == address.CityId)!.CityName;
+        }
+        Address response = await _contactService.CreateAddress(address);
+
+        if (response != null && response.AddressId != new Guid())
+            navigator.NavigateTo(navigator.Uri, true);
+    }
+
+    public async Task UpdateAddress()
+    {
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+        Model.AgentId = AgentId;
+        if (Model.CityId is not null)
+        {
+            Model.CityName = Geolocation.Cities.List.FirstOrDefault(x => x.CityId == Model.CityId)!.CityName;
+        }
+        if (await _contactService.UpdateAddress(Model))
+        {
+            navigator.NavigateTo(navigator.Uri, true);
+        }
+    }
+}
+
+@code
+{
+    [Parameter] public Guid AgentId { get; set; }
+    [Parameter] public Address Model { get; set; }
+}
+
+@code
+{
+    [Parameter] public Action ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+}

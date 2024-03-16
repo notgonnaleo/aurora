@@ -21,8 +21,8 @@ namespace Backend.API.Controllers.Authentication
         private readonly AuthorizationService _authorizationService;
         private readonly UserContextService _userContextService;
         private readonly IMemoryCache _cache;
-        public AuthenticationController(AuthenticationService authenticationService, AuthorizationService authorizationService, UserContextService userContextService, IMemoryCache cache) 
-        { 
+        public AuthenticationController(AuthenticationService authenticationService, AuthorizationService authorizationService, UserContextService userContextService, IMemoryCache cache)
+        {
             _authenticationService = authenticationService;
             _authorizationService = authorizationService;
             _userContextService = userContextService;
@@ -33,6 +33,7 @@ namespace Backend.API.Controllers.Authentication
         [Route("Login")]
         public async Task<ActionResult<UserSessionContext>> Login(LoginRequest request)
         {
+            request.ValidateFields();
             var response = _authenticationService.Authenticate(request);
             if (response.Success)
             {

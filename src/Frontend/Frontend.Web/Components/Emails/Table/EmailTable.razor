@@ -1,0 +1,74 @@
+﻿@using Backend.Domain.Entities.Contacts;
+<div class="card-body">
+@if (EmailAddresses.Any())
+{
+    <div class="table-responsive">
+        <table class="table search-table align-middle text-nowrap">
+            <tbody>
+                @foreach (var emailAddress in EmailAddresses)
+                {
+                    <!-- start row -->
+                    <tr class="search-items">
+                        <td>
+                            <p>@(emailAddress.Primary.GetValueOrDefault() ? "Primary mailing" : $"{string.Empty}")</p>
+                        </td>
+                        <td>
+                            <span class="usr-email-addr" id="@emailAddress.EmailAddressId">@emailAddress.EmailAddress</span>
+                        </td>
+                        <td class="text-end">
+                            <div class="action-btn">
+                                <a class="text-primary edit" @onclick="() => EditItem(emailAddress)">
+                                    <i class="ti ti-eye fs-5"></i>
+                                </a>
+                                <a class="text-dark delete ms-2" @onclick="() => DeleteModalAction(emailAddress)">
+                                    <i class="ti ti-trash fs-5"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- end row -->
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>No emails created to this agent yet.</p>
+}
+</div>
+
+@if(selectedEmail is not null)
+{
+    <Frontend.Web.Components.Emails.Modals.DeleteEmail Email="selectedEmail" ShowModal="ShowModal" />
+}
+
+@code
+{
+    Email? selectedEmail = null;
+    public void DeleteModalAction(Email email)
+    {
+        ShowModal = true;
+        selectedEmail = email;
+    }
+}
+
+@code
+{
+    [Parameter]
+    public IEnumerable<Email> EmailAddresses { get; set; }
+
+    [Parameter]
+    public bool ShowModal { get; set; }
+
+    [Parameter]
+    public EventCallback<Email> SelectedItem { get; set; }
+}
+
+@code
+{
+    private void EditItem(Email selectedEmail)
+    {
+        SelectedItem.InvokeAsync(selectedEmail);
+    }
+}

@@ -1,0 +1,15 @@
+﻿@using Backend.Domain.Entities.Profiles;
+<div>
+    <i class="ti ti-x cursor-pointer p-4"></i>
+</div>
+<div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
+    <div class="card-body p-2">
+        <EditForm Model="Profile">
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Profile Profile { get; set; }
+}

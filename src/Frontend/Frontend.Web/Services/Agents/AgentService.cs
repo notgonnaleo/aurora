@@ -30,6 +30,10 @@ namespace Frontend.Web.Services.Agents
         {
             return await _agentRepository.GetAgent(tenantId, agentId);
         }
+        public async Task<AgentDetail> GetAgentWithDetail(string agentId)
+        {
+            return await _agentRepository.GetAgentWithDetail(agentId);
+        }
 
         public async Task<Backend.Domain.Entities.Agents.Agent> CreateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {

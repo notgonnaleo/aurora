@@ -33,6 +33,10 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string SubCategory = "SubCategories";
         public static string Agents = "Agents";
         public static string AgentTypes = "AgentTypes";
+        public static string Profiles = "Profiles";
+        public static string Phones = "Phones";
+        public static string Addresses = "Addresses";
+        public static string EmailAddresses = "EmailAddresses";
         public static string Stock = "Stock";
     }
 
@@ -53,6 +57,10 @@ namespace Backend.Infrastructure.Enums.Modules
             public static string DELETE = "Delete";
         }
 
+        // Below here we add our custom routes if necessary.
+        // Otherwise, we use the generic ones which increase the productivity a little more when integrating it with the UI
+
+        #region Authorization and Authentication
         /// <summary>
         /// Authentication custom endpoints methods
         /// </summary>
@@ -83,7 +91,9 @@ namespace Backend.Infrastructure.Enums.Modules
 
             }
         }
+        #endregion
 
+        #region Products
         /// <summary>
         /// Products custom endpoints methods
         /// </summary>
@@ -244,7 +254,9 @@ namespace Backend.Infrastructure.Enums.Modules
                 }
             }
         }
+        #endregion
 
+        #region Agents
         /// <summary>
         /// Agents custom endpoint methods
         /// </summary>
@@ -252,6 +264,14 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
+                public static class GetAgentWithDetail
+                {
+                    public static string RouteName = "GetAgentWithDetail";
+                    public static class Args
+                    {
+                        public static string agentId = "agentId";
+                    }
+                }
                 public static class GetAgents
                 {
                     public static string tenantId = "tenantId";
@@ -277,7 +297,7 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class UpdateAgent
                 {
-                    public static string Id = "Id";
+                    public static string Id = "agentId";
                     public static string tenantId = "tenantId";
                 }
             }
@@ -286,11 +306,191 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class DeleteAgent
                 {
-                    public static string Id = "Id";
+                    public static string Id = "agentId";
                     public static string tenantId = "tenantId";
                 }
             }
         }
+
+        public class Addresses
+        {
+            public static class GET
+            {
+                public static class GetAddresses
+                {
+                    public static string tenantId = "tenantId";
+                }
+
+                public static class GetAddress
+                {
+                    public static string tenantId = "tenantId";
+                    public static string addressId = "addressId";
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddAddress
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateAddress
+                {
+                    public static string addressId = "addressId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteAddress
+                {
+                    public static string addressId = "addressId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+        }
+
+        public class EmailAddresses
+        {
+            public static class GET
+            {
+                public static class GetEmails
+                {
+                    public static string tenantId = "tenantId";
+                }
+
+                public static class GetEmail
+                {
+                    public static string tenantId = "tenantId";
+                    public static string emailAddressId = "emailAddressId";
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddEmail
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateEmail
+                {
+                    public static string emailAddressId = "emailAddressId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteEmail
+                {
+                    public static string emailAddressId = "emailAddressId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+        }
+
+        public class Phones
+        {
+            public static class GET
+            {
+                public static class GetPhones
+                {
+                    public static string tenantId = "tenantId";
+                }
+
+                public static class GetPhone
+                {
+                    public static string tenantId = "tenantId";
+                    public static string phoneId = "phoneId";
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddPhone
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdatePhone
+                {
+                    public static string phoneId = "phoneId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeletePhone
+                {
+                    public static string phoneId = "phoneId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+        }
+
+        public class Profiles
+        {
+            public static class GET
+            {
+                public static class GetProfiles
+                {
+                    public static string tenantId = "tenantId";
+                }
+
+                public static class GetProfile
+                {
+                    public static string tenantId = "tenantId";
+                    public static string profileId = "profileId";
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddProfile
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class SetAgentProfile
+                {
+                    public static string EndpointName = "SetAgentProfile";
+
+                }
+
+                public static class UpdateProfile
+                {
+                    public static string profileId = "profileId";
+                    public static string tenantId = "tenantId";
+                }
+
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteProfile
+                {
+                    public static string profileId = "profileId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+        }
+        #endregion
 
         public class Stock
         {
