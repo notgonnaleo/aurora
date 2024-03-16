@@ -38,7 +38,7 @@
                                 <input type="text" class="form-control" id="AgentId" placeholder="AgenttId" @bind="@Model.AgentId" disabled>
                             </div>
 
-                            <div class="mb-3 col-sm-12">
+                            <div class="mb-3 col-sm-3">
                                 <label for="movementType" class="form-label">Movement Type</label>
                                 <select class="form-select" @bind="@Model.MovementType">
                                     <option value="" disabled hidden selected> Movement</option>
@@ -49,7 +49,7 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3 col-sm-12">
+                            <div class="mb-3 col-sm-3">
                                 <label for="movementStatusId" class="form-label">MovementStatus</label>
                                 <select class="form-select" @bind="@Model.MovementStatusId">
                                     <option value="" disabled hidden selected>Status</option>
@@ -60,17 +60,16 @@
                                 </select>
                             </div>
 
-                            <div class="row">
-                                <div class="mb-3 col-sm-3">
-                                    <label for="Quantity">Quantity</label>
-                                    <input type="number" class="form-control" id="Quantity" placeholder="Quantity" @bind="@Model.Quantity">
-                                </div>
-                                <!-- Adicione mais campos conforme necessário para editar os detalhes do estoque -->
+                            <div class="mb-3 col-sm-3">
+                                <label class="form-label" for="Quantity">Quantity</label>
+                                <input type="number" class="form-control" id="Quantity" placeholder="Quantity" @bind="@Model.Quantity">
                             </div>
 
+
+                            
                         </div>
 
-                        <button type="button" @onclick="UpdateStock" class="btn btn-default float-right">Update</button>
+                        <button type="button" @onclick="UpdateStock" class="btn btn-outline-primary">Update</button>
                     }
                 </form>
             </div>
@@ -84,7 +83,7 @@
 @code
 {
     [Parameter]
-    public Backend.Domain.Entities.Stocks.Stock Model { get; set; }
+    public Backend.Domain.Entities.Stocks.Stock? Model { get; set; }
 
     public bool isLoading;
 

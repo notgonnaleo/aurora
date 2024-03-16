@@ -13,7 +13,7 @@
 
 
 <div class="card card-body ">
-    <h5 class="card-title fw-semibold mb-4">Stock</h5>
+    <h3 class="card-title fw-semibold mb-4">Stock</h3>
     @if (isLoading)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
@@ -41,6 +41,11 @@
                             <th>Type Movement</th>
                             <th>IdStatus</th>
                             <th>Quantity</th>
+                            <th>Value</th>
+                            <th>SKU</th>
+                            <th>GTIN</th>
+                            <th>CategoryName</th>
+                            <th>SubCategoryName</th>
 
                         </tr>
                     </thead>
@@ -79,6 +84,21 @@
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.Quantity</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.ProductValue</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.SKU</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.GTIN</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.CategoryName</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.SubCategoryName</span>
                                 </td>
                                 <td>
                                     <div class="action-btn">
