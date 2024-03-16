@@ -39,9 +39,18 @@ namespace Frontend.Web.Services.Stocks
                 Quantity = x.Quantity,
                 MovementType = x.MovementType,
 
-                // CAMPOS DE PRODUTO
+                // Campos de Product
                 ProductName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Name,
-                
+                ProductValue = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Value ?? 0,
+                SKU = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SKU,
+                GTIN = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.GTIN,
+                //VariantName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.VariantName,
+                //AgentName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.AgentName,
+
+                // Campos de Category e SubCategory
+                CategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.CategoryName,
+                SubCategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SubCategoryName
+
             });
         }
 

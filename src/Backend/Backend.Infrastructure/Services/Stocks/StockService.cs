@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
+using static Backend.Infrastructure.Enums.Modules.Methods;
 
 namespace Backend.Infrastructure.Services.Stocks
 {
@@ -31,7 +32,7 @@ namespace Backend.Infrastructure.Services.Stocks
             _productService = productService;
         }
 
-        public Stock Add(Stock stock)
+        public Domain.Entities.Stocks.Stock Add(Domain.Entities.Stocks.Stock stock)
         {
 
             stock.StockMovementId = Guid.NewGuid();
@@ -51,7 +52,7 @@ namespace Backend.Infrastructure.Services.Stocks
             return stock;
         }
 
-        public IEnumerable<Stock> Get()
+        public IEnumerable<Domain.Entities.Stocks.Stock> Get()
         {
             var context = LoadContext();
             return _appDbContext.Stocks.Where(x => x.TenantId == context.Tenant.Id && x.Active == true).ToList();
@@ -59,12 +60,12 @@ namespace Backend.Infrastructure.Services.Stocks
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
         {
-            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
+            IEnumerable<Domain.Entities.Stocks.Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
             List<ProductDetail> products = _productService.GetProductsWithDetail(tenantId).ToList();
 
             return stock.Select(x => new StockDetail
             {
-                // CAMPOS DO OBJETO STOCK
+                // Campos de Stock
                 UserId = x.UserId,
                 TenantId = x.TenantId,
                 VariantId = x.VariantId,
@@ -74,9 +75,17 @@ namespace Backend.Infrastructure.Services.Stocks
                 Active = x.Active,
                 Quantity = x.Quantity,
 
-                // CAMPOS DE PRODUTO
+                // Campos de Product
                 ProductName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Name,
-                //ProductValue = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Value,
+                ProductValue = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Value ?? 0,
+                SKU = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SKU,
+                GTIN = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.GTIN,
+                //VariantName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.VariantName,
+                //AgentName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.AgentName,
+
+                // Campos de Category e SubCategory
+                CategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.CategoryName,
+                SubCategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SubCategoryName
             });
         }
 
@@ -104,7 +113,7 @@ namespace Backend.Infrastructure.Services.Stocks
         public bool Delete(Guid stockMovementId)
         {
             var context = LoadContext();
-            Stock stock = _appDbContext.Stocks.Where(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id).First();
+            Domain.Entities.Stocks.Stock stock = _appDbContext.Stocks.Where(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id).First();
             stock.Active = false;
 
             _appDbContext.Update(stock);
