@@ -20,32 +20,41 @@
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
 </div>
 
-
 <div class="container scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
-    <div class="card-body p-2">
-        <EditForm Model="@stock">
-            <div class="row">
-                <div class="accordion accordion-flush position-relative overflow-hidden" id="accordionFlushExample">
-                    <div class="accordion-item mb-3 shadow-none border rounded">
-                        <h2 class="accordion-header text-center my-3" id="flush-headingOne">
-                            Basic Info
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body px-3 fw-normal">
+    <EditForm Model="@stock">
+        <div class="row">
+            <div class="accordion accordion-flush position-relative overflow-hidden" id="accordionFlushExample">
+                <div class="accordion-item mb-3 shadow-none border rounded">
+                    <h2 class="accordion-header text-center my-3" id="flush-headingOne">
+                        Basic Info
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                        <div class="accordion-body px-3 fw-normal">
 
-                                <div class="row">
-                                    <div class="mb-2 col-sm-12">
-                                        <label for="productId" class="form-label"> Product Name</label>
-                                        <select class="form-select" @onchange="OnProductChange">
-                                            <option value="" disabled hidden selected>Select a Product</option>
-                                            @foreach (var product in products)
-                                            {
-                                                <option value="@product.ProductId">@product.Name</option>
-                                            }
-                                        </select>
-                                    </div>
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <label for="productId" class="form-label"> Product Name</label>
+                                    <select class="form-select" @onchange="OnProductChange">
+                                        <option value="" disabled hidden selected>Select a Product</option>
+                                        @foreach (var product in products)
+                                        {
+                                            <option value="@product.ProductId">@product.Name</option>
+                                        }
+                                    </select>
                                 </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="mb-2 col-sm-12 p-2">
+                                    <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                                    <label>Insert product variant</label>
+                                </div>
+                            </div>
+
+                        @if (isInsertVariant)
+                        {
+                            @if (variant.Any())
+                            {
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="variantId" class="form-label"> Variant Name</label>
@@ -62,65 +71,73 @@
                                         </select>
                                     </div>
                                 </div>
+                            }
+                            else
+                            {
+                                <p>Looks like you don't have any variants registered yet.</p>
+                                <p>Go to the products dashboard and create your first variant</p>
+                                <a class="btn btn-outline-dark-primary" href="/products">Go to products dashboard</a>
+                            }
+                        }
 
-                                <div class="row">
-                                    <div class="mb-2 col-sm-12">
-                                        <label for="agentId" class="form-label"> Agent Name</label>
-                                        <select class="form-select" @bind="@stock.AgentId">
-                                            <option value="" disabled hidden selected>Select a Agent</option>
-                                            @foreach (var agent in agents)
-                                            {
-                                                <option value="@agent.AgentId">@agent.Name</option>
-
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="mb-2 col-sm-12">
-                                        <label for="quantity" class="form-label">Quantity</label>
-                                        <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@stock.Quantity" />
-                                    </div>
-                                </div>
-
-
-                                <div class="mb-3 col-sm-12">
-                                    <label for="movementStatusId" class="form-label">MovementStatus</label>
-                                    <select class="form-select" @bind="@stock.MovementStatusId">
-                                        <option value="" disabled hidden selected>Status</option>
-                                        <option value="1">Available</option>
-                                        <option value="2">replacement</option>
-                                        <option value="3">sold off</option>
-                                        <option value="4">reserved</option>
-                                    </select>
-                                </div>
-
-                                <div class="mb-3 col-sm-12">
-                                    <label for="movementType" class="form-label">Movement Type</label>
-                                    <select class="form-select" @bind="@stock.MovementType">
-                                        <option value="" disabled hidden selected> Movement</option>
-                                        @foreach (var movement in MovementTypes.Movementtype)
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <label for="agentId" class="form-label"> Agent Name</label>
+                                    <select class="form-select" @bind="@stock.AgentId">
+                                        <option value="" disabled hidden selected>Select a Agent</option>
+                                        @foreach (var agent in agents)
                                         {
-                                            <option value="@movement">@movement</option>
+                                            <option value="@agent.AgentId">@agent.Name</option>
+
                                         }
                                     </select>
                                 </div>
-
                             </div>
+
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <label for="quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@stock.Quantity" />
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3 col-sm-12">
+                                <label for="movementStatusId" class="form-label">MovementStatus</label>
+                                <select class="form-select" @bind="@stock.MovementStatusId">
+                                    <option value="" disabled hidden selected>Status</option>
+                                    <option value="1">Available</option>
+                                    <option value="2">replacement</option>
+                                    <option value="3">sold off</option>
+                                    <option value="4">reserved</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-sm-12">
+                                <label for="movementType" class="form-label">Movement Type</label>
+                                <select class="form-select" @bind="@stock.MovementType">
+                                    <option value="" disabled hidden selected> Movement</option>
+                                    @foreach (var movement in MovementTypes.Movementtype)
+                                    {
+                                        <option value="@movement">@movement</option>
+                                    }
+                                </select>
+                            </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
-                <button type="button" @onclick="CreateStock" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
-            </div>
-        </EditForm>
-    </div>
+        </div>
+        <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+            <button type="button" @onclick="CreateStock" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
+        </div>
+    </EditForm>
 </div>
 
 
-@code {
+@code 
+{
     private Stock stock = new Stock();
     private IEnumerable<ProductDetail> products = new List<ProductDetail>();
     private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
@@ -146,6 +163,9 @@
         variant = await _productVariantService.GetVariantsByProduct(tenantId, selectedProductId.ToString());
 
     }
+
+    private bool isInsertVariant = false;
+    private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
 
     private async Task CreateStock()
     {
