@@ -13,14 +13,14 @@
 
 
 <div class="card card-body ">
-    <h3 class="card-title fw-semibold mb-4">Stock</h3>
     @if (isLoading)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
     }
     else
     {
-        @if (!(Model == null || Model.Count() == 0))
+        <h3 class="card-title fw-semibold mb-4">Stock</h3>
+        @if (!(Model is null || Model.Count() == 0))
         {
             <div class="table-responsive">
                 <table class="table search-table align-middle text-nowrap table-fixed">
@@ -35,18 +35,15 @@
                                     </div>
                                 </div>
                             </th>
-                            <th>IdStock</th>
-                            <th>IdProduct</th>
-                            <th>ProductName</th>
-                            <th>Type Movement</th>
-                            <th>IdStatus</th>
-                            <th>Quantity</th>
-                            <th>Value</th>
                             <th>SKU</th>
                             <th>GTIN</th>
-                            <th>CategoryName</th>
-                            <th>SubCategoryName</th>
-
+                            <th>Product Name</th>
+                            <th>Value</th>
+                            <th>Movement Type</th>
+                            <th>Status</th>
+                            <th>Quantity</th>
+                            <th>Category</th>
+                            <th>Sub-Category</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,19 +59,17 @@
                                         </div>
                                     </div>
                                 </td>
-
                                 <td>
-                                    <span class="usr-email-addr" data-email="adams@mail.com">@stock.StockMovementId</span>
+                                    <span class="usr-ph-no">@stock.SKU</span>
                                 </td>
                                 <td>
-
-                                    <span class="usr-email-addr" data-email="adams@mail.com">@stock.ProductId</span>
-
+                                    <span class="usr-ph-no">@stock.GTIN</span>
                                 </td>
                                 <td>
-
                                     <span class="usr-location" data-location="Boston, USA">@stock.ProductName</span>
-
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.ProductValue</span>
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.MovementType</span>
@@ -84,15 +79,6 @@
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.Quantity</span>
-                                </td>
-                                <td>
-                                    <span class="usr-ph-no">@stock.ProductValue</span>
-                                </td>
-                                <td>
-                                    <span class="usr-ph-no">@stock.SKU</span>
-                                </td>
-                                <td>
-                                    <span class="usr-ph-no">@stock.GTIN</span>
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.CategoryName</span>
@@ -112,7 +98,6 @@
                                     </div>
                                 </td>
                             </tr>
-
                         }
                     </tbody>
                 </table>
