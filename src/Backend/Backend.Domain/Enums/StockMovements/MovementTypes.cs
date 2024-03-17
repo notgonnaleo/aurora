@@ -8,14 +8,10 @@ namespace Backend.Domain.Enums.MovementType
 {
     public class MovementTypes
     {
-
-
-
-        public static List<string> Movementtype = new List<string>()
+        public static List<string> MovementType = new List<string>()
         {
-            "Prohibited",
-            "Exit"
-
+            "Output",
+            "Input"
         };
     }
 }
