@@ -42,7 +42,7 @@
                                 <label for="movementType" class="form-label">Movement Type</label>
                                 <select class="form-select" @bind="@Model.MovementType">
                                     <option value="" disabled hidden selected> Movement</option>
-                                    @foreach (var movement in MovementTypes.Movementtype)
+                                    @foreach (var movement in MovementTypes.MovementType)
                                     {
                                         <option value="@movement">@movement</option>
                                     }
