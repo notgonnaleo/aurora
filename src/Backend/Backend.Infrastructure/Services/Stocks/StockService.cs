@@ -71,7 +71,6 @@ namespace Backend.Infrastructure.Services.Stocks
                 VariantId = x.VariantId,
                 StockMovementId = x.StockMovementId,
                 ProductId = x.ProductId,
-                MovementStatusId = x.MovementStatusId,
                 Active = x.Active,
                 Quantity = x.Quantity,
 

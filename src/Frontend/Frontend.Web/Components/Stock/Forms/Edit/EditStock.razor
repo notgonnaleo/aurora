@@ -6,8 +6,6 @@
 @inject NavigationManager navigator
 @inject AuthenticationService _authenticationService;
 
-
-
 <div>
     <div class="card p-4">
         <h5 class="card-title fw-semibold mb-4">Stock details</h5>
@@ -41,22 +39,11 @@
                             <div class="mb-3 col-sm-3">
                                 <label for="movementType" class="form-label">Movement Type</label>
                                 <select class="form-select" @bind="@Model.MovementType">
-                                    <option value="" disabled hidden selected> Movement</option>
-                                    @foreach (var movement in MovementTypes.MovementType)
+                                    <option value="" disabled hidden selected>Action to be done</option>
+                                    @foreach (var movement in Enum.GetValues(typeof(MovementTypes)))
                                     {
-                                        <option value="@movement">@movement</option>
+                                        <option value="@((int)movement)">@movement.ToString()</option>
                                     }
-                                </select>
-                            </div>
-
-                            <div class="mb-3 col-sm-3">
-                                <label for="movementStatusId" class="form-label">MovementStatus</label>
-                                <select class="form-select" @bind="@Model.MovementStatusId">
-                                    <option value="" disabled hidden selected>Status</option>
-                                    <option value="1">Available</option>
-                                    <option value="2">replacement</option>
-                                    <option value="3">sold off</option>
-                                    <option value="4">reserved</option>
                                 </select>
                             </div>
 
@@ -64,11 +51,7 @@
                                 <label class="form-label" for="Quantity">Quantity</label>
                                 <input type="number" class="form-control" id="Quantity" placeholder="Quantity" @bind="@Model.Quantity">
                             </div>
-
-
-                            
                         </div>
-
                         <button type="button" @onclick="UpdateStock" class="btn btn-outline-primary">Update</button>
                     }
                 </form>
@@ -77,24 +60,17 @@
     </div>
 </div>
 
-
-
-
 @code
 {
     [Parameter]
     public Backend.Domain.Entities.Stocks.Stock? Model { get; set; }
 
     public bool isLoading;
-
-
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
-
-        var queryString = navigator.Uri.Split('/').Last();
         Model = await _stockService.GetStock(Model.TenantId.ToString(), Model.StockMovementId.ToString());
         isLoading = false;
     }
@@ -103,15 +79,14 @@
     {
         try
         {
-            bool updated = await _stockService.UpdateStock(Model);
-            if (updated)
+            if (await _stockService.UpdateStock(Model))
             {
-                navigator.NavigateTo("/stock");
+                navigator.NavigateTo(navigator.Uri, true);
             }
         }
         catch (Exception ex)
         {
-            throw;
+            throw ex;
         }
     }
 }
