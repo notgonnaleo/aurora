@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240316154334_APP-SNAPSHOT")]
+    [Migration("20240319010727_APP-SNAPSHOT")]
     partial class APPSNAPSHOT
     {
         /// <inheritdoc />
@@ -262,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6555),
+                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(5925),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -510,11 +510,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("6123c390-acfc-4630-9dbe-b5107b4d9f5b"),
+                            ProductId = new Guid("2c51794e-e031-4fdd-a41d-6106e9452f0a"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6721),
+                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(6062),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -529,10 +529,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("bdd09f7d-41c8-4e45-93fe-5bc7e0567ac7"),
+                            ProductId = new Guid("19bf3937-2995-4dfb-8072-060278be5ce9"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6729),
+                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(6076),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -739,11 +739,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<DateTime?>("MovementDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("MovementStatusId")
+                    b.Property<int?>("MovementType")
                         .HasColumnType("integer");
-
-                    b.Property<string>("MovementType")
-                        .HasColumnType("text");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
@@ -763,7 +760,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("VariantId")
+                    b.Property<Guid?>("VariantId")
                         .HasColumnType("uuid");
 
                     b.HasKey("StockMovementId");
@@ -813,7 +810,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6644),
+                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(6028),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });

@@ -26,6 +26,7 @@ namespace Backend.Domain.Entities.Products
 
         [Required]
         public Guid TenantId { get; set; }        
+
         [Key]
         public Guid ProductId { get; set; }
         public string SKU { get; set; }
@@ -44,8 +45,6 @@ namespace Backend.Domain.Entities.Products
         public Guid? CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
         
-        [ForeignKey("AgentId")]
-        public virtual Agent? Agent { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
         [ForeignKey("SubCategoryId")]

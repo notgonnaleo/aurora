@@ -23,11 +23,11 @@ namespace Backend.Domain.Entities.Stocks
         public Guid UserId { get; set; }
         public int Quantity { get; set; }
         public DateTime? MovementDate { get; set; }
-        public string? MovementType { get; set; }
+        public int? MovementType { get; set; }
 
         //Chaves estrangeiras de outras tabelas 
         [ForeignKey("VariantId")]
-        public Guid VariantId { get; set; }
+        public Guid? VariantId { get; set; }
 
         [ForeignKey("AgentId")]
         public Guid AgentId { get; set; }

@@ -21,7 +21,10 @@ namespace Backend.Domain.Entities.Products
 
         [Required]
         public Guid TenantId { get; set; }
+        
         [Required]
+        [ForeignKey("ProductId")]
+
         public Guid ProductId { get; set; }
 
         public string SKU { get; set; }
@@ -37,9 +40,6 @@ namespace Backend.Domain.Entities.Products
         public double? Value { get; set; }
 
         public bool OverwriteValue { get; set; }
-
-        [ForeignKey("ProductId")]
-        public virtual Product? Product { get; set; }
 
         public ProductVariant(ProductVariant productVariant, Guid userId)
         {

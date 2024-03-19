@@ -55,7 +55,14 @@ namespace Backend.Infrastructure.Services.Stocks
         public IEnumerable<Domain.Entities.Stocks.Stock> Get()
         {
             var context = LoadContext();
-            return _appDbContext.Stocks.Where(x => x.TenantId == context.Tenant.Id && x.Active == true).ToList();
+            return _appDbContext.Stocks
+                .Where(x => x.TenantId == context.Tenant.Id && x.Active == true)
+                .ToList();
+        }
+
+        public IEnumerable<Stock> GetStockInventory()
+        {
+
         }
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
@@ -80,7 +87,6 @@ namespace Backend.Infrastructure.Services.Stocks
                 SKU = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SKU,
                 GTIN = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.GTIN,
                 //VariantName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.VariantName,
-                //AgentName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.AgentName,
 
                 // Campos de Category e SubCategory
                 CategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.CategoryName,
