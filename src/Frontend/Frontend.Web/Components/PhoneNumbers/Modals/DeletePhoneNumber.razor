@@ -24,7 +24,7 @@
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteItem()">
                     Confirm
                 </button>
             </div>
@@ -44,6 +44,11 @@
 @code
 {
     public void CloseModal() => ShowModal = !ShowModal;
+
+    public async Task DeleteItem()
+    {
+        await _contactService.DeletePhone(Model.TenantId.ToString(), Model.PhoneId.ToString());
+    }
 }
 
 @code

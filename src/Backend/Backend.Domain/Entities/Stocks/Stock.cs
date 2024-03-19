@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Categories;
+using Backend.Domain.Enums.StockMovements;
 
 namespace Backend.Domain.Entities.Stocks
 {
@@ -23,9 +24,6 @@ namespace Backend.Domain.Entities.Stocks
         public int Quantity { get; set; }
         public DateTime? MovementDate { get; set; }
         public string? MovementType { get; set; }
-        public int MovementStatusId { get; set; }
-
-
 
         //Chaves estrangeiras de outras tabelas 
         [ForeignKey("VariantId")]
@@ -48,5 +46,6 @@ namespace Backend.Domain.Entities.Stocks
         //public string AgentName { get; set; }
         public string SubCategoryName { get; set; }
         public string CategoryName { get; set; }
+        public MovementStatus MovementStatusId { get; set; }
     }
 }

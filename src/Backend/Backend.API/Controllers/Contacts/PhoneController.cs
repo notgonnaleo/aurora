@@ -76,7 +76,7 @@ namespace Backend.API.Controllers.Phones
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
-        [HttpDelete]
+        [HttpPut]
         [Route("Delete")]
         public ActionResult DeletePhone(Guid tenantId, Guid phoneId)
         {

@@ -52,7 +52,6 @@
 
                     @if (isInsertVariant)
                     {
-
                         <div class="row">
                             <div class="mb-2 col-sm-12">
                                 <label for="variantId" class="form-label"> Variant Name</label>
@@ -92,29 +91,16 @@
                             </div>
                         </div>
 
-
-                        <div class="mb-3 col-sm-12">
-                            <label for="movementStatusId" class="form-label">MovementStatus</label>
-                            <select class="form-select" @bind="@stock.MovementStatusId">
-                                <option value="" disabled hidden selected>Status</option>
-                                <option value="1">Available</option>
-                                <option value="2">replacement</option>
-                                <option value="3">sold off</option>
-                                <option value="4">reserved</option>
-                            </select>
-                        </div>
-
                         <div class="mb-3 col-sm-12">
                             <label for="movementType" class="form-label">Movement Type</label>
                             <select class="form-select" @bind="@stock.MovementType">
-                                <option value="" disabled hidden selected> Movement</option>
-                                @foreach (var movement in MovementTypes.MovementType)
+                                <option value="" disabled hidden selected>Action to be done</option>
+                                @foreach (var movement in Enum.GetValues(typeof(MovementTypes)))
                                 {
-                                    <option value="@movement">@movement</option>
+                                    <option value="@((int)movement)">@movement.ToString()</option>
                                 }
                             </select>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -187,7 +173,7 @@
 
 @code
 {
-    [Parameter] public Action ?ToggleRightSidebar { get; set; }
+    [Parameter] public Action? ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
 }
 
