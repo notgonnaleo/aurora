@@ -1,5 +1,7 @@
 ﻿using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.Stocks;
+using Backend.Domain.Enums.MovementType;
+using Backend.Domain.Enums.StockMovements;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Agents;
@@ -60,9 +62,45 @@ namespace Backend.Infrastructure.Services.Stocks
                 .ToList();
         }
 
-        public IEnumerable<Stock> GetStockInventory()
+        public IEnumerable<Inventory> GetInventory(Guid productId, Guid? variantId)
         {
+            var context = LoadContext();
 
+            List<Inventory> inventory = new List<Inventory>();
+            ProductVariant variant = new ProductVariant();
+            var totalQuantity = 0;
+
+            var stockLogs = _appDbContext.Stocks
+                .Where(x => x.TenantId == context.Tenant.Id && 
+                x.ProductId == productId && 
+                x.Active);
+
+            var product = _appDbContext.Products
+                .First(x => x.ProductId == productId);
+
+            variant = _appDbContext.ProductVariants
+                .FirstOrDefault(x => x.VariantId == variantId);
+
+            foreach (var log in stockLogs)
+            {
+                if(log.MovementType == (int)MovementTypes.Input)
+                {
+                    totalQuantity += log.Quantity;
+                }
+                if(log.MovementType == (int)MovementTypes.Output)
+                {
+                    totalQuantity -= log.Quantity;
+                }
+                if(totalQuantity < 0) totalQuantity = 0;
+                inventory.Add(new Inventory()
+                {
+                    Product = product,
+                    Variant = variant,
+                    TotalAmount = totalQuantity,
+                    Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
+                });
+            }
+            return inventory;
         }
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)

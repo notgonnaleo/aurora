@@ -49,6 +49,20 @@ namespace Backend.API.Controllers.Stocks
             }
         }
 
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetInventory")]
+        public ActionResult GetInventory(Guid productId, Guid? variantId)
+        {
+            try
+            {
+                return Ok(_stockService.GetInventory(productId, variantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
