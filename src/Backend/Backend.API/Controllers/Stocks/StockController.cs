@@ -51,12 +51,12 @@ namespace Backend.API.Controllers.Stocks
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
-        [Route("GetInventory")]
+        [Route("GetProductInventory")]
         public ActionResult GetInventory(Guid productId, Guid? variantId)
         {
             try
             {
-                return Ok(_stockService.GetInventory(productId, variantId));
+                return Ok(_stockService.GetProductInventory(productId, variantId));
             }
             catch (Exception ex)
             {

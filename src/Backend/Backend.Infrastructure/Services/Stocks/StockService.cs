@@ -62,7 +62,7 @@ namespace Backend.Infrastructure.Services.Stocks
                 .ToList();
         }
 
-        public IEnumerable<Inventory> GetInventory(Guid productId, Guid? variantId)
+        public Inventory GetProductInventory(Guid productId, Guid? variantId)
         {
             var context = LoadContext();
 
@@ -92,15 +92,15 @@ namespace Backend.Infrastructure.Services.Stocks
                     totalQuantity -= log.Quantity;
                 }
                 if(totalQuantity < 0) totalQuantity = 0;
-                inventory.Add(new Inventory()
-                {
-                    Product = product,
-                    Variant = variant,
-                    TotalAmount = totalQuantity,
-                    Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
-                });
             }
-            return inventory;
+
+            return new Inventory()
+            {
+                Product = product,
+                Variant = variant,
+                TotalAmount = totalQuantity,
+                Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
+            };
         }
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)

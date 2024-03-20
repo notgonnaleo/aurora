@@ -87,9 +87,15 @@ namespace Backend.Infrastructure.Services.Products
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public IEnumerable<ProductDetail> GetProductsWithDetail(Guid tenantId)
+        public IEnumerable<ProductDetail> GetProductsWithDetail(Guid? tenantId)
         {
-            var products = Get(tenantId);
+            // Im too lazy to be getting ids so whatever
+            if(tenantId == Guid.Empty || tenantId is null)
+            {
+                var context = LoadContext();
+                tenantId = context.Tenant.Id;
+            }
+            var products = Get(tenantId.Value);
             var types = _productType.Get();
             var categories = _categoryService.Get();
             var subCategories = _subCategoryService.Get();
