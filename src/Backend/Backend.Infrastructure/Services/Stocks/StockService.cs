@@ -65,21 +65,22 @@ namespace Backend.Infrastructure.Services.Stocks
         public Inventory GetProductInventory(Guid productId, Guid? variantId)
         {
             var context = LoadContext();
-
-            List<Inventory> inventory = new List<Inventory>();
-            ProductVariant variant = new ProductVariant();
+            Inventory inventory = new Inventory();
             var totalQuantity = 0;
+
+            ProductVariant variant = new ProductVariant();
+            if(variantId is not null)
+            {
+                variant = _appDbContext.ProductVariants
+                    .FirstOrDefault(x => x.VariantId == variantId);
+            }
 
             var stockLogs = _appDbContext.Stocks
                 .Where(x => x.TenantId == context.Tenant.Id && 
                 x.ProductId == productId && 
                 x.Active);
 
-            var product = _appDbContext.Products
-                .First(x => x.ProductId == productId);
-
-            variant = _appDbContext.ProductVariants
-                .FirstOrDefault(x => x.VariantId == variantId);
+            var product = _productService.GetById(context.Tenant.Id, productId);
 
             foreach (var log in stockLogs)
             {
@@ -101,6 +102,48 @@ namespace Backend.Infrastructure.Services.Stocks
                 TotalAmount = totalQuantity,
                 Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
             };
+        }
+
+        public IEnumerable<Inventory> GetFullInventory()
+        {
+            var context = LoadContext();
+            List<Inventory> inventory = new List<Inventory>();
+            var totalQuantity = 0;
+
+            var allProducts = _productService.Get(context.Tenant.Id);
+
+            foreach (var product in allProducts)
+            {
+                var variant = _appDbContext.ProductVariants
+                    .FirstOrDefault(x => x.ProductId == product.ProductId);
+
+                var stockLogs = _appDbContext.Stocks
+                    .Where(x => x.TenantId == context.Tenant.Id &&
+                    x.ProductId == product.ProductId &&
+                    x.Active);
+
+                foreach (var log in stockLogs)
+                {
+                    if (log.MovementType == (int)MovementTypes.Input)
+                    {
+                        totalQuantity += log.Quantity;
+                    }
+                    if (log.MovementType == (int)MovementTypes.Output)
+                    {
+                        totalQuantity -= log.Quantity;
+                    }
+                    if (totalQuantity < 0) totalQuantity = 0;
+                }
+
+                inventory.Add(new Inventory()
+                {
+                    Product = product,
+                    Variant = variant,
+                    TotalAmount = totalQuantity,
+                    Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
+                });
+            }
+            return inventory;
         }
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)

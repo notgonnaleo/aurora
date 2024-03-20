@@ -46,7 +46,9 @@ namespace Backend.Infrastructure.Services.Products
         public Product? GetById(Guid tenantId, Guid productId)
         {
             return _appDbContext.Products
-                .Where(x => x.TenantId == tenantId && x.ProductId == productId && x.Active)
+                .Where(x => x.TenantId == tenantId 
+                && x.ProductId == productId 
+                && x.Active)
                 .FirstOrDefault();
         }
 
@@ -123,6 +125,42 @@ namespace Backend.Infrastructure.Services.Products
                 UpdatedBy = product.UpdatedBy,
                 Active = product.Active,
             });
+        }
+
+        public ProductDetail GetProductThumbnail(Guid tenantId, Guid productId)
+        {
+            var product = _appDbContext.Products.FirstOrDefault(x => x.TenantId == tenantId &&
+            x.ProductId == productId &&
+            x.Active);
+
+            var types = _productType.Get();
+            var category = _categoryService.GetCategoryAndSubCategoriesById(product.CategoryId.Value);
+
+            return new ProductDetail
+            {
+                TenantId = product.TenantId,
+                ProductId = product.ProductId,
+                ProductTypeId = product.ProductTypeId,
+                SKU = product.SKU,
+                GTIN = product.GTIN,
+                Name = product.Name,
+                Description = product.Description,
+                Value = product.Value,
+                TotalWeight = product.TotalWeight,
+                LiquidWeight = product.LiquidWeight,
+                ProductType = types.First(x => x.Id == product.ProductTypeId),
+                ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
+                CategoryId = product.CategoryId ?? null,
+                SubCategoryId = product.SubCategoryId ?? null,
+                CategoryName = category.CategoryName,
+                SubCategoryName = // need to finish this shit lmao,
+                Created = product.Created,
+                CreatedBy = product.CreatedBy,
+                Updated = product.Updated,
+                UpdatedBy = product.UpdatedBy,
+                Active = product.Active,
+            };
+
         }
     }
 }
