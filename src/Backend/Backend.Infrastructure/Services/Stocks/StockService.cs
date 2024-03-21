@@ -16,7 +16,8 @@ using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
 using static Backend.Infrastructure.Enums.Modules.Methods;
-
+using Stock = Backend.Domain.Entities.Stocks.Stock;
+using StockStatusEnum = Backend.Domain.Enums.StockMovements;
 namespace Backend.Infrastructure.Services.Stocks
 {
     public class StockService : Service
@@ -25,19 +26,20 @@ namespace Backend.Infrastructure.Services.Stocks
         private readonly AppDbContext _appDbContext;
         private readonly AgentService _agentService;
         private readonly ProductService _productService;
+        private readonly ProductVariantService _productVariantService;
 
-
-        public StockService(AppDbContext appDbContext, AgentService agentService, UserContextService main, ProductService productService)
+        public StockService(AppDbContext appDbContext, AgentService agentService, UserContextService main, ProductService productService, ProductVariantService productVariantService)
             : base(main)
         {
             _appDbContext = appDbContext;
             _agentService = agentService;
             _productService = productService;
+            _productVariantService=productVariantService;
+
         }
 
-        public Domain.Entities.Stocks.Stock Add(Domain.Entities.Stocks.Stock stock)
+        public Stock Add(Stock stock)
         {
-
             stock.StockMovementId = Guid.NewGuid();
             var context = LoadContext();
             ValidateTenant(stock.TenantId);
@@ -56,7 +58,7 @@ namespace Backend.Infrastructure.Services.Stocks
             return stock;
         }
 
-        public IEnumerable<Domain.Entities.Stocks.Stock> Get(Guid tenantId)
+        public IEnumerable<Stock> Get(Guid tenantId)
         {
             var context = LoadContext();
             ValidateTenant(tenantId);
@@ -70,41 +72,46 @@ namespace Backend.Infrastructure.Services.Stocks
             var context = LoadContext();
             ValidateTenant(tenantId);
             Inventory inventory = new Inventory();
-            var totalQuantity = 0;
 
             ProductVariant variant = new ProductVariant();
-            if(variantId is not null)
+            if (variantId is not null)
             {
                 variant = _appDbContext.ProductVariants
                     .FirstOrDefault(x => x.VariantId == variantId);
             }
 
             var stockLogs = _appDbContext.Stocks
-                .Where(x => x.TenantId == context.Tenant.Id && 
-                x.ProductId == productId && 
+                .Where(x => x.TenantId == context.Tenant.Id &&
+                x.ProductId == productId &&
                 x.Active);
 
             var product = _productService.GetProductThumbnail(tenantId, productId);
 
-            foreach (var log in stockLogs)
-            {
-                if(log.MovementType == (int)MovementTypes.Input)
-                {
-                    totalQuantity += log.Quantity;
-                }
-                if(log.MovementType == (int)MovementTypes.Output)
-                {
-                    totalQuantity -= log.Quantity;
-                }
-                if(totalQuantity < 0) totalQuantity = 0;
-            }
+            var totalQuantity = CalculateStock(stockLogs);
 
             return new Inventory()
             {
                 Product = product,
                 Variant = variant,
                 TotalAmount = totalQuantity,
-                Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
+                Status = GenerateInventoryStatus(totalQuantity),
+            };
+        }
+
+        public Domain.Entities.Stocks.MovementStatus GenerateInventoryStatus(int amount)
+        {
+            if (amount <= 0)
+            {
+                return new Domain.Entities.Stocks.MovementStatus()
+                {
+                    StatusId = (int)StockStatusEnum.MovementStatus.OutOfStock,
+                    StatusDescription = StockStatusEnum.MovementStatus.OutOfStock.ToString()
+                };
+            }
+            return new Domain.Entities.Stocks.MovementStatus()
+            {
+                StatusId = (int)StockStatusEnum.MovementStatus.Available,
+                StatusDescription = StockStatusEnum.MovementStatus.Available.ToString()
             };
         }
 
@@ -113,52 +120,59 @@ namespace Backend.Infrastructure.Services.Stocks
             var context = LoadContext();
             ValidateTenant(tenantId);
             List<Inventory> inventory = new List<Inventory>();
-            var totalQuantity = 0;
 
             var allProducts = _productService.GetProductsWithDetail(context.Tenant.Id);
 
             foreach (var product in allProducts)
             {
+                // Ideally this should be a own method but i dont care about it too much right now
                 var variant = _appDbContext.ProductVariants
-                    .FirstOrDefault(x => x.ProductId == product.ProductId);
+                    .FirstOrDefault(x => x.TenantId == tenantId &&
+                    x.ProductId == product.ProductId &&
+                    x.Active);
 
                 var stockLogs = _appDbContext.Stocks
                     .Where(x => x.TenantId == context.Tenant.Id &&
                     x.ProductId == product.ProductId &&
                     x.Active);
 
-                foreach (var log in stockLogs)
-                {
-                    if (log.MovementType == (int)MovementTypes.Input)
-                    {
-                        totalQuantity += log.Quantity;
-                    }
-                    if (log.MovementType == (int)MovementTypes.Output)
-                    {
-                        totalQuantity -= log.Quantity;
-                    }
-                    if (totalQuantity < 0) totalQuantity = 0;
-                }
-
+                var totalQuantity = CalculateStock(stockLogs);
                 inventory.Add(new Inventory()
                 {
                     Product = product,
                     Variant = variant,
                     TotalAmount = totalQuantity,
-                    Status = totalQuantity > 0 ? MovementStatus.Available : MovementStatus.OutOfStock,
+                    Status = GenerateInventoryStatus(totalQuantity),
                 });
             }
             return inventory;
         }
 
+        public int CalculateStock(IEnumerable<Stock> stockLogs)
+        {
+            var amount = 0;
+            foreach (var log in stockLogs)
+            {
+                if (log.MovementType == (int)MovementTypes.Input)
+                {
+                    amount += log.Quantity;
+                }
+                if (log.MovementType == (int)MovementTypes.Output)
+                {
+                    amount -= log.Quantity;
+                }
+                if (amount < 0) amount = 0;
+            }
+            return amount;
+        }
+
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
         {
-            IEnumerable<Domain.Entities.Stocks.Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
+            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
             List<ProductDetail> products = _productService.GetProductsWithDetail(tenantId).ToList();
 
             return stock.Select(x => new StockDetail
             {
-                // Campos de Stock
                 UserId = x.UserId,
                 TenantId = x.TenantId,
                 VariantId = x.VariantId,
@@ -166,27 +180,25 @@ namespace Backend.Infrastructure.Services.Stocks
                 ProductId = x.ProductId,
                 Active = x.Active,
                 Quantity = x.Quantity,
-
-                // Campos de Product
                 ProductName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Name,
                 ProductValue = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Value ?? 0,
                 SKU = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SKU,
                 GTIN = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.GTIN,
-                //VariantName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.VariantName,
-
-                // Campos de Category e SubCategory
                 CategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.CategoryName,
                 SubCategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SubCategoryName
             });
         }
 
-        public Domain.Entities.Stocks.Stock? GetById(Guid tenantId, Guid stockMovementId)
+        public Stock? GetById(Guid tenantId, Guid stockMovementId)
         {
             var context = LoadContext();
-            return _appDbContext.Stocks.FirstOrDefault(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id);
+            ValidateTenant(tenantId);
+            return _appDbContext.Stocks
+                .FirstOrDefault(x => x.StockMovementId == stockMovementId && 
+                x.TenantId == context.Tenant.Id);
         }
 
-        public bool Update(Domain.Entities.Stocks.Stock model)
+        public bool Update(Stock model)
         {
             var context = LoadContext();
             ValidateTenant(model.TenantId);
@@ -194,17 +206,13 @@ namespace Backend.Infrastructure.Services.Stocks
             model.UpdatedBy = context.UserId;
             model.Active = true;
             _appDbContext.Update(model);
-
-
             return _appDbContext.SaveChanges() > 0;
-
-
         }
 
         public bool Delete(Guid stockMovementId)
         {
             var context = LoadContext();
-            Domain.Entities.Stocks.Stock stock = _appDbContext.Stocks.Where(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id).First();
+            Stock stock = _appDbContext.Stocks.Where(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id).First();
             stock.Active = false;
 
             _appDbContext.Update(stock);
@@ -212,13 +220,8 @@ namespace Backend.Infrastructure.Services.Stocks
 
             if (response <= 0)
                 throw new Exception(Localization.GenericValidations.ErrorDeleteItem(context.Language));
-
             return true;
         }
-
-
-
-
     }
 
 }

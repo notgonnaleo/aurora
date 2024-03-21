@@ -5,11 +5,16 @@
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager navigator;
 
-<aside class="left-sidebar" >
+<aside class="left-sidebar">
     <div class="">
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="./index.html" class="text-nowrap logo-img">
-                <h1>Aurora</h1>
+            <a class="text-nowrap logo-img d-block py-3 w-100">
+                <h3>
+                    <strong>
+                        <i class="ti ti-robot" style="margin-right: 4px"></i>
+                    </strong>
+                    <strong>Aurora</strong>
+                </h3>
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse" @onclick="ToggleNavMenu">
                 <i class="ti ti-x fs-8"></i>

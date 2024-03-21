@@ -25,13 +25,9 @@
 
 @code
 {
-
-
     public Backend.Domain.Entities.Stocks.Stock Model = new Backend.Domain.Entities.Stocks.Stock();
-
     protected override async Task OnInitializedAsync()
     {
-        
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
         Model = await _stockService.GetStock(Model.TenantId.ToString(), StockMovementId.ToString());

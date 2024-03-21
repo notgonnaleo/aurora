@@ -11,8 +11,7 @@
 @inject NavigationManager NavigationManager;
 @inject ProductService _productService;
 
-
-<div class="card card-body ">
+<div class="card card-body w-100">
     @if (isLoading)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
@@ -36,9 +35,7 @@
                                 </div>
                             </th>
                             <th>SKU</th>
-                            <th>GTIN</th>
                             <th>Product Name</th>
-                            <th>Value</th>
                             <th>Movement Type</th>
                             <th>Quantity</th>
                         </tr>
@@ -46,7 +43,6 @@
                     <tbody>
                         @foreach (var stock in Model)
                         {
-                            <!-- start row -->
                             <tr class="search-items">
                                 <td>
                                     <div class="n-chk align-self-center text-center">
@@ -60,29 +56,13 @@
                                     <span class="usr-ph-no">@stock.SKU</span>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no">@stock.GTIN</span>
-                                </td>
-                                <td>
                                     <span class="usr-location">@stock.ProductName</span>
-                                </td>
-                                <td>
-                                    <span class="usr-ph-no">@stock.ProductValue</span>
                                 </td>
                                 <td>
                                     <span class="badge @(stock.MovementType == 1 ? "bg-primary" : "bg-danger")">@stock.MovementType</span>
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.Quantity</span>
-                                </td>
-                                <td>
-                                    <div class="action-btn">
-                                        <a class="text-primary edit" @onclick="() => Edit(stock)">
-                                            <i class="ti ti-edit fs-5"></i>
-                                        </a>
-                                        <a class=" text-dark delete ms-2">
-                                            <i class="ti ti-trash fs-5"></i>
-                                        </a>
-                                    </div>
                                 </td>
                             </tr>
                         }
@@ -92,12 +72,13 @@
         }
         else
         {
-            <p>No stock created yet.</p>
+            <p>Could not find any stock entries.</p>
+            <a href="/stock" class="btn btn-primary">Add new entry</a>
         }
     }
 </div>
 
-@code 
+@code
 {
     public bool isLoading;
     public IEnumerable<StockDetail> Model = new List<StockDetail>();

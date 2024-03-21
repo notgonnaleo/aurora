@@ -112,11 +112,11 @@ namespace Backend.API.Controllers.Stocks
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("GetProductStock")]
-        public ActionResult GetProductStock(Guid productId, Guid? variantId)
+        public ActionResult GetProductStock(Guid tenantId, Guid productId, Guid? variantId)
         {
             try
             {
-                return Ok(_stockService.GetProductStock(productId, variantId));
+                return Ok(_stockService.GetProductStock(tenantId, productId, variantId));
             }
             catch (Exception ex)
             {
