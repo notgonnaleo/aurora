@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Products;
+﻿using Backend.Domain.Entities.Authentication.Tenants;
+using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Enums.MovementType;
 using Backend.Domain.Enums.StockMovements;
@@ -39,8 +40,9 @@ namespace Backend.Infrastructure.Services.Stocks
 
             stock.StockMovementId = Guid.NewGuid();
             var context = LoadContext();
+            ValidateTenant(stock.TenantId);
+
             stock.TenantId = context.Tenant.Id;
-           
             stock.UserId = context.UserId;
             stock.MovementDate = DateTime.Now;
             stock.CreatedBy = context.UserId;
@@ -54,17 +56,19 @@ namespace Backend.Infrastructure.Services.Stocks
             return stock;
         }
 
-        public IEnumerable<Domain.Entities.Stocks.Stock> Get()
+        public IEnumerable<Domain.Entities.Stocks.Stock> Get(Guid tenantId)
         {
             var context = LoadContext();
+            ValidateTenant(tenantId);
             return _appDbContext.Stocks
                 .Where(x => x.TenantId == context.Tenant.Id && x.Active == true)
                 .ToList();
         }
 
-        public Inventory GetProductInventory(Guid productId, Guid? variantId)
+        public Inventory GetProductStock(Guid tenantId, Guid productId, Guid? variantId)
         {
             var context = LoadContext();
+            ValidateTenant(tenantId);
             Inventory inventory = new Inventory();
             var totalQuantity = 0;
 
@@ -80,7 +84,7 @@ namespace Backend.Infrastructure.Services.Stocks
                 x.ProductId == productId && 
                 x.Active);
 
-            var product = _productService.GetById(context.Tenant.Id, productId);
+            var product = _productService.GetProductThumbnail(tenantId, productId);
 
             foreach (var log in stockLogs)
             {
@@ -104,13 +108,14 @@ namespace Backend.Infrastructure.Services.Stocks
             };
         }
 
-        public IEnumerable<Inventory> GetFullInventory()
+        public IEnumerable<Inventory> GetInventory(Guid tenantId)
         {
             var context = LoadContext();
+            ValidateTenant(tenantId);
             List<Inventory> inventory = new List<Inventory>();
             var totalQuantity = 0;
 
-            var allProducts = _productService.Get(context.Tenant.Id);
+            var allProducts = _productService.GetProductsWithDetail(context.Tenant.Id);
 
             foreach (var product in allProducts)
             {

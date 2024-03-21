@@ -10,7 +10,7 @@ namespace Backend.Domain.Entities.Stocks
 {
     public class Inventory
     {
-        public Product Product { get; set; }
+        public ProductDetail Product { get; set; }
         public ProductVariant? Variant { get; set; }
         public int TotalAmount { get; set; }
         public MovementStatus Status { get; set; }

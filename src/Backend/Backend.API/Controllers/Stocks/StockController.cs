@@ -37,26 +37,11 @@ namespace Backend.API.Controllers.Stocks
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public ActionResult Get()
+        public ActionResult Get(Guid tenantId)
         {
             try
             {
-                return Ok(_stockService.Get());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [TypeFilter(typeof(ValidateUserContextAttribute))]
-        [HttpGet]
-        [Route("GetProductInventory")]
-        public ActionResult GetInventory(Guid productId, Guid? variantId)
-        {
-            try
-            {
-                return Ok(_stockService.GetProductInventory(productId, variantId));
+                return Ok(_stockService.Get(tenantId));
             }
             catch (Exception ex)
             {
@@ -101,11 +86,7 @@ namespace Backend.API.Controllers.Stocks
         {
             try
             {
-
                 return Ok(_stockService.Update(model));
-
-
-
             }
             catch (Exception ex)
             {
@@ -121,6 +102,36 @@ namespace Backend.API.Controllers.Stocks
             try
             {
                 return Ok(_stockService.Delete(stockMovementId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetProductStock")]
+        public ActionResult GetProductStock(Guid productId, Guid? variantId)
+        {
+            try
+            {
+                return Ok(_stockService.GetProductStock(productId, variantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetInventory")]
+        public ActionResult GetInventory(Guid tenantId)
+        {
+            try
+            {
+                return Ok(_stockService.GetInventory(tenantId));
             }
             catch (Exception ex)
             {

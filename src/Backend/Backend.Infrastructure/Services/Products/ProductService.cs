@@ -129,10 +129,12 @@ namespace Backend.Infrastructure.Services.Products
 
         public ProductDetail GetProductThumbnail(Guid tenantId, Guid productId)
         {
-            var product = _appDbContext.Products.FirstOrDefault(x => x.TenantId == tenantId &&
-            x.ProductId == productId &&
-            x.Active);
+            var product = _appDbContext.Products
+                .FirstOrDefault(x => x.TenantId == tenantId &&
+                x.ProductId == productId &&
+                x.Active);
 
+            // honestly this should be an enum but i dont wanna to talk about that rn.
             var types = _productType.Get();
             var category = _categoryService.GetCategoryAndSubCategoriesById(product.CategoryId.Value);
 
@@ -153,7 +155,7 @@ namespace Backend.Infrastructure.Services.Products
                 CategoryId = product.CategoryId ?? null,
                 SubCategoryId = product.SubCategoryId ?? null,
                 CategoryName = category.CategoryName,
-                SubCategoryName = // need to finish this shit lmao,
+                SubCategoryName = category.SubCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName,
                 Created = product.Created,
                 CreatedBy = product.CreatedBy,
                 Updated = product.Updated,
