@@ -1,8 +1,5 @@
-﻿using Backend.Domain.Entities.Authentication.Tenants;
-using Backend.Domain.Entities.Products;
+﻿using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.Stocks;
-using Backend.Domain.Enums.MovementType;
-using Backend.Domain.Enums.StockMovements;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Enums.Localization;
 using Backend.Infrastructure.Services.Agents;
@@ -15,9 +12,12 @@ using System.Linq;
 using System.Runtime.Loader;
 using System.Text;
 using System.Threading.Tasks;
-using static Backend.Infrastructure.Enums.Modules.Methods;
 using Stock = Backend.Domain.Entities.Stocks.Stock;
-using StockStatusEnum = Backend.Domain.Enums.StockMovements;
+using MovementStatus = Backend.Domain.Enums.StockMovements.MovementStatus;
+using MovementTypes = Backend.Domain.Enums.StockMovements.MovementType.MovementTypes;
+using Backend.Domain.Enums.StockMovements.MovementType;
+using Backend.Domain.Enums.EnumExtensions;
+
 namespace Backend.Infrastructure.Services.Stocks
 {
     public class StockService : Service
@@ -104,14 +104,14 @@ namespace Backend.Infrastructure.Services.Stocks
             {
                 return new Domain.Entities.Stocks.MovementStatus()
                 {
-                    StatusId = (int)StockStatusEnum.MovementStatus.OutOfStock,
-                    StatusDescription = StockStatusEnum.MovementStatus.OutOfStock.ToString()
+                    StatusId = (int)MovementStatus.OutOfStock,
+                    StatusDescription = MovementStatus.OutOfStock.ToString()
                 };
             }
             return new Domain.Entities.Stocks.MovementStatus()
             {
-                StatusId = (int)StockStatusEnum.MovementStatus.Available,
-                StatusDescription = StockStatusEnum.MovementStatus.Available.ToString()
+                StatusId = (int)MovementStatus.Available,
+                StatusDescription = MovementStatus.Available.ToString()
             };
         }
 
@@ -178,6 +178,11 @@ namespace Backend.Infrastructure.Services.Stocks
                 VariantId = x.VariantId,
                 StockMovementId = x.StockMovementId,
                 ProductId = x.ProductId,
+                MovementType = new Domain.Entities.Stocks.MovementTypes()
+                {
+                    MovementTypeId = x.MovementType.Value,
+                    MovementTypeName = ((MovementTypes)x.MovementType.Value).GetDescription() // get the name of the enum by the int value
+                },
                 Active = x.Active,
                 Quantity = x.Quantity,
                 ProductName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Name,

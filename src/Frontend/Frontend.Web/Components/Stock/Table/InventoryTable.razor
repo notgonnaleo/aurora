@@ -3,9 +3,10 @@
 @using Frontend.Web.Services.Stocks;
 @using Frontend.Web.Services.Authentication;
 @using Microsoft.AspNetCore.Components.Forms;
-@using Backend.Domain.Enums.MovementType;
+@using Backend.Domain.Enums.StockMovements.MovementType;
 @using Frontend.Web.Services.Products;
 @using Backend.Domain.Entities.Products;
+@using InventoryStatus = Backend.Domain.Enums.StockMovements;
 @inject StockService _stockService;
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager NavigationManager;
@@ -18,7 +19,7 @@
     }
     else
     {
-        <h3 class="card-title fw-semibold mb-4">Stock Entries Log</h3>
+        <h3 class="card-title fw-semibold mb-4">Inventory Management</h3>
         @if (!(Model is null || Model.Count() == 0))
         {
             <div class="table-responsive">
@@ -41,7 +42,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var stock in Model)
+                        @foreach (var item in Model)
                         {
                             <tr class="search-items">
                                 <td>
@@ -53,16 +54,16 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no">@stock.SKU</span>
+                                    <span class="usr-ph-no">@item.Product.SKU</span>
                                 </td>
                                 <td>
-                                    <span class="usr-location">@stock.ProductName</span>
+                                    <span class="usr-ph-no">@item.Product.Name</span>
                                 </td>
                                 <td>
-                                    <span class="badge @(stock.MovementType == 1 ? "bg-primary" : "bg-danger")">@stock.MovementType</span>
+                                    <span class="usr-location">@item.TotalAmount</span>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no">@stock.Quantity</span>
+                                    <span class="badge @(item.Status.StatusId == (int)InventoryStatus.MovementStatus.Available ? "bg-primary" : "bg-danger")">@item.Status.StatusDescription</span>
                                 </td>
                             </tr>
                         }
@@ -81,19 +82,20 @@
 @code
 {
     public bool isLoading;
-    public IEnumerable<StockDetail> Model = new List<StockDetail>();
+    public IEnumerable<Inventory> Model = new List<Inventory>();
 
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        Model = await _stockService.GetStockWithDetail(context.Tenant.Id.ToString());
+        Model = await _stockService.GetInventory(context.Tenant.Id.ToString());
         isLoading = false;
     }
 
-    private void Edit(StockDetail stock)
+    private void Edit(Inventory item)
     {
-        NavigationManager.NavigateTo($"/stock/edit/{stock.StockMovementId}");
+        // todo: create page for this only lol
+        NavigationManager.NavigateTo($"/stock/inventory/product-analytics/{item.Product.ProductId}");
     }
 }
 

@@ -24,36 +24,8 @@ namespace Frontend.Web.Services.Stocks
 
         public async Task<IEnumerable<StockDetail>> GetStockWithDetail(string tenantId)
         {            
-            var stocks = await _stockRepository.GetStockWithDetail(tenantId);
-            IEnumerable<ProductDetail> products = await _productRepository.GetProducts(tenantId);          
-            return stocks.Select(x => new StockDetail
-            {
-                // CAMPOS DO OBJETO STOCK
-                UserId = x.UserId,
-                TenantId = x.TenantId,
-                VariantId = x.VariantId,
-                StockMovementId = x.StockMovementId,
-                ProductId = x.ProductId,
-                MovementStatusId = x.MovementStatusId,
-                Active = x.Active,
-                Quantity = x.Quantity,
-                MovementType = x.MovementType,
-
-                // Campos de Product
-                ProductName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Name,
-                ProductValue = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.Value ?? 0,
-                SKU = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SKU,
-                GTIN = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.GTIN,
-                //VariantName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.VariantName,
-                //AgentName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.AgentName,
-
-                // Campos de Category e SubCategory
-                CategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.CategoryName,
-                SubCategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SubCategoryName
-
-            });
+            return await _stockRepository.GetStockWithDetail(tenantId);
         }
-
 
         public async Task<IEnumerable<Backend.Domain.Entities.Stocks.Stock>> GetStocks(string tenantId)
         {
@@ -70,6 +42,10 @@ namespace Frontend.Web.Services.Stocks
             return await _stockRepository.UpdateStock(stock);
         }
 
+        public async Task<IEnumerable<Inventory>> GetInventory(string tenantId)
+        {
+            return await _stockRepository.GetInventory(tenantId);
+        }
 
     }
 }

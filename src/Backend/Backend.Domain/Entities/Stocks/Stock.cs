@@ -46,6 +46,7 @@ namespace Backend.Domain.Entities.Stocks
         //public string AgentName { get; set; }
         public string SubCategoryName { get; set; }
         public string CategoryName { get; set; }
-        public MovementStatus MovementStatusId { get; set; }
+        public MovementTypes MovementType { get; set; }
+        public MovementStatus MovementStatus { get; set; }
     }
 }

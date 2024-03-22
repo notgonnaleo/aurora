@@ -3,7 +3,7 @@
 @using Frontend.Web.Services.Stocks;
 @using Frontend.Web.Services.Authentication;
 @using Microsoft.AspNetCore.Components.Forms;
-@using Backend.Domain.Enums.MovementType;
+@using MovementTypeEnum = Backend.Domain.Enums.StockMovements.MovementType;
 @using Frontend.Web.Services.Products;
 @using Backend.Domain.Entities.Products;
 @inject StockService _stockService;
@@ -69,7 +69,7 @@
                                     <span class="usr-ph-no">@stock.ProductValue</span>
                                 </td>
                                 <td>
-                                    <span class="badge @(stock.MovementType == 1 ? "bg-primary" : "bg-danger")">@stock.MovementType</span>
+                                    <span class="badge @(stock.MovementType.MovementTypeId == (int)MovementTypeEnum.MovementTypes.Input ? "bg-primary" : "bg-danger")">@stock.MovementType</span>
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.Quantity</span>
