@@ -87,8 +87,16 @@
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        Model = await _stockService.GetStockWithDetail(context.Tenant.Id.ToString());
-        isLoading = false;
+        if(context is null)
+        {
+            Model = new List<StockDetail>();
+            isLoading = true;
+        }
+        else
+        {
+            Model = await _stockService.GetStockWithDetail(context.Tenant.Id.ToString());
+            isLoading = false;
+        }
     }
 
     private void Edit(StockDetail stock)

@@ -37,7 +37,7 @@ else
 
 @code 
 {
-    public bool isAuthenticated;
+    public bool isAuthenticated = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,11 +49,14 @@ else
     {
         if (!isAuthenticated)
             navigator.NavigateTo("/Login");
+        else
+            navigator.NavigateTo("/Dashboard");
     }
 
     public async Task<bool> IsAuthenticated()
     {
-        return await _authService.IsUserLogged();
+        var response = await _authService.IsUserLogged();
+        return response.GetValueOrDefault();
     }
 }
 

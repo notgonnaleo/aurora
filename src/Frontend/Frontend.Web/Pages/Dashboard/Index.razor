@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/Dashboard"
 @using Backend.Domain.Entities.Authentication.Tenants;
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
 @using Frontend.Web.Services.Authentication;
@@ -108,9 +108,10 @@
     private bool isAuthenticated = false;
     private UserSessionContext dashboardProfile = new UserSessionContext();
 
-    public async Task<bool> IsAuthenticated()
+    public async Task<bool?> IsAuthenticated()
     {
-        return await _authenticationService.IsUserLogged();
+        var response = await _authenticationService.IsUserLogged();
+        return response.GetValueOrDefault();
     }
 
     public async void GetDashboardProfile()
@@ -121,7 +122,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        isAuthenticated = await IsAuthenticated();
+        var response = await IsAuthenticated();
+        isAuthenticated = response.GetValueOrDefault();
         if (isAuthenticated)
         {
             GetDashboardProfile();
