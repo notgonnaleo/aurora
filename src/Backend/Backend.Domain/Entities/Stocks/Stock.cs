@@ -36,14 +36,21 @@ namespace Backend.Domain.Entities.Stocks
         public Guid ProductId { get; set; }
     }
 
-    public class StockDetail : Stock
+    public class StockDetail : Model
     {
+        public Guid StockMovementId { get; set; }
+        public Guid TenantId { get; set; }
+        public Guid ProductId { get; set; }
         public string ProductName { get; set; }
+        public Guid? VariantId { get; set; }
+        public string? VariantName { get; set; }
+        public Guid AgentId { get; set; }
+        public Guid AgentName { get; set; }
         public string SKU { get; set; }
         public string GTIN { get; set; }
         public double ProductValue { get; set; }
-        //public string? VariantName { get; set; }
-        //public string AgentName { get; set; }
+        public DateTime MovementDate { get; set; }
+        public int Quantity { get; set; }
         public string SubCategoryName { get; set; }
         public string CategoryName { get; set; }
         public MovementTypes MovementType { get; set; }

@@ -18,16 +18,14 @@ namespace Backend.Domain.Enums.EnumExtensions
         /// I NEED TO MAKE A METHOD THAT WORKS THIS ONE SUCKS AS FUCK ITS A PIECE OF SHIT DO NOT USE LOLOLOLOL
         public static string GetDescription(this Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
+            var field = value.GetType().GetField(value.ToString());
+            var desAttribute = field.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
 
-            DescriptionAttribute[] attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
-
-            if (attributes != null && attributes.Any())
+            if (desAttribute.Length > 0)
             {
-                return attributes.First().Description;
+                return desAttribute[0].Description;
             }
-
-            return value.ToString();
+            return string.Empty;
         }
     }
 }

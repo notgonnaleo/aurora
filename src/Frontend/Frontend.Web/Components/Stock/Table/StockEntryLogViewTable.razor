@@ -59,7 +59,7 @@
                                     <span class="usr-location">@stock.ProductName</span>
                                 </td>
                                 <td>
-                                    <span class="badge @(stock.MovementType.MovementTypeId == (int)Movement.MovementTypes.Input ? "bg-primary" : "bg-danger")">@stock.MovementType</span>
+                                    <span class="badge @(stock.MovementType.MovementTypeId == (int)Movement.MovementTypes.Input ? "bg-primary" : "bg-danger")">@stock.MovementType.MovementTypeName</span>
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.Quantity</span>

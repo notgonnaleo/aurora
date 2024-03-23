@@ -173,7 +173,6 @@ namespace Backend.Infrastructure.Services.Stocks
 
             return stock.Select(x => new StockDetail
             {
-                UserId = x.UserId,
                 TenantId = x.TenantId,
                 VariantId = x.VariantId,
                 StockMovementId = x.StockMovementId,
