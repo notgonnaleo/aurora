@@ -54,7 +54,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no">@item.Product.SKU</span>
+                                    <span class="usr-ph-no cursor-pointer" @onclick="() => Edit(item)">@item.Product.SKU</span>
                                 </td>
                                 <td>
                                     <span class="usr-ph-no">@item.Product.Name</span>
@@ -94,8 +94,7 @@
 
     private void Edit(Inventory item)
     {
-        // todo: create page for this only lol
-        NavigationManager.NavigateTo($"/stock/inventory/product-analytics/{item.Product.ProductId}");
+        NavigationManager.NavigateTo($"/inventory/product/{item.Product.ProductId}");
     }
 }
 

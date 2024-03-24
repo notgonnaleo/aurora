@@ -66,6 +66,21 @@ namespace Backend.API.Controllers.Stocks
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
+        [Route("GetStockEntriesByProduct")]
+        public ActionResult GetStockEntriesByProduct(Guid tenantId, Guid productId)
+        {
+            try
+            {
+                return Ok(_stockService.GetStockEntriesByProduct(tenantId, productId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
         [Route("Find")]
         public ActionResult GetById(Guid tenantId, Guid stockMovementId)
         {

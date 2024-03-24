@@ -519,7 +519,6 @@ namespace Backend.Infrastructure.Enums.Modules
                         public static string tenantId = "tenantId";
                     }
                 }
-
                 public static class GetInventory
                 {
                     public static string GetInventoryEndpointName = "GetInventory";
@@ -528,7 +527,6 @@ namespace Backend.Infrastructure.Enums.Modules
                         public static string tenantId = "tenantId";
                     }
                 }
-
                 public static class GetProductStock
                 {
                     public static string GetProductStockEndpointName = "GetProductStock";
@@ -537,6 +535,15 @@ namespace Backend.Infrastructure.Enums.Modules
                         public static string tenantId = "tenantId";
                         public static string productId = "productId";
                         public static string variantId = "variantId";
+                    }
+                }
+                public static class GetStockEntriesByProduct
+                {
+                    public static string GetStockEntriesByProductEndpointName = "GetStockEntriesByProduct";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string productId = "productId";
                     }
                 }
             }

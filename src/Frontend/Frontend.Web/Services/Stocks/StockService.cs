@@ -47,5 +47,10 @@ namespace Frontend.Web.Services.Stocks
             return await _stockRepository.GetInventory(tenantId);
         }
 
+        public async Task<IEnumerable<StockDetail>> GetStockEntriesByProduct(string tenantId, string productId)
+        {
+            return await _stockRepository.GetStockEntriesByProduct(tenantId, productId);
+        }
+
     }
 }

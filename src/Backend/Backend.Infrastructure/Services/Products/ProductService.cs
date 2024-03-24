@@ -134,7 +134,6 @@ namespace Backend.Infrastructure.Services.Products
                 x.ProductId == productId &&
                 x.Active);
 
-            // honestly this should be an enum but i dont wanna to talk about that rn.
             var types = _productType.Get();
             var category = _categoryService.GetCategoryAndSubCategoriesById(product.CategoryId.Value);
 

@@ -25,15 +25,6 @@
                 <table class="table search-table align-middle text-nowrap table-fixed">
                     <thead class="header-item">
                         <tr>
-                            <th>
-                                <div class="n-chk align-self-center text-center">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
-                                        <label class="form-check-label" for="contact-check-all"></label>
-                                        <span class="new-control-indicator"></span>
-                                    </div>
-                                </div>
-                            </th>
                             <th>SKU</th>
                             <th>Product Name</th>
                             <th>Movement Type</th>
@@ -44,14 +35,6 @@
                         @foreach (var stock in Model)
                         {
                             <tr class="search-items">
-                                <td>
-                                    <div class="n-chk align-self-center text-center">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
-                                            <label class="form-check-label" for="checkbox1"></label>
-                                        </div>
-                                    </div>
-                                </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.SKU</span>
                                 </td>

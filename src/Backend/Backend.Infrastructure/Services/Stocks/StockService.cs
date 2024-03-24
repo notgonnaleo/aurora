@@ -180,7 +180,7 @@ namespace Backend.Infrastructure.Services.Stocks
                 MovementType = new Domain.Entities.Stocks.MovementTypes()
                 {
                     MovementTypeId = x.MovementType.Value,
-                    MovementTypeName = ((MovementTypes)x.MovementType.Value).GetDescription() // get the name of the enum by the int value
+                    MovementTypeName = ((MovementTypes)x.MovementType.Value).GetDescription()
                 },
                 Active = x.Active,
                 Quantity = x.Quantity,
@@ -190,6 +190,34 @@ namespace Backend.Infrastructure.Services.Stocks
                 GTIN = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.GTIN,
                 CategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.CategoryName,
                 SubCategoryName = products.FirstOrDefault(y => y.ProductId == x.ProductId)?.SubCategoryName
+            });
+        }
+
+        public IEnumerable<StockDetail> GetStockEntriesByProduct(Guid tenantId, Guid productId)
+        {
+            IEnumerable<Stock> stock = _appDbContext.Stocks
+                .Where(x => x.TenantId == tenantId && x.ProductId == productId);
+            ProductDetail product = _productService.GetProductThumbnail(tenantId, productId);
+
+            return stock.Select(x => new StockDetail
+            {
+                TenantId = x.TenantId,
+                VariantId = x.VariantId,
+                StockMovementId = x.StockMovementId,
+                ProductId = x.ProductId,
+                MovementType = new Domain.Entities.Stocks.MovementTypes()
+                {
+                    MovementTypeId = x.MovementType.Value,
+                    MovementTypeName = ((MovementTypes)x.MovementType.Value).GetDescription()
+                },
+                Active = x.Active,
+                Quantity = x.Quantity,
+                ProductName = product?.Name,
+                ProductValue = product?.Value ?? 0,
+                SKU = product?.SKU,
+                GTIN = product?.GTIN,
+                CategoryName = product?.CategoryName,
+                SubCategoryName = product?.SubCategoryName
             });
         }
 

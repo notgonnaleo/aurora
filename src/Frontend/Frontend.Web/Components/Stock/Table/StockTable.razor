@@ -97,6 +97,12 @@
     }
 </div>
 
+@code
+{
+    [Parameter]
+    public string? ProductId { get; set; }
+}
+
 @code 
 {
     public bool isLoading;
@@ -104,10 +110,28 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // need to debug here cuz exceptions are ocurring :D
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        Model = await _stockService.GetStockWithDetail(context.Tenant.Id.ToString());
+        if (string.IsNullOrEmpty(ProductId))
+        {
+            Model = await GetStockEntriesLogs(context.Tenant.Id.ToString());
+        }
+        else
+        {
+            Model = await GetStockEntriesLogsByProduct(context.Tenant.Id.ToString(), ProductId);
+        }
         isLoading = false;
+    }
+
+    private async Task<IEnumerable<StockDetail>> GetStockEntriesLogs(string tenantId)
+    {
+        return await _stockService.GetStockWithDetail(tenantId);
+    }
+
+    private async Task<IEnumerable<StockDetail>> GetStockEntriesLogsByProduct(string tenantId, string productId)
+    {
+        return await _stockService.GetStockEntriesByProduct(tenantId, productId);
     }
 
     private void Edit(StockDetail stock)

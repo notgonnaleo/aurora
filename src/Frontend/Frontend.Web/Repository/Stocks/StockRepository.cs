@@ -93,5 +93,25 @@ namespace Frontend.Web.Repository.Stocks
             var model = new RouteBuilder<Stock>().Send(Endpoints.Stock, Methods.Default.PUT, stock);
             return await _httpClientRepository.Put(model);
         }
+
+        public async Task<IEnumerable<StockDetail>> GetStockEntriesByProduct(string tenantId, string productId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetStockEntriesByProduct.Args.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetStockEntriesByProduct.Args.productId,
+                    ParameterValue = productId,
+                }
+            };
+            var request = new RouteBuilder<StockDetail>().SendMultiple(Endpoints.Stock, StockEnums.GET.GetStockEntriesByProduct.GetStockEntriesByProductEndpointName, parameters);
+            return await _httpClientRepository.Get(request);
+        }
+        
     }
 }
