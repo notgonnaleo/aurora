@@ -11,7 +11,6 @@
 @inject NavigationManager NavigationManager;
 @inject ProductService _productService;
 
-
 <div class="card card-body ">
     @if (isLoading)
     {
@@ -100,7 +99,7 @@
 @code
 {
     [Parameter]
-    public string? ProductId { get; set; }
+    public string productId { get; set; }
 }
 
 @code 
@@ -110,16 +109,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // need to debug here cuz exceptions are ocurring :D
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        if (string.IsNullOrEmpty(ProductId))
+        if (string.IsNullOrEmpty(productId))
         {
             Model = await GetStockEntriesLogs(context.Tenant.Id.ToString());
         }
         else
         {
-            Model = await GetStockEntriesLogsByProduct(context.Tenant.Id.ToString(), ProductId);
+            Model = await GetStockEntriesLogsByProduct(context.Tenant.Id.ToString(), productId.ToString());
         }
         isLoading = false;
     }

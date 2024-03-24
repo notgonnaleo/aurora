@@ -79,10 +79,7 @@
     {
         try
         {
-            if (await _stockService.UpdateStock(Model))
-            {
-                navigator.NavigateTo(navigator.Uri, true);
-            }
+            if (await _stockService.UpdateStock(Model)) navigator.NavigateTo(navigator.Uri, true);
         }
         catch (Exception ex)
         {
