@@ -3,6 +3,7 @@ using Backend.Domain.Entities.Stocks;
 using Frontend.Web.Repository.Agents;
 using Backend.Domain.Entities.Products;
 using Frontend.Web.Services.Products;
+using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Profiles;
 
 namespace Frontend.Web.Services.Stocks
 {
@@ -23,9 +24,9 @@ namespace Frontend.Web.Services.Stocks
         }
 
         public async Task<IEnumerable<StockDetail>> GetStockWithDetail(string tenantId)
-        {            
+        {
             var stocks = await _stockRepository.GetStockWithDetail(tenantId);
-            IEnumerable<ProductDetail> products = await _productRepository.GetProducts(tenantId);          
+            IEnumerable<ProductDetail> products = await _productRepository.GetProducts(tenantId);
             return stocks.Select(x => new StockDetail
             {
                 // CAMPOS DO OBJETO STOCK
@@ -70,6 +71,10 @@ namespace Frontend.Web.Services.Stocks
             return await _stockRepository.UpdateStock(stock);
         }
 
+        public async Task<bool> DeleteStock(string tenantId, string stockMovementId)
+        {
+            return await _stockRepository.DeleteStock(tenantId, stockMovementId);
+        }
 
     }
 }

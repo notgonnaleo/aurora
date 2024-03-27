@@ -55,7 +55,7 @@ else
                         </a>
                     </div>
                     <div>
-                        <a class="p-2 d-inline-flex cursor-pointer">
+                            <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(product)">
                                 <i class="ti ti-trash-x"></i>
                         </a>
                     </div>
@@ -64,6 +64,22 @@ else
         </div>
     </div>
     }
+}
+
+@if (selectedProduct is not null)
+{
+    <Frontend.Web.Components.Products.Modals.DeleteProduct ShowModal="ShowModal" Model="selectedProduct" />
+}
+
+@code
+{
+    Product? selectedProduct = null;
+    public void DeleteModalAction(Product product)
+    {
+        ShowModal = true;
+        selectedProduct = product;
+    }
+
 }
 
 @code {
@@ -92,4 +108,8 @@ else
     {
         OnCreateNewVariant.InvokeAsync(product);
     }
+
+    [Parameter]
+    public bool ShowModal { get; set; } = false;
 }
+

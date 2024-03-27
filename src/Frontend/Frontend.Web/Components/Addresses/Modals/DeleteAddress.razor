@@ -49,6 +49,7 @@
     public async Task DeleteItem()
     {
        await _contactService.DeleteAddress(Model.TenantId.ToString(), Model.AddressId.ToString());
+        navigator.NavigateTo(navigator.Uri, true);
     }
 }
 

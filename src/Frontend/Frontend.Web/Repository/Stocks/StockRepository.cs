@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Stocks;
+﻿using Backend.Domain.Entities.Profiles;
+using Backend.Domain.Entities.Stocks;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
@@ -64,6 +65,25 @@ namespace Frontend.Web.Repository.Stocks
         {
             var model = new RouteBuilder<Stock>().Send(Endpoints.Stock, Methods.Default.PUT, stock);
             return await _httpClientRepository.Put(model);
+        }
+
+        public async Task<bool> DeleteStock(string tenantId, string stockMovementId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+                {
+                    new RouteParameterRequest()
+                    {
+                        ParameterName = Methods.Stock.DELETE.DeleteStock.tenantId,
+                        ParameterValue = tenantId,
+                    },
+                    new RouteParameterRequest()
+                    {
+                        ParameterName = Methods.Stock.DELETE.DeleteStock.StockMovementId,
+                        ParameterValue = stockMovementId,
+                    }
+                };
+            var request = new RouteBuilder<Stock>().SendMultiple(Endpoints.Stock, Methods.Default.DELETE, parameters);
+            return await _httpClientRepository.Put(request);
         }
     }
 }

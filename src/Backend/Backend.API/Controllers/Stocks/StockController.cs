@@ -100,13 +100,13 @@ namespace Backend.API.Controllers.Stocks
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
-        [HttpDelete]
+        [HttpPut]
         [Route("Delete")]
-        public ActionResult Delete(Guid stockMovementId)
+        public ActionResult Delete(Guid tenantId,Guid stockMovementId)
         {
             try
             {
-                return Ok(_stockService.Delete(stockMovementId));
+                return Ok(_stockService.Delete(tenantId,stockMovementId));
             }
             catch (Exception ex)
             {

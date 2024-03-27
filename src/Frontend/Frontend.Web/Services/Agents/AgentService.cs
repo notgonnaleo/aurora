@@ -25,7 +25,7 @@ namespace Frontend.Web.Services.Agents
             return await _agentRepository.GetAgentTypes();
         }
 
-        
+
         public async Task<Backend.Domain.Entities.Agents.Agent> GetAgent(string tenantId, string agentId)
         {
             return await _agentRepository.GetAgent(tenantId, agentId);
@@ -43,6 +43,11 @@ namespace Frontend.Web.Services.Agents
         public async Task<bool> UpdateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {
             return await _agentRepository.UpdateAgent(agent);
+        }
+
+        public async Task<bool> DeleteAgent(string tenantId, string agentId)
+        {
+            return await _agentRepository.DeleteAgent(tenantId, agentId);
         }
     }
 }

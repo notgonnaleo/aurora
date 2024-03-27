@@ -1,10 +1,7 @@
-﻿@using Backend.Domain.Entities.Categories;
-@using Backend.Domain.Entities.Contacts;
-@using Frontend.Web.Services.Categories;
-@using Frontend.Web.Services.Contacts;
-
+﻿@using Backend.Domain.Entities.Stocks;
+@using Frontend.Web.Services.Stocks;
 @inject NavigationManager navigator;
-@inject ContactService _contactService;
+@inject StockService _stockService;
 
 <div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -17,7 +14,7 @@
             </div>
             <div class="modal-body">
                 <h4>
-                    Delete @Model.PhoneNumber?
+                    Do you really want to delete it?
                 </h4>
             </div>
             <div class="modal-footer">
@@ -44,16 +41,15 @@
 @code
 {
     public void CloseModal() => ShowModal = !ShowModal;
-
     public async Task DeleteItem()
     {
-        await _contactService.DeletePhone(Model.TenantId.ToString(), Model.PhoneId.ToString());
-        navigator.NavigateTo(navigator.Uri, true);
+        await _stockService.DeleteStock(Model.TenantId.ToString(), Model.StockMovementId.ToString());
+        navigator.NavigateTo(navigator.Uri, true);   
     }
 }
 
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
-    [Parameter] public Phone Model { get; set; }
+    [Parameter] public Stock Model { get; set; }
 }

@@ -75,16 +75,21 @@ namespace Backend.Infrastructure.Services.Products
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public bool Delete(Guid tenantId, Guid Id)
+        public bool Delete(Guid tenantId, Guid ProductId)
         {
             var context = LoadContext();
             Product product = _appDbContext.Products
-                .Where(x => x.ProductId == Id && x.TenantId == tenantId)
+                .Where(x => x.ProductId == ProductId && x.TenantId == tenantId)
                 .First();
 
-            product.Active = false;
+            product.Active = false;   
             _appDbContext.Update(product);
-            return _appDbContext.SaveChanges() > 0;
+            var response = _appDbContext.SaveChanges();
+
+            if (response <= 0)
+                throw new Exception(Localization.GenericValidations.ErrorDeleteItem(context.Language));
+
+            return true;
         }
 
         public IEnumerable<ProductDetail> GetProductsWithDetail(Guid tenantId)

@@ -53,5 +53,23 @@ namespace Frontend.Web.Services.Products
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.PUT, product);
             return await _httpClientRepository.Put(model);
         }
+        public async Task<bool> DeleteProduct(string tenantId, string productId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+                {
+                    new RouteParameterRequest()
+                    {
+                        ParameterName = Methods.Products.DELETE.DeleteProduct.tenantId,
+                        ParameterValue = tenantId,
+                    },
+                    new RouteParameterRequest()
+                    {
+                        ParameterName = Methods.Products.DELETE.DeleteProduct.productId,
+                        ParameterValue = productId,
+                    }
+                };
+            var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.DELETE, parameters);
+            return await _httpClientRepository.Put(request);
+        }
     }
 }

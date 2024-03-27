@@ -109,7 +109,7 @@ namespace Backend.Infrastructure.Services.Stocks
 
         }
 
-        public bool Delete(Guid stockMovementId)
+        public bool Delete(Guid tenantId,Guid stockMovementId)
         {
             var context = LoadContext();
             Domain.Entities.Stocks.Stock stock = _appDbContext.Stocks.Where(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id).First();
