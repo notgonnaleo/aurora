@@ -1,0 +1,99 @@
+﻿@page "/report/1"
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .invoice {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+            .invoice h1 {
+                text-align: center;
+            }
+
+            .invoice .info {
+                margin-bottom: 20px;
+            }
+
+                .invoice .info p {
+                    margin: 5px 0;
+                }
+
+            .invoice table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .invoice th, .invoice td {
+                border: 1px solid #ccc;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .invoice tfoot {
+                font-weight: bold;
+            }
+    </style>
+
+    <div class="invoice">
+        <h1>Invoice</h1>
+        <div class="info">
+            <p><strong>Invoice Number:</strong> INV-123456</p>
+            <p><strong>Date:</strong> March 28, 2024</p>
+            <p><strong>Due Date:</strong> April 10, 2024</p>
+            <p><strong>Customer:</strong> John Doe</p>
+            <p><strong>Email:</strong> john@example.com</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product A</td>
+                    <td>2</td>
+                    <td>$50.00</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td>Product B</td>
+                    <td>1</td>
+                    <td>$80.00</td>
+                    <td>$80.00</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Subtotal</td>
+                    <td>$180.00</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Tax (10%)</td>
+                    <td>$18.00</td>
+                </tr>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td>$198.00</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+@code {
+
+}

@@ -23,85 +23,80 @@
 <div class="container scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
     <EditForm Model="@stock">
         <div class="row">
-            <div class="accordion-item mb-3 shadow-none border rounded">
-                <div id="flush-collapseOne" class="accordion-collapse collapse show" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body px-3 fw-normal">
+            <div>
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="productId" class="form-label"> Product Name</label>
+                        <select class="form-select" @onchange="OnProductChange">
+                            <option value="" disabled hidden selected>Select a Product</option>
+                            @foreach (var product in products)
+                            {
+                                <option value="@product.ProductId">@product.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
 
-                        <div class="row">
-                            <div class="mb-2 col-sm-12">
-                                <label for="productId" class="form-label"> Product Name</label>
-                                <select class="form-select" @onchange="OnProductChange">
-                                    <option value="" disabled hidden selected>Select a Product</option>
-                                    @foreach (var product in products)
-                                    {
-                                        <option value="@product.ProductId">@product.Name</option>
-                                    }
-                                </select>
-                            </div>
+                @if (variant.Any())
+                {
+                    <div class="row">
+                        <div class="mb-2 col-sm-12 p-2">
+                            <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                            <label>Insert product variant</label>
                         </div>
+                    </div>
+                }
 
-                    @if (variant.Any())
-                    {
-                        <div class="row">
-                            <div class="mb-2 col-sm-12 p-2">
-                                <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
-                                <label>Insert product variant</label>
-                            </div>
-                        </div>
-                    }
-
-                    @if (isInsertVariant)
-                    {
-                        <div class="row">
-                            <div class="mb-2 col-sm-12">
-                                <label for="variantId" class="form-label"> Variant Name</label>
-                                <select class="form-select" @bind="@stock.VariantId">
-                                    <option value="" disabled hidden selected>Select a Variant</option>
-                                    @foreach (var Variant in variant)
-                                    {
-                                        @if (stock.ProductId == Variant.ProductId)
-                                        {
-                                            stock.VariantId = Variant.VariantId;
-                                            <option value="@Variant.VariantId">@Variant.Name</option>
-                                        }
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                    }
-
-                        <div class="row">
-                            <div class="mb-2 col-sm-12">
-                                <label for="agentId" class="form-label"> Agent Name</label>
-                                <select class="form-select" @bind="@stock.AgentId">
-                                    <option value="" disabled hidden selected>Select a Agent</option>
-                                    @foreach (var agent in agents)
-                                    {
-                                        <option value="@agent.AgentId">@agent.Name</option>
-
-                                    }
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="mb-2 col-sm-12">
-                                <label for="quantity" class="form-label">Quantity</label>
-                                <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@stock.Quantity" />
-                            </div>
-                        </div>
-
-                        <div class="mb-3 col-sm-12">
-                            <label for="movementType" class="form-label">Movement Type</label>
-                            <select class="form-select" @bind="@stock.MovementType">
-                                <option value="" disabled hidden selected>Action to be done</option>
-                                @foreach (var movement in Enum.GetValues(typeof(Backend.Domain.Enums.StockMovements.MovementType.MovementTypes)))
+                @if (isInsertVariant)
+                {
+                    <div class="row">
+                        <div class="mb-2 col-sm-12">
+                            <label for="variantId" class="form-label"> Variant Name</label>
+                            <select class="form-select" @bind="@stock.VariantId">
+                                <option value="" disabled hidden selected>Select a Variant</option>
+                                @foreach (var Variant in variant)
                                 {
-                                    <option value="@((int)movement)">@movement.ToString()</option>
+                                    @if (stock.ProductId == Variant.ProductId)
+                                    {
+                                        stock.VariantId = Variant.VariantId;
+                                        <option value="@Variant.VariantId">@Variant.Name</option>
+                                    }
                                 }
                             </select>
                         </div>
                     </div>
+                }
+
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="agentId" class="form-label"> Agent Name</label>
+                        <select class="form-select" @bind="@stock.AgentId">
+                            <option value="" disabled hidden selected>Select a Agent</option>
+                            @foreach (var agent in agents)
+                            {
+                                <option value="@agent.AgentId">@agent.Name</option>
+
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@stock.Quantity" />
+                    </div>
+                </div>
+
+                <div class="mb-3 col-sm-12">
+                    <label for="movementType" class="form-label">Movement Type</label>
+                    <select class="form-select" @bind="@stock.MovementType">
+                        <option value="" disabled hidden selected>Action to be done</option>
+                        @foreach (var movement in Enum.GetValues(typeof(Backend.Domain.Enums.StockMovements.MovementType.MovementTypes)))
+                        {
+                            <option value="@((int)movement)">@movement.ToString()</option>
+                        }
+                    </select>
                 </div>
             </div>
         </div>
