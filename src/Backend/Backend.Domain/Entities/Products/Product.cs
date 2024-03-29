@@ -71,6 +71,8 @@ namespace Backend.Domain.Entities.Products
             Updated = null;
             UpdatedBy = null;
             Active = true;
+            CategoryId = product.CategoryId;
+            SubCategoryId = product.SubCategoryId;
         }
 
         public string ValidateSKU(Product product)
