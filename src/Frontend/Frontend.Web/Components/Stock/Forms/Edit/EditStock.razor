@@ -1,0 +1,91 @@
+﻿@using Backend.Domain.Entities.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Stocks;
+@using Backend.Domain.Enums.StockMovements.MovementType;
+@inject StockService _stockService
+@inject NavigationManager navigator
+@inject AuthenticationService _authenticationService;
+
+<div>
+    <div class="card p-4">
+        <h5 class="card-title fw-semibold mb-4">Stock details</h5>
+        <div class="row">
+            <div class="col-md-9">
+                <form>
+                    @if (Model is null && isLoading)
+                    {
+                        <Frontend.Web.Components.Loader.LoadingSpinner />
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="mb-3 col-sm-3">
+                                <label for="ProductId">Product ID</label>
+                                <input type="text" class="form-control" id="ProductId" placeholder="Product ID" @bind="@Model.ProductId" disabled>
+                            </div>
+                            <div class="mb-3 col-sm-3">
+                                <label for="StockMovementId">Stock ID</label>
+                                <input type="text" class="form-control" id="StockMovementId" placeholder="StockMovementId" @bind="@Model.StockMovementId" disabled>
+                            </div>
+                            <div class="mb-3 col-sm-3">
+                                <label for="VariantId">Variant ID</label>
+                                <input type="text" class="form-control" id="VariantId" placeholder="VariantId" @bind="@Model.VariantId" disabled>
+                            </div>
+                            <div class="mb-3 col-sm-3">
+                                <label for="AgentId">Agent ID</label>
+                                <input type="text" class="form-control" id="AgentId" placeholder="AgenttId" @bind="@Model.AgentId" disabled>
+                            </div>
+
+                            <div class="mb-3 col-sm-3">
+                                <label for="movementType" class="form-label">Movement Type</label>
+                                <select class="form-select" @bind="@Model.MovementType">
+                                    <option value="" disabled hidden selected>Action to be done</option>
+                                    @foreach (var movement in Enum.GetValues(typeof(Backend.Domain.Enums.StockMovements.MovementType.MovementTypes)))
+                                    {
+                                        <option value="@((int)movement)">@movement.ToString()</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mb-3 col-sm-3">
+                                <label class="form-label" for="Quantity">Quantity</label>
+                                <input type="number" class="form-control" id="Quantity" placeholder="Quantity" @bind="@Model.Quantity">
+                            </div>
+                        </div>
+                        <button type="button" @onclick="UpdateStock" class="btn btn-outline-primary">Update</button>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public Backend.Domain.Entities.Stocks.Stock? Model { get; set; }
+
+    public bool isLoading;
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+        Model = await _stockService.GetStock(Model.TenantId.ToString(), Model.StockMovementId.ToString());
+        isLoading = false;
+    }
+
+    public async Task UpdateStock()
+    {
+        try
+        {
+            if (await _stockService.UpdateStock(Model)) navigator.NavigateTo(navigator.Uri, true);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+}
+
+

@@ -1,0 +1,35 @@
+﻿@page "/stock"
+
+
+<PageTitle>Aurora - Stock</PageTitle>
+
+<aside class="right-sidebar @formCssClass">
+    <Frontend.Web.Components.Stock.Forms.Add.AddStock  CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
+</aside>
+
+<div class="container-fluid " >
+    <div class="row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleForm">
+                @btnText
+            </button>
+        </div>
+    </div>
+    <div class="row ">
+        <Frontend.Web.Components.Stock.Table.InventoryTable />
+    </div>
+</div>
+
+
+@code
+{
+    private bool collapseForm = true;
+    private string? formCssClass => collapseForm ? null : "show-menu";
+    private string? btnText => collapseForm ? "New" : "Hide menu";
+
+    private void ToggleForm()
+    {
+        collapseForm = !collapseForm;
+    }
+}
+

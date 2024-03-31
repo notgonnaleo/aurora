@@ -1,0 +1,175 @@
+﻿@using Backend.Domain.Entities.Stocks;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Backend.Domain.Enums.StockMovements.MovementType;
+@using Frontend.Web.Services.Products;
+@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Agents;
+@using Backend.Domain.Entities.Agents;
+@inject StockService _stockService;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
+@inject ProductService _productService;
+@inject ProductVariantService _productVariantService
+@inject AgentService _agentService
+
+
+<div>
+    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+</div>
+
+<div class="container scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
+    <EditForm Model="@stock">
+        <div class="row">
+            <div>
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="productId" class="form-label"> Product Name</label>
+                        <select class="form-select" @onchange="OnProductChange">
+                            <option value="" disabled hidden selected>Select a Product</option>
+                            @foreach (var product in products)
+                            {
+                                <option value="@product.ProductId">@product.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                @if (variant.Any())
+                {
+                    <div class="row">
+                        <div class="mb-2 col-sm-12 p-2">
+                            <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                            <label>Insert product variant</label>
+                        </div>
+                    </div>
+                }
+
+                @if (isInsertVariant)
+                {
+                    <div class="row">
+                        <div class="mb-2 col-sm-12">
+                            <label for="variantId" class="form-label"> Variant Name</label>
+                            <select class="form-select" @bind="@stock.VariantId">
+                                <option value="" disabled hidden selected>Select a Variant</option>
+                                @foreach (var Variant in variant)
+                                {
+                                    @if (stock.ProductId == Variant.ProductId)
+                                    {
+                                        stock.VariantId = Variant.VariantId;
+                                        <option value="@Variant.VariantId">@Variant.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="agentId" class="form-label"> Agent Name</label>
+                        <select class="form-select" @bind="@stock.AgentId">
+                            <option value="" disabled hidden selected>Select a Agent</option>
+                            @foreach (var agent in agents)
+                            {
+                                <option value="@agent.AgentId">@agent.Name</option>
+
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" placeholder="Quantity" @bind="@stock.Quantity" />
+                    </div>
+                </div>
+
+                <div class="mb-3 col-sm-12">
+                    <label for="movementType" class="form-label">Movement Type</label>
+                    <select class="form-select" @bind="@stock.MovementType">
+                        <option value="" disabled hidden selected>Action to be done</option>
+                        @foreach (var movement in Enum.GetValues(typeof(Backend.Domain.Enums.StockMovements.MovementType.MovementTypes)))
+                        {
+                            <option value="@((int)movement)">@movement.ToString()</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+            <button type="button" @onclick="CreateStock" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
+        </div>
+    </EditForm>
+</div>
+
+
+@code 
+{
+    private Stock stock = new Stock();
+    private IEnumerable<ProductDetail> products = new List<ProductDetail>();
+    private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
+    private IEnumerable<Agent> agents = new List<Agent>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        var tenantId = context.Tenant.Id.ToString();
+        products = (await _productService.GetProducts(tenantId)).ToList();
+        agents = (await _agentService.GetAgents(tenantId)).ToList();
+
+    }
+
+    private async Task OnProductChange(ChangeEventArgs e)
+    {
+
+        string selectedProductId = e.Value.ToString();
+        var context = await _authenticationService.GetContext();
+        var tenantId = context.Tenant.Id.ToString();
+        stock.ProductId = new Guid(selectedProductId);
+        variant = await _productVariantService.GetVariantsByProduct(tenantId, selectedProductId.ToString());
+
+    }
+
+    private bool isInsertVariant = false;
+    private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
+
+    private async Task CreateStock()
+    {
+        try
+        {
+            var context = await _authenticationService.GetContext();
+            stock.TenantId = context.Tenant.Id;
+            Stock newstock = await _stockService.CreateStock(stock);
+            if (newstock is not null && newstock.StockMovementId != Guid.Empty)
+                navigator.NavigateTo(navigator.Uri, true);
+        }
+        catch (Exception )
+        {
+            // Handle exceptions appropriately
+            throw;
+        }
+    }
+}
+
+
+@code
+{
+    @*Stock Accordion *@
+    private bool collapseStockAccordion = true;
+    private string? stockAccordionHeaderToggle => collapseStockAccordion ? null : "collapsed";
+    private string? stockAccordionToggle => collapseStockAccordion ? "collapse" : "collapse show";
+    private void ToggleStockAccordion() => collapseStockAccordion = !collapseStockAccordion;
+}
+
+@code
+{
+    [Parameter] public Action? ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+}
+
+

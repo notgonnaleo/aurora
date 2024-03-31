@@ -7,7 +7,9 @@
 
 @if (isAuthenticated)
 {
-    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    // If authenticated we are going to show the side and topbar.
+    // because they are supposed to be everywhere in the system so that's why we need this if statement.
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" >
         <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
@@ -35,7 +37,7 @@ else
 
 @code 
 {
-    public bool isAuthenticated;
+    public bool isAuthenticated = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,10 +49,15 @@ else
     {
         if (!isAuthenticated)
             navigator.NavigateTo("/Login");
+        else
+            navigator.NavigateTo("/Dashboard");
     }
 
     public async Task<bool> IsAuthenticated()
     {
-        return await _authService.IsUserLogged();
+        var response = await _authService.IsUserLogged();
+        return response.GetValueOrDefault();
     }
 }
+
+

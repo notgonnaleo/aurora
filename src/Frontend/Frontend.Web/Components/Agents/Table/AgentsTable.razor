@@ -2,9 +2,9 @@
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Agents;
 @using Frontend.Web.Util.Session;
-@inject AgentService _agentService
+@inject AgentService _agentService;
 @inject AuthenticationService _authenticationService;
-@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager;
 
 @if (agents == null)
 {
@@ -48,6 +48,8 @@ else
         </div>
     }
 }
+
+
 
 @code {
     private IEnumerable<Agent>? agents;

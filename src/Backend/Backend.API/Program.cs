@@ -23,6 +23,8 @@ using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Contact;
 using Backend.Infrastructure.Services.Addresses;
 using Backend.Infrastructure.Services.Profiles;
+using Backend.Infrastructure.Services.Base;
+using Backend.Infrastructure.Services.Stocks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,10 @@ builder.Services.AddScoped<MembershipService>();
 
 // Tenants
 builder.Services.AddScoped<TenantService>();
+
+// Stock 
+builder.Services.AddScoped<StockService>();
+
 
 // User
 builder.Services.AddScoped<UserService>();

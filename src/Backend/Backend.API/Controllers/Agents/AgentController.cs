@@ -22,7 +22,7 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public ActionResult Add(Agent agent)
+        public ActionResult Add(Domain.Entities.Agents.Agent agent)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace Backend.API.Controllers.Agents
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Agent model)
+        public ActionResult Update(Domain.Entities.Agents.Agent model)
         {
             try
             {

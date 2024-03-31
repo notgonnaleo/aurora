@@ -17,10 +17,9 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
 
     public override void OnActionExecuting(ActionExecutingContext context)
     {
-        string tokenRequest = context.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer", "").Trim();     
+        string tokenRequest = context.HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer", "").Trim();
         var userContext = _cache.Get<UserSessionContext>(tokenRequest);
 
-        // If there is no userContext it probably mean the user is not fucking logged in
         if (userContext == null)
         {
             context.Result = new UnauthorizedObjectResult(userContext)
@@ -28,23 +27,24 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
                 StatusCode = 401,
                 Value = "User is not autheticated"
             };
-            return; // Fuck off 
+            return;
         }
 
-        // If the user is authenticated it will refresh the token on the cache to extend it's duration
         _cache.Set("Token", tokenRequest, TimeSpan.FromHours(4));
         _cache.Set(userContext.Token, userContext, TimeSpan.FromHours(4));
 
         if (tokenRequest == userContext.Token)
         {
-            foreach (var access in userContext.Levels) // i have no idea on wtf im doing | << chill out you doing fine
+            foreach (var access in userContext.Levels)
             {
                 if (!access.Access)
+                {
                     context.Result = new UnauthorizedObjectResult(userContext)
                     {
                         StatusCode = 401,
                         Value = userContext.Message
                     };
+                }
             }
         }
         else
@@ -54,7 +54,7 @@ public class ValidateUserContextAttribute : ActionFilterAttribute
                 StatusCode = 401,
                 Value = "User authorization is not valid"
             };
-            return; // Fuck off 
+            return;
         }
     }
 }

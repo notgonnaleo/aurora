@@ -1,0 +1,90 @@
+﻿@using Backend.Domain.Entities.Stocks;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Movement = Backend.Domain.Enums.StockMovements.MovementType;
+@using Frontend.Web.Services.Products;
+@using Backend.Domain.Entities.Products;
+@inject StockService _stockService;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager NavigationManager;
+@inject ProductService _productService;
+
+<div class="card card-body w-100">
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        <h3 class="card-title fw-semibold mb-4">Stock Entries Log</h3>
+        @if (!(Model is null || Model.Count() == 0))
+        {
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap table-fixed">
+                    <thead class="header-item">
+                        <tr>
+                            <th>SKU</th>
+                            <th>Product Name</th>
+                            <th>Movement Type</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stock in Model)
+                        {
+                            <tr class="search-items">
+                                <td>
+                                    <span class="usr-ph-no">@stock.SKU</span>
+                                </td>
+                                <td>
+                                    <span class="usr-location">@stock.ProductName</span>
+                                </td>
+                                <td>
+                                    <span class="badge @(stock.MovementType.MovementTypeId == (int)Movement.MovementTypes.Input ? "bg-primary" : "bg-danger")">@stock.MovementType.MovementTypeName</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.Quantity</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>Could not find any stock entries.</p>
+            <a href="/stock" class="btn btn-primary">Add new entry</a>
+        }
+    }
+</div>
+
+@code
+{
+    public bool isLoading;
+    public IEnumerable<StockDetail> Model = new List<StockDetail>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var context = await _authenticationService.GetContext();
+        if(context is null)
+        {
+            Model = new List<StockDetail>();
+            isLoading = true;
+        }
+        else
+        {
+            Model = await _stockService.GetStockWithDetail(context.Tenant.Id.ToString());
+            isLoading = false;
+        }
+    }
+
+    private void Edit(StockDetail stock)
+    {
+        NavigationManager.NavigateTo($"/stock/edit/{stock.StockMovementId}");
+    }
+}
+

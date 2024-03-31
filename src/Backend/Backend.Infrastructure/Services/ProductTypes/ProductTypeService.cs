@@ -44,7 +44,9 @@ namespace Backend.Infrastructure.Services.ProductTypes
         {
             try
             {
-                return _appDbContext.ProductTypes.Where(x => x.Id == Id).FirstOrDefault();
+                return _appDbContext.ProductTypes
+                    .Where(x => x.Id == Id)
+                    .FirstOrDefault();
 
             }
             catch (Exception ex)

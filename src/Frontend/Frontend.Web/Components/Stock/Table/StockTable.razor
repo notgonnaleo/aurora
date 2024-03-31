@@ -1,0 +1,140 @@
+﻿@using Backend.Domain.Entities.Stocks;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Microsoft.AspNetCore.Components.Forms;
+@using MovementTypeEnum = Backend.Domain.Enums.StockMovements.MovementType;
+@using Frontend.Web.Services.Products;
+@using Backend.Domain.Entities.Products;
+@inject StockService _stockService;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager NavigationManager;
+@inject ProductService _productService;
+
+<div class="card card-body ">
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        <h3 class="card-title fw-semibold mb-4">Stock Entries Log</h3>
+        @if (!(Model is null || Model.Count() == 0))
+        {
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap table-fixed">
+                    <thead class="header-item">
+                        <tr>
+                            <th>
+                                <div class="n-chk align-self-center text-center">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
+                                        <label class="form-check-label" for="contact-check-all"></label>
+                                        <span class="new-control-indicator"></span>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>SKU</th>
+                            <th>GTIN</th>
+                            <th>Product Name</th>
+                            <th>Value</th>
+                            <th>Movement Type</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var stock in Model)
+                        {
+                            <!-- start row -->
+                            <tr class="search-items">
+                                <td>
+                                    <div class="n-chk align-self-center text-center">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
+                                            <label class="form-check-label" for="checkbox1"></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.SKU</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.GTIN</span>
+                                </td>
+                                <td>
+                                    <span class="usr-location">@stock.ProductName</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.ProductValue</span>
+                                </td>
+                                <td>
+                                    <span class="badge @(stock.MovementType.MovementTypeId == (int)MovementTypeEnum.MovementTypes.Input ? "bg-primary" : "bg-danger")">@stock.MovementType.MovementTypeName</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@stock.Quantity</span>
+                                </td>
+                                <td>
+                                    <div class="action-btn">
+                                        <a class="text-primary edit" @onclick="() => Edit(stock)">
+                                            <i class="ti ti-edit fs-5"></i>
+                                        </a>
+                                        <a class=" text-dark delete ms-2">
+                                            <i class="ti ti-trash fs-5"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>No stock created yet.</p>
+        }
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public string productId { get; set; }
+}
+
+@code 
+{
+    public bool isLoading;
+    public IEnumerable<StockDetail> Model = new List<StockDetail>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var context = await _authenticationService.GetContext();
+        if (string.IsNullOrEmpty(productId))
+        {
+            Model = await GetStockEntriesLogs(context.Tenant.Id.ToString());
+        }
+        else
+        {
+            Model = await GetStockEntriesLogsByProduct(context.Tenant.Id.ToString(), productId.ToString());
+        }
+        isLoading = false;
+    }
+
+    private async Task<IEnumerable<StockDetail>> GetStockEntriesLogs(string tenantId)
+    {
+        return await _stockService.GetStockWithDetail(tenantId);
+    }
+
+    private async Task<IEnumerable<StockDetail>> GetStockEntriesLogsByProduct(string tenantId, string productId)
+    {
+        return await _stockService.GetStockEntriesByProduct(tenantId, productId);
+    }
+
+    private void Edit(StockDetail stock)
+    {
+        NavigationManager.NavigateTo($"/stock/edit/{stock.StockMovementId}");
+    }
+}
+
