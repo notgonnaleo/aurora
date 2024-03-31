@@ -51,8 +51,8 @@
     private LoginRequest model = new LoginRequest();
     protected override async Task OnInitializedAsync()
     {
-        bool isAuthenticated = await _authenticationService.IsUserLogged();
-        if (isAuthenticated)
+        var response = await _authenticationService.IsUserLogged();
+        if (response.GetValueOrDefault())
             Navigator.NavigateTo("/", true);
     }
 

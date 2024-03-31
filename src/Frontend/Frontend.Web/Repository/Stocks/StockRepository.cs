@@ -29,11 +29,39 @@ namespace Frontend.Web.Repository.Stocks
 
         public async Task<IEnumerable<StockDetail>> GetStockWithDetail(string tenantId)
         {
-            var parameters = new RouteParameterRequest() { ParameterName = StockEnums.GET.GetStocks.tenantId, ParameterValue = tenantId };
-            var request = new RouteBuilder<StockDetail>().Send(Endpoints.Stock, Methods.Default.GET, parameters);
+            var parameters = new RouteParameterRequest() { ParameterName = StockEnums.GET.GetStockWithDetail.Args.tenantId, ParameterValue = tenantId };
+            var request = new RouteBuilder<StockDetail>().Send(Endpoints.Stock, StockEnums.GET.GetStockWithDetail.GetStockWithDetailEndpoint, parameters);
             return await _httpClientRepository.Get(request);
         }
-
+        public async Task<IEnumerable<Inventory>> GetInventory(string tenantId)
+        {
+            var parameters = new RouteParameterRequest() { ParameterName = StockEnums.GET.GetInventory.Args.tenantId, ParameterValue = tenantId };
+            var request = new RouteBuilder<Inventory>().Send(Endpoints.Stock, StockEnums.GET.GetInventory.GetInventoryEndpointName, parameters);
+            return await _httpClientRepository.Get(request);
+        }
+        public async Task<IEnumerable<Inventory>> GetProductStock(string tenantId, string productId, string variantId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetProductStock.Args.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetProductStock.Args.productId,
+                    ParameterValue = productId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetProductStock.Args.variantId,
+                    ParameterValue = variantId,
+                }
+            };
+            var request = new RouteBuilder<Inventory>().SendMultiple(Endpoints.Stock, StockEnums.GET.GetProductStock.GetProductStockEndpointName, parameters);
+            return await _httpClientRepository.Get(request);
+        }
 
         public async Task<IEnumerable<Stock>> GetStocks(string tenantId)
         {
@@ -85,5 +113,25 @@ namespace Frontend.Web.Repository.Stocks
             var request = new RouteBuilder<Stock>().SendMultiple(Endpoints.Stock, Methods.Default.DELETE, parameters);
             return await _httpClientRepository.Put(request);
         }
+
+        public async Task<IEnumerable<StockDetail>> GetStockEntriesByProduct(string tenantId, string productId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetStockEntriesByProduct.Args.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = StockEnums.GET.GetStockEntriesByProduct.Args.productId,
+                    ParameterValue = productId,
+                }
+            };
+            var request = new RouteBuilder<StockDetail>().SendMultiple(Endpoints.Stock, StockEnums.GET.GetStockEntriesByProduct.GetStockEntriesByProductEndpointName, parameters);
+            return await _httpClientRepository.Get(request);
+        }
+        
     }
 }

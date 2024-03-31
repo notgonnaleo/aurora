@@ -21,11 +21,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public ActionResult Get(Guid tenantId)
+        public ActionResult Get(Guid? tenantId)
         {
             try
             {
-                return Ok(_productService.GetProductsWithDetail(tenantId));
+                return Ok(_productService.GetProductsWithDetail(tenantId.GetValueOrDefault()));
             }
             catch (Exception ex)
             {

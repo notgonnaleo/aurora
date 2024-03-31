@@ -37,18 +37,17 @@ namespace Backend.API.Controllers.Stocks
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
         [Route("List")]
-        public ActionResult Get()
+        public ActionResult Get(Guid tenantId)
         {
             try
             {
-                return Ok(_stockService.Get());
+                return Ok(_stockService.Get(tenantId));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet]
@@ -58,6 +57,21 @@ namespace Backend.API.Controllers.Stocks
             try
             {
                 return Ok(_stockService.GetStockWithDetail(tenantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetStockEntriesByProduct")]
+        public ActionResult GetStockEntriesByProduct(Guid tenantId, Guid productId)
+        {
+            try
+            {
+                return Ok(_stockService.GetStockEntriesByProduct(tenantId, productId));
             }
             catch (Exception ex)
             {
@@ -87,11 +101,7 @@ namespace Backend.API.Controllers.Stocks
         {
             try
             {
-
                 return Ok(_stockService.Update(model));
-
-
-
             }
             catch (Exception ex)
             {
@@ -107,6 +117,36 @@ namespace Backend.API.Controllers.Stocks
             try
             {
                 return Ok(_stockService.Delete(tenantId,stockMovementId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetProductStock")]
+        public ActionResult GetProductStock(Guid tenantId, Guid productId, Guid? variantId)
+        {
+            try
+            {
+                return Ok(_stockService.GetProductStock(tenantId, productId, variantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet]
+        [Route("GetInventory")]
+        public ActionResult GetInventory(Guid tenantId)
+        {
+            try
+            {
+                return Ok(_stockService.GetInventory(tenantId));
             }
             catch (Exception ex)
             {

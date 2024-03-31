@@ -23,11 +23,11 @@ namespace Backend.Domain.Entities.Stocks
         public Guid UserId { get; set; }
         public int Quantity { get; set; }
         public DateTime? MovementDate { get; set; }
-        public string? MovementType { get; set; }
+        public int? MovementType { get; set; }
 
         //Chaves estrangeiras de outras tabelas 
         [ForeignKey("VariantId")]
-        public Guid VariantId { get; set; }
+        public Guid? VariantId { get; set; }
 
         [ForeignKey("AgentId")]
         public Guid AgentId { get; set; }
@@ -36,16 +36,24 @@ namespace Backend.Domain.Entities.Stocks
         public Guid ProductId { get; set; }
     }
 
-    public class StockDetail : Stock
+    public class StockDetail : Model
     {
+        public Guid StockMovementId { get; set; }
+        public Guid TenantId { get; set; }
+        public Guid ProductId { get; set; }
         public string ProductName { get; set; }
+        public Guid? VariantId { get; set; }
+        public string? VariantName { get; set; }
+        public Guid AgentId { get; set; }
+        public Guid AgentName { get; set; }
         public string SKU { get; set; }
         public string GTIN { get; set; }
         public double ProductValue { get; set; }
-        //public string? VariantName { get; set; }
-        //public string AgentName { get; set; }
+        public DateTime MovementDate { get; set; }
+        public int Quantity { get; set; }
         public string SubCategoryName { get; set; }
         public string CategoryName { get; set; }
-        public MovementStatus MovementStatusId { get; set; }
+        public MovementTypes MovementType { get; set; }
+        public MovementStatus MovementStatus { get; set; }
     }
 }

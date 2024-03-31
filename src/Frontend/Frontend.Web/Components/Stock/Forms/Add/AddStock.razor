@@ -3,7 +3,7 @@
 @using Frontend.Web.Services.Stocks;
 @using Frontend.Web.Services.Authentication;
 @using Microsoft.AspNetCore.Components.Forms;
-@using Backend.Domain.Enums.MovementType;
+@using Backend.Domain.Enums.StockMovements.MovementType;
 @using Frontend.Web.Services.Products;
 @using Backend.Domain.Entities.Products;
 @using Frontend.Web.Services.Agents;
@@ -95,7 +95,7 @@
                             <label for="movementType" class="form-label">Movement Type</label>
                             <select class="form-select" @bind="@stock.MovementType">
                                 <option value="" disabled hidden selected>Action to be done</option>
-                                @foreach (var movement in Enum.GetValues(typeof(MovementTypes)))
+                                @foreach (var movement in Enum.GetValues(typeof(Backend.Domain.Enums.StockMovements.MovementType.MovementTypes)))
                                 {
                                     <option value="@((int)movement)">@movement.ToString()</option>
                                 }

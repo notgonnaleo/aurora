@@ -26,6 +26,7 @@ namespace Backend.Domain.Entities.Products
 
         [Required]
         public Guid TenantId { get; set; }        
+
         [Key]
         public Guid ProductId { get; set; }
         public string SKU { get; set; }
@@ -44,8 +45,6 @@ namespace Backend.Domain.Entities.Products
         public Guid? CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
         
-        [ForeignKey("AgentId")]
-        public virtual Agent? Agent { get; set; }
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
         [ForeignKey("SubCategoryId")]
@@ -63,6 +62,9 @@ namespace Backend.Domain.Entities.Products
             Description = product.Description;
             ColorName = product.ColorName;
             MetricUnitName = product.MetricUnitName;
+            //coloquei os dois id aqui, porque quando estava dando um new product e perdendo os Id !!!!!
+            CategoryId = product.CategoryId;
+            SubCategoryId= product.SubCategoryId;   
             ProductTypeId = product.ProductTypeId;
             Value = product.Value;
             TotalWeight = product.TotalWeight;

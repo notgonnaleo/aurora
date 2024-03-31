@@ -34,14 +34,17 @@ namespace Backend.Infrastructure.Services.Products
         public IEnumerable<ProductVariant> GetAllVariantsByProduct(Guid tenantId, Guid productId)
         {
             return _appDbContext.ProductVariants
-                .Where(x => x.TenantId == tenantId && x.ProductId == productId).ToList();
+                .Where(x => x.TenantId == tenantId && 
+                x.ProductId == productId &&
+                x.Active);
         }
         public IEnumerable<ProductVariant> GetVariant(Guid tenantId, Guid productId, Guid variantId)
         {
             return _appDbContext.ProductVariants
                 .Where(x => x.TenantId == tenantId &&
                 x.ProductId == productId &&
-                x.VariantId == variantId).ToList();
+                x.VariantId == variantId &&
+                x.Active);
         }
 
         public async Task<ProductVariant> CreateVariant(ProductVariant model)

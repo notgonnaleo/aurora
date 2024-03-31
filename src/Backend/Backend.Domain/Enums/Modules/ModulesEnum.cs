@@ -57,6 +57,11 @@ namespace Backend.Infrastructure.Enums.Modules
             public static string DELETE = "Delete";
         }
 
+        public static class DefaultArgument
+        {
+            public static string tenantId = "tenantId";
+        }
+
         // Below here we add our custom routes if necessary.
         // Otherwise, we use the generic ones which increase the productivity a little more when integrating it with the UI
 
@@ -514,7 +519,41 @@ namespace Backend.Infrastructure.Enums.Modules
                 {
                     public static string tenantId = "tenantId";
                     public static string stockMovementId = "StockMovementId";
-                    
+                }
+                public static class GetStockWithDetail
+                {
+                    public static string GetStockWithDetailEndpoint = "GetStockWithDetail";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetInventory
+                {
+                    public static string GetInventoryEndpointName = "GetInventory";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetProductStock
+                {
+                    public static string GetProductStockEndpointName = "GetProductStock";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string productId = "productId";
+                        public static string variantId = "variantId";
+                    }
+                }
+                public static class GetStockEntriesByProduct
+                {
+                    public static string GetStockEntriesByProductEndpointName = "GetStockEntriesByProduct";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string productId = "productId";
+                    }
                 }
             }
 

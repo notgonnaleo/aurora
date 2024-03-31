@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     /// <inheritdoc />
-    public partial class APPSNAPSHOT : Migration
+    public partial class stock : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,6 +94,33 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductVariants",
+                columns: table => new
+                {
+                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SKU = table.Column<string>(type: "text", nullable: false),
+                    GTIN = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    ColorName = table.Column<string>(type: "text", nullable: true),
+                    LiquidWeight = table.Column<double>(type: "double precision", nullable: true),
+                    TotalWeight = table.Column<double>(type: "double precision", nullable: true),
+                    Value = table.Column<double>(type: "double precision", nullable: true),
+                    OverwriteValue = table.Column<bool>(type: "boolean", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductVariants", x => x.VariantId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Profiles",
                 columns: table => new
                 {
@@ -126,9 +153,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     MovementDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    MovementType = table.Column<string>(type: "text", nullable: true),
-                    MovementStatusId = table.Column<int>(type: "integer", nullable: false),
-                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MovementType = table.Column<int>(type: "integer", nullable: true),
+                    VariantId = table.Column<Guid>(type: "uuid", nullable: true),
                     AgentId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<Guid>(type: "uuid", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
@@ -264,7 +290,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     ProductTypeId = table.Column<int>(type: "integer", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: true),
                     SubCategoryId = table.Column<Guid>(type: "uuid", nullable: true),
-                    AgentId = table.Column<Guid>(type: "uuid", nullable: true),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
@@ -274,11 +299,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.ProductId);
-                    table.ForeignKey(
-                        name: "FK_Product_Agent_AgentId",
-                        column: x => x.AgentId,
-                        principalTable: "Agent",
-                        principalColumn: "AgentId");
                     table.ForeignKey(
                         name: "FK_Product_Category_CategoryId",
                         column: x => x.CategoryId,
@@ -324,39 +344,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ProductVariants",
-                columns: table => new
-                {
-                    VariantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SKU = table.Column<string>(type: "text", nullable: false),
-                    GTIN = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    ColorName = table.Column<string>(type: "text", nullable: true),
-                    LiquidWeight = table.Column<double>(type: "double precision", nullable: true),
-                    TotalWeight = table.Column<double>(type: "double precision", nullable: true),
-                    Value = table.Column<double>(type: "double precision", nullable: true),
-                    OverwriteValue = table.Column<bool>(type: "boolean", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductVariants", x => x.VariantId);
-                    table.ForeignKey(
-                        name: "FK_ProductVariants_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Addresses",
                 columns: new[] { "AddressId", "Active", "AddressTypeId", "AgentId", "CityId", "CityName", "CountryId", "CountryName", "Created", "CreatedBy", "PostalCode", "Primary", "Reference", "StateId", "StateName", "StreetName", "StreetNumber", "TenantId", "Updated", "UpdatedBy" },
@@ -377,7 +364,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "CategoryId", "Active", "CategoryName", "Created", "CreatedBy", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6555), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5844), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "ProductType",
@@ -406,13 +393,13 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             migrationBuilder.InsertData(
                 table: "Product",
-                columns: new[] { "ProductId", "Active", "AgentId", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("bdd09f7d-41c8-4e45-93fe-5bc7e0567ac7"), true, null, null, "Azul-Marinho", new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6729), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
+                columns: new[] { "ProductId", "Active", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
+                values: new object[] { new Guid("a4508f34-761c-4b22-9ca0-d9fc8d5ac644"), true, null, "Azul-Marinho", new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5988), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
 
             migrationBuilder.InsertData(
                 table: "SubCategory",
                 columns: new[] { "SubCategoryId", "Active", "CategoryId", "Created", "CreatedBy", "SubCategoryName", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6644), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5940), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "Emails",
@@ -430,8 +417,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             migrationBuilder.InsertData(
                 table: "Product",
-                columns: new[] { "ProductId", "Active", "AgentId", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("6123c390-acfc-4630-9dbe-b5107b4d9f5b"), true, null, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 3, 16, 15, 43, 34, 289, DateTimeKind.Utc).AddTicks(6721), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
+                columns: new[] { "ProductId", "Active", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
+                values: new object[] { new Guid("21d0406c-d7cc-434a-abb0-35bdfef54202"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5981), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Agent_AgentTypeId",
@@ -446,11 +433,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             migrationBuilder.CreateIndex(
                 name: "IX_Phones_AgentId",
                 table: "Phones",
-                column: "AgentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_AgentId",
-                table: "Product",
                 column: "AgentId");
 
             migrationBuilder.CreateIndex(
@@ -471,11 +453,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
             migrationBuilder.CreateIndex(
                 name: "IX_ProductMedia_ProductId",
                 table: "ProductMedia",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductVariants_ProductId",
-                table: "ProductVariants",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -509,19 +486,19 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 name: "Stock");
 
             migrationBuilder.DropTable(
+                name: "Agent");
+
+            migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "Agent");
+                name: "AgentType");
 
             migrationBuilder.DropTable(
                 name: "ProductType");
 
             migrationBuilder.DropTable(
                 name: "SubCategory");
-
-            migrationBuilder.DropTable(
-                name: "AgentType");
 
             migrationBuilder.DropTable(
                 name: "Category");
