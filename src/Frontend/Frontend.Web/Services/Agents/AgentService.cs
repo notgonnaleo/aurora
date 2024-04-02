@@ -15,7 +15,7 @@ namespace Frontend.Web.Services.Agents
             _agentRepository = agentRepository;
         }
 
-        public async Task<IEnumerable<Agent>> GetAgents(string tenantId)
+        public async Task<IEnumerable<Backend.Domain.Entities.Agents.Agent>> GetAgents(string tenantId)
         {
             return await _agentRepository.GetAgents(tenantId);
         }
@@ -25,7 +25,8 @@ namespace Frontend.Web.Services.Agents
             return await _agentRepository.GetAgentTypes();
         }
 
-        public async Task<Agent> GetAgent(string tenantId, string agentId)
+
+        public async Task<Backend.Domain.Entities.Agents.Agent> GetAgent(string tenantId, string agentId)
         {
             return await _agentRepository.GetAgent(tenantId, agentId);
         }
@@ -34,14 +35,19 @@ namespace Frontend.Web.Services.Agents
             return await _agentRepository.GetAgentWithDetail(agentId);
         }
 
-        public async Task<Agent> CreateAgent(Agent agent)
+        public async Task<Backend.Domain.Entities.Agents.Agent> CreateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {
             return await _agentRepository.CreateAgent(agent);
         }
 
-        public async Task<bool> UpdateAgent(Agent agent)
+        public async Task<bool> UpdateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {
             return await _agentRepository.UpdateAgent(agent);
+        }
+
+        public async Task<bool> DeleteAgent(string tenantId, string agentId)
+        {
+            return await _agentRepository.DeleteAgent(tenantId, agentId);
         }
     }
 }

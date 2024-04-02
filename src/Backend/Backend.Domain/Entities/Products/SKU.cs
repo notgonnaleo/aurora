@@ -25,7 +25,7 @@ namespace Backend.Domain.Entities.Products
             //SubCategoryName = subCategory.Substring(0, 1);
             ColorName = colorName.Substring(0, 1);
             string numberId = new Random().Next(10, 100).ToString();
-            SKUValue = $"{Year}{ProductName}{ProductTypeId}{numberId}";
+            SKUValue = $"{Year}{ProductName.ToUpper()}{ProductTypeId}{numberId}";
         }
     }
 }

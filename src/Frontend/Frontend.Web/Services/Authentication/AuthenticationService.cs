@@ -35,15 +35,15 @@ namespace Frontend.Web.Services.Authentication
             return response != null;
         }
 
-        public async Task<bool> IsUserLogged()
+        public async Task<bool?> IsUserLogged()
         {
             return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession") != null;
         }
 
-        public async Task<UserSessionContext> GetContext()
+        public async Task<UserSessionContext?> GetContext()
         {
             var response = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
-            return response ?? new UserSessionContext();
+            return response;
         }
 
         public async Task<bool> UpdateTenantInformationInContext(Tenant selectedTenant)

@@ -25,6 +25,7 @@ namespace Frontend.Web.Services.Products
             return new ProductDetail()
             {
                 ProductId = product.ProductId,
+
                 Name = product.Name,
                 SKU = product.SKU,
                 Description = product.Description,
@@ -47,7 +48,11 @@ namespace Frontend.Web.Services.Products
 
         public async Task<bool> UpdateProduct(Product product)
         {
-           return await _productRepository.UpdateProduct(product);
+            return await _productRepository.UpdateProduct(product);
+        }
+        public async Task<bool> DeleteProduct(string tenantId, string productId)
+        {
+            return await _productRepository.DeleteProduct(tenantId, productId);
         }
     }
 }

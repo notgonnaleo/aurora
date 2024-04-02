@@ -27,7 +27,6 @@ namespace Backend.Infrastructure.Services.Base
         {
             var context = _userContextService.LoadContext();
             if (tenantId != context.Tenant.Id) throw new Exception(Localization.GenericValidations.ErrorWrongTenant(context.Language));
-
         }
 
     }

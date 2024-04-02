@@ -37,6 +37,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Phones = "Phones";
         public static string Addresses = "Addresses";
         public static string EmailAddresses = "EmailAddresses";
+        public static string Stock = "Stock";
     }
 
     /// <summary>
@@ -54,6 +55,11 @@ namespace Backend.Infrastructure.Enums.Modules
             public static string POST = "Add";
             public static string PUT = "Update";
             public static string DELETE = "Delete";
+        }
+
+        public static class DefaultArgument
+        {
+            public static string tenantId = "tenantId";
         }
 
         // Below here we add our custom routes if necessary.
@@ -108,6 +114,15 @@ namespace Backend.Infrastructure.Enums.Modules
                 {
                     public static string tenantId = "tenantId";
                     public static string productId = "productId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateProduct
+                {
+                    public static string productId = "productId";
+                    public static string tenantId = "tenantId";
                 }
             }
 
@@ -280,6 +295,8 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                     public static string agentId = "agentId";
                 }
+
+                
             }
 
             public static class POST
@@ -294,7 +311,7 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class UpdateAgent
                 {
-                    public static string Id = "agentId";
+                    public static string agentId = "agentId";
                     public static string tenantId = "tenantId";
                 }
             }
@@ -303,7 +320,7 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class DeleteAgent
                 {
-                    public static string Id = "agentId";
+                    public static string agentId = "agentId";
                     public static string tenantId = "tenantId";
                 }
             }
@@ -488,5 +505,85 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
         #endregion
+
+        public class Stock
+        {
+
+            public static class GET
+            {
+                public static class GetStocks
+                {
+                    public static string tenantId = "tenantId";
+                }
+                public static class GetStock
+                {
+                    public static string tenantId = "tenantId";
+                    public static string stockMovementId = "StockMovementId";
+                }
+                public static class GetStockWithDetail
+                {
+                    public static string GetStockWithDetailEndpoint = "GetStockWithDetail";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetInventory
+                {
+                    public static string GetInventoryEndpointName = "GetInventory";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetProductStock
+                {
+                    public static string GetProductStockEndpointName = "GetProductStock";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string productId = "productId";
+                        public static string variantId = "variantId";
+                    }
+                }
+                public static class GetStockEntriesByProduct
+                {
+                    public static string GetStockEntriesByProductEndpointName = "GetStockEntriesByProduct";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string productId = "productId";
+                    }
+                }
+            }
+
+            public static class POST
+            {
+                public static class AddStock
+                {
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class PUT
+            {
+                public static class UpdateStock
+                {
+                    public static string StockMovementId = "StockMovementId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteStock
+                {
+                    public static string StockMovementId = "StockMovementId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
+
+        }
     }
 }

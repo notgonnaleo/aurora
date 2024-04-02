@@ -1,14 +1,23 @@
 ﻿@using Backend.Domain.Entities.Authentication.Tenants;
-<div class="card-body">
-    <h5 class="card-title fw-semibold mb-4">Sample Page</h5>
-    @if (IsAuthenticated)
-    {
-        <p class="mb-0">You're logged in @Tenant.Name</p>
-    }
-</div>
+@using Backend.Domain.Entities.Authentication.Users.UserContext
+@using Microsoft.JSInterop;
+@inject IJSRuntime JSRuntime
+
+@if (Profile is not null && Profile.Tenant is not null)
+{
+    <div class="card card-body bg-primary">
+        <h5 style="color: #fff" class="card-title fw-semibold mb-4">
+            <strong>Welcome, @Profile?.Username!</strong>
+        </h5>
+        @if (IsAuthenticated)
+        {
+            <p style="color: #fff" class="mb-0">You're viewing the dashboard as company: <strong>@Profile!.Tenant!.Name</strong></p>
+        }
+    </div>
+}
 
 @code
 {
     [Parameter] public bool IsAuthenticated { get; set; }
-    [Parameter] public Tenant Tenant { get; set; }
+    [Parameter] public UserSessionContext? Profile { get; set; }
 }

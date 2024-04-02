@@ -1,0 +1,53 @@
+﻿@page "/inventory/product/{productId}"
+@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Products;
+@inject ProductService _productService;
+@inject AuthenticationService _authenticationService;
+
+<aside class="right-sidebar @formCssClass">
+    <Frontend.Web.Components.Stock.Forms.Add.AddStock CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
+</aside>
+
+<div class="container-fluid">
+    <div class="row">
+        <Frontend.Web.Components.Products.Forms.View.ProductView Model="Model" />
+    </div>
+    <div class="row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleForm">
+                @btnText
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <Frontend.Web.Components.Stock.Table.StockTable productId=@productId />
+    </div>
+</div>
+
+@code
+{
+    private ProductDetail Model = new ProductDetail();
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        Model.TenantId = context.Tenant.Id;
+        Model = await _productService.GetProductWithDetails(Model.TenantId.ToString(), productId);
+    }
+}
+@code
+{
+    private bool collapseForm = true;
+    private string? formCssClass => collapseForm ? null : "show-menu";
+    private string? btnText => collapseForm ? "New" : "Hide menu";
+
+    private void ToggleForm()
+    {
+        collapseForm = !collapseForm;
+    }
+}
+@code
+{
+    [Parameter]
+    public string productId { get; set; }
+}

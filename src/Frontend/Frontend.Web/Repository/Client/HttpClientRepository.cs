@@ -44,6 +44,7 @@ namespace Frontend.Web.Repository.Client
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
                 _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
+                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 return await _httpClient.GetFromJsonAsync<List<T>>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
             }
             catch (Exception ex)
@@ -66,6 +67,7 @@ namespace Frontend.Web.Repository.Client
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
                 _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
+                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 return await _httpClient.GetFromJsonAsync<T>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
             }
             catch (Exception ex)
@@ -88,6 +90,7 @@ namespace Frontend.Web.Repository.Client
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
+                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 if (route.Body != null) 
                     request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
                 return await _httpClient.SendAsync(request);
@@ -111,6 +114,7 @@ namespace Frontend.Web.Repository.Client
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
+                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 if (route.Body != null)
                     request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
                 var response = await _httpClient.SendAsync(request);
@@ -137,6 +141,7 @@ namespace Frontend.Web.Repository.Client
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, isPublic, ContentTypeEnum.JSON);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
                 return await _httpClient.SendAsync(request);
             }

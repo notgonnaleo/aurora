@@ -1,0 +1,100 @@
+﻿@using Backend.Domain.Entities.Stocks;
+@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Services.Stocks;
+@using Frontend.Web.Services.Authentication;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Backend.Domain.Enums.StockMovements.MovementType;
+@using Frontend.Web.Services.Products;
+@using Backend.Domain.Entities.Products;
+@using InventoryStatus = Backend.Domain.Enums.StockMovements;
+@inject StockService _stockService;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager NavigationManager;
+@inject ProductService _productService;
+
+<div class="card card-body w-100">
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+        <h3 class="card-title fw-semibold mb-4">Inventory Management</h3>
+        @if (!(Model is null || Model.Count() == 0))
+        {
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap table-fixed">
+                    <thead class="header-item">
+                        <tr>
+                            <th>
+                                <div class="n-chk align-self-center text-center">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
+                                        <label class="form-check-label" for="contact-check-all"></label>
+                                        <span class="new-control-indicator"></span>
+                                    </div>
+                                </div>
+                            </th>
+                            <th>SKU</th>
+                            <th>Product Name</th>
+                            <th>Movement Type</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="search-items">
+                                <td>
+                                    <div class="n-chk align-self-center text-center">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
+                                            <label class="form-check-label" for="checkbox1"></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no cursor-pointer" @onclick="() => Edit(item)">@item.Product.SKU</span>
+                                </td>
+                                <td>
+                                    <span class="usr-ph-no">@item.Product.Name</span>
+                                </td>
+                                <td>
+                                    <span class="usr-location">@item.TotalAmount</span>
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Status.StatusId == (int)InventoryStatus.MovementStatus.Available ? "bg-primary" : "bg-danger")">@item.Status.StatusDescription</span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p>Could not find any stock entries.</p>
+            <a href="/stock" class="btn btn-primary">Add new entry</a>
+        }
+    }
+</div>
+
+@code
+{
+    public bool isLoading;
+    public IEnumerable<Inventory> Model = new List<Inventory>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var context = await _authenticationService.GetContext();
+        Model = await _stockService.GetInventory(context.Tenant.Id.ToString());
+        isLoading = false;
+    }
+
+    private void Edit(Inventory item)
+    {
+        NavigationManager.NavigateTo($"/inventory/product/{item.Product.ProductId}");
+    }
+}
+

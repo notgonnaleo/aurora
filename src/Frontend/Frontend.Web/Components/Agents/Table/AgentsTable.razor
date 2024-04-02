@@ -2,9 +2,9 @@
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Agents;
 @using Frontend.Web.Util.Session;
-@inject AgentService _agentService
+@inject AgentService _agentService;
 @inject AuthenticationService _authenticationService;
-@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager;
 
 @if (agents == null)
 {
@@ -38,7 +38,7 @@ else
                             </a>
                         </div>
                         <div>
-                            <a class="p-2 d-inline-flex cursor-pointer">
+                            <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(agent)">
                                 <i class="ti ti-trash-x"></i>
                             </a>
                         </div>
@@ -47,6 +47,22 @@ else
             </div>
         </div>
     }
+}
+
+@if (selectedAgent is not null)
+{
+    <Frontend.Web.Components.Agents.Modals.DeleteAgent ShowModal="ShowModal" Model="selectedAgent" />
+}
+
+@code
+{
+    Agent? selectedAgent = null;
+    public void DeleteModalAction(Agent agent)
+    {
+        ShowModal = true;
+        selectedAgent = agent;
+    }
+
 }
 
 @code {
@@ -61,4 +77,7 @@ else
     {
         NavigationManager.NavigateTo($"/agents/edit/{agent.AgentId}");
     }
+
+    [Parameter]
+    public bool ShowModal { get; set; } = false;
 }

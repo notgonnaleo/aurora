@@ -92,6 +92,23 @@ namespace Backend.Infrastructure.Services.Categories
             return new List<Category>();
         }
 
+        public Category GetCategoryAndSubCategoriesById(Guid categoryId)
+        {
+            var context = LoadContext();
+            Category category = _appDbContext.Categories
+                .FirstOrDefault(x => x.TenantId == context.Tenant.Id &&
+                x.CategoryId == categoryId &&
+                x.Active);
+
+            if (category is not null)
+            {
+                category.SubCategories = _subCategoryService
+                    .GetSubCategoriesByCategory(category.CategoryId); // TODO: Make this more efficient, like getting it all in one query, you can use joins in entity framework
+                return category;
+            }
+            return new Category();
+        }
+
         public bool Delete(Guid categoryId)
         {
             var context = LoadContext();

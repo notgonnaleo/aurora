@@ -27,7 +27,7 @@ namespace Backend.Infrastructure.Services.Agents
             _appDbContext = appDbContext;
         }
 
-        public Agent Add(Agent agent)
+        public Domain.Entities.Agents.Agent Add(Domain.Entities.Agents.Agent agent)
         {
             var context = LoadContext();
             agent.TenantId = context.Tenant.Id;
@@ -45,13 +45,13 @@ namespace Backend.Infrastructure.Services.Agents
             return agent;
         }
 
-        public IEnumerable<Agent> Get()
+        public IEnumerable<Domain.Entities.Agents.Agent> Get()
         {
             var context = LoadContext();
             return _appDbContext.Agents.Where(x => x.TenantId == context.Tenant.Id && x.Active).ToList();
         }
 
-        public Agent? GetById(Guid tenantId, Guid agentId)
+        public Domain.Entities.Agents.Agent? GetById(Guid tenantId, Guid agentId)
         {
             if(tenantId == Guid.Empty || agentId == Guid.Empty)
                 return null;
@@ -61,7 +61,7 @@ namespace Backend.Infrastructure.Services.Agents
             return _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.TenantId == context.Tenant.Id);
         }
 
-        public bool Update(Agent model)
+        public bool Update(Domain.Entities.Agents.Agent model)
         {
             var context = LoadContext();
             ValidateTenant(model.TenantId);
@@ -86,10 +86,10 @@ namespace Backend.Infrastructure.Services.Agents
             };
         }
 
-        public bool Delete(Guid Id)
+        public bool Delete(Guid tenantId, Guid AgentId)
         {
             var context = LoadContext();
-            Agent agents = _appDbContext.Agents.Where(x => x.AgentId == Id && x.TenantId == context.Tenant.Id).First();
+            Agent agents = _appDbContext.Agents.Where(x => x.AgentId == AgentId && x.TenantId == context.Tenant.Id).First();
             agents.Active = false;
 
             _appDbContext.Update(agents);

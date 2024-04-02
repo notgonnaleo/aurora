@@ -4,11 +4,17 @@
 @inject TenantService _tenantService; 
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager navigator;
-<aside class="left-sidebar" > 
-    <div>
+
+<aside class="left-sidebar">
+    <div class="">
         <div class="brand-logo d-flex align-items-center justify-content-between">
-            <a href="./index.html" class="text-nowrap logo-img">
-                <h1>Blazor</h1>
+            <a class="text-nowrap logo-img d-block py-3 w-100">
+                <h3>
+                    <strong>
+                        <i class="ti ti-robot" style="margin-right: 4px"></i>
+                    </strong>
+                    <strong>Aurora</strong>
+                </h3>
             </a>
             <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse" @onclick="ToggleNavMenu">
                 <i class="ti ti-x fs-8"></i>
@@ -69,15 +75,6 @@
                         </span>
                         <span class="hide-menu">Products</span>
                     </a>
-                </li> 
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="agents" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-users"></i>
-                        </span>
-                        <span class="hide-menu">Agents</span>
-                    </a>
                 </li>
 
                 <li class="sidebar-item">
@@ -88,6 +85,25 @@
                         <span class="hide-menu">Categories</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/agents" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-users"></i>
+                        </span>
+                        <span class="hide-menu">Agents</span>
+                    </a>
+                </li> 
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/stock" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-box"></i>
+                        </span>
+                        <span class="hide-menu">Stock</span>
+                    </a>
+                </li>
+
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">AUTH</span>
@@ -174,4 +190,5 @@
 {
     [Parameter] public bool CollapseNavMenu { get; set; }
     [Parameter] public Action ToggleNavMenu { get; set; }
-}
+} 
+
