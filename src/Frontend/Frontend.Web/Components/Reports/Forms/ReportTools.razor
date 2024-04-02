@@ -1,0 +1,72 @@
+﻿@using Backend.Domain.Entities.Reports;
+@inject IJSRuntime Js
+
+<div>
+    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+</div>
+<div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
+    <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+        <div class="col-md-2 m-2">
+            <button type="button" class="btn btn-primary d-print-none text-right" @onclick="Print">Export Pdf</button>
+        </div>
+        <div class="col-md-2 m-2">
+            <button type="button" class="btn btn-primary d-print-none text-right" @onclick="PrintWord">Export Word (.docx)</button>
+        </div>
+        <div>
+            <label for="sku" class="form-label">Font size test</label>
+            <input type="number" class="form-control" id="sku" placeholder="SKU" @bind="@TemplateSettings.FontTitleSize">
+        </div>
+    </div>
+</div>
+
+@code {
+    private TemplateSettings _templateSettings = new TemplateSettings() { FontTitleSize = 24 };
+
+    [Parameter]
+    public TemplateSettings TemplateSettings
+    {
+        get => _templateSettings;
+        set
+        {
+            if (_templateSettings != value)
+            {
+                _templateSettings = value;
+                TemplateSettingsChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<TemplateSettings> TemplateSettingsChanged { get; set; }
+
+    // When the font size input changes, update the TemplateSettings.FontTitleSize
+    // and notify the parent component about the change.
+    private async Task OnFontSizeChange(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value.ToString(), out var newSize))
+        {
+            TemplateSettings.FontTitleSize = newSize;
+            await TemplateSettingsChanged.InvokeAsync(TemplateSettings);
+        }
+    }
+}
+
+
+@code 
+{
+    private async Task Print()
+    {
+        await Js.InvokeVoidAsync("window.print");
+    }
+
+    private async Task PrintWord()
+    {
+        await Js.InvokeVoidAsync("exportWord");
+    }
+}
+
+@code
+{
+    [Parameter] public Action ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+}

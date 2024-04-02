@@ -1,26 +1,11 @@
 ﻿@page "/report/product-invoice/{productId}"
-@inject IJSRuntime Js
+@using Backend.Domain.Entities.Reports;
+
+<div class="d-print-none">
+    <Frontend.Web.Components.Reports.Forms.ReportTools TemplateSettingsChanged="SetCustomReportSettings" />
+</div>
 
 <div class="container-fluid">
-    <div class="row d-print-none">
-        <div class="card card-body">
-            <h3>
-                Review/Edit Report
-            </h3>
-            <label for="sku" class="form-label">Font size test</label>
-            <input type="number" class="form-control" id="sku" placeholder="SKU" @bind="@FontTitleSize">
-            <div class="col-md-2 m-2">
-                <button type="button" class="btn btn-primary d-print-none text-right" @onclick="Print">Customize report</button>
-            </div>
-            <div class="col-md-2 m-2">
-                <button type="button" class="btn btn-primary d-print-none text-right" @onclick="Print">Export Pdf</button>
-            </div>
-            <div class="col-md-2 m-2">
-                <button type="button" class="btn btn-primary d-print-none text-right" @onclick="PrintWord">Export Word (.docx)</button>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="report" id="reportContent">
             <h1>Report</h1>
@@ -83,7 +68,7 @@
     }
 
         .report h1 {
-            font-size: @(FontTitleSize)px;
+            font-size: @(CustomSettings.FontTitleSize)px;
             text-align: center;
         }
 
@@ -111,23 +96,24 @@
             font-weight: bold;
         }
 </style>
+
 @code 
 {
     [Parameter]
     public string productId { get; set; }
-
-    private async Task Print()
-    {
-        await Js.InvokeVoidAsync("window.print");
-    }
-
-    private async Task PrintWord()
-    {
-        await Js.InvokeVoidAsync("exportWord");
-    }
 }
 
-@code
-{
-    public int FontTitleSize = 12;
+@code {
+    // Assuming other parts of your parent component remain the same.
+
+    public TemplateSettings CustomSettings = new TemplateSettings();
+
+    // Adjust the method signature to async Task and update it to be compatible with EventCallback
+    private Task SetCustomReportSettings(TemplateSettings templateSettings)
+    {
+        CustomSettings = templateSettings;
+        StateHasChanged(); // Call StateHasChanged to refresh the UI if needed.
+        return Task.CompletedTask;
+    }
+
 }
