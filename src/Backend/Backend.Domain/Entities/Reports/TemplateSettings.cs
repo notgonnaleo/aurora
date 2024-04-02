@@ -9,5 +9,12 @@ namespace Backend.Domain.Entities.Reports
     public class TemplateSettings
     {
         public int FontTitleSize { get; set; }
+
+        public TemplateSettings() { }
+
+        public TemplateSettings(int titleSize) 
+        {
+            FontTitleSize = titleSize;
+        }
     }
 }

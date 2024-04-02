@@ -1,11 +1,23 @@
 ﻿@page "/report/product-invoice/{productId}"
 @using Backend.Domain.Entities.Reports;
 
-<div class="d-print-none">
-    <Frontend.Web.Components.Reports.Forms.ReportTools TemplateSettingsChanged="SetCustomReportSettings" />
-</div>
+<aside class="d-print-none right-sidebar @formCssClass">
+    <Frontend.Web.Components.Reports.Forms.ReportTools TemplateSettingsChanged="SetCustomReportSettings"
+                                                        CollapseRightSidebar="collapseReportTools"
+                                                        ToggleRightSidebar="ToggleReportTools" />
+</aside>
+
+
 
 <div class="container-fluid">
+    <div class="d-print-none row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleReportTools">
+                <i class="ti ti-tools p-2"></i> @btnText
+            </button>
+        </div>
+    </div>
+
     <div class="row">
         <div class="report" id="reportContent">
             <h1>Report</h1>
@@ -58,6 +70,7 @@
         </div>
     </div>
 </div>
+
 <style>
     .report {
         max-width: 800px;
@@ -103,17 +116,31 @@
     public string productId { get; set; }
 }
 
-@code {
-    // Assuming other parts of your parent component remain the same.
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        SetCustomReportSettings(CustomSettings);
+    }
 
     public TemplateSettings CustomSettings = new TemplateSettings();
-
-    // Adjust the method signature to async Task and update it to be compatible with EventCallback
-    private Task SetCustomReportSettings(TemplateSettings templateSettings)
+    private void SetCustomReportSettings(TemplateSettings templateSettings)
     {
         CustomSettings = templateSettings;
-        StateHasChanged(); // Call StateHasChanged to refresh the UI if needed.
-        return Task.CompletedTask;
+    }
+}
+
+@code
+{
+    private string? btnText = "Open Report Editor";
+    public string? formCssClass = null;
+    private bool collapseReportTools = true;
+
+    private void ToggleReportTools()
+    {
+        collapseReportTools = !collapseReportTools;
+        formCssClass = collapseReportTools ? null : "show-menu";
+        btnText = collapseReportTools ? "Open Report Editor" : "Close Report Editor";
     }
 
 }

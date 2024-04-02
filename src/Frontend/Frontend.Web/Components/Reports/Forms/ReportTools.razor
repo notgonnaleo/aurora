@@ -1,53 +1,102 @@
 ﻿@using Backend.Domain.Entities.Reports;
 @inject IJSRuntime Js
 
-<div>
+@code
+{
+    @*Title Accordion *@
+    private bool collapseTitle = true;
+    private string? titleHeaderToggle => collapseTitle ? null : "collapsed";
+    private string? titleToggle => collapseTitle ? "collapse" : "collapse show";
+    private void ToggleTitleAccordion() => collapseTitle = !collapseTitle;
+
+    @*Export Accordion *@
+    private bool collapseExport = true;
+    private string? exportHeaderToggle => collapseExport ? null : "collapsed";
+    private string? exportToggle => collapseExport ? "collapse" : "collapse show";
+    private void ToggleExportAccordion() => collapseExport = !collapseExport;
+}
+
+<div class="m-2">
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
 </div>
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
-    <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
-        <div class="col-md-2 m-2">
-            <button type="button" class="btn btn-primary d-print-none text-right" @onclick="Print">Export Pdf</button>
-        </div>
-        <div class="col-md-2 m-2">
-            <button type="button" class="btn btn-primary d-print-none text-right" @onclick="PrintWord">Export Word (.docx)</button>
-        </div>
-        <div>
-            <label for="sku" class="form-label">Font size test</label>
-            <input type="number" class="form-control" id="sku" placeholder="SKU" @bind="@TemplateSettings.FontTitleSize">
+    <div class="card-body p-2">
+        <div class="row">
+            <div class="accordion-item">
+                <div class="accordion accordion-flush position-relative overflow-hidden @titleHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleTitleAccordion">
+                                Title
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @titleToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Title Size</label>
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.FontTitleSize" @onchange="OnFontSizeChange">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion accordion-flush position-relative overflow-hidden @exportHeaderToggle" id="accordionFlushExample">
+                <div class="accordion-item mb-3 shadow-none border rounded">
+                    <h2 class="accordion-header" id="flush-headingOne">
+                        <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleExportAccordion">
+                            Export
+                        </button>
+                    </h2>
+                    <div id="flush-collapseOne" class="accordion-collapse @exportToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                        <div class="accordion-body px-3 fw-normal">
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <button type="button" class="btn btn-primary d-print-none bottom-0 w-100 mb-1 rounded" @onclick="Print">
+                                        <i class="ti ti-file-type-pdf"></i> .PDF
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <button type="button" class="btn btn-primary d-print-none bottom-0 w-100 mb-1 rounded" @onclick="PrintWord">
+                                        <i class="ti ti-file-type-docx"></i> .DOCX
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+
+            </div>
         </div>
     </div>
 </div>
 
-@code {
-    private TemplateSettings _templateSettings = new TemplateSettings() { FontTitleSize = 24 };
-
-    [Parameter]
-    public TemplateSettings TemplateSettings
+@code
+{
+    public TemplateSettings CustomSettings = new TemplateSettings(24);
+    protected override async Task OnInitializedAsync()
     {
-        get => _templateSettings;
-        set
-        {
-            if (_templateSettings != value)
-            {
-                _templateSettings = value;
-                TemplateSettingsChanged.InvokeAsync(value);
-            }
-        }
+        await TemplateSettingsChanged.InvokeAsync(CustomSettings);
     }
+}
 
+@code 
+{
     [Parameter]
     public EventCallback<TemplateSettings> TemplateSettingsChanged { get; set; }
 
-    // When the font size input changes, update the TemplateSettings.FontTitleSize
-    // and notify the parent component about the change.
-    private async Task OnFontSizeChange(ChangeEventArgs e)
+    private void OnFontSizeChange(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value.ToString(), out var newSize))
-        {
-            TemplateSettings.FontTitleSize = newSize;
-            await TemplateSettingsChanged.InvokeAsync(TemplateSettings);
-        }
+        int fontTitleSize = int.Parse(e.Value.ToString());
+
+        CustomSettings.FontTitleSize = fontTitleSize;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
     }
 }
 
