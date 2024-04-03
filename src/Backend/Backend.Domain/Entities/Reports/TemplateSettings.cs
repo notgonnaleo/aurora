@@ -8,13 +8,16 @@ namespace Backend.Domain.Entities.Reports
 {
     public class TemplateSettings
     {
+        // Title
         public int FontTitleSize { get; set; }
+        public string TitleAlign { get; set; }
 
         public TemplateSettings() { }
 
-        public TemplateSettings(int titleSize) 
+        public TemplateSettings(int titleSize, string titleAlign) 
         {
             FontTitleSize = titleSize;
+            TitleAlign = titleAlign;
         }
     }
 }

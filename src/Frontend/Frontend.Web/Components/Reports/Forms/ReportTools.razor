@@ -39,16 +39,16 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="mb-2 col-sm-12">
-                                        <label for="alignTitle" class="form-label">Title Align</label>
-                                        <button type="button" class="btn btn-outline-primary m-1">
-                                            <i class="ti ti-align-box-left-top"></i> Left
+                                    <label for="alignTitle" class="form-label">Title Align</label>
+                                    <div class="mb-2 col-sm-12 text-center">
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(0)">
+                                            <i class="ti ti-align-box-left-top"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-primary m-1">
-                                            <i class="ti ti-align-box-center-top"></i> Middle
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(1)">
+                                            <i class="ti ti-align-box-center-top"></i>
                                         </button>
-                                        <button type="button" class="btn btn-outline-primary m-1">
-                                            <i class="ti ti-align-box-right-top"></i> Right
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(2)">
+                                            <i class="ti ti-align-box-right-top"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -93,7 +93,7 @@
 
 @code
 {
-    public TemplateSettings CustomSettings = new TemplateSettings(24);
+    public TemplateSettings CustomSettings = new TemplateSettings(24, "center");
     protected override async Task OnInitializedAsync()
     {
         await TemplateSettingsChanged.InvokeAsync(CustomSettings);
@@ -105,10 +105,29 @@
     [Parameter]
     public EventCallback<TemplateSettings> TemplateSettingsChanged { get; set; }
 
+    private void OnTitleAlignmentChange(int selectedAlignment)
+    {
+        switch (selectedAlignment)
+        {
+            case 0:
+                CustomSettings.TitleAlign = "left";
+                break;
+            case 1:
+                CustomSettings.TitleAlign = "center";
+                break;
+            case 2:
+                CustomSettings.TitleAlign = "right";
+                break;
+            default:
+                CustomSettings.TitleAlign = "center";
+                break;
+        }
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
     private void OnFontSizeChange(ChangeEventArgs e)
     {
-        int fontTitleSize = int.Parse(e.Value.ToString());
-
+        int fontTitleSize = int.Parse(e.Value.ToString());  
         CustomSettings.FontTitleSize = fontTitleSize;
         TemplateSettingsChanged.InvokeAsync(CustomSettings);
     }
