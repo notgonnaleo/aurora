@@ -2,7 +2,7 @@ name: Compilar e implantar o aplicativo .NET Core no aplicativo Web appaurora
 on:
   push:
     branches:
-    - feature/reports
+    - feature/pipeline
 env:
   AZURE_WEBAPP_NAME: appaurora
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
