@@ -1,4 +1,4 @@
-name: Compilar e implantar o aplicativo .NET Core no aplicativo Web appaurora
+name: Aurora - Publish API and UI
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: .\publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: .
+  WORKING_DIRECTORY: ./src/
 jobs:
   build:
     runs-on: windows-latest
