@@ -11,8 +11,6 @@
                                                         ToggleRightSidebar="ToggleReportTools" />
 </aside>
 
-
-
 <div class="container-fluid">
     <div class="d-print-none row">
         <div class="m-4">
@@ -83,36 +81,39 @@
                     </tr>
                 </tbody>
             </table>
-            
+            @if (Variants.Any())
+            {
             <hr />
 
-            <h6>
-                <strong>Item Variantions</strong>
-            </h6>
-            <table class="report-table">
-                <thead class="report-table-label">
-                    <tr>
-                        <th class="report-table-label">SKU</th>
-                        <th class="report-table-label">Name</th>
-                        <th class="report-table-label">Description</th>
-                        <th class="report-table-label">Liquid Weight</th>
-                        <th class="report-table-label">Total Weight</th>
-                        <th class="report-table-label">Metric Unit</th>
-                        <th class="report-table-label">Unit Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="report-table-row">@Product.SKU</td>
-                        <td class="report-table-row">@Product.Name</td>
-                        <td class="report-table-row">@Product.Description</td>
-                        <td class="report-table-row">@Product.LiquidWeight.GetValueOrDefault()</td>
-                        <td class="report-table-row">@Product.TotalWeight.GetValueOrDefault()</td>
-                        <td class="report-table-row">@(Product.MetricUnitName ?? "N/A")</td>
-                        <td class="report-table-row">@Product.Value</td>
-                    </tr>
-                </tbody>
-            </table>
+                <h6>
+                    <strong>Item Variations</strong>
+                </h6>
+                <table class="report-table">
+                    <thead class="report-table-label">
+                        <tr>
+                            <th class="report-table-label">SKU</th>
+                            <th class="report-table-label">Name</th>
+                            <th class="report-table-label">Description</th>
+                            <th class="report-table-label">Liquid Weight</th>
+                            <th class="report-table-label">Total Weight</th>
+                            <th class="report-table-label">Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @foreach (var Variant in Variants)
+                            {
+                                <td class="report-table-row">@Variant.SKU</td>
+                                <td class="report-table-row">@Variant.Name</td>
+                                <td class="report-table-row">@Variant.Description</td>
+                                <td class="report-table-row">@Variant.LiquidWeight.GetValueOrDefault()</td>
+                                <td class="report-table-row">@Variant.TotalWeight.GetValueOrDefault()</td>
+                                <td class="report-table-row">@Variant.Value</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 </div>
@@ -185,6 +186,7 @@
     protected override async Task OnInitializedAsync()
     {
         await GetProduct();
+        await GetVariants();
         SetCustomReportSettings(CustomSettings);
     }
 

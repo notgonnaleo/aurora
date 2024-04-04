@@ -4,10 +4,10 @@
 @code
 {
     @*Title Accordion *@
-    private bool collapseTitle = true;
-    private string? titleHeaderToggle => collapseTitle ? null : "collapsed";
-    private string? titleToggle => collapseTitle ? "collapse" : "collapse show";
-    private void ToggleTitleAccordion() => collapseTitle = !collapseTitle;
+    private bool collapseCustomizer = true;
+    private string? customizerHeaderToggle => collapseCustomizer ? null : "collapsed";
+    private string? customizerToggle => collapseCustomizer ? "collapse" : "collapse show";
+    private void ToggleCustomizerAccordion() => collapseCustomizer = !collapseCustomizer;
 
     @*Export Accordion *@
     private bool collapseExport = true;
@@ -23,15 +23,36 @@
     <div class="card-body p-2">
         <div class="row">
             <div class="accordion-item">
-                <div class="accordion accordion-flush position-relative overflow-hidden @titleHeaderToggle" id="accordionFlushExample">
+                <div class="accordion accordion-flush position-relative overflow-hidden @customizerHeaderToggle" id="accordionFlushExample">
                     <div class="accordion-item mb-3 shadow-none border rounded">
                         <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleTitleAccordion">
-                                Title
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleCustomizerAccordion">
+                                Customize
                             </button>
                         </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse @titleToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                        <div id="flush-collapseOne" class="accordion-collapse @customizerToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
                             <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Title Size</label>
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.FontTitleSize" @onchange="OnFontSizeChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="alignTitle" class="form-label">Title Align</label>
+                                    <div class="mb-2 col-sm-12 text-center">
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(0)">
+                                            <i class="ti ti-align-box-left-top"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(1)">
+                                            <i class="ti ti-align-box-center-top"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(2)">
+                                            <i class="ti ti-align-box-right-top"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <hr />
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="fontTitleSize" class="form-label">Title Size</label>
