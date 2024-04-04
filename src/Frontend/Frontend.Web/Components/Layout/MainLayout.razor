@@ -50,7 +50,7 @@ else
         if (!isAuthenticated)
             navigator.NavigateTo("/Login");
         else
-            navigator.NavigateTo("/Dashboard");
+            navigator.NavigateTo(navigator.Uri);
     }
 
     public async Task<bool> IsAuthenticated()
