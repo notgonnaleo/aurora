@@ -7,8 +7,9 @@ on:
   push:
     branches:
       - feature/pipeline
+env:
+  WORKING_DIRECTORY: ./src/
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: windows-latest
