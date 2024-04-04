@@ -8,7 +8,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: ./src/
+  WORKING_DIRECTORY: ./src/Backend/
 jobs:
   build:
     runs-on: windows-latest
