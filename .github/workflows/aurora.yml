@@ -14,16 +14,48 @@ env:
 
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-
 jobs:
-  prepare:
+  build:
     runs-on: windows-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
 
-    - name: List
-      run: dir
+    - uses: actions/checkout@v3
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
-    - name: Create folder
-      run: mkdir -p src/Backend/Backend.API
+      # Build Backend
+    - name: Restore Backend
+      run: dotnet restore "${{ env.BACKEND_WORKING_DIRECTORY }}"
+    - name: Build Backend
+      run: dotnet build "${{ env.BACKEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test Backend
+      run: dotnet test "${{ env.BACKEND_WORKING_DIRECTORY }}" --no-build
+    - name: Publish Backend
+      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" -c release --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
+    - name: Publish Backend Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend
+        path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
+
+      - name: Download Backend artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: backend
+          path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
+      - name: Deploy API
+        id: deploy-api
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.BACKEND_WORKING_DIRECTORY }}
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
+  
