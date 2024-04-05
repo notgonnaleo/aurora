@@ -6,8 +6,8 @@ on:
 env:
   AZURE_WEBAPP_NAME: appaurora
   
-  FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
-  BACKEND_OUTPUT_PACKAGE_PATH: .\backend-output\
+  FRONTEND_OUTPUT_PACKAGE_PATH: .\src\Frontend\frontend-output\
+  BACKEND_OUTPUT_PACKAGE_PATH: .\src\Backend\backend-output\
 
   BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
   FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
@@ -106,7 +106,7 @@ jobs:
       - name: List
         run: | 
           ls ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
-          
+
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
