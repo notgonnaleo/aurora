@@ -71,6 +71,9 @@ jobs:
         with:
           name: backend
           path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+      - name: List artifact files
+        run: |
+            ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
