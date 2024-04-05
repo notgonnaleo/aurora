@@ -99,26 +99,26 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+          package: ${{ env.BACKEND_WORKING_DIRECTORY }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
 
       # Frontend Deployment
       - name: Create folder for Frontend Artifacts
         run: mkdir ${{ env.FRONTEND_WORKING_DIRECTORY }}
 
-      - name: Move Frontend artifacts to new folder
-        run: mv ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }} ${{ env.FRONTEND_WORKING_DIRECTORY }}
-
       - name: Download Frontend artifacts
         uses: actions/download-artifact@v3
         with:
           name: frontend
           path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
-          
+
+      - name: Move Frontend artifacts to new folder
+        run: mv ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }} ${{ env.FRONTEND_WORKING_DIRECTORY }}
+
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+          package: ${{ env.FRONTEND_WORKING_DIRECTORY }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FRONTEND }}
     
