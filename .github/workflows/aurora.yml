@@ -46,10 +46,6 @@ jobs:
     - name: My location
       run: | 
         pwd
-    - name: List before build
-      run: | 
-        ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
-
     - uses: actions/checkout@v4
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
@@ -58,9 +54,6 @@ jobs:
     - name: My location
       run: | 
         pwd
-    - name: List before build
-      run: | 
-        ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
     - name: Restore Frontend
       run: dotnet restore "${{ env.FRONTEND_WORKING_DIRECTORY }}"
     - name: Build Frontend
