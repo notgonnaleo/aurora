@@ -94,10 +94,6 @@ jobs:
       - name: Move Backend artifacts to new folder
         run: mv ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }} ${{ env.BACKEND_WORKING_DIRECTORY }}
 
-      - name: List
-        run: | 
-          ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
-
       - name: Deploy API
         id: deploy-api
         uses: azure/webapps-deploy@v2
@@ -118,11 +114,7 @@ jobs:
         with:
           name: frontend
           path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
-
-      - name: List
-        run: | 
-          ls ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
-
+          
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
