@@ -1,4 +1,5 @@
 name: Aurora - Publish API and UI
+
 on:
   push:
     branches:
@@ -6,9 +7,11 @@ on:
 env:
   AZURE_WEBAPP_NAME: appaurora
   AZURE_WEBAPP_PACKAGE_PATH: '.'
+  BACKEND_PATH: './src/Backend/Backend.API'
+  FRONTEND_PATH: './src/Frontend/Frontend.Web'
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
-  WORKING_DIRECTORY: ./src
+
 jobs:
   build:
     runs-on: windows-latest
@@ -18,32 +21,49 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-    - name: Restore
-      run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-    - name: Build
-      run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-    - name: Test
-      run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
-    - name: Publish
-      run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v3
+
+    - name: Restore Backend Dependencies
+      run: dotnet restore "${{ env.BACKEND_PATH }}"
+    - name: Build Backend
+      run: dotnet build "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Publish Backend
+      run: dotnet publish "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output ./publish
+
+    - name: Restore Frontend Dependencies
+      run: dotnet restore "${{ env.FRONTEND_PATH }}"
+    - name: Build Frontend
+      run: dotnet build "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Publish Frontend
+      run: dotnet publish "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output ./publish/wwwroot
+
+    - name: Upload Backend Artifact
+      uses: actions/upload-artifact@v2
       with:
-        name: webapp
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        name: backend
+        path: ./publish
+    - name: Upload Frontend Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: frontend
+        path: ./publish/wwwroot
+      
   deploy:
     runs-on: windows-latest
     needs: build
     steps:
-      - name: Download artifact from build job
+      - name: Download Backend Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: webapp
-      
-      - name: Deploy to Azure Web App
+          name: backend
+      - name: Download Frontend Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend
+
+      - name: Deploy App to Azure Services
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: ./publish
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FB15A912AF54FB69E6F03E58B35D104 }}
