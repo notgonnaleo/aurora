@@ -71,6 +71,8 @@ jobs:
         with:
           name: backend
           path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+      - name: WHERE AM I???????
+        run: pwd
       - name: List artifact files
         run: |
             ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
