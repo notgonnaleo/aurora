@@ -6,8 +6,8 @@ on:
 env:
   AZURE_WEBAPP_NAME: appaurora
   
-  FRONTEND_OUTPUT_PACKAGE_PATH: .\src\Frontend\frontend-output\
-  BACKEND_OUTPUT_PACKAGE_PATH: .\src\Backend\backend-output\
+  FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
+  BACKEND_OUTPUT_PACKAGE_PATH: .\backend-output\
 
   BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
   FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
@@ -27,8 +27,9 @@ jobs:
 
     - name: My location
       run: | 
-        pwd
+          pwd
 
+      # Build Backend
     - name: Restore Backend
       run: dotnet restore "${{ env.BACKEND_WORKING_DIRECTORY }}"
     - name: Build Backend
@@ -57,6 +58,7 @@ jobs:
       run: | 
         pwd
 
+      # Build Frontend
     - name: Restore Frontend
       run: dotnet restore "${{ env.FRONTEND_WORKING_DIRECTORY }}"
     - name: Build Frontend
@@ -70,7 +72,6 @@ jobs:
       with:
         name: frontend
         path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
-
     - name: My location
       run: | 
         pwd
@@ -79,23 +80,38 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+
+      # Backend Deployment
+      - name: Create folder for Backend Artifacts
+        run: mkdir ${{ env.BACKEND_WORKING_DIRECTORY }}
+
       - name: Download Backend artifacts
         uses: actions/download-artifact@v3
         with:
           name: backend
           path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
 
+      - name: Move Backend artifacts to new folder
+        run: mv ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }} ${{ env.BACKEND_WORKING_DIRECTORY }}
+
       - name: List
         run: | 
           ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: Deploy API
+        id: deploy-api
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
+
+      # Frontend Deployment
+      - name: Create folder for Frontend Artifacts
+        run: mkdir ${{ env.FRONTEND_WORKING_DIRECTORY }}
+
+      - name: Move Frontend artifacts to new folder
+        run: mv ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }} ${{ env.FRONTEND_WORKING_DIRECTORY }}
 
       - name: Download Frontend artifacts
         uses: actions/download-artifact@v3
