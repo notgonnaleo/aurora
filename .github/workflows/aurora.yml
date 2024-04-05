@@ -24,12 +24,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
     - name: My location
       run: | 
         pwd
-    - name: List before build
-      run: | 
-        ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
     - name: Restore Backend
       run: dotnet restore "${{ env.BACKEND_WORKING_DIRECTORY }}"
     - name: Build Backend
@@ -43,17 +42,21 @@ jobs:
       with:
         name: backend
         path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
     - name: My location
       run: | 
         pwd
+
     - uses: actions/checkout@v4
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
     - name: My location
       run: | 
         pwd
+
     - name: Restore Frontend
       run: dotnet restore "${{ env.FRONTEND_WORKING_DIRECTORY }}"
     - name: Build Frontend
@@ -67,6 +70,7 @@ jobs:
       with:
         name: frontend
         path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+
     - name: My location
       run: | 
         pwd
@@ -80,9 +84,11 @@ jobs:
         with:
           name: backend
           path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
       - name: List
         run: | 
           ls ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
@@ -96,9 +102,11 @@ jobs:
         with:
           name: frontend
           path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+
       - name: List
         run: | 
           ls ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+          
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
