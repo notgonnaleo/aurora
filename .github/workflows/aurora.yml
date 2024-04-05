@@ -56,6 +56,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.BACKEND_WORKING_DIRECTORY }}
+          package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
   
