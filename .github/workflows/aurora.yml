@@ -6,9 +6,12 @@ on:
 env:
   AZURE_WEBAPP_NAME: appaurora
   
-  AZURE_BACKEND_WEBAPP_PACKAGE_PATH: '.'
+  FRONTEND_OUTPUT_PACKAGE_PATH: .\backend-output\
+  BACKEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
+
   BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
   FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
+
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
 jobs:
@@ -29,12 +32,12 @@ jobs:
     - name: Test
       run: dotnet test "${{ env.BACKEND_WORKING_DIRECTORY }}" --no-build
     - name: Publish
-      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_BACKEND_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: backend
-        path: ${{ env.AZURE_BACKEND_WEBAPP_PACKAGE_PATH }}
+        path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
 
     - uses: actions/checkout@v4
     - name: Setup .NET SDK
@@ -49,12 +52,12 @@ jobs:
     - name: Test
       run: dotnet test "${{ env.FRONTEND_WORKING_DIRECTORY }}" --no-build
     - name: Publish
-      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_FRONTEND_WEBAPP_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
     - name: Publish Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: frontend
-        path: ${{ env.AZURE_FRONTEND_WEBAPP_PACKAGE_PATH }}
+        path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
 
   deploy:
     runs-on: windows-latest
@@ -69,18 +72,18 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.AZURE_BACKEND_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: frontend
-          path: ${{ env.AZURE_FRONTEND_WEBAPP_PACKAGE_PATH }}
+          path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FRONTEND }}
-          package: ${{ env.AZURE_FRONTEND_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
     
