@@ -22,5 +22,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: List
+      run: dir
+
     - name: Create folder
       run: mkdir -p src/Backend/Backend.API
