@@ -19,7 +19,8 @@ jobs:
   prepare:
     runs-on: windows-latest
     steps:
-    - name: Checkout Repository
+    - name: Checkout
       uses: actions/checkout@v2
-    - name: Create Frontend Output Directory
-      run: mkdir -p  .\src\
+
+    - name: Create folder
+      run: mkdir -p src/Backend/Backend.API
