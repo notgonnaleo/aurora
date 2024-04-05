@@ -7,10 +7,8 @@ env:
   AZURE_WEBAPP_NAME: appaurora
   
   AZURE_BACKEND_WEBAPP_PACKAGE_PATH: '.'
-  AZURE_FRONTEND_WEBAPP_PACKAGE_PATH: Frontend\Frontend.Web\published
-
   BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
-  FRONTEND_WORKING_DIRECTORY: Frontend\Frontend.Web
+  FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
 jobs:
@@ -72,7 +70,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: ${{ env.AZURE_BACKEND_WEBAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FB15A912AF54FB69E6F03E58B35D104 }}
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
@@ -83,6 +81,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FB15A912AF54FB69E6F03E58B35D104 }}
+          publish-profile: ${{ secrets.PUBLISH_PROFILE_FRONTEND }}
           package: ${{ env.AZURE_FRONTEND_WEBAPP_PACKAGE_PATH }}
     

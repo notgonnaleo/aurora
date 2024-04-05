@@ -25,6 +25,7 @@ using Backend.Infrastructure.Services.Addresses;
 using Backend.Infrastructure.Services.Profiles;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Stocks;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -178,5 +179,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// For UI redirect when deploying in the Azure Web App Service
+// CAUTION: BIOHAZARD LEAKING DO NOT TOUCH (CANCEROUS)
+app.MapGet("/", async (context) =>
+{
+    context.Response.Redirect("/ui");
+});
 
 app.Run();

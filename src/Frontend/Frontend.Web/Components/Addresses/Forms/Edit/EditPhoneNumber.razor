@@ -95,8 +95,8 @@
     {
         try
         {
-            if (await _categoryService.UpdateCategory(category)) 
-                navigator.NavigateTo("/categories");
+            if (await _categoryService.UpdateCategory(category))
+                navigator.NavigateTo(navigator.BaseUri + "/categories");
         }
         catch (Exception ex)
         {
