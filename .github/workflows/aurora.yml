@@ -6,8 +6,11 @@ on:
 env:
   AZURE_WEBAPP_NAME: appaurora
   
-  FRONTEND_OUTPUT_PACKAGE_PATH: .\backend-output\
-  BACKEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
+  FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
+  FRONTEND_ARTIFACT_PATH: .\frontend-output\frontend
+
+  BACKEND_OUTPUT_PACKAGE_PATH: .\backend-output\
+  BACKEND_ARTIFACT_PATH: .\backend-output\backend
 
   BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
   FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
@@ -67,12 +70,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: backend
+          path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+          package: ${{ env.BACKEND_ARTIFACT_PATH }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
 
       - name: Download artifact from build job
@@ -84,6 +88,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          package: ${{ env.FRONTEND_ARTIFACT_PATH }}
           publish-profile: ${{ secrets.PUBLISH_PROFILE_FRONTEND }}
-          package: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
     
