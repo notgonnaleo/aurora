@@ -27,14 +27,14 @@ jobs:
     - name: Build Backend
       run: dotnet build "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Publish Backend
-      run: dotnet publish "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output ./publish
+      run: dotnet publish "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output .
 
     - name: Restore Frontend Dependencies
       run: dotnet restore "${{ env.FRONTEND_PATH }}"
     - name: Build Frontend
       run: dotnet build "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Publish Frontend
-      run: dotnet publish "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output ./publish/wwwroot
+      run: dotnet publish "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output ./wwwroot
 
     - name: Upload Backend Artifact
       uses: actions/upload-artifact@v2
@@ -65,5 +65,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ./publish
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FB15A912AF54FB69E6F03E58B35D104 }}
