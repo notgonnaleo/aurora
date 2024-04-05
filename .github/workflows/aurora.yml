@@ -14,12 +14,14 @@ env:
 
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
+
 jobs:
-  deploy:
+  prepare:
     runs-on: windows-latest
     steps:
-      - name: Create folder for Backend Artifacts
-        run: mkdir 'src\Backend\Backend.API'
-
-      - name: Create folder for Frontend Artifacts
-        run: mkdir 'src\Frontend\Frontend.Web'
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    - name: Create Frontend Output Directory
+      run: mkdir -p  .\src\Frontend\Frontend.Web\
+    - name: Create Backend Output Directory
+      run: mkdir -p  .\src\Backend\Backend.API\
