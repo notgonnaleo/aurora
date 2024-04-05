@@ -22,6 +22,4 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     - name: Create Frontend Output Directory
-      run: mkdir -p  .\src\Frontend\Frontend.Web\
-    - name: Create Backend Output Directory
-      run: mkdir -p  .\src\Backend\Backend.API\
+      run: mkdir -p  .\src\
