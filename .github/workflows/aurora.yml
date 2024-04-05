@@ -27,25 +27,24 @@ jobs:
     - name: Build Backend
       run: dotnet build "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Publish Backend
-      run: dotnet publish "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output .
+      run: dotnet publish "${{ env.BACKEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.BACKEND_PATH }}"
+    - name: Upload Backend Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: backend
+        path: ${{ env.BACKEND_PATH }}
 
     - name: Restore Frontend Dependencies
       run: dotnet restore "${{ env.FRONTEND_PATH }}"
     - name: Build Frontend
       run: dotnet build "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Publish Frontend
-      run: dotnet publish "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output ./wwwroot
-
-    - name: Upload Backend Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: backend
-        path: ./publish
+      run: dotnet publish "${{ env.FRONTEND_PATH }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.FRONTEND_PATH }}"
     - name: Upload Frontend Artifact
       uses: actions/upload-artifact@v2
       with:
         name: frontend
-        path: ./publish/wwwroot
+        path: ${{ env.FRONTEND_PATH }}
       
   deploy:
     runs-on: windows-latest
