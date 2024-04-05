@@ -2,7 +2,7 @@ name: Aurora - Publish API and UI
 on:
   push:
     branches:
-      - feature/pipeline
+    - feature/pipeline
 env:
   AZURE_WEBAPP_NAME: appaurora
   
