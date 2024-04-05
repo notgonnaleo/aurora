@@ -9,7 +9,8 @@ env:
   ROOT_DIRECTORY: '.'
   BACKEND_PATH: './src/Backend/Backend.API'
   FRONTEND_PATH: './src/Frontend/Frontend.Web'
-
+  BACKEND_OUTPUT_PATH: './wwwroot/src/Backend/Backend.API'
+  FRONTEND_OUTPUT_PATH: './wwwroot/src/Frontend/Frontend.Web'
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
 jobs:
@@ -34,7 +35,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: frontend
-        path: ${{ env.FRONTEND_PATH }}
+        path: ${{ env.FRONTEND_OUTPUT_PATH }}
       
     - name: Restore Backend
       run: dotnet restore "${{ env.BACKEND_PATH }}"
@@ -48,7 +49,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: backend
-        path: ${{ env.BACKEND_PATH }}
+        path: ${{ env.BACKEND_OUTPUT_PATH }}
 
   deploy:
     runs-on: windows-latest
@@ -63,7 +64,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: /src/Frontend/Frontend.Web
+          package: ${{ env.FRONTEND_OUTPUT_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FB15A912AF54FB69E6F03E58B35D104 }}
 
       - name: Download artifact from Backend build job
@@ -75,6 +76,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: /src/Backend/Backend.API
+          package: ${{ env.BACKEND_OUTPUT_PATH }}
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FB15A912AF54FB69E6F03E58B35D104 }}
   
