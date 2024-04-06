@@ -44,18 +44,22 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+    - name: Download Backend artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: backend
+        path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
 
-      - name: Download Backend artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: backend
-          path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+    - name: Create directory on FTP server
+      run: |
+        lftp -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_HOST }} -e "mkdir -p ${{ env.BACKEND_WORKING_DIRECTORY }}; quit"
+    
+    - name: Push files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+        server-dir: ${{ env.BACKEND_WORKING_DIRECTORY }}
 
-      - name: Deploy API
-        id: deploy-api
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
-  
