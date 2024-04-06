@@ -81,7 +81,7 @@ jobs:
       id: deploy-ui
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.BACKEND-APPNAME }}
-        publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
-        package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+        app-name: ${{ env.FRONTEND-APPNAME }}
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_FRONTEND }}
+        package: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
   
