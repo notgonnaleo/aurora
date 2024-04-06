@@ -4,13 +4,13 @@ on:
     branches:
     - feature/pipeline
 env:
-  AZURE_WEBAPP_NAME: appaurora
-  
-  FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
+  BACKEND-APPNAME: api-aurora
+  BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
   BACKEND_OUTPUT_PACKAGE_PATH: .\backend-output\
 
-  BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
+  FRONTEND-APPNAME: ui-aurora
   FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
+  FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
 
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 6.0.x
@@ -25,7 +25,6 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
 
-      # Build Backend
     - name: Restore Backend
       run: dotnet restore "${{ env.BACKEND_WORKING_DIRECTORY }}"
     - name: Build Backend
@@ -37,8 +36,22 @@ jobs:
     - name: Publish Backend Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: backend
+        name: ${{ env.BACKEND-APPNAME }}
         path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
+    - name: Restore Frontend
+      run: dotnet restore "${{ env.FRONTEND_WORKING_DIRECTORY }}"
+    - name: Build Frontend
+      run: dotnet build "${{ env.FRONTEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test Frontend
+      run: dotnet test "${{ env.FRONTEND_WORKING_DIRECTORY }}" --no-build
+    - name: Publish Backend
+      run: dotnet Frontend "${{ env.FRONTEND_WORKING_DIRECTORY }}" -c release --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
+    - name: Publish Backend Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.FRONTEND-APPNAME }}
+        path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
 
   deploy:
     runs-on: windows-latest
@@ -47,38 +60,28 @@ jobs:
     - name: Download Backend artifacts
       uses: actions/download-artifact@v3
       with:
-        name: backend
+        name: ${{ env.BACKEND-APPNAME }}
         path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
-
-    - name: Create directory on FTP server
-      run: |
-        $ftpUser = "${{ secrets.FTP_USERNAME }}"
-        $ftpPassword = "${{ secrets.FTP_PASSWORD }}"
-        $ftpUrl = "ftp://${{ secrets.FTP_HOST }}/${{ env.BACKEND_WORKING_DIRECTORY }}".Replace('\', '/')
-        
-        $encPass = [System.Text.Encoding]::UTF8.GetBytes($ftpPassword)
-        $encPass = [System.Convert]::ToBase64String($encPass)
-        $credentials = "user=$ftpUser:$ftpPassword"
-        
-        $ftpRequest = [System.Net.FtpWebRequest]::Create($ftpUrl)
-        $ftpRequest.Method = [System.Net.WebRequestMethods+Ftp]::MakeDirectory
-        $ftpRequest.Credentials = New-Object System.Net.NetworkCredential($ftpUser, $ftpPassword)
-        $ftpRequest.Headers.Add("Authorization", "Basic $credentials")
-        
-        try {
-          $response = $ftpRequest.GetResponse()
-          Write-Output "Directory created or already exists."
-        } catch {
-          Write-Error "Error creating directory. It might already exist or there's a permission issue."
-        }
-      shell: pwsh
       
-    - name: Push files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+    - name: Deploy API
+      id: deploy-api
+      uses: azure/webapps-deploy@v2
       with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
-        server-dir: ${{ env.BACKEND_WORKING_DIRECTORY }}
+        app-name: ${{ env.BACKEND-APPNAME }}
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
+        package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
 
+    - name: Download Frontend artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.FRONTEND-APPNAME }}
+        path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+      
+    - name: Deploy UI
+      id: deploy-ui
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.BACKEND-APPNAME }}
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
+        package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+  
