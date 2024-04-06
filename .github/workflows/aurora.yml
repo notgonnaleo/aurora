@@ -4,16 +4,16 @@ on:
     branches:
     - feature/pipeline
 env:
-  BACKEND-APPNAME: api-aurora
-  BACKEND_WORKING_DIRECTORY: .\src\Backend\Backend.API
-  BACKEND_OUTPUT_PACKAGE_PATH: .\backend-output\
+  BACKEND-APPNAME:              api-aurora
+  BACKEND_WORKING_DIRECTORY:    .\src\Backend\Backend.API
+  BACKEND_OUTPUT_PACKAGE_PATH:  .\backend-output\
 
-  FRONTEND-APPNAME: ui-aurora
-  FRONTEND_WORKING_DIRECTORY: .\src\Frontend\Frontend.Web
+  FRONTEND-APPNAME:             ui-aurora
+  FRONTEND_WORKING_DIRECTORY:   .\src\Frontend\Frontend.Web
   FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
 
-  CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 6.0.x
+  CONFIGURATION:                Release
+  DOTNET_CORE_VERSION:          6.0.x
 jobs:
   build:
     runs-on: windows-latest
@@ -32,7 +32,7 @@ jobs:
     - name: Test Backend
       run: dotnet test "${{ env.BACKEND_WORKING_DIRECTORY }}" --no-build
     - name: Publish Backend
-      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" -c release --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" -c Release-Production --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
     - name: Publish Backend Artifacts
       uses: actions/upload-artifact@v3
       with:
@@ -46,7 +46,7 @@ jobs:
     - name: Test Frontend
       run: dotnet test "${{ env.FRONTEND_WORKING_DIRECTORY }}" --no-build
     - name: Publish Backend
-      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" -c release --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" -c Release-Production --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
     - name: Publish Backend Artifacts
       uses: actions/upload-artifact@v3
       with:

@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+	<Configurations>Debug;Release;Release-Production</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
