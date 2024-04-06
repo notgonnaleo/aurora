@@ -8,12 +8,6 @@
 	<Configurations>Debug;Release;Release-Production</Configurations>
   </PropertyGroup>
 	
-	<ItemGroup Condition="'$(Configuration)'=='Release-Production'">
-		<Content Include="appsettings.Production.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-	
   <ItemGroup>
     <Compile Remove="Components\Products\Forms\Delete\**" />
     <Compile Remove="wwwroot\lib\**" />

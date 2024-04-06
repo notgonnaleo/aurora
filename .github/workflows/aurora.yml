@@ -32,7 +32,7 @@ jobs:
     - name: Test Backend
       run: dotnet test "${{ env.BACKEND_WORKING_DIRECTORY }}" --no-build
     - name: Publish Backend
-      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" -c Release-Production --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
+      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" -c Release --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
     - name: Publish Backend Artifacts
       uses: actions/upload-artifact@v3
       with:
@@ -45,9 +45,9 @@ jobs:
       run: dotnet build "${{ env.FRONTEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
     - name: Test Frontend
       run: dotnet test "${{ env.FRONTEND_WORKING_DIRECTORY }}" --no-build
-    - name: Publish Backend
-      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" -c Release-Production --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
-    - name: Publish Backend Artifacts
+    - name: Publish Frontend
+      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" -c Release --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
+    - name: Publish Frontend Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.FRONTEND-APPNAME }}
