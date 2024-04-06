@@ -52,8 +52,27 @@ jobs:
 
     - name: Create directory on FTP server
       run: |
-        lftp -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_HOST }} -e "mkdir -p ${{ env.BACKEND_WORKING_DIRECTORY }}; quit"
-    
+        $ftpUser = "${{ secrets.FTP_USERNAME }}"
+        $ftpPassword = "${{ secrets.FTP_PASSWORD }}"
+        $ftpUrl = "ftp://${{ secrets.FTP_HOST }}/${{ env.BACKEND_WORKING_DIRECTORY }}".Replace('\', '/')
+        
+        $encPass = [System.Text.Encoding]::UTF8.GetBytes($ftpPassword)
+        $encPass = [System.Convert]::ToBase64String($encPass)
+        $credentials = "user=$ftpUser:$ftpPassword"
+        
+        $ftpRequest = [System.Net.FtpWebRequest]::Create($ftpUrl)
+        $ftpRequest.Method = [System.Net.WebRequestMethods+Ftp]::MakeDirectory
+        $ftpRequest.Credentials = New-Object System.Net.NetworkCredential($ftpUser, $ftpPassword)
+        $ftpRequest.Headers.Add("Authorization", "Basic $credentials")
+        
+        try {
+          $response = $ftpRequest.GetResponse()
+          Write-Output "Directory created or already exists."
+        } catch {
+          Write-Error "Error creating directory. It might already exist or there's a permission issue."
+        }
+      shell: pwsh
+      
     - name: Push files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
