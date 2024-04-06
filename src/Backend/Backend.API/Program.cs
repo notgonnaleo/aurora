@@ -158,7 +158,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: DevAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:7288", "http://localhost:5012").AllowAnyMethod().AllowAnyHeader();
+                          policy.WithOrigins(
+                              "https://localhost:7288", 
+                              "http://localhost:5012",
+                              "https://ui-aurora.azurewebsites.net")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
                       });
 });
 
