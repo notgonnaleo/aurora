@@ -4,16 +4,22 @@
 @code
 {
     @*Title Accordion *@
-    private bool collapseCustomizer = true;
-    private string? customizerHeaderToggle => collapseCustomizer ? null : "collapsed";
-    private string? customizerToggle => collapseCustomizer ? "collapse" : "collapse show";
-    private void ToggleCustomizerAccordion() => collapseCustomizer = !collapseCustomizer;
+    private bool collapseTitle = true;
+    private string? titleHeaderToggle => collapseTitle ? null : "collapsed";
+    private string? titleToggle => collapseTitle ? "collapse" : "collapse show";
+    private void ToggleTitleAccordion() => collapseTitle = !collapseTitle;
 
     @*Export Accordion *@
     private bool collapseExport = true;
     private string? exportHeaderToggle => collapseExport ? null : "collapsed";
     private string? exportToggle => collapseExport ? "collapse" : "collapse show";
     private void ToggleExportAccordion() => collapseExport = !collapseExport;
+
+    private bool collapseTable = true;
+    private string? tableHeaderToggle => collapseTable ? null : "collapsed";
+    private string? tableToggle => collapseTable ? "collapse" : "collapse show";
+    private void ToggleTableAccordion() => collapseTable = !collapseTable;
+
 }
 
 <div class="m-2">
@@ -22,15 +28,16 @@
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
         <div class="row">
+            @* Title *@
             <div class="accordion-item">
-                <div class="accordion accordion-flush position-relative overflow-hidden @customizerHeaderToggle" id="accordionFlushExample">
+                <div class="accordion accordion-flush position-relative overflow-hidden @titleHeaderToggle" id="accordionFlushExample">
                     <div class="accordion-item mb-3 shadow-none border rounded">
                         <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleCustomizerAccordion">
-                                Customize
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleTitleAccordion">
+                                Title
                             </button>
                         </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse @customizerToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                        <div id="flush-collapseOne" class="accordion-collapse @titleToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
                             <div class="accordion-body px-3 fw-normal">
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
@@ -52,24 +59,51 @@
                                         </button>
                                     </div>
                                 </div>
-                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Table *@
+            <div class="accordion-item">
+                <div class="accordion accordion-flush position-relative overflow-hidden @tableHeaderToggle" id="accordionTableExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingTable">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTable" aria-controls="flush-collapseTable" @onclick="ToggleTableAccordion">
+                                Table
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTable" class="accordion-collapse @tableToggle" aria-labelledby="flush-headingTable" data-bs-parent="#accordionTableExample">
+                            <div class="accordion-body px-3 fw-normal">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Export *@
+            <div class="accordion-item">
+                <div class="accordion accordion-flush position-relative overflow-hidden @exportHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleExportAccordion">
+                                Export
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @exportToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
-                                        <label for="fontTitleSize" class="form-label">Title Size</label>
-                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.FontTitleSize" @onchange="OnFontSizeChange">
+                                        <button type="button" class="btn btn-primary d-print-none bottom-0 w-100 mb-1 rounded" @onclick="Print">
+                                            <i class="ti ti-file-type-pdf"></i> .PDF
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label for="alignTitle" class="form-label">Title Align</label>
-                                    <div class="mb-2 col-sm-12 text-center">
-                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(0)">
-                                            <i class="ti ti-align-box-left-top"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(1)">
-                                            <i class="ti ti-align-box-center-top"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnTitleAlignmentChange(2)">
-                                            <i class="ti ti-align-box-right-top"></i>
+                                    <div class="mb-2 col-sm-12">
+                                        <button type="button" class="btn btn-primary d-print-none bottom-0 w-100 mb-1 rounded" @onclick="PrintWord">
+                                            <i class="ti ti-file-type-docx"></i> .DOCX
                                         </button>
                                     </div>
                                 </div>
@@ -77,35 +111,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="accordion accordion-flush position-relative overflow-hidden @exportHeaderToggle" id="accordionFlushExample">
-                <div class="accordion-item mb-3 shadow-none border rounded">
-                    <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick="ToggleExportAccordion">
-                            Export
-                        </button>
-                    </h2>
-                    <div id="flush-collapseOne" class="accordion-collapse @exportToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
-                        <div class="accordion-body px-3 fw-normal">
-                            <div class="row">
-                                <div class="mb-2 col-sm-12">
-                                    <button type="button" class="btn btn-primary d-print-none bottom-0 w-100 mb-1 rounded" @onclick="Print">
-                                        <i class="ti ti-file-type-pdf"></i> .PDF
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12">
-                                    <button type="button" class="btn btn-primary d-print-none bottom-0 w-100 mb-1 rounded" @onclick="PrintWord">
-                                        <i class="ti ti-file-type-docx"></i> .DOCX
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
 
             </div>
         </div>
