@@ -180,11 +180,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// For UI redirect when deploying in the Azure Web App Service
-// CAUTION: BIOHAZARD LEAKING DO NOT TOUCH (CANCEROUS)
-app.MapGet("/", async (context) =>
-{
-    context.Response.Redirect("/ui");
-});
-
 app.Run();
