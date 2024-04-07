@@ -120,25 +120,27 @@
 
 <style>
     .report {
-        max-width: 100%;
+        max-width: @(CustomSettings.ReportWidthSize)%;
         margin: 0 auto;
-        border: 1px solid #212529;
+        border: @(CustomSettings.BorderSize)px solid @(CustomSettings.BorderColor);
         padding: 20px;
-        border-radius: 5px;
+        border-radius: @(CustomSettings.BorderRadius)px;
     }
 
     .report-watermark{
-        font-size: 15px;
+        font-size: 12px;
         text-align: left;
     }
 
     .report-title {
         font-size: @(CustomSettings.FontTitleSize)px;
         text-align: @(CustomSettings.TitleAlign);
+        font-weight: @(CustomSettings.FontTitleBold ? "bold" : "normal");
+        color: @(CustomSettings.FontTitleColor);
     }
 
     .report-detail {
-        text-align: left;
+        text-align: @(CustomSettings.DetailsTextAlign);
         margin-bottom: 20px;
     }
 
@@ -153,14 +155,18 @@
     }
 
     .report-table-label{
-        border: 1px solid #212529;
+        font-size: @(CustomSettings.LabelTextSize)px;
+        color: @(CustomSettings.LabelTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
         padding: 0.3rem;
         text-align: left;
         box-sizing: border-box;
     }
 
     .report-table-row{
-        border: 1px solid #212529;
+        font-size: @(CustomSettings.RowTextSize)px;
+        color: @(CustomSettings.RowTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
         padding: 0.3rem;
         text-align: left;
         box-sizing: border-box;

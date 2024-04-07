@@ -3,22 +3,25 @@
 
 @code
 {
-    @*Title Accordion *@
     private bool collapseTitle = true;
     private string? titleHeaderToggle => collapseTitle ? null : "collapsed";
     private string? titleToggle => collapseTitle ? "collapse" : "collapse show";
     private void ToggleTitleAccordion() => collapseTitle = !collapseTitle;
 
-    @*Export Accordion *@
     private bool collapseExport = true;
     private string? exportHeaderToggle => collapseExport ? null : "collapsed";
     private string? exportToggle => collapseExport ? "collapse" : "collapse show";
     private void ToggleExportAccordion() => collapseExport = !collapseExport;
 
-    private bool collapseTable = true;
-    private string? tableHeaderToggle => collapseTable ? null : "collapsed";
-    private string? tableToggle => collapseTable ? "collapse" : "collapse show";
-    private void ToggleTableAccordion() => collapseTable = !collapseTable;
+    private bool collapseReport = true;
+    private string? reportHeaderToggle => collapseReport ? null : "collapsed";
+    private string? reportToggle => collapseReport ? "collapse" : "collapse show";
+    private void ToggleReportAccordion() => collapseReport = !collapseReport;
+
+    private bool collapseDetail = true;
+    private string? detailHeaderToggle => collapseDetail ? null : "collapsed";
+    private string? detailToggle => collapseDetail ? "collapse" : "collapse show";
+    private void ToggleDetailAccordion() => collapseDetail = !collapseDetail;
 
 }
 
@@ -65,17 +68,72 @@
                 </div>
             </div>
 
-            @* Table *@
+            @* Report & Border *@
             <div class="accordion-item">
-                <div class="accordion accordion-flush position-relative overflow-hidden @tableHeaderToggle" id="accordionTableExample">
+                <div class="accordion accordion-flush position-relative overflow-hidden @reportHeaderToggle" id="accordionTableExample">
                     <div class="accordion-item mb-3 shadow-none border rounded">
                         <h2 class="accordion-header" id="flush-headingTable">
-                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTable" aria-controls="flush-collapseTable" @onclick="ToggleTableAccordion">
-                                Table
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTable" aria-controls="flush-collapseTable" @onclick="ToggleReportAccordion">
+                                Report & Border
                             </button>
                         </h2>
-                        <div id="flush-collapseTable" class="accordion-collapse @tableToggle" aria-labelledby="flush-headingTable" data-bs-parent="#accordionTableExample">
+                        <div id="flush-collapseTable" class="accordion-collapse @reportToggle" aria-labelledby="flush-headingTable" data-bs-parent="#accordionTableExample">
                             <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="alignTitle" class="form-label">Report Settings</label>
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.ReportWidthSize" @onchange="OnReportWidthChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Border Color</label>
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.BorderColor" @onchange="OnBorderColorChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Border Radius</label>
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.BorderColor" @onchange="OnBorderRadiusChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Border Size</label>
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.BorderColor" @onchange="OnBorderSizeChange">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Detail *@
+            <div class="accordion-item">
+                <div class="accordion accordion-flush position-relative overflow-hidden @detailHeaderToggle" id="accordionTableExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingTable">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTable" aria-controls="flush-collapseTable" @onclick="ToggleDetailAccordion">
+                                Detail
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTable" class="accordion-collapse @detailToggle" aria-labelledby="flush-headingTable" data-bs-parent="#accordionTableExample">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <label for="alignTitle" class="form-label">Title Align</label>
+                                    <div class="mb-2 col-sm-12 text-center">
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnDetailAlignmentChange(0)">
+                                            <i class="ti ti-align-box-left-top"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnDetailAlignmentChange(1)">
+                                            <i class="ti ti-align-box-center-top"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnDetailAlignmentChange(2)">
+                                            <i class="ti ti-align-box-right-top"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,7 +177,13 @@
 
 @code
 {
-    public TemplateSettings CustomSettings = new TemplateSettings(24, "center");
+    public TemplateSettings CustomSettings = new TemplateSettings(
+        100, 1, "black", 15,
+        24, "center", true, "black",
+        "black", 12,
+        "black", 12,
+        "black"
+    );
     protected override async Task OnInitializedAsync()
     {
         await TemplateSettingsChanged.InvokeAsync(CustomSettings);
@@ -131,6 +195,7 @@
     [Parameter]
     public EventCallback<TemplateSettings> TemplateSettingsChanged { get; set; }
 
+    // Title
     private void OnTitleAlignmentChange(int selectedAlignment)
     {
         switch (selectedAlignment)
@@ -157,6 +222,70 @@
         CustomSettings.FontTitleSize = fontTitleSize;
         TemplateSettingsChanged.InvokeAsync(CustomSettings);
     }
+
+    private void OnTitleBoldChange()
+    {
+        CustomSettings.FontTitleBold = !CustomSettings.FontTitleBold;
+    }
+
+    private void OnFontTitleColor(ChangeEventArgs e)
+    {
+        string hexCode = e.Value.ToString();
+        CustomSettings.FontTitleColor = hexCode;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    // Report
+    private void OnReportWidthChange(ChangeEventArgs e)
+    {
+        int width = int.Parse(e.Value.ToString());
+        CustomSettings.ReportWidthSize = width;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    // Border 
+    private void OnBorderSizeChange(ChangeEventArgs e)
+    {
+        int size = int.Parse(e.Value.ToString());
+        CustomSettings.BorderSize = size;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    private void OnBorderColorChange(ChangeEventArgs e)
+    {
+        string hexCode = e.Value.ToString();
+        CustomSettings.BorderColor = hexCode;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    private void OnBorderRadiusChange(ChangeEventArgs e)
+    {
+        int radius = int.Parse(e.Value.ToString());
+        CustomSettings.BorderRadius = radius;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    // Detail Information
+    private void OnDetailAlignmentChange(int selectedAlignment)
+    {
+        switch (selectedAlignment)
+        {
+            case 0:
+                CustomSettings.DetailsTextAlign = "left";
+                break;
+            case 1:
+                CustomSettings.DetailsTextAlign = "center";
+                break;
+            case 2:
+                CustomSettings.DetailsTextAlign = "right";
+                break;
+            default:
+                CustomSettings.DetailsTextAlign = "center";
+                break;
+        }
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
 }
 
 
