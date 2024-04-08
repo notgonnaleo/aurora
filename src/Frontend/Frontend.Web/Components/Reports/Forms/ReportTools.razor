@@ -23,6 +23,11 @@
     private string? detailToggle => collapseDetail ? "collapse" : "collapse show";
     private void ToggleDetailAccordion() => collapseDetail = !collapseDetail;
 
+    private bool collapseTable = true;
+    private string? tableHeaderToggle => collapseTable ? null : "collapsed";
+    private string? tableToggle => collapseTable ? "collapse" : "collapse show";
+    private void ToggleTableAccordion() => collapseTable = !collapseTable;
+
 }
 
 <div class="m-2">
@@ -46,6 +51,12 @@
                                     <div class="mb-2 col-sm-12">
                                         <label for="fontTitleSize" class="form-label">Title Size</label>
                                         <input type="number" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.FontTitleSize" @onchange="OnFontSizeChange">
+                                    </div>
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Title Bold</label> <br />
+                                        <button type="button" class="btn btn-outline-primary m-1" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.FontTitleBold" @onclick="OnTitleBoldChange">
+                                            <i class="ti ti-bold"></i>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -81,26 +92,26 @@
                             <div class="accordion-body px-3 fw-normal">
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
-                                        <label for="alignTitle" class="form-label">Report Settings</label>
-                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.ReportWidthSize" @onchange="OnReportWidthChange">
+                                        <label for="alignTitle" class="form-label">Report Width</label>
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Width" value="@CustomSettings.ReportWidthSize" @onchange="OnReportWidthChange">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="fontTitleSize" class="form-label">Border Color</label>
-                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.BorderColor" @onchange="OnBorderColorChange">
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Border Color" value="@CustomSettings.BorderColor" @onchange="OnBorderColorChange">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="fontTitleSize" class="form-label">Border Radius</label>
-                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.BorderColor" @onchange="OnBorderRadiusChange">
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Border Radius" value="@CustomSettings.BorderRadius" @onchange="OnBorderRadiusChange">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="fontTitleSize" class="form-label">Border Size</label>
-                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Title Size" value="@CustomSettings.BorderColor" @onchange="OnBorderSizeChange">
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Border Size" value="@CustomSettings.BorderSize" @onchange="OnBorderSizeChange">
                                     </div>
                                 </div>
                             </div>
@@ -132,6 +143,49 @@
                                         <button type="button" class="btn btn-outline-primary m-1" @onclick="() => OnDetailAlignmentChange(2)">
                                             <i class="ti ti-align-box-right-top"></i>
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Table *@
+            <div class="accordion-item">
+                <div class="accordion accordion-flush position-relative overflow-hidden @detailHeaderToggle" id="accordionTableExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingTable">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTable" aria-controls="flush-collapseTable" @onclick="ToggleDetailAccordion">
+                                Table
+                            </button>
+                        </h2>
+                        <div id="flush-collapseTable" class="accordion-collapse @detailToggle" aria-labelledby="flush-headingTable" data-bs-parent="#accordionTableExample">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="fontTitleSize" class="form-label">Table Color</label>
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Table Color" value="@CustomSettings.TableColor" @onchange="OnTableColorChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="fontTitleSize" class="form-label">Header Size</label>
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Header Size" value="@CustomSettings.LabelTextColor" @onchange="OnLabelSizeChange">
+                                    </div>
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="fontTitleSize" class="form-label">Header Color</label>
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Header Color" value="@CustomSettings.LabelTextColor" @onchange="OnLabelColorChange">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="fontTitleSize" class="form-label">Row Size</label>
+                                        <input type="number" class="form-control" id="fontTitleSize" placeholder="Row Size" value="@CustomSettings.RowTextSize" @onchange="OnRowSizeChange">
+                                    </div>
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="fontTitleSize" class="form-label">Row Color</label>
+                                        <input type="color" class="form-control" id="fontTitleSize" placeholder="Row Color" value="@CustomSettings.RowTextColor" @onchange="OnRowColorChange">
                                     </div>
                                 </div>
                             </div>
@@ -226,6 +280,7 @@
     private void OnTitleBoldChange()
     {
         CustomSettings.FontTitleBold = !CustomSettings.FontTitleBold;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
     }
 
     private void OnFontTitleColor(ChangeEventArgs e)
@@ -286,6 +341,43 @@
         TemplateSettingsChanged.InvokeAsync(CustomSettings);
     }
 
+    // Table
+    private void OnTableColorChange(ChangeEventArgs e)
+    {
+        string hexCode = e.Value.ToString();
+        CustomSettings.TableColor = hexCode;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    // Label
+    private void OnLabelColorChange(ChangeEventArgs e)
+    {
+        string hexCode = e.Value.ToString();
+        CustomSettings.LabelTextColor = hexCode;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    private void OnLabelSizeChange(ChangeEventArgs e)
+    {
+        int size = int.Parse(e.Value.ToString());
+        CustomSettings.LabelTextSize = size;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    // Row
+    private void OnRowColorChange(ChangeEventArgs e)
+    {
+        string hexCode = e.Value.ToString();
+        CustomSettings.RowTextColor = hexCode;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
+
+    private void OnRowSizeChange(ChangeEventArgs e)
+    {
+        int size = int.Parse(e.Value.ToString());
+        CustomSettings.RowTextSize = size;
+        TemplateSettingsChanged.InvokeAsync(CustomSettings);
+    }
 }
 
 
