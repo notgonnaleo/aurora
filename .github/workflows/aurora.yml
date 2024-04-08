@@ -1,0 +1,87 @@
+name: Aurora - Publish API and UI
+on:
+  push:
+    branches:
+    - master
+env:
+  BACKEND-APPNAME:              api-aurora
+  BACKEND_WORKING_DIRECTORY:    .\src\Backend\Backend.API
+  BACKEND_OUTPUT_PACKAGE_PATH:  .\backend-output\
+
+  FRONTEND-APPNAME:             ui-aurora
+  FRONTEND_WORKING_DIRECTORY:   .\src\Frontend\Frontend.Web
+  FRONTEND_OUTPUT_PACKAGE_PATH: .\frontend-output\
+
+  CONFIGURATION:                Release
+  DOTNET_CORE_VERSION:          6.0.x
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+
+    - uses: actions/checkout@v3
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+
+    - name: Restore Backend
+      run: dotnet restore "${{ env.BACKEND_WORKING_DIRECTORY }}"
+    - name: Build Backend
+      run: dotnet build "${{ env.BACKEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test Backend
+      run: dotnet test "${{ env.BACKEND_WORKING_DIRECTORY }}" --no-build
+    - name: Publish Backend
+      run: dotnet publish "${{ env.BACKEND_WORKING_DIRECTORY }}" -c Release --output "${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}"
+    - name: Publish Backend Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.BACKEND-APPNAME }}
+        path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
+    - name: Restore Frontend
+      run: dotnet restore "${{ env.FRONTEND_WORKING_DIRECTORY }}"
+    - name: Build Frontend
+      run: dotnet build "${{ env.FRONTEND_WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
+    - name: Test Frontend
+      run: dotnet test "${{ env.FRONTEND_WORKING_DIRECTORY }}" --no-build
+    - name: Publish Frontend
+      run: dotnet publish "${{ env.FRONTEND_WORKING_DIRECTORY }}" -c Release --output "${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}"
+    - name: Publish Frontend Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.FRONTEND-APPNAME }}
+        path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    steps:
+    - name: Download Backend artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.BACKEND-APPNAME }}
+        path: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+      
+    - name: Deploy API
+      id: deploy-api
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.BACKEND-APPNAME }}
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_BACKEND }}
+        package: ${{ env.BACKEND_OUTPUT_PACKAGE_PATH }}
+
+    - name: Download Frontend artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.FRONTEND-APPNAME }}
+        path: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+      
+    - name: Deploy UI
+      id: deploy-ui
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.FRONTEND-APPNAME }}
+        publish-profile: ${{ secrets.PUBLISH_PROFILE_FRONTEND }}
+        package: ${{ env.FRONTEND_OUTPUT_PACKAGE_PATH }}
+  

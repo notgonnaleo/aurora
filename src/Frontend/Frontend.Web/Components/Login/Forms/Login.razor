@@ -53,7 +53,7 @@
     {
         var response = await _authenticationService.IsUserLogged();
         if (response.GetValueOrDefault())
-            Navigator.NavigateTo("/", true);
+            Navigator.NavigateTo(Navigator.BaseUri, true);
     }
 
     public async Task<bool> SignIn()
@@ -71,6 +71,6 @@
     
     public void RedirectAfterSuccess(bool logged)
     {
-        if (logged) Navigator.NavigateTo("/", true);
+        if (logged) Navigator.NavigateTo(Navigator.BaseUri, true);
     }
 }
