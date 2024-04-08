@@ -48,9 +48,9 @@ else
     public void Redirect(bool isAuthenticated)
     {
         if (!isAuthenticated)
-            navigator.NavigateTo(navigator.BaseUri + "Login");
+            navigator.NavigateTo("/Login");
         else
-            navigator.NavigateTo(navigator.BaseUri);
+            navigator.NavigateTo(navigator.Uri);
     }
 
     public async Task<bool> IsAuthenticated()
