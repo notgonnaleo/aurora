@@ -95,7 +95,7 @@
     {
         try
         {
-            if (await _categoryService.UpdateCategory(category)) 
+            if (await _categoryService.UpdateCategory(category))
                 navigator.NavigateTo("/categories");
         }
         catch (Exception ex)

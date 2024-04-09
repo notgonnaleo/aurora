@@ -21,6 +21,7 @@
 @inject CategoryService _categoryService;
 @inject SubCategoryService _subCategoryService;
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
 
 
 
@@ -29,7 +30,9 @@
 </div>
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
-        <form>
+        <EditForm Model="model" OnValidSubmit="CreateProduct">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <ValidationSummary></ValidationSummary>
             <div class="row">
                 <!-- Basic Info Accordion -->
                 <div class="accordion accordion-flush position-relative overflow-hidden @productAccordionHeaderToggle " id="accordionFlushExample">
@@ -77,7 +80,7 @@
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="name" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="name" placeholder="Your product name" @bind="@model.Name">
+                                        <InputText type="text" class="form-control" id="name" placeholder="Your product name" @bind-Value="@model.Name"></InputText>
                                     </div>
                                 </div>
                                 <!-- Description -->
@@ -201,7 +204,7 @@
                     </div>
                 </div>
             </CascadingValue>
-        </form>
+        </EditForm>
     </div>
 
     <!-- Botão de envio -->
@@ -299,15 +302,35 @@
         var context = await _authenticationService.GetContext();
         model.TenantId = context.Tenant.Id;
 
-        if (model.SKU is null && isAutoGenerateSKU)
+        // Doe no meu coração fazer validação aqui mas o tempo é curto e por hora isso resolve problemas enormes
+        // O ideal mesmo seria adaptar a layer de retorno de api para lidar com erros oque já existe na API mas
+        // isso vai requer um tempo maior que posso olhar mais no futuro, por hora isso é o melhor
+        if(model.SKU is null && isAutoGenerateSKU)
         {
             model.SKU = string.Empty;
+        }
+        if (string.IsNullOrEmpty(model.ColorName)){
+            Toaster.Error("Color selected is invalid");
+        }
+        if (string.IsNullOrEmpty(model.GTIN))
+        {
+            Toaster.Error("GTIN is invalid");
+        }
+        if (string.IsNullOrEmpty(model.Name))
+        {
+            Toaster.Error("Name is invalid");
         }
 
         Product newProduct = await _productService.CreateProduct(model);
         if (newProduct != null && newProduct.ProductId != new Guid())
+        {
+            Toaster.Success(newProduct.Name, "was created successfully!.");
             navigator.NavigateTo("/products", true);
-
+        }
+        else
+        {
+            Toaster.Error("Error while creating, Check the fields again");
+        }
 
     }
 }

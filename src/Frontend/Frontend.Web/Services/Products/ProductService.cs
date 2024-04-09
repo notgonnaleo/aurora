@@ -27,19 +27,7 @@ namespace Frontend.Web.Services.Products
 
         public async Task<ProductDetail> GetProductWithDetails(string tenantId, string productId)
         {
-            var product = await _productRepository.GetProduct(tenantId, productId);
-            return new ProductDetail()
-            {
-                ProductId = product.ProductId,
-
-                Name = product.Name,
-                SKU = product.SKU,
-                Description = product.Description,
-                TenantId = product.TenantId,
-                Value = product.Value,
-                GTIN = product.GTIN,
-                Active = product.Active,
-            };
+            return await _productRepository.GetProductThumbnail(tenantId, productId);
         }
 
         public async Task<Product> GetProduct(string tenantId, string productId)

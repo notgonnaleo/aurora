@@ -3,6 +3,7 @@
 @using Frontend.Web.Services.Authentication
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager Navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
 
 <div class="row vh-100 justify-content-end">
     <div class="col-md-6 ">
@@ -66,17 +67,19 @@
     {
         var response = await _authenticationService.IsUserLogged();
         if (response.GetValueOrDefault())
-            Navigator.NavigateTo("/", true);
+            Navigator.NavigateTo(Navigator.BaseUri, true);
     }
 
     public async Task<bool> SignIn()
     {
         if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
         {
+            Toaster.Error("Username and password fields must be filled");
             throw new Exception("Fields are empty");
         }
         isLoading = true;
         logged = await _authenticationService.SignIn(model);
+        Toaster.Success("User authorized successfully!");
         RedirectAfterSuccess(logged.Value);
         isLoading = false;
         return logged.Value;
@@ -84,6 +87,6 @@
 
     public void RedirectAfterSuccess(bool logged)
     {
-        if (logged) Navigator.NavigateTo("/", true);
+        if (logged) Navigator.NavigateTo(Navigator.BaseUri, true);
     }
 }

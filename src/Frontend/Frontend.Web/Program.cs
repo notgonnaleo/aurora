@@ -24,8 +24,19 @@ using Frontend.Web.Util.Session;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Frontend.Web.Services.Contacts;
+using Sotsera.Blazor.Toaster.Core.Models;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+
+builder.Services.AddToaster(config =>
+{
+    // Customization: https://blazor-toaster.sotsera.com/
+    config.PositionClass = Defaults.Classes.Position.BottomLeft;
+    config.PreventDuplicates = true;
+    config.NewestOnTop = false;
+    config.ShowProgressBar = true;
+    config.VisibleStateDuration = 1500;
+});
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 

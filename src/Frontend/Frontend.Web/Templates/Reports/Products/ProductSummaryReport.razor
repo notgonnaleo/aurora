@@ -1,0 +1,235 @@
+﻿@page "/report/{tenantId}/product-summary/{productId}"
+@using Backend.Domain.Entities.Products
+@using Backend.Domain.Entities.Reports;
+@using Frontend.Web.Services.Products
+@inject ProductService _productService;
+@inject ProductVariantService _productVariantService;
+
+<aside class="d-print-none right-sidebar @formCssClass">
+    <Frontend.Web.Components.Reports.Forms.ReportTools TemplateSettingsChanged="SetCustomReportSettings"
+                                                        CollapseRightSidebar="collapseReportTools"
+                                                        ToggleRightSidebar="ToggleReportTools" />
+</aside>
+
+<div class="container-fluid">
+    <div class="d-print-none row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleReportTools">
+                <i class="ti ti-tools p-2"></i> @btnText
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="report" id="reportContent">
+            <h1 class="report-watermark"><strong>Powered by <i class="ti ti-robot"></i> Aurora</strong></h1>
+            <h1 class="report-title">Product - #@Product.SKU</h1>
+
+            <div class="report-detail">
+                <p><strong>SKU:</strong>@Product.SKU</p>
+                <p><strong>GTIN:</strong>@Product.GTIN</p>
+                <p><strong>Name:</strong>@Product.Name</p>
+                <p><strong>Type:</strong>@(Product.ProductType is null ? "N/A" : Product.ProductType.Name)</p>
+                <p><strong>Default Color:</strong>@(Product.ColorName ?? "N/A")</p>
+                <p><strong>Unit Price:</strong>@Product.Value</p>
+                <p><strong>Producer/Vendor:</strong> John Doe</p>
+            </div>
+
+            <hr />
+
+            <h6>
+                <strong>Item Summary</strong>
+            </h6>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th class="report-table-label">SKU</th>
+                        <th class="report-table-label">GTIN</th>
+                        <th class="report-table-label">Name</th>
+                        <th class="report-table-label">Description</th>
+                        <th class="report-table-label">Category</th>
+                        <th class="report-table-label">Sub-Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="report-table-row">@Product.SKU</td>
+                        <td class="report-table-row">@Product.GTIN</td>
+                        <td class="report-table-row">@Product.Name</td>
+                        <td class="report-table-row">@Product.Description</td>
+                        <td class="report-table-row">@(Product.Category is null ? "N/A" : Product.Category.CategoryName)</td>
+                        <td class="report-table-row">@(Product.SubCategory is null ? "N/A" : Product.SubCategory.SubCategoryName)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="report-table">
+                <thead class="report-table-label">
+                    <tr>
+                        <th class="report-table-label">Liquid Weight</th>
+                        <th class="report-table-label">Total Weight</th>
+                        <th class="report-table-label">Metric Unit</th>
+                        <th class="report-table-label">Unit Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="report-table-row">@Product.LiquidWeight.GetValueOrDefault()</td>
+                        <td class="report-table-row">@Product.TotalWeight.GetValueOrDefault()</td>
+                        <td class="report-table-row">@(Product.MetricUnitName ?? "N/A")</td>
+                        <td class="report-table-row">@Product.Value</td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (Variants.Any())
+            {
+            <hr />
+
+                <h6>
+                    <strong>Item Variations</strong>
+                </h6>
+                <table class="report-table">
+                    <thead class="report-table-label">
+                        <tr>
+                            <th class="report-table-label">SKU</th>
+                            <th class="report-table-label">Name</th>
+                            <th class="report-table-label">Description</th>
+                            <th class="report-table-label">Liquid Weight</th>
+                            <th class="report-table-label">Total Weight</th>
+                            <th class="report-table-label">Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @foreach (var Variant in Variants)
+                            {
+                                <td class="report-table-row">@Variant.SKU</td>
+                                <td class="report-table-row">@Variant.Name</td>
+                                <td class="report-table-row">@Variant.Description</td>
+                                <td class="report-table-row">@Variant.LiquidWeight.GetValueOrDefault()</td>
+                                <td class="report-table-row">@Variant.TotalWeight.GetValueOrDefault()</td>
+                                <td class="report-table-row">@Variant.Value</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .report {
+        max-width: @(CustomSettings.ReportWidthSize)%;
+        margin: 0 auto;
+        border: @(CustomSettings.BorderSize)px solid @(CustomSettings.BorderColor);
+        padding: 20px;
+        border-radius: @(CustomSettings.BorderRadius)px;
+    }
+
+    .report-watermark{
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .report-title {
+        font-size: @(CustomSettings.FontTitleSize)px;
+        text-align: @(CustomSettings.TitleAlign);
+        font-weight: @(CustomSettings.FontTitleBold ? "bold" : "normal");
+        color: @(CustomSettings.FontTitleColor);
+    }
+
+    .report-detail {
+        text-align: @(CustomSettings.DetailsTextAlign);
+        margin-bottom: 20px;
+    }
+
+    .report-detail p {
+        margin: 5px 0;
+    }
+
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+
+    .report-table-label{
+        font-size: @(CustomSettings.LabelTextSize)px;
+        color: @(CustomSettings.LabelTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
+        padding: 0.3rem;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .report-table-row{
+        font-size: @(CustomSettings.RowTextSize)px;
+        color: @(CustomSettings.RowTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
+        padding: 0.3rem;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .report tfoot {
+        font-weight: bold;
+    }
+
+</style>
+
+@code 
+{
+    [Parameter]
+    public string tenantId { get; set; }
+
+    [Parameter]
+    public string productId { get; set; }
+}
+
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProduct();
+        await GetVariants();
+        SetCustomReportSettings(CustomSettings);
+    }
+
+    public TemplateSettings CustomSettings = new TemplateSettings();
+    private void SetCustomReportSettings(TemplateSettings templateSettings)
+    {
+        CustomSettings = templateSettings;
+    }
+}
+
+@code
+{
+    private string? btnText = "Open Report Editor";
+    public string? formCssClass = null;
+    private bool collapseReportTools = true;
+
+    private void ToggleReportTools()
+    {
+        collapseReportTools = !collapseReportTools;
+        formCssClass = collapseReportTools ? null : "show-menu";
+        btnText = collapseReportTools ? "Open Report Editor" : "Close Report Editor";
+    }
+
+}
+
+@code
+{
+    ProductDetail Product = new ProductDetail();
+    IEnumerable<ProductVariant> Variants = new List<ProductVariant>();
+
+    public async Task GetProduct()
+    {
+        Product = await _productService.GetProductWithDetails(tenantId, productId);
+    }
+
+    public async Task GetVariants()
+    {
+        Variants = await _productVariantService.GetVariantsByProduct(tenantId, productId);
+    }
+}
