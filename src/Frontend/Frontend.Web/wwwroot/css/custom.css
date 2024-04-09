@@ -118,17 +118,8 @@ a {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Form control */
-.form-control {
-    background: transparent;
-    border: none;
-    height: 50px;
-    color: black !important;
-    border: 1px solid black;
-    background: rgba(255, 255, 255, 0.08);  
-    padding-left: 20px;
-    padding-right: 20px;
-}
+
+
 
 /*Card */
 .full-height {
@@ -149,62 +140,6 @@ a {
 textarea.form-control {
     height: inherit !important;
 }
-
-/* Checkbox style */
-.checkbox-wrap {
-    display: block;
-    position: relative;
-    padding-left: 30px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    user-select: none;
-}
-
-    .checkbox-wrap input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-    }
-
-    .checkbox-wrap .checkmark:after {
-        content: "\f0c8";
-        font-family: "FontAwesome";
-        position: absolute;
-        color: rgba(255, 255, 255, 0.1);
-        font-size: 20px;
-        margin-top: -4px;
-    }
-
-    .checkbox-wrap input:checked ~ .checkmark:after {
-        display: block;
-        content: "\f14a";
-        font-family: "FontAwesome";
-        color: rgba(0, 0, 0, 0.2);
-    }
-
-.checkbox-primary {
-    color: black;
-}
-
-    .checkbox-primary input:checked ~ .checkmark:after {
-        color: black;
-    }
-
-/* Buttons */
-.btn {
-    cursor: pointer;
-    font-size: 15px;
-    text-transform: uppercase;
-}
-
-    .btn:hover, .btn:active, .btn:focus {
-        outline: none;
-    }
-
 
     /* Media Screen */
 

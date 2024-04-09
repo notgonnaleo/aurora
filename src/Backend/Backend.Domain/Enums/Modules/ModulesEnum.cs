@@ -363,8 +363,9 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class DeleteAddress
                 {
-                    public static string addressId = "addressId";
                     public static string tenantId = "tenantId";
+                    public static string addressId = "addressId";
+                    
                 }
             }
         }
