@@ -3,6 +3,7 @@
 @using Frontend.Web.Services.Authentication
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager Navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
 
 <div class="col-md-8 col-lg-6 col-xxl-3 position-relative">
     <div class="card mb-0">
@@ -60,10 +61,12 @@
     {
         if (string.IsNullOrEmpty(model.Username) || string.IsNullOrEmpty(model.Password))
         {
+            Toaster.Error("Username and password fields must be filled");
             throw new Exception("Fields are empty");
         }
         isLoading = true;
         logged = await _authenticationService.SignIn(model);
+        Toaster.Success("User authorized successfully!");
         RedirectAfterSuccess(logged.Value);
         isLoading = false;
         return logged.Value;

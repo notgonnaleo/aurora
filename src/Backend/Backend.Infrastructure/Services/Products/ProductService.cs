@@ -147,6 +147,8 @@ namespace Backend.Infrastructure.Services.Products
                 Name = product.Name,
                 Description = product.Description,
                 Value = product.Value,
+                ColorName = product.ColorName,
+                MetricUnitName = product.MetricUnitName,
                 TotalWeight = product.TotalWeight,
                 LiquidWeight = product.LiquidWeight,
                 ProductType = types.First(x => x.Id == product.ProductTypeId),
