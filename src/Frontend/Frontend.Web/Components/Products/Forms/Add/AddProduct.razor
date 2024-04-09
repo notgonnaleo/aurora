@@ -64,7 +64,7 @@
                                     </div>
                                 </div>
 
-                                <!-- upload img -->
+                                @* <!-- upload img -->
                                 <div class="row">
                                     <div class="mb-2 col-sm-12 p-2">
                                         <label for="productImage" class="form-label">Product Image</label>
@@ -72,7 +72,7 @@
 
                                         
                                     </div>
-                                </div>
+                                </div> *@
 
                                 
 
@@ -253,47 +253,47 @@
 {
     private UserSessionContext context = new UserSessionContext();
     private Product model = new Product();
-    public IFormFile productImageFile;
+    // public IFormFile productImageFile;
 
-    private async Task HandleFileUpload(InputFileChangeEventArgs e)
-    {
-        var browserFile = e.File;
-        var fileName = Path.GetFileName(browserFile.Name);
-        var contentType = browserFile.ContentType;
+    // private async Task HandleFileUpload(InputFileChangeEventArgs e)
+    // {
+    //     var browserFile = e.File;
+    //     var fileName = Path.GetFileName(browserFile.Name);
+    //     var contentType = browserFile.ContentType;
 
-        using (var stream = browserFile.OpenReadStream())
-        {
-            productImageFile = new FormFile(stream, 0, stream.Length, null, fileName)
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = contentType
-                };
-        }
+    //     using (var stream = browserFile.OpenReadStream())
+    //     {
+    //         productImageFile = new FormFile(stream, 0, stream.Length, null, fileName)
+    //             {
+    //                 Headers = new HeaderDictionary(),
+    //                 ContentType = contentType
+    //             };
+    //     }
 
-        // Verifique se há uma imagem selecionada antes de salvar
-        if (productImageFile != null)
-        {
-            // Caminho onde a imagem será salva no projeto do Frontend
-            var basePath = System.Environment.CurrentDirectory;
-            var imagePath = Path.Combine(basePath, "wwwroot", "images", "products", productImageFile.FileName);
+    //     // Verifique se há uma imagem selecionada antes de salvar
+    //     if (productImageFile != null)
+    //     {
+    //         // Caminho onde a imagem será salva no projeto do Frontend
+    //         var basePath = System.Environment.CurrentDirectory;
+    //         var imagePath = Path.Combine(basePath, "wwwroot", "images", "products", productImageFile.FileName);
 
-            // Verifique se o diretório onde a imagem será salva existe
-            var directory = Path.GetDirectoryName(imagePath);
-            if (!Directory.Exists(directory))
-            {
-                // Se o diretório não existir, crie-o
-                Directory.CreateDirectory(directory);
-            }
+    //         // Verifique se o diretório onde a imagem será salva existe
+    //         var directory = Path.GetDirectoryName(imagePath);
+    //         if (!Directory.Exists(directory))
+    //         {
+    //             // Se o diretório não existir, crie-o
+    //             Directory.CreateDirectory(directory);
+    //         }
 
-            // Salve a imagem na pasta especificada
-            using (var stream = new FileStream(imagePath, FileMode.Create))
-            {
-                await productImageFile.CopyToAsync(stream);
-            }
-        }
+    //         // Salve a imagem na pasta especificada
+    //         using (var stream = new FileStream(imagePath, FileMode.Create))
+    //         {
+    //             await productImageFile.CopyToAsync(stream);
+    //         }
+    //     }
 
 
-    }
+    // }
 
     public async Task CreateProduct()
     {
