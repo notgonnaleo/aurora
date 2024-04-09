@@ -241,7 +241,7 @@ namespace Backend.Infrastructure.Services.Stocks
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public bool Delete(Guid stockMovementId)
+        public bool Delete(Guid tenantId,Guid stockMovementId)
         {
             var context = LoadContext();
             Stock stock = _appDbContext.Stocks.Where(x => x.StockMovementId == stockMovementId && x.TenantId == context.Tenant.Id).First();

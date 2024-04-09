@@ -1,9 +1,10 @@
 ﻿@using Backend.Domain.Entities.Categories;
 @using Backend.Domain.Entities.Contacts;
 @using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Contacts;
 
 @inject NavigationManager navigator;
-@inject CategoryService _categoryService;
+@inject ContactService _contactService;
 
 <div class="modal fade @modalClass" id="bs-example-modal-sm" tabindex="-1" style="@inlineStyle" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -26,7 +27,7 @@
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteItem()">
                     Confirm
                 </button>
             </div>
@@ -46,6 +47,11 @@
 @code
 {
     public void CloseModal() => ShowModal = !ShowModal;
+    public async Task DeleteItem()
+    {
+        await _contactService.DeleteEmailAddress(Email.TenantId.ToString(), Email.EmailAddressId.ToString());
+        navigator.NavigateTo(navigator.Uri, true);
+    }
 }
 
 @code
@@ -53,3 +59,4 @@
     [Parameter] public bool ShowModal { get; set; }
     [Parameter] public Email Email { get; set; }
 }
+

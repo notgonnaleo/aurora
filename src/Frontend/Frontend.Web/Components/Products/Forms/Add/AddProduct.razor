@@ -10,6 +10,11 @@
 @using Frontend.Web.Services.Categories;
 @using Frontend.Web.Services.Products;
 @using Frontend.Web.Services.SubCategories;
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Internal;
+
+
+
 @inject ProductService _productService
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService
@@ -17,6 +22,8 @@
 @inject SubCategoryService _subCategoryService;
 @inject NavigationManager navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
+
+
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -27,7 +34,8 @@
             <DataAnnotationsValidator></DataAnnotationsValidator>
             <ValidationSummary></ValidationSummary>
             <div class="row">
-                <div class="accordion accordion-flush position-relative overflow-hidden @productAccordionHeaderToggle" id="accordionFlushExample">
+                <!-- Basic Info Accordion -->
+                <div class="accordion accordion-flush position-relative overflow-hidden @productAccordionHeaderToggle " id="accordionFlushExample">
                     <div class="accordion-item mb-3 shadow-none border rounded">
                         <h2 class="accordion-header" id="flush-headingOne">
                             <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseProductAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleProductAccordion>
@@ -37,35 +45,55 @@
                         <div id="flush-collapseOne" class="accordion-collapse @productAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
                             <div class="accordion-body px-3 fw-normal">
                                 <div class="row">
+                                    <!-- SKU -->
                                     <div class="mb-2 col-sm-6">
                                         <label for="sku" class="form-label">SKU</label>
                                         <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled="@isAutoGenerateSKU">
                                     </div>
+                                    <!-- GTIN -->
                                     <div class="mb-2 col-sm-6">
                                         <label for="name" class="form-label">GTIN</label>
                                         <input type="text" class="form-control" id="gtin" placeholder="GTIN" @bind="@model.GTIN">
                                     </div>
                                 </div>
                                 <div class="row">
+                                    <!-- Auto generate SKU -->
                                     <div class="mb-2 col-sm-12 p-2">
                                         <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAutoGenerateSKU">
                                         <label>Auto generate SKU</label>
                                     </div>
                                 </div>
+
+                                @* <!-- upload img -->
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <label for="productImage" class="form-label">Product Image</label>
+                                        <InputFile id="productImage" OnChange="HandleFileUpload" accept="image/*" />
+
+                                        
+                                    </div>
+                                </div> *@
+
+                                
+
+                                <!-- Name -->
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
                                         <label for="name" class="form-label">Name</label>
                                         <InputText type="text" class="form-control" id="name" placeholder="Your product name" @bind-Value="@model.Name"></InputText>
                                     </div>
                                 </div>
+                                <!-- Description -->
                                 <div class="mb-2 col-sm-12">
                                     <label for="description" class="form-label">Description</label>
                                     <input type="text" class="form-control" id="description" placeholder="Small details of the product" @bind="@model.Description">
                                 </div>
+                                <!-- Value -->
                                 <div class="mb-2 col-sm-12">
                                     <label for="value" class="form-label">Value</label>
                                     <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@model.Value">
                                 </div>
+                                <!-- Product Type -->
                                 <div class="mb-3 col-sm-12">
                                     <label for="productType" class="form-label">Product Type</label>
                                     <select class="form-select" @bind="@model.ProductTypeId">
@@ -75,6 +103,7 @@
                                         <option value="3">Product</option>
                                     </select>
                                 </div>
+                                <!-- Color -->
                                 <div class="row">
                                     <div class="mb-2 col-sm-12 p-2">
                                         <label for="colors" class="form-label">Color</label>
@@ -86,6 +115,7 @@
                                             }
                                         </select>
                                     </div>
+                                    <!-- Metric Unit -->
                                     <div class="mb-2 col-sm-12 p-2">
                                         <label for="metricUnits" class="form-label">Metric Unit</label>
                                         <select class="form-select" @bind="@model.MetricUnitName">
@@ -97,12 +127,15 @@
                                         </select>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Weight Accordion -->
             <div class="accordion accordion-flush position-relative overflow-hidden @weightAccordionHeaderToggle" id="accordionFlushExample">
                 <div class="accordion-item mb-3 shadow-none border rounded">
                     <h2 class="accordion-header" id="flush-headingOne">
@@ -113,10 +146,12 @@
                     <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
                         <div class="accordion-body px-3 fw-normal">
                             <div class="row">
+                                <!-- Liquid Weight -->
                                 <div class="mb-2 col-sm-6">
                                     <label for="liquidWeight" class="form-label">Liquid Weight</label>
                                     <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@model.LiquidWeight">
                                 </div>
+                                <!-- Total Weight -->
                                 <div class="mb-2 col-sm-6">
                                     <label for="totalWeight" class="form-label">Total Weight</label>
                                     <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@model.TotalWeight">
@@ -127,52 +162,57 @@
                 </div>
             </div>
 
+            <!-- Categories Accordion -->
             <CascadingValue Value="@model.CategoryId">
-            <div class="row">
-                <div class="accordion accordion-flush position-relative overflow-hidden @categoryAccordionHeaderToggle" id="accordionFlushExample">
-                    <div class="accordion-item mb-3 shadow-none border rounded">
-                        <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleCategoryAccordion>
-                                Categories
-                            </button>
-                        </h2>
-                        <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
-                            <div class="accordion-body px-3 fw-normal">
-                                <div class="row">
-                                    <div class="mb-3 col-sm-12">
-                                        <label for="category" class="form-label">Category</label>
-                                        <select class="form-select" @onchange="LoadSubCategories">
-                                            <option value="" disabled hidden selected>The category of your product</option>
-                                            @foreach (var category in categories)
-                                            {
-                                                <option value="@category.CategoryId">@category.CategoryName</option>
-
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="mb-3 col-sm-12">
-                                        <label for="productType" class="form-label">Sub Category</label>
-                                        <select class="form-select" @bind="@model.SubCategoryId">
-                                            <option value="" disabled hidden selected>The sub category of your product</option>
-                                            @foreach (var subCategory in subCategories)
-                                            {
-                                                <option value="@subCategory.SubCategoryId">@subCategory.SubCategoryName</option>
-                                            }
-                                        </select>
+                <div class="row">
+                    <div class="accordion accordion-flush position-relative overflow-hidden @categoryAccordionHeaderToggle" id="accordionFlushExample">
+                        <div class="accordion-item mb-3 shadow-none border rounded">
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleCategoryAccordion>
+                                    Categories
+                                </button>
+                            </h2>
+                            <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                                <div class="accordion-body px-3 fw-normal">
+                                    <div class="row">
+                                        <!-- Category -->
+                                        <div class="mb-3 col-sm-12">
+                                            <label for="category" class="form-label">Category</label>
+                                            <select class="form-select" @onchange="LoadSubCategories">
+                                                <option value="" disabled hidden selected>The category of your product</option>
+                                                @foreach (var category in categories)
+                                                {
+                                                    <option value="@category.CategoryId">@category.CategoryName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <!-- Sub Category -->
+                                        <div class="mb-3 col-sm-12">
+                                            <label for="productType" class="form-label">Sub Category</label>
+                                            <select class="form-select" @bind="@model.SubCategoryId">
+                                                <option value="" disabled hidden selected>The sub category of your product</option>
+                                                @foreach (var subCategory in subCategories)
+                                                {
+                                                    <option value="@subCategory.SubCategoryId">@subCategory.SubCategoryName</option>
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </CascadingValue>
         </EditForm>
     </div>
+
+    <!-- Botão de envio -->
     <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
         <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
     </div>
 </div>
+
 
 @code
 {
@@ -204,12 +244,61 @@
     }
 }
 
+
+
+
+
+
 @code
 {
     private UserSessionContext context = new UserSessionContext();
     private Product model = new Product();
+    // public IFormFile productImageFile;
+
+    // private async Task HandleFileUpload(InputFileChangeEventArgs e)
+    // {
+    //     var browserFile = e.File;
+    //     var fileName = Path.GetFileName(browserFile.Name);
+    //     var contentType = browserFile.ContentType;
+
+    //     using (var stream = browserFile.OpenReadStream())
+    //     {
+    //         productImageFile = new FormFile(stream, 0, stream.Length, null, fileName)
+    //             {
+    //                 Headers = new HeaderDictionary(),
+    //                 ContentType = contentType
+    //             };
+    //     }
+
+    //     // Verifique se há uma imagem selecionada antes de salvar
+    //     if (productImageFile != null)
+    //     {
+    //         // Caminho onde a imagem será salva no projeto do Frontend
+    //         var basePath = System.Environment.CurrentDirectory;
+    //         var imagePath = Path.Combine(basePath, "wwwroot", "images", "products", productImageFile.FileName);
+
+    //         // Verifique se o diretório onde a imagem será salva existe
+    //         var directory = Path.GetDirectoryName(imagePath);
+    //         if (!Directory.Exists(directory))
+    //         {
+    //             // Se o diretório não existir, crie-o
+    //             Directory.CreateDirectory(directory);
+    //         }
+
+    //         // Salve a imagem na pasta especificada
+    //         using (var stream = new FileStream(imagePath, FileMode.Create))
+    //         {
+    //             await productImageFile.CopyToAsync(stream);
+    //         }
+    //     }
+
+
+    // }
+
     public async Task CreateProduct()
     {
+
+        
         var context = await _authenticationService.GetContext();
         model.TenantId = context.Tenant.Id;
 
@@ -275,3 +364,4 @@
     [Parameter] public Action ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
 }
+

@@ -82,13 +82,13 @@ namespace Backend.API.Controllers.Agents
         }
 
         [TypeFilter(typeof(ValidateUserContextAttribute))]
-        [HttpDelete]
+        [HttpPut]
         [Route("Delete")]
-        public ActionResult Delete(Guid id)
+        public ActionResult Delete(Guid tenantId, Guid AgentId)
         {
             try
             {
-                return Ok(_agentService.Delete(id));
+                return Ok(_agentService.Delete( tenantId, AgentId));
             }
             catch (Exception ex)
             {

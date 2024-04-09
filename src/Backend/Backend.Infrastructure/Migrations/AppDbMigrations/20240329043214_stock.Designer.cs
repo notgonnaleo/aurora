@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240319010727_APP-SNAPSHOT")]
-    partial class APPSNAPSHOT
+    [Migration("20240329043214_stock")]
+    partial class stock
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(5925),
+                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5844),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -438,9 +438,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("AgentId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
 
@@ -497,8 +494,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("AgentId");
-
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ProductTypeId");
@@ -510,11 +505,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("2c51794e-e031-4fdd-a41d-6106e9452f0a"),
+                            ProductId = new Guid("21d0406c-d7cc-434a-abb0-35bdfef54202"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(6062),
+                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5981),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -529,10 +524,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("19bf3937-2995-4dfb-8072-060278be5ce9"),
+                            ProductId = new Guid("a4508f34-761c-4b22-9ca0-d9fc8d5ac644"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(6076),
+                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5988),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -648,8 +643,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .HasColumnType("double precision");
 
                     b.HasKey("VariantId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductVariants");
                 });
@@ -810,7 +803,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 19, 1, 7, 27, 26, DateTimeKind.Utc).AddTicks(6028),
+                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5940),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -851,10 +844,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Agent")
-                        .WithMany()
-                        .HasForeignKey("AgentId");
-
                     b.HasOne("Backend.Domain.Entities.Categories.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
@@ -869,8 +858,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .WithMany()
                         .HasForeignKey("SubCategoryId");
 
-                    b.Navigation("Agent");
-
                     b.Navigation("Category");
 
                     b.Navigation("ProductType");
@@ -879,17 +866,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.ProductMedia", b =>
-                {
-                    b.HasOne("Backend.Domain.Entities.Products.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.Products.ProductVariant", b =>
                 {
                     b.HasOne("Backend.Domain.Entities.Products.Product", "Product")
                         .WithMany()

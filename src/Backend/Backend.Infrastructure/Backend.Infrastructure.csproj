@@ -39,7 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\AppDbMigrations\" />
     <Folder Include="Migrations\AuthDbMigrations\" />
   </ItemGroup>
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Backend.Infrastructure": {
+      "commandName": "Project",
+      "jsWebView2Debugging": false
+    }
+  }
+}

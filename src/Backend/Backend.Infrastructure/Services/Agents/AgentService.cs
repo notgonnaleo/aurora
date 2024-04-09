@@ -86,10 +86,10 @@ namespace Backend.Infrastructure.Services.Agents
             };
         }
 
-        public bool Delete(Guid Id)
+        public bool Delete(Guid tenantId, Guid AgentId)
         {
             var context = LoadContext();
-            Agent agents = _appDbContext.Agents.Where(x => x.AgentId == Id && x.TenantId == context.Tenant.Id).First();
+            Agent agents = _appDbContext.Agents.Where(x => x.AgentId == AgentId && x.TenantId == context.Tenant.Id).First();
             agents.Active = false;
 
             _appDbContext.Update(agents);

@@ -5,45 +5,58 @@
 @inject NavigationManager Navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 
-<div class="col-md-8 col-lg-6 col-xxl-3 position-relative">
-    <div class="card mb-0">
-        <div class="card-body">
-            <a class="text-nowrap logo-img text-center d-block py-3 w-100">
-                <h3 class="panel-title"><strong>Aurora</strong></h3>
-            </a>
-            <p class="text-center">Log in your account</p>
-            @if (isLoading)
-            {
-                <div class="z-3 position absolute h-100 d-flex align-items-center justify-content-center">
-                    <Frontend.Web.Components.Loader.LoadingSpinner />
-                </div>
-            }
-            @if (logged.HasValue && logged.Value)
-            {
-                <div class="alert alert-success fade-in" role="alert">
-                    Success, redirecting to main page.
-                </div>
-            }
-            else if (logged.HasValue && !logged.Value)
-            {
-                <div class="alert alert-warning fade-in" role="alert">
-                    Something went wrong.
-                </div>
-            }
-            <form>
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username">
-                </div>
-                <div class="mb-4">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password">
-                </div>
-                <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Log in</button>
-            </form>
+<div class="row vh-100 justify-content-end">
+    <div class="col-md-6 ">
+        <div class="login-wrap p-0">
+            <div class="card d-flex justify-content-center bg-white text-dark half-width right-side full-height">
+ 
+                @if (isLoading)
+                {
+                    <div class="z-3 position absolute h-100 d-flex align-items-center justify-content-center">
+                        <Frontend.Web.Components.Loader.LoadingSpinner />
+                    </div>
+                }
+                @if (logged.HasValue && logged.Value)
+                {
+                    <div class="alert alert-success fade-in" role="alert">
+                        Success, redirecting to main page.
+                    </div>
+                }
+                else if (logged.HasValue && !logged.Value)
+                {
+                    <div class="alert alert-warning fade-in" role="alert">
+                        Something went wrong.
+                    </div>
+                }
+
+                <a class="text-nowrap logo-img text-center d-block py-3 w-100">
+                    <h1 class="panel-title"><strong>Aurora</strong></h1>
+                </a>
+
+                <form action="#" class="signin-form">
+                    <div class="form-group ">
+
+                        <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username">
+                    </div>
+                    <div class="form-group ">
+
+                        <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password">
+                        <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Log in</button>
+                    </div>
+                    <div class="form-group d-md-flex justify-content-center align-items-center">
+                        <span>Don't have an account?</span>
+                        <a class="ms-2">Sign Up</a>
+                    </div>
+
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
 @code
 {
     public bool isLoading;
@@ -71,7 +84,7 @@
         isLoading = false;
         return logged.Value;
     }
-    
+
     public void RedirectAfterSuccess(bool logged)
     {
         if (logged) Navigator.NavigateTo(Navigator.BaseUri, true);

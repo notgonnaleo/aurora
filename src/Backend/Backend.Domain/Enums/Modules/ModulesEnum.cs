@@ -112,6 +112,15 @@ namespace Backend.Infrastructure.Enums.Modules
                 }
             }
 
+            public static class PUT
+            {
+                public static class UpdateProduct
+                {
+                    public static string productId = "productId";
+                    public static string tenantId = "tenantId";
+                }
+            }
+
             public static class DELETE
             {
                 public static class DeleteProduct
@@ -297,7 +306,7 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class UpdateAgent
                 {
-                    public static string Id = "agentId";
+                    public static string agentId = "agentId";
                     public static string tenantId = "tenantId";
                 }
             }
@@ -306,7 +315,7 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class DeleteAgent
                 {
-                    public static string Id = "agentId";
+                    public static string agentId = "agentId";
                     public static string tenantId = "tenantId";
                 }
             }
@@ -349,8 +358,9 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static class DeleteAddress
                 {
-                    public static string addressId = "addressId";
                     public static string tenantId = "tenantId";
+                    public static string addressId = "addressId";
+                    
                 }
             }
         }

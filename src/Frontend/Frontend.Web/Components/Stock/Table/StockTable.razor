@@ -78,9 +78,9 @@
                                         <a class="text-primary edit" @onclick="() => Edit(stock)">
                                             <i class="ti ti-edit fs-5"></i>
                                         </a>
-                                        <a class=" text-dark delete ms-2">
+                                        @*<a class=" text-dark delete ms-2" @onclick="() => DeleteModalAction(stock)">
                                             <i class="ti ti-trash fs-5"></i>
-                                        </a>
+                                        </a>*@
                                     </div>
                                 </td>
                             </tr>
@@ -95,14 +95,31 @@
         }
     }
 </div>
+@if (selectedStock is not null)
+{
+    <Frontend.Web.Components.Stock.Modals.DeleteStock ShowModal="ShowModal" Model="selectedStock" />
+}
+
+@code
+{
+    Stock? selectedStock = null;
+    public void DeleteModalAction(Stock stock)
+    {
+        ShowModal = true;
+        selectedStock = stock;
+    }
+}
 
 @code
 {
     [Parameter]
     public string productId { get; set; }
+    [Parameter]
+    public bool ShowModal { get; set; } = false;
+
 }
 
-@code 
+@code
 {
     public bool isLoading;
     public IEnumerable<StockDetail> Model = new List<StockDetail>();
