@@ -39,7 +39,7 @@ namespace Backend.API.Controllers.Products
         {
             try
             {
-                return Ok(_productService.GetById(tenantId, productId));
+                return Ok(_productService.GetProductThumbnail(tenantId, productId));
             }
             catch (Exception ex)
             {

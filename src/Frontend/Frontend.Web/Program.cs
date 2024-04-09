@@ -24,9 +24,17 @@ using Frontend.Web.Util.Session;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Frontend.Web.Services.Contacts;
+using Sotsera.Blazor.Toaster.Core.Models;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
+builder.Services.AddToaster(config =>
+{
+    //example customizations
+    config.PositionClass = Defaults.Classes.Position.TopRight;
+    config.PreventDuplicates = true;
+    config.NewestOnTop = false;
+});
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 

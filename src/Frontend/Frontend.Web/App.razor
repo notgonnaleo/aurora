@@ -1,6 +1,8 @@
 ﻿@using Frontend.Web.Components.Layout;
+@using Sotsera.Blazor.Toaster
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
+        <ToastContainer />
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
