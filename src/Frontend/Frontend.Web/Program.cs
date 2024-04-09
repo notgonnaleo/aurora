@@ -30,10 +30,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddToaster(config =>
 {
-    //example customizations
-    config.PositionClass = Defaults.Classes.Position.TopRight;
+    // Customization: https://blazor-toaster.sotsera.com/
+    config.PositionClass = Defaults.Classes.Position.BottomLeft;
     config.PreventDuplicates = true;
     config.NewestOnTop = false;
+    config.ShowProgressBar = true;
+    config.VisibleStateDuration = 1500;
 });
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
