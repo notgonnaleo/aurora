@@ -38,11 +38,11 @@
                     <form action="#" class="signin-form">
                         <div class="form-group ">
 
-                            <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username">
+                            <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username" @onkeydown="@Enter">
                         </div>
                         <div class="form-group ">
 
-                            <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password">
+                            <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password" @onkeydown="@Enter">
                             <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
@@ -82,15 +82,33 @@
             throw new Exception("Fields are empty");
         }
         isLoading = true;
-        logged = await _authenticationService.SignIn(model);
-        Toaster.Success("User authorized successfully!");
-        RedirectAfterSuccess(logged.Value);
-        isLoading = false;
-        return logged.Value;
+        try
+        {
+            logged = await _authenticationService.SignIn(model);
+            Toaster.Success("User authorized successfully!");
+            RedirectAfterSuccess(logged.Value);
+            return logged.Value;
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            isLoading = false;
+            Toaster.Error("User authorized failled!");
+            return false;
+        }
     }
 
     public void RedirectAfterSuccess(bool logged)
     {
-        if (logged) Navigator.NavigateTo(Navigator.BaseUri, true);
+        if (logged)
+        {
+            Navigator.NavigateTo(Navigator.BaseUri, true);
+        }
+    }
+
+    public void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter" || e.Key == "Enter") SignIn();
     }
 }
