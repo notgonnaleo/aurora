@@ -156,7 +156,7 @@
 [data-bs-theme=dark] {
     --bs-body-color: #cae2f9;
     --bs-body-color-rgb: 90,106,133;
-    --bs-body-bg: #212529;
+    --bs-body-bg: #151f2c;
     --bs-body-bg-rgb: 33,37,41;
     --bs-emphasis-color: #F6F9FC;
     --bs-emphasis-color-rgb: 246,249,252;
@@ -220,9 +220,9 @@ body {
     font-size: var(--bs-body-font-size);
     font-weight: var(--bs-body-font-weight);
     line-height: var(--bs-body-line-height);
-    color: var(--bs-body-color);
+    color: var(--bs-body-color) !important;
     text-align: var(--bs-body-text-align);
-    background-color: var(--bs-body-bg);
+    background-color: var(--bs-body-bg) !important;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0,0,0,0)
 }
@@ -241,7 +241,7 @@ hr {
     margin-bottom: 0.5rem;
     font-weight: 500;
     line-height: 1.2;
-    color: var(--bs-heading-color,inherit)
+    color: var(--bs-heading-color,inherit) !important;
 }
 
 .h1, h1 {
@@ -448,7 +448,7 @@ th {
 }
 
 tbody, td, tfoot, th, thead, tr {
-    border-color: inherit;
+    border-color: #3b4249;
     border-style: solid;
     border-width: 0
 }
@@ -748,7 +748,8 @@ progress {
     padding-right: calc(var(--bs-gutter-x) * 0.5);
     padding-left: calc(var(--bs-gutter-x) * 0.5);
     margin-right: auto;
-    margin-left: auto
+    margin-left: auto;
+    background-color: var(--bs-card-color) !important;
 }
 
 @media (min-width:576px) {
@@ -19237,16 +19238,16 @@ textarea.form-control-lg {
         right: 0px;
     }
 
-    .left-sidebar {
-        width: 270px;
-        background-color: #fff;
-        position: absolute;
-        -webkit-transition: 0.2s ease-in;
-        transition: 0.2s ease-in;
-        height: 100%;
-        z-index: 11;
-        border-right: 1px solid rgb(229,234,239)
-    }
+.left-sidebar {
+    width: 270px;
+    background-color: var(--bs-body-bg);
+    position: absolute;
+    -webkit-transition: 0.2s ease-in;
+    transition: 0.2s ease-in;
+    height: 100%;
+    z-index: 11;
+    border-right: 1px solid var(--bs-primary);
+}
 
         .left-sidebar .scroll-sidebar {
             overflow-y: auto;
@@ -19306,10 +19307,14 @@ textarea.form-control-lg {
         font-weight: 400
     }
 
+        span{
+            color: var(--bs-heading-color,inherit) !important
+        }
         .sidebar-nav ul .sidebar-item .sidebar-link span:first-child {
             display: -webkit-box;
             display: -ms-flexbox;
-            display: flex
+            display: flex;
+            color: var(--bs-heading-color,inherit) !important
         }
 
         .sidebar-nav ul .sidebar-item .sidebar-link .ti {
@@ -19343,7 +19348,7 @@ textarea.form-control-lg {
 
         .sidebar-nav ul .sidebar-item .first-level .sidebar-item .sidebar-link:hover {
             background-color: transparent;
-            color: #5D87FF
+            color: #5D87FF 
         }
 
         .sidebar-nav ul .sidebar-item .first-level .sidebar-item .sidebar-link.active.has-arrow:after {
@@ -19435,7 +19440,7 @@ textarea.form-control-lg {
         position: relative;
         z-index: 50;
         width: 100%;
-        background: #fff;
+        background-color: var(--bs-body-bg);
         padding: 0 25px;
         top: 0px;
     }
@@ -19492,7 +19497,8 @@ textarea.form-control-lg {
 
     .nav-icon-hover {
         -webkit-transition: all 0.3s ease-in-out;
-        transition: all 0.3s ease-in-out
+        transition: all 0.3s ease-in-out;
+        color: var(--bs-heading-color);
     }
 
         .nav-icon-hover:hover:before {
@@ -19735,7 +19741,8 @@ textarea.form-control-lg {
         }
 
     .page-wrapper {
-        position: relative
+        position: relative;
+        background-color: var(--bs-body-bg);
     }
 
     .body-wrapper {
@@ -19747,7 +19754,8 @@ textarea.form-control-lg {
             margin: 0 auto;
             padding: 24px;
             -webkit-transition: 0.2s ease-in;
-            transition: 0.2s ease-in
+            transition: 0.2s ease-in;
+            background-color: var(--bs-body-bg) !important;
         }
 
     @media (max-width:767.98px) {
