@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Frontend.Web.Models.Route;
+using Frontend.Web.Util.Cookie;
 using Frontend.Web.Util.Enums.ContentTypeEnums;
 using Frontend.Web.Util.Environments;
 using Frontend.Web.Util.Session;
@@ -13,12 +14,12 @@ namespace Frontend.Web.Models.Client
     public class HttpRequestHeader
     {
         private readonly IConfiguration _configuration;
-        private readonly CookieHandler _localStorageHandler;
+        private readonly CookieHandler _cookies;
         private readonly EnvironmentHandler _environmentHandler;
-        public HttpRequestHeader(IConfiguration configuration, CookieHandler localStorageHandler, EnvironmentHandler environmentHandler)
+        public HttpRequestHeader(IConfiguration configuration, CookieHandler cookies, EnvironmentHandler environmentHandler)
         {
             _configuration = configuration;
-            _localStorageHandler = localStorageHandler;
+            _cookies = cookies;
             _environmentHandler = environmentHandler;
         }
 
@@ -30,7 +31,7 @@ namespace Frontend.Web.Models.Client
         /// <returns>Authentication Header Value</returns>
         public async Task<AuthenticationHeaderValue> GetToken()
         {
-            var userContext = await _localStorageHandler.GetValueAsync<UserSessionContext>("UserSession");
+            var userContext = await _cookies.GetValueAsync<UserSessionContext>("UserSession");
             return new AuthenticationHeaderValue("Bearer", userContext.Token);
         }
 
@@ -40,7 +41,7 @@ namespace Frontend.Web.Models.Client
         /// <returns>HTTP Header Settings</returns>
         public async Task<HttpRequestHeader> BuildHttpRequestHeader(HttpMethod method, bool isPublic, string? contentType)
         {
-            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _localStorageHandler, _environmentHandler)
+            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _cookies, _environmentHandler)
             {
                 Uri = _environmentHandler.GetEndpoint(),
                 Authorization = isPublic ? null : await GetToken(),

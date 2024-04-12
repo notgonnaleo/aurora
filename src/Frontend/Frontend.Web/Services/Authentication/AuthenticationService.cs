@@ -7,6 +7,7 @@ using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Client;
 using Frontend.Web.Services.Tenants;
+using Frontend.Web.Util.Cookie;
 using Frontend.Web.Util.Session;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,30 +20,30 @@ namespace Frontend.Web.Services.Authentication
     public class AuthenticationService
     {
         private readonly HttpClientRepository _httpClientRepository;
-        private readonly CookieHandler _localStorageHandler;
+        private readonly CookieHandler _cookies;
         private readonly AuthenticationRepository _authenticationRepository;
 
-        public AuthenticationService(HttpClientRepository httpClientRepository, CookieHandler localStorageHandler, AuthenticationRepository authenticationRepository)
+        public AuthenticationService(HttpClientRepository httpClientRepository, CookieHandler cookies, AuthenticationRepository authenticationRepository)
         {
-            _localStorageHandler = localStorageHandler;
+            _cookies = cookies;
             _httpClientRepository = httpClientRepository;
             _authenticationRepository = authenticationRepository;
         }
         public async Task<bool> SignIn(LoginRequest model)
         {
             var response = await _authenticationRepository.SignIn(model);
-            await _localStorageHandler.SetValueAsync("UserSession", JsonSerializer.Serialize(response));
+            await _cookies.SetValueAsync("UserSession", JsonSerializer.Serialize(response));
             return response != null;
         }
 
         public async Task<bool?> IsUserLogged()
         {
-            return await _localStorageHandler.GetValueAsync<UserSessionContext>("UserSession") != null;
+            return await _cookies.GetValueAsync<UserSessionContext>("UserSession") != null;
         }
 
         public async Task<UserSessionContext?> GetContext()
         {
-            var response = await _localStorageHandler.GetValueAsync<UserSessionContext>("UserSession");
+            var response = await _cookies.GetValueAsync<UserSessionContext>("UserSession");
             return response;
         }
 
@@ -52,7 +53,7 @@ namespace Frontend.Web.Services.Authentication
             if(context == null) 
                 return false;
             context.Tenant = selectedTenant;
-            await _localStorageHandler.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
+            await _cookies.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
             return true;
         }
     }

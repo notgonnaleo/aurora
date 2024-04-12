@@ -36,23 +36,17 @@ namespace Frontend.Web.Util.Cookie
         public async Task<T?> GetValueAsync<T>(string key)
         {
             await WaitForReference();
-            var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
+            var result = await _accessorJsRef.Value.InvokeAsync<string>("getCookie", key);
             if (result != null && result.Any())
                 return JsonSerializer.Deserialize<T>(result);
             else
                 return default;
         }
 
-        public async Task SetValueAsync<T>(string key, T value)
-        {
-            await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("set", key, value);
-        }
-
         public async Task SetValueAsync(string key, string value)
         {
             await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("set", key, value);
+            await _accessorJsRef.Value.InvokeVoidAsync("setCookie", key, value, 1);
         }
 
         public async Task Clear()

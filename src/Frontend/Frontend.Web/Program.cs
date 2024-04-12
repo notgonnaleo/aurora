@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Frontend.Web.Services.Contacts;
 using Sotsera.Blazor.Toaster.Core.Models;
+using Frontend.Web.Util.Cookie;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
