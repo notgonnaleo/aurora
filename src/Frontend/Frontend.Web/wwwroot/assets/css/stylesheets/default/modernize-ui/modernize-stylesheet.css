@@ -5,9 +5,14 @@
  * Copyright 2011-2022 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
-@import "../css/icons/tabler-icons/tabler-icons.css"; /* Icons */
-@import "../css/loaders/loader.css"; /* Loader */
-@import "../css/loaders/loader2.css"; /* Loader 2 */
+
+/* Icons */
+@import "../../../icons/tabler-icons/tabler-icons.css";
+
+/* Loaders */
+@import "../../loaders/loader-circle.css";
+@import "../../loaders/loader-dots.css";
+
 
 :root, [data-bs-theme=light] {
     --bs-blue: #5D87FF;
