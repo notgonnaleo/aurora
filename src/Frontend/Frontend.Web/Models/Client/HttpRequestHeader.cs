@@ -13,12 +13,12 @@ namespace Frontend.Web.Models.Client
     public class HttpRequestHeader
     {
         private readonly IConfiguration _configuration;
-        private readonly SessionStorageAccessor _sessionProvider;
+        private readonly CookieHandler _localStorageHandler;
         private readonly EnvironmentHandler _environmentHandler;
-        public HttpRequestHeader(IConfiguration configuration, SessionStorageAccessor sessionProvider, EnvironmentHandler environmentHandler)
+        public HttpRequestHeader(IConfiguration configuration, CookieHandler localStorageHandler, EnvironmentHandler environmentHandler)
         {
             _configuration = configuration;
-            _sessionProvider = sessionProvider;
+            _localStorageHandler = localStorageHandler;
             _environmentHandler = environmentHandler;
         }
 
@@ -30,7 +30,7 @@ namespace Frontend.Web.Models.Client
         /// <returns>Authentication Header Value</returns>
         public async Task<AuthenticationHeaderValue> GetToken()
         {
-            var userContext = await _sessionProvider.GetValueAsync<UserSessionContext>("UserSession");
+            var userContext = await _localStorageHandler.GetValueAsync<UserSessionContext>("UserSession");
             return new AuthenticationHeaderValue("Bearer", userContext.Token);
         }
 
@@ -40,7 +40,7 @@ namespace Frontend.Web.Models.Client
         /// <returns>HTTP Header Settings</returns>
         public async Task<HttpRequestHeader> BuildHttpRequestHeader(HttpMethod method, bool isPublic, string? contentType)
         {
-            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _sessionProvider, _environmentHandler)
+            HttpRequestHeader httpRequestHeader = new HttpRequestHeader(_configuration, _localStorageHandler, _environmentHandler)
             {
                 Uri = _environmentHandler.GetEndpoint(),
                 Authorization = isPublic ? null : await GetToken(),

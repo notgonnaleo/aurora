@@ -19,30 +19,30 @@ namespace Frontend.Web.Services.Authentication
     public class AuthenticationService
     {
         private readonly HttpClientRepository _httpClientRepository;
-        private readonly SessionStorageAccessor _sessionStorageAccessor;
+        private readonly CookieHandler _localStorageHandler;
         private readonly AuthenticationRepository _authenticationRepository;
 
-        public AuthenticationService(HttpClientRepository httpClientRepository, SessionStorageAccessor sessionStorageAccessor, AuthenticationRepository authenticationRepository)
+        public AuthenticationService(HttpClientRepository httpClientRepository, CookieHandler localStorageHandler, AuthenticationRepository authenticationRepository)
         {
-            _sessionStorageAccessor = sessionStorageAccessor;
+            _localStorageHandler = localStorageHandler;
             _httpClientRepository = httpClientRepository;
             _authenticationRepository = authenticationRepository;
         }
         public async Task<bool> SignIn(LoginRequest model)
         {
             var response = await _authenticationRepository.SignIn(model);
-            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(response));
+            await _localStorageHandler.SetValueAsync("UserSession", JsonSerializer.Serialize(response));
             return response != null;
         }
 
         public async Task<bool?> IsUserLogged()
         {
-            return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession") != null;
+            return await _localStorageHandler.GetValueAsync<UserSessionContext>("UserSession") != null;
         }
 
         public async Task<UserSessionContext?> GetContext()
         {
-            var response = await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession");
+            var response = await _localStorageHandler.GetValueAsync<UserSessionContext>("UserSession");
             return response;
         }
 
@@ -52,7 +52,7 @@ namespace Frontend.Web.Services.Authentication
             if(context == null) 
                 return false;
             context.Tenant = selectedTenant;
-            await _sessionStorageAccessor.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
+            await _localStorageHandler.SetValueAsync("UserSession", JsonSerializer.Serialize(context));
             return true;
         }
     }
