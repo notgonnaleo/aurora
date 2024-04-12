@@ -68,15 +68,33 @@
             throw new Exception("Fields are empty");
         }
         isLoading = true;
-        logged = await _authenticationService.SignIn(model);
-        Toaster.Success("User authorized successfully!");
-        RedirectAfterSuccess(logged.Value);
-        isLoading = false;
-        return logged.Value;
+        try
+        {
+            logged = await _authenticationService.SignIn(model);
+            Toaster.Success("User authorized successfully!");
+            RedirectAfterSuccess(logged.Value);
+            return logged.Value;
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            isLoading = false;
+            Toaster.Error("User authorized failled!");
+            return false;
+        }
     }
 
     public void RedirectAfterSuccess(bool logged)
     {
-        if (logged) Navigator.NavigateTo(Navigator.BaseUri, true);
+        if (logged)
+        {
+            Navigator.NavigateTo(Navigator.BaseUri, true);
+        }
+    }
+
+    public void Enter(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter" || e.Key == "Enter") SignIn();
     }
 }
