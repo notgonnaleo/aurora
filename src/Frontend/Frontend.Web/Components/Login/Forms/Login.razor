@@ -35,11 +35,11 @@
         <form>
             <div class="mb-3 w-100">
                 <label for="username" class="form-label">Username</label>
-                <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username">
+                <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username" @onkeydown="@Enter">
             </div>
             <div class="mb-4 w-100">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password">
+                <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password" @onkeydown="@Enter">
             </div>
             <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2 w-100">Log in</button>
         </form>
