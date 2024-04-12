@@ -1,9 +1,12 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Backend.Domain.Enums.Colors;
+@using Backend.Domain.Enums.MetricUnits;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
 @inject NavigationManager navigator
 @inject ProductService _productService
 @inject AuthenticationService _authenticationService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
 
 <div>
     <div class="card p-4">
@@ -45,6 +48,26 @@
                                 <option value="3">Product</option>
                             </select>
                         </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="productType">Color</label>
+                            <select class="form-select" @bind="@Model.ColorName">
+                                <option selected>@Model.ColorName</option>
+                                @foreach (var color in Colors.ColorList)
+                                {
+                                    <option value="@color">@color</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="mb-3 col-sm-3">
+                            <label for="metricUnits" class="form-label">Metric Unit</label>
+                            <select class="form-select" @bind="@Model.MetricUnitName">
+                                <option selected>@Model.MetricUnitName</option>
+                                @foreach (var unitType in MetricUnits.Measure.measurementUnitTypes)
+                                {
+                                    <option value="@unitType">@unitType</option>
+                                }
+                            </select>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="mb-3 col-sm-3">
@@ -70,11 +93,15 @@
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
         bool updated = await _productService.UpdateProduct(Model);
-        if (updated) navigator.NavigateTo(navigator.Uri, true);
+        if (updated)
+        {
+            Toaster.Success("Product updated!");
+            navigator.NavigateTo(navigator.Uri, true);
+        }
     }
 }
 
 @code
 {
-    [Parameter] public Product Model { get; set; }
+    [Parameter] public ProductDetail Model {  get; set; }
 }

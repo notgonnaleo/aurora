@@ -62,9 +62,8 @@ namespace Backend.Domain.Entities.Products
             Description = product.Description;
             ColorName = product.ColorName;
             MetricUnitName = product.MetricUnitName;
-            //coloquei os dois id aqui, porque quando estava dando um new product e perdendo os Id !!!!!
             CategoryId = product.CategoryId;
-            SubCategoryId= product.SubCategoryId;   
+            SubCategoryId = product.SubCategoryId;   
             ProductTypeId = product.ProductTypeId;
             Value = product.Value;
             TotalWeight = product.TotalWeight;

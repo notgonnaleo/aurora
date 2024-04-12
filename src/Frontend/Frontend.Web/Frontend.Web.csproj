@@ -1,11 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+	<Configurations>Debug;Release;Release-Production</Configurations>
   </PropertyGroup>
-
+	
   <ItemGroup>
     <Compile Remove="Components\Products\Forms\Delete\**" />
     <Compile Remove="wwwroot\lib\**" />
@@ -20,6 +32,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.21" PrivateAssets="all" />
+    <PackageReference Include="Sotsera.Blazor.Toaster" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Img\" />
     <Folder Include="wwwroot\css\icons\tabler-icons\fonts\" />
   </ItemGroup>
 

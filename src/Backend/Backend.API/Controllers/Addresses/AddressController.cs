@@ -78,7 +78,7 @@ namespace Backend.API.Controllers.Addresses
             }
 
             [TypeFilter(typeof(ValidateUserContextAttribute))]
-            [HttpDelete]
+            [HttpPut]
             [Route("Delete")]
             public ActionResult DeleteAddress(Guid tenantId, Guid addressId)
             {

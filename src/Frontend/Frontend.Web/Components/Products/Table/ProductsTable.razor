@@ -86,6 +86,7 @@ else
     private IEnumerable<ProductDetail>? products;
     protected override async Task OnInitializedAsync()
     {
+        
         var context = await _authenticationService.GetContext();
         products = await _productService.GetProducts(context.Tenant.Id.ToString());
     }
@@ -111,5 +112,8 @@ else
 
     [Parameter]
     public bool ShowModal { get; set; } = false;
+
+
 }
+
 

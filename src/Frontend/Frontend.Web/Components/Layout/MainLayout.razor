@@ -9,7 +9,7 @@
 {
     // If authenticated we are going to show the side and topbar.
     // because they are supposed to be everywhere in the system so that's why we need this if statement.
-    <div class="page-wrapper @NavMenuCssClass " id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" >
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme="dark">
         <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
@@ -50,7 +50,7 @@ else
         if (!isAuthenticated)
             navigator.NavigateTo("/Login");
         else
-            navigator.NavigateTo("/Dashboard");
+            navigator.NavigateTo(navigator.Uri);
     }
 
     public async Task<bool> IsAuthenticated()
