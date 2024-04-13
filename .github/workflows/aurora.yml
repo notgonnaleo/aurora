@@ -2,7 +2,7 @@ name: Aurora - Publish API and UI
 on:
   push:
     branches:
-    - feature/ui-and-some-changes
+    - master
 env:
   BACKEND-APPNAME:              api-aurora
   BACKEND_WORKING_DIRECTORY:    .\src\Backend\Backend.API

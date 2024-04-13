@@ -7,10 +7,8 @@
 
 @if (isAuthenticated)
 {
-    // If authenticated we are going to show the side and topbar.
-    // because they are supposed to be everywhere in the system so that's why we need this if statement.
-    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme="dark">
-        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "dark" : "light")>
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
             @Body
@@ -19,9 +17,17 @@
 }
 else
 {
-    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <div data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "dark" : "light")>
         @Body
     </div>
+}
+
+@code
+{
+    // Por enquanto vou deixar assim mas acho que o ideal seria um enum int com varios estilos mas tanto faz
+    // DarkMode = true 
+    // LightMode = false
+    private bool Theme = false;
 }
 
 @code 

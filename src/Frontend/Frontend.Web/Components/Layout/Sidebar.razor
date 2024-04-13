@@ -5,7 +5,7 @@
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager navigator;
 
-<aside class="left-sidebar d-print-none" data-bs-theme="dark">
+<aside class="left-sidebar d-print-none" data-bs-theme=@(Theme ? "dark" : "light")>
     <div class="">
         <div class="brand-logo d-flex align-items-center justify-content-between">
             <a class="text-nowrap logo-img d-block py-3 w-100">
@@ -192,3 +192,7 @@
     [Parameter] public Action ToggleNavMenu { get; set; }
 } 
 
+@code
+{
+    [Parameter] public bool Theme { get; set; }
+}
