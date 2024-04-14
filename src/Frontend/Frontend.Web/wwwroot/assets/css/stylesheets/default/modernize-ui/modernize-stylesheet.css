@@ -122,7 +122,7 @@
     --bs-tertiary-color-rgb: 90,106,133;
     --bs-tertiary-bg: #F6F9FC;
     --bs-tertiary-bg-rgb: 246,249,252;
-    --bs-body-bg: #fff;
+    --bs-body-bg: #f6f8fb;
     --bs-card-color: #fff;
     --bs-body-bg-rgb: 255,255,255;
     --bs-heading-color: #2A3547;
@@ -135,7 +135,7 @@
     --bs-highlight-bg: #ffefd2;
     --bs-border-width: 1px;
     --bs-border-style: solid;
-    --bs-border-color: #ebf1f6;
+    --bs-border-color: #0420451a;
     --bs-border-color-translucent: rgba(0,0,0,0.175);
     --bs-border-radius: 7px;
     --bs-border-radius-sm: 5px;
@@ -457,7 +457,7 @@ th {
 }
 
 tbody, td, tfoot, th, thead, tr {
-    border-color: #3b4249;
+    border-color: var(--bs-border-color);
     border-style: solid;
     border-width: 0
 }
@@ -5801,7 +5801,7 @@ textarea.form-control-lg {
     --bs-card-title-color: #2A3547;
     --bs-card-subtitle-color: #2A3547;
     --bs-card-border-width: 1px;
-    --bs-card-border-color: #25384f;
+    --bs-card-border-color: var(--bs-border-color);
     --bs-card-border-radius: 7px;
     --bs-card-inner-border-radius: 7px;
     --bs-card-cap-padding-y: 15px;
@@ -19448,15 +19448,15 @@ textarea.form-control-lg {
             transform: rotate(-135deg) translate(0,-50%)
         }
 
-    .app-header {
-        position: relative;
-        z-index: 50;
-        width: 100%;
-        background-color: var(--bs-body-bg);
-        padding: 0 25px;
-        top: 0px;
-        border-bottom: 1px solid var(--bs-border-color);
-    }
+        .app-header {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            background-color: var(--bs-body-bg) !important;
+            padding: 0 25px;
+            top: 0px;
+            border-bottom: 1px solid var(--bs-border-color) !important;
+        }
 
         .app-header .container-fluid, .app-header .container-lg, .app-header .container-md, .app-header .container-sm, .app-header .container-xl, .app-header .container-xxl {
             max-width: 1200px;

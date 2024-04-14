@@ -6,12 +6,12 @@
 @if (Profile is not null && Profile.Tenant is not null)
 {
     <div class="card card-body bg-primary">
-        <h5 style="color: #fff" class="card-title fw-semibold mb-4">
+        <h5 class="card-title text-light fw-semibold mb-4">
             <strong>Welcome, @Profile?.Username!</strong>
         </h5>
         @if (IsAuthenticated)
         {
-            <p style="color: #fff" class="mb-0">You're viewing the dashboard as company: <strong>@Profile!.Tenant!.Name</strong></p>
+            <p class="text-light mb-0">You're viewing the dashboard as company: <strong>@Profile!.Tenant!.Name</strong></p>
         }
     </div>
 }
