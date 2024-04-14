@@ -1,0 +1,16 @@
+﻿<label>Theme color</label>
+
+<EditForm Model="model">
+    <InputRadioGroup @bind-Value="model.ThemeId">
+        @foreach (var theme in Enum.GetValues(typeof(Themes)))
+        {
+            <InputRadio Value="(int)theme">@theme.ToString()</InputRadio>   
+        }
+    </InputRadioGroup>
+    <button type="submit">Save</button>
+</EditForm>
+
+@code 
+{
+    private ThemeSettings model = new ThemeSettings();
+}
