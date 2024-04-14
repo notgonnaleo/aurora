@@ -36,6 +36,37 @@ namespace Frontend.Web.Services.Authentication
             return response != null;
         }
 
+        /*
+         * [Informação importante sobre as atualizações no modulo de autenticação]
+         * 
+         * TODO: Existe um bug causado por conta do uso de cookies em que quando o servidor morre
+         * E o usuário acessa o site com o mesmo token utilizado no login anterior antes da morte do server
+         * o servidor vai retornar 401 porém no frontend só estamos validando se os cookies estão preenchidos
+         * precisa-se adicionar uma nova feature na qual:
+         *
+         * Frontend valida: 
+         * #1 - Cookie da UserSession existe?
+         * #2 - Token salvo no frontend (JSON de reposta salvo após o login) também existe na memória do servidor?
+         * 
+         * Resposta N1:
+         * Se #2 for verdade então usuário pode prosseguir para a tela de Dashboard
+         * Caso falso, retorne o usuário para a tela de login aonde ele deve re-logar 
+         * 
+         * Requisitos N1:
+         * Endpoint para checkar no cache do servidor se o token e a session correspondem
+         * dependendo do retorno, alterar o comportamente realizado no metodo IsUserLogged
+         * 
+         * OU
+         * 
+         * Reposta N2:
+         * Se #2 for verdade, executar refresh no token e nos dados da sessão do usuário,
+         * 
+         * Requisitos N2:
+         * Provavelmente, adicionar dados validos dentro da estrutura payload do JWT como 
+         * ID do Usuario 
+         * Data e Hora em que o Login foi realizado
+         * Booleano para se o usuário gostaria de manter a sessão persistente ("Lembrar minha senha")
+         */
         public async Task<bool?> IsUserLogged()
         {
             return await _cookies.GetValueAsync<UserSessionContext>("UserSession") != null;
