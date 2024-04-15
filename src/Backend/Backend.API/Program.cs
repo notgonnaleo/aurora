@@ -153,19 +153,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: DevAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins(
-                              "https://localhost:7288", 
-                              "http://localhost:5012",
-                              "https://ui-aurora.azurewebsites.net")
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
-                      });
-});
+
 
 var app = builder.Build();
 
@@ -173,9 +161,14 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseCors(DevAllowSpecificOrigins);
+
 
 app.UseHttpsRedirection();
+
+app.UseCors(x => x
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
 
 app.UseSession();
 
