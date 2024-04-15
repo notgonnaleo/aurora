@@ -25,6 +25,8 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Frontend.Web.Services.Contacts;
 using Sotsera.Blazor.Toaster.Core.Models;
+using Frontend.Web.Util.Cookie;
+using Frontend.Web.Components.Settings.Theme;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -41,6 +43,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }); // this should move to environment handler file
+builder.Services.AddScoped<CookieHandler>();
 builder.Services.AddScoped<SessionStorageAccessor>();
 builder.Services.AddScoped<HttpClientRepository>();
 builder.Services.AddScoped<HttpRequestHeader>();
@@ -66,5 +69,6 @@ builder.Services.AddScoped<ProfileRepository>();
 builder.Services.AddScoped<ContactService>();
 builder.Services.AddScoped<StockRepository>();
 builder.Services.AddScoped<StockService>();
+builder.Services.AddScoped<ThemeSettingsFeatureSet>();
 
 await builder.Build().RunAsync();

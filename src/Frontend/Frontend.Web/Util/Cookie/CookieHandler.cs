@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Microsoft.JSInterop;
 
-namespace Frontend.Web.Util.Session
+namespace Frontend.Web.Util.Cookie
 {
-    public class SessionStorageAccessor : IAsyncDisposable
+    public class CookieHandler : IAsyncDisposable
     {
         private Lazy<IJSObjectReference> _accessorJsRef = new();
         private readonly IJSRuntime _jsRuntime;
 
-        public SessionStorageAccessor(IJSRuntime jsRuntime)
+        public CookieHandler(IJSRuntime jsRuntime)
         {
             _jsRuntime = jsRuntime;
         }
@@ -21,7 +21,7 @@ namespace Frontend.Web.Util.Session
         {
             if (_accessorJsRef.IsValueCreated is false)
             {
-                _accessorJsRef = new(await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "/assets/js/BrowserStorageHandler/SessionStorageAccessor.js"));
+                _accessorJsRef = new(await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "/assets/js/BrowserStorageHandler/CookieHandler.js"));
             }
         }
 
@@ -36,23 +36,17 @@ namespace Frontend.Web.Util.Session
         public async Task<T?> GetValueAsync<T>(string key)
         {
             await WaitForReference();
-            var result = await _accessorJsRef.Value.InvokeAsync<string>("get", key);
+            var result = await _accessorJsRef.Value.InvokeAsync<string>("getCookie", key);
             if (result != null && result.Any())
                 return JsonSerializer.Deserialize<T>(result);
             else
                 return default;
         }
 
-        public async Task SetValueAsync<T>(string key, T value)
-        {
-            await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("set", key, value);
-        }
-
         public async Task SetValueAsync(string key, string value)
         {
             await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("set", key, value);
+            await _accessorJsRef.Value.InvokeVoidAsync("setCookie", key, value, 1);
         }
 
         public async Task Clear()
