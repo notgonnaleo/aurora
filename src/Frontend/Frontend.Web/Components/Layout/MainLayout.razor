@@ -1,13 +1,17 @@
 ﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Components.Settings.Theme
 @using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Util.Cookie
 @inject IJSRuntime JS
 @inherits LayoutComponentBase
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
+@inject CookieHandler _cookies
+@inject ThemeSettingsFeatureSet _themeSettings
 
 @if (isAuthenticated)
 {
-    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "dark" : "light")>
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
         <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
@@ -17,18 +21,19 @@
 }
 else
 {
-    <div data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "dark" : "light")>
+    <div data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
         @Body
     </div>
 }
 
 @code
 {
-    // Por enquanto vou deixar assim mas acho que o ideal seria um enum int com varios estilos mas tanto faz
-    // Update: como radiobutton é limitado vai ter que ser com int mesmo :)
-    // DarkMode = true 
-    // LightMode = false
-    private bool Theme = false;
+    private bool Theme = true;
+    private async void LoadAppTheme()
+    {
+        var theme = await _themeSettings.GetUserTheme();
+        Theme = _themeSettings.ReturnThemeIdAsBoolean(theme.ThemeId);
+    }
 }
 
 @code 
@@ -48,6 +53,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
         Redirect(isAuthenticated);
     }

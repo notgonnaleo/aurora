@@ -1,16 +1,54 @@
-﻿<label>Theme color</label>
+﻿@using Frontend.Web.Util.Cookie
+@inject ThemeSettingsFeatureSet _themeSettings
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
+@inject NavigationManager Navigator
 
-<EditForm Model="model">
-    <InputRadioGroup @bind-Value="model.ThemeId">
+<h5><strong>User theme</strong></h5>
+<div class="card card-body">
+    <label>Theme color</label>
+    <div class="row">
         @foreach (var theme in Enum.GetValues(typeof(Themes)))
         {
-            <InputRadio Value="(int)theme">@theme.ToString()</InputRadio>   
+            <div class="d-inline mb-4">
+                <input type="radio" id="@(theme.ToString())" name="theme-option" value="@((int)theme)" @onchange="SetTheme" checked="@IsThemeSelected((int)theme)" />
+                <label class="text">@theme.ToString()</label><br />
+            </div>
+            <br />
         }
-    </InputRadioGroup>
-    <button type="submit">Save</button>
-</EditForm>
+        @* Pelo amor de deus alguem coloca esse botao pra direita porque eu nao consigo  *@
+        <div class="ml-auto">
+            <button class="btn btn-primary float-right" type="button" @onclick="SaveTheme">Save</button>
+        </div>
+    </div>
+</div>
 
 @code 
 {
-    private ThemeSettings model = new ThemeSettings();
+    private int selectedThemeId;
+    protected override async Task OnInitializedAsync()
+    {
+        var userTheme = await GetUserTheme();
+        selectedThemeId = userTheme.ThemeId;
+    }
+    private bool IsThemeSelected(int themeId)
+    {
+        return selectedThemeId == themeId;
+    }
+    private async Task<ThemeSettings> GetUserTheme()
+    {
+        return await _themeSettings.GetUserTheme();
+    }
+    private void SetTheme(ChangeEventArgs e)
+    {
+        selectedThemeId = Convert.ToInt32(e.Value);  
+    }
+    private void SaveTheme()
+    {
+        if(selectedThemeId > 1)
+        {
+            Toaster.Error("Invalid theme selected");
+        }
+        _themeSettings.SaveTheme(selectedThemeId);
+        Navigator.NavigateTo(Navigator.Uri, true);
+    }
 }

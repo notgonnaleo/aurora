@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Frontend.Web.Services.Contacts;
 using Sotsera.Blazor.Toaster.Core.Models;
 using Frontend.Web.Util.Cookie;
+using Frontend.Web.Components.Settings.Theme;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -68,5 +69,6 @@ builder.Services.AddScoped<ProfileRepository>();
 builder.Services.AddScoped<ContactService>();
 builder.Services.AddScoped<StockRepository>();
 builder.Services.AddScoped<StockService>();
+builder.Services.AddScoped<ThemeSettingsFeatureSet>();
 
 await builder.Build().RunAsync();
