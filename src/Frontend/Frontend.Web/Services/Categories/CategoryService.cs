@@ -24,7 +24,7 @@ namespace Frontend.Web.Services.Categories
         }
         public async Task<Category> CreateCategory(Category category)
         {
-            return await _categoryRepository.CreateCategory(category);
+            return (await _categoryRepository.CreateCategory(category)).Result;
         }
         public async Task<bool> UpdateCategory(Category category)
         {

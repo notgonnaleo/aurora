@@ -37,7 +37,7 @@ namespace Frontend.Web.Services.Agents
 
         public async Task<Backend.Domain.Entities.Agents.Agent> CreateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {
-            return await _agentRepository.CreateAgent(agent);
+            return (await _agentRepository.CreateAgent(agent)).Result;
         }
 
         public async Task<bool> UpdateAgent(Backend.Domain.Entities.Agents.Agent agent)

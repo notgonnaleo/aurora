@@ -3,6 +3,7 @@ using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using Backend.Infrastructure.Enums.Modules;
 using System.Net.Http.Json;
+using Frontend.Web.Models.Client;
 
 namespace Frontend.Web.Repository.Contacts
 {
@@ -21,7 +22,7 @@ namespace Frontend.Web.Repository.Contacts
             {
                 var parameters = new RouteParameterRequest() { ParameterName = Methods.Addresses.GET.GetAddresses.tenantId, ParameterValue = tenantId };
                 var request = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.GET, parameters);
-                return await _httpClientRepository.Get(request);
+                return (await _httpClientRepository.Get(request)).Result;
             }
 
             public async Task<Address> GetAddress(string tenantId, string addressId)
@@ -40,14 +41,13 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Address>().SendMultiple(Endpoints.Addresses, Methods.Default.FIND, parameters);
-                return await _httpClientRepository.GetById(request);
+                return (await _httpClientRepository.Find(request)).Result;
             }
 
-            public async Task<Address> CreateAddress(Address address)
+            public async Task<ApiResponse<Address>> CreateAddress(Address address)
             {
                 var model = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.POST, address);
-                var response = await _httpClientRepository.Post(model);
-                return await response.Content.ReadFromJsonAsync<Address>();
+                return await _httpClientRepository.Post(model);
             }
 
             public async Task<bool> UpdateAddress(Address address)

@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using Newtonsoft.Json;
@@ -18,7 +19,7 @@ namespace Frontend.Web.Services.Products
             _httpClientRepository = httpClientRepository;
         }
 
-        public async Task<IEnumerable<ProductDetail>> GetProducts(string tenantId)
+        public async Task<ApiResponse<IEnumerable<ProductDetail>>> GetProducts(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = ProductsEnums.GET.GetProducts.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<ProductDetail>().Send(Endpoints.Products, Methods.Default.GET, parameters);
@@ -41,9 +42,9 @@ namespace Frontend.Web.Services.Products
                 }
             };
             var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.FIND, parameters);
-            return await _httpClientRepository.GetById(request);
+            return (await _httpClientRepository.Find(request)).Result;
         }
-        public async Task<ProductDetail> GetProductThumbnail(string tenantId, string productId)
+        public async Task<ApiResponse<ProductDetail>> GetProductThumbnail(string tenantId, string productId)
         {
             var parameters = new List<RouteParameterRequest>()
             {
@@ -59,13 +60,12 @@ namespace Frontend.Web.Services.Products
                 }
             };
             var request = new RouteBuilder<ProductDetail>().SendMultiple(Endpoints.Products, Methods.Default.FIND, parameters);
-            return await _httpClientRepository.GetById(request);
+            return await _httpClientRepository.Find(request);
         }
-        public async Task<Product> CreateProduct(Product product)
+        public async Task<ApiResponse<Product>> CreateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
-            var response = await _httpClientRepository.Post(model);
-            return await response.Content.ReadFromJsonAsync<Product>();
+            return await _httpClientRepository.Post(model);
         }
         public async Task<bool> UpdateProduct(Product product)
         {
@@ -89,51 +89,6 @@ namespace Frontend.Web.Services.Products
                 };
             var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.DELETE, parameters);
             return await _httpClientRepository.Put(request);
-        }
-    }
-    public class ApiResponseError
-    {
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("title")]
-        public string Title { get; set; }
-
-        [JsonProperty("status")]
-        public int Status { get; set; }
-
-        [JsonProperty("traceId")]
-        public string TraceId { get; set; }
-
-        [JsonProperty("errors")]
-        public Dictionary<string, List<string>> Errors { get; set; }
-
-        // Constructor to initialize the dictionary
-        public ApiResponseError()
-        {
-            Errors = new Dictionary<string, List<string>>();
-        }
-
-        // Method to add errors
-        public void AddError(string key, string message)
-        {
-            if (Errors.ContainsKey(key))
-            {
-                Errors[key].Add(message);
-            }
-            else
-            {
-                Errors.Add(key, new List<string> { message });
-            }
-        }
-
-        // Method to print all errors (for debugging or logging)
-        public void PrintErrors()
-        {
-            foreach (var error in Errors)
-            {
-                Console.WriteLine($"{error.Key}: {string.Join(", ", error.Value)}");
-            }
         }
     }
 }

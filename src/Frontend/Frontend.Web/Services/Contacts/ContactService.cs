@@ -40,7 +40,7 @@ namespace Frontend.Web.Services.Contacts
 
         public async Task<Address> CreateAddress(Address address)
         {
-            return await _addressRepository.CreateAddress(address);
+            return (await _addressRepository.CreateAddress(address)).Result;
         }
 
         public async Task<bool> UpdateAddress(Address address)
@@ -66,7 +66,7 @@ namespace Frontend.Web.Services.Contacts
 
         public async Task<Email> CreateEmailAddress(Email email)
         {
-            return await _emailAddressRepository.CreateEmail(email);
+            return (await _emailAddressRepository.CreateEmail(email)).Result;
         }
 
         public async Task<bool> UpdateEmailAddress(Email email)
@@ -92,7 +92,7 @@ namespace Frontend.Web.Services.Contacts
 
         public async Task<Phone> CreatePhone(Phone phone)
         {
-            return await _phoneRepository.CreatePhone(phone);
+            return (await _phoneRepository.CreatePhone(phone)).Result;
         }
 
         public async Task<bool> UpdatePhone(Phone phone)
@@ -118,7 +118,7 @@ namespace Frontend.Web.Services.Contacts
 
         public async Task<Profile> CreateProfile(Profile profile)
         {
-            return await _profileRepository.CreateProfile(profile);
+            return (await _profileRepository.CreateProfile(profile)).Result;
         }
 
         public async Task<bool> UpdateProfile(Profile profile)

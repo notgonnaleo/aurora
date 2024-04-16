@@ -139,13 +139,17 @@ else
 @code
 {
     private bool isAuthenticated = false;
-    private bool isLoading = false;
+    private bool isLoading = true;
     private UserSessionContext dashboardProfile = new UserSessionContext();
 
     public async Task<bool?> IsAuthenticated()
     {
         var response = await _authenticationService.IsUserLogged();
-        return response.GetValueOrDefault();
+        if (response.StatusCode == 404 && !response.Result)
+        {
+            Navigator.NavigateTo("/Login");
+        }
+        return response.Result;
     }
 
     public async void GetDashboardProfile()
@@ -161,8 +165,8 @@ else
         isAuthenticated = response.GetValueOrDefault();
         if (isAuthenticated)
         {
-            isLoading = false;
             GetDashboardProfile();
+            isLoading = false;
         }
     }
 }

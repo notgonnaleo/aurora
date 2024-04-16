@@ -12,12 +12,11 @@ namespace Frontend.Web.Services.SubCategories
         }
         public async Task<IEnumerable<SubCategory>> GetSubCategoriesByCategoryId(string tenantId, string categoryId)
         {
-            var result = await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId);
-            return result;
+            return (await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId)).Result;
         }
         public async Task<SubCategory> CreateSubCategory(SubCategory subCategory)
         {
-            return await _subCategoryRepository.CreateSubCategory(subCategory);
+            return (await _subCategoryRepository.CreateSubCategory(subCategory)).Result;
         }
         public async Task<bool> UpdateSubCategory(SubCategory subCategory)
         {

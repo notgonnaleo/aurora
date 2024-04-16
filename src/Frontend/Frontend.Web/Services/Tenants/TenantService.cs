@@ -25,7 +25,7 @@ namespace Frontend.Web.Services.Tenants
         }
         public async Task<Tenant> SetTenant(Guid tenantId)
         {
-            return await _tenantRepository.SetTenant(tenantId);
+            return (await _tenantRepository.SetTenant(tenantId)).Result;
         }
     }
 }

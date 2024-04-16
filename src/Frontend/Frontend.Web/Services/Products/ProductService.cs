@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -20,12 +21,12 @@ namespace Frontend.Web.Services.Products
 
         }
 
-        public async Task<IEnumerable<ProductDetail>> GetProducts(string tenantId)
+        public async Task<ApiResponse<IEnumerable<ProductDetail>>> GetProducts(string tenantId)
         {
             return await _productRepository.GetProducts(tenantId);
         }
 
-        public async Task<ProductDetail> GetProductWithDetails(string tenantId, string productId)
+        public async Task<ApiResponse<ProductDetail>> GetProductWithDetails(string tenantId, string productId)
         {
             return await _productRepository.GetProductThumbnail(tenantId, productId);
         }
@@ -37,7 +38,7 @@ namespace Frontend.Web.Services.Products
 
         public async Task<Product> CreateProduct(Product product)
         {
-            return await _productRepository.CreateProduct(product);
+            return (await _productRepository.CreateProduct(product)).Result;
         }
 
         public async Task<bool> UpdateProduct(Product product)

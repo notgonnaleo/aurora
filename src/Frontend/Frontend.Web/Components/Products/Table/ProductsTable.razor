@@ -1,4 +1,5 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Models.Client
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
 @using Frontend.Web.Util.Session;
@@ -6,63 +7,67 @@
 @inject ProductService _productService
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager NavigationManager
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
 
-@if (products == null)
+@if (Model is null && isLoading)
 {
-    <div class="overflow-hidden center">
-        <svg viewBox="25 25 50 50">
-            <circle r="20" cy="50" cx="50"></circle>
-        </svg>
-    </div>
+    <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
 }
 else
 {
-    @foreach (var product in products)
+    if(Model!.Result is null)
     {
-    <div class="col-sm-6 col-xl-3">
-        <div class="card overflow-hidden rounded-2">
-            <div class="card-img-top rounded-0">
-                <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" class="card-img-top rounded-0">
+        <h6>No items registered yet...</h6>
+    }
+    else
+    {
+        @foreach (var product in Model.Result)
+        {
+            <div class="col-sm-6 col-xl-3">
+                <div class="card overflow-hidden rounded-2">
+                    <div class="card-img-top rounded-0">
+                        <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" class="card-img-top rounded-0">
+                    </div>
+                    <div class="card-body pt-3 p-4">
+                        <div>
+                            <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(product)">
+                                #@product.SKU
+                            </h6>
+                        </div>
+                        <div>
+                            <h6 class="fw-semibold fs-4">
+                                @product.Name
+                            </h6>
+                        </div>
+                        <div>
+                            <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@product.ProductTypeName</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="fw-semibold fs-2 mb-0">
+                                    R$ @product.Value
+                                </h6>
+                            </div>
+                            <div>
+                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                            </div>
+                            <div>
+                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => CreateNewVariant(product)">
+                                    Add variant
+                                </a>
+                            </div>
+                            <div>
+                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(product)">
+                                    <i class="ti ti-trash-x"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body pt-3 p-4">
-                <div>
-                    <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(product)">
-                        #@product.SKU
-                    </h6>
-                </div>
-                <div>
-                    <h6 class="fw-semibold fs-4">
-                        @product.Name
-                    </h6>
-                </div>
-                <div>
-                    <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@product.ProductTypeName</span>
-                </div>
-                <div class="d-flex align-items-center justify-content-between">
-                    <div>
-                        <h6 class="fw-semibold fs-2 mb-0">
-                            R$ @product.Value
-                        </h6>
-                    </div>
-                    <div>
-                        <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
-                            <i class="ti ti-edit"></i>
-                        </a>
-                    </div>
-                    <div>
-                        <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => CreateNewVariant(product)">
-                            Add variant
-                        </a>
-                    </div>
-                    <div>
-                            <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(product)">
-                                <i class="ti ti-trash-x"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        }
     }
 }
 
@@ -82,13 +87,20 @@ else
 
 }
 
-@code {
-    private IEnumerable<ProductDetail>? products;
+@code 
+{
+    private bool isLoading = true;
+    private ApiResponse<IEnumerable<ProductDetail>>? Model;
     protected override async Task OnInitializedAsync()
     {
-        
+        isLoading = true;
         var context = await _authenticationService.GetContext();
-        products = await _productService.GetProducts(context.Tenant.Id.ToString());
+        Model = await _productService.GetProducts(context.Tenant.Id.ToString());
+        if (Model.Success)
+        {
+            Toaster.Error(Model.ErrorMessage);
+        }
+        isLoading = false;
     }
 }
 

@@ -119,7 +119,7 @@
     {
         var context = await _authenticationService.GetContext();
         var tenantId = context.Tenant.Id.ToString();
-        products = (await _productService.GetProducts(tenantId)).ToList();
+        products = (await _productService.GetProducts(tenantId)).Result.ToList();
         agents = (await _agentService.GetAgents(tenantId)).ToList();
 
     }

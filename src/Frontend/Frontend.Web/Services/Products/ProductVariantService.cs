@@ -13,12 +13,12 @@ namespace Frontend.Web.Services.Products
 
         public async Task<IEnumerable<ProductVariant>> GetVariantsByProduct(string tenantId, string productId)
         {
-            return await _productVariantRepository.GetAllVariantsByProduct(tenantId, productId);
+            return (await _productVariantRepository.GetAllVariantsByProduct(tenantId, productId)).Result;
         }
 
         public async Task<ProductVariant> CreateVariant(ProductVariant productVariant)
         {
-            return await _productVariantRepository.CreateProductVariant(productVariant);
+            return (await _productVariantRepository.CreateProductVariant(productVariant)).Result;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Contacts;
 using Backend.Infrastructure.Enums.Modules;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using System.Net.Http.Json;
@@ -21,7 +22,7 @@ namespace Frontend.Web.Repository.Contacts
             {
                 var parameters = new RouteParameterRequest() { ParameterName = Methods.Phones.GET.GetPhones.tenantId, ParameterValue = tenantId };
                 var request = new RouteBuilder<Phone>().Send(Endpoints.Phones, Methods.Default.GET, parameters);
-                return await _httpClientRepository.Get(request);
+                return (await _httpClientRepository.Get(request)).Result;
             }
 
             public async Task<Phone> GetPhone(string tenantId, string phoneId)
@@ -40,14 +41,13 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Phone>().SendMultiple(Endpoints.Phones, Methods.Default.FIND, parameters);
-                return await _httpClientRepository.GetById(request);
+                return (await _httpClientRepository.Find(request)).Result;
             }
 
-            public async Task<Phone> CreatePhone(Phone phone)
+            public async Task<ApiResponse<Phone>> CreatePhone(Phone phone)
             {
                 var model = new RouteBuilder<Phone>().Send(Endpoints.Phones, Methods.Default.POST, phone);
-                var response = await _httpClientRepository.Post(model);
-                return await response.Content.ReadFromJsonAsync<Phone>();
+                return await _httpClientRepository.Post(model);
             }
 
             public async Task<bool> UpdatePhone(Phone phone)
