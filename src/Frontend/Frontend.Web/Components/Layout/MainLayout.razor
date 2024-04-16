@@ -35,6 +35,23 @@ else
     }
 }
 
+@code
+{
+    private async void TokenCheck()
+    {
+        var response = await _authService.Validate();
+        if (response)
+        {
+            isAuthenticated = false;
+            navigator.NavigateTo("/Login");
+        }
+        else
+        {
+            navigator.NavigateTo(navigator.Uri);
+        }
+    }
+}
+
 @code 
 {
     public bool isAuthenticated = false;
@@ -42,6 +59,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         isAuthenticated = await IsAuthenticated();
+        TokenCheck();
         Redirect(isAuthenticated);
     }
 

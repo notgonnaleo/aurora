@@ -67,6 +67,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public class Authentication
         {
             public static string Login = "Login";
+            public static string Validate = "Validate";
             public static string SetTenant = "SetTenant";
 
             public static class SetTenantParameters

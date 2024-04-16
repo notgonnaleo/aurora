@@ -12,9 +12,6 @@
 @using Frontend.Web.Services.SubCategories;
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Internal;
-
-
-
 @inject ProductService _productService
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService
@@ -22,8 +19,6 @@
 @inject SubCategoryService _subCategoryService;
 @inject NavigationManager navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
-
-
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -73,8 +68,6 @@
                                         
                                     </div>
                                 </div> *@
-
-                                
 
                                 <!-- Name -->
                                 <div class="row">
@@ -243,11 +236,6 @@
         GetCategories();
     }
 }
-
-
-
-
-
 
 @code
 {

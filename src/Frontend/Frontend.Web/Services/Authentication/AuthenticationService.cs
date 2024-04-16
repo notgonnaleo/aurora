@@ -35,6 +35,20 @@ namespace Frontend.Web.Services.Authentication
             return response != null;
         }
 
+        public async Task<bool> Validate()
+        {
+            var response = await _authenticationRepository.Validate();
+            if(response.Token is null)
+            {
+                if (await _cookies.GetValueAsync<UserSessionContext>("UserSession") is not null)
+                {
+                    await _cookies.Clear("UserSession");
+                    return true;
+                }
+            }
+            return true;
+        }
+
         public async Task<bool?> IsUserLogged()
         {
             return await _sessionStorageAccessor.GetValueAsync<UserSessionContext>("UserSession") != null;

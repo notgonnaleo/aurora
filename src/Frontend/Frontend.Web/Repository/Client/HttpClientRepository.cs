@@ -72,7 +72,7 @@ namespace Frontend.Web.Repository.Client
             }
             catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
         }

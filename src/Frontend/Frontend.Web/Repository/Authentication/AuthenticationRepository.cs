@@ -21,5 +21,11 @@ namespace Frontend.Web.Repository.Authentication
             var response = await _httpClientRepository.Post(routeBuilder, true);
             return await response.Content.ReadFromJsonAsync<UserSessionContext>();
         }
+
+        public async Task<UserSessionContext> Validate()
+        {
+            RouteBuilder<UserSessionContext> routeBuilder = new RouteBuilder<UserSessionContext>().Send(Endpoints.Authentication, Methods.Authentication.Validate);
+            return await _httpClientRepository.GetById(routeBuilder);
+        }
     }
 }

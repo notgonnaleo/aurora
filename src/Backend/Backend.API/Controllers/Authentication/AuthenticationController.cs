@@ -45,6 +45,21 @@ namespace Backend.API.Controllers.Authentication
             return NotFound(response.Message);
         }
 
+        [HttpGet]
+        [Route("Validate")]
+        public async Task<ActionResult> Validate()
+        {
+            string token = HttpContext.Request.Headers.Authorization.ToString();
+            var userContext = _cache.Get<UserSessionContext>(token);
+            if (userContext is null)
+            {
+                /* Com extrema urgencia assim que possivel preciso adaptar a leitura de erros no frontend mas por enquanto
+                 vou fazer assim apenas pra funcionar */
+                return Ok(new UserSessionContext());
+            }
+            return Ok(userContext);
+        }
+
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("SetTenant")]
