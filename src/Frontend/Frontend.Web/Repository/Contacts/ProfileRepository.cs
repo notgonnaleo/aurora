@@ -54,7 +54,7 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<bool> UpdateProfile(Profile profile)
             {
                 var model = new RouteBuilder<Profile>().Send(Endpoints.Profiles, Methods.Default.PUT, profile);
-                return await _httpClientRepository.Put(model);
+                return (await _httpClientRepository.Put(model)).Success;
             }
 
             public async Task<bool> DeleteProfile(string tenantId, string profileId)
@@ -73,7 +73,7 @@ namespace Frontend.Web.Repository.Contacts
                     }
                 };
                 var request = new RouteBuilder<Profile>().SendMultiple(Endpoints.Profiles, Methods.Default.DELETE, parameters);
-                return await _httpClientRepository.Put(request);
+                return (await _httpClientRepository.Put(request)).Success;
             }
         }
     }

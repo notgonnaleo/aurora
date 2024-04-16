@@ -53,7 +53,7 @@ namespace Frontend.Web.Repository.Categories
         public async Task<bool> UpdateCategory(Category category)
         {
             var model = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.PUT, category);
-            return await _httpClientRepository.Put(model);
+            return (await _httpClientRepository.Put(model)).Success;
         }
         public async Task<bool> DeleteCategory(string tenantId, string categoryId)
         {
@@ -71,7 +71,7 @@ namespace Frontend.Web.Repository.Categories
                 },
             };
             var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.DELETE, parameters);
-            return await _httpClientRepository.Put(request);
+            return (await _httpClientRepository.Put(request)).Success;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<bool> UpdatePhone(Phone phone)
             {
                 var model = new RouteBuilder<Phone>().Send(Endpoints.Phones, Methods.Default.PUT, phone);
-                return await _httpClientRepository.Put(model);
+                return (await _httpClientRepository.Put(model)).Success;
             }
 
             public async Task<bool> DeletePhone(string tenantId, string phoneId)
@@ -72,7 +72,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Phone>().SendMultiple(Endpoints.Phones, Methods.Default.DELETE, parameters);
-                return await _httpClientRepository.Put(request);
+                return (await _httpClientRepository.Put(request)).Success;
             }
         }
     }

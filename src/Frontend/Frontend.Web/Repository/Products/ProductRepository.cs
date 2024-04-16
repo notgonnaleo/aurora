@@ -70,7 +70,7 @@ namespace Frontend.Web.Services.Products
         public async Task<bool> UpdateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.PUT, product);
-            return await _httpClientRepository.Put(model);
+            return (await _httpClientRepository.Put(model)).Success;
         }
         public async Task<bool> DeleteProduct(string tenantId, string productId)
         {
@@ -88,7 +88,7 @@ namespace Frontend.Web.Services.Products
                     }
                 };
             var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.DELETE, parameters);
-            return await _httpClientRepository.Put(request);
+            return (await _httpClientRepository.Put(request)).Success;
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<bool> UpdateAddress(Address address)
             {
                 var model = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.PUT, address);
-                return await _httpClientRepository.Put(model);
+                return (await _httpClientRepository.Put(model)).Success;
             }
 
             public async Task<bool> DeleteAddress(string tenantId, string addressId)
@@ -72,7 +72,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Address>().SendMultiple(Endpoints.Addresses, Methods.Default.DELETE, parameters);
-                return await _httpClientRepository.Put(request);
+                return (await _httpClientRepository.Put(request)).Success;
             }
         }
     }

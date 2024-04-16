@@ -92,7 +92,7 @@ namespace Frontend.Web.Repository.Stocks
         public async Task<bool> UpdateStock(Stock stock)
         {
             var model = new RouteBuilder<Stock>().Send(Endpoints.Stock, Methods.Default.PUT, stock);
-            return await _httpClientRepository.Put(model);
+            return (await _httpClientRepository.Put(model)).Success;
         }
 
         public async Task<bool> DeleteStock(string tenantId, string stockMovementId)
@@ -111,7 +111,7 @@ namespace Frontend.Web.Repository.Stocks
                     }
                 };
             var request = new RouteBuilder<Stock>().SendMultiple(Endpoints.Stock, Methods.Default.DELETE, parameters);
-            return await _httpClientRepository.Put(request);
+            return (await _httpClientRepository.Put(request)).Success;
         }
 
         public async Task<IEnumerable<StockDetail>> GetStockEntriesByProduct(string tenantId, string productId)

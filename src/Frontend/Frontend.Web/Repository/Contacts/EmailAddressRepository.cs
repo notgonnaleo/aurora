@@ -53,7 +53,7 @@ namespace Frontend.Web.Repository.Contacts
         public async Task<bool> UpdateEmail(Email email)
         {
             var model = new RouteBuilder<Email>().Send(Endpoints.EmailAddresses, Methods.Default.PUT, email);
-            return await _httpClientRepository.Put(model);
+            return (await _httpClientRepository.Put(model)).Success;
         }
 
         public async Task<bool> DeleteEmail(string tenantId, string emailAddressId)
@@ -72,7 +72,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
             var request = new RouteBuilder<Email>().SendMultiple(Endpoints.EmailAddresses, Methods.Default.DELETE, parameters);
-            return await _httpClientRepository.Put(request);
+            return (await _httpClientRepository.Put(request)).Success;
         }
     }
 }

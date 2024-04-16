@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Client;
@@ -66,7 +67,7 @@ namespace Frontend.Web.Repository.Agents
         public async Task<bool> UpdateAgent(Agent agent)
         {
             var model = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.PUT, agent);
-            return await _httpClientRepository.Put(model);
+            return (await _httpClientRepository.Put(model)).Success;
         }
 
         public async Task<bool> DeleteAgent(string tenantId, string agentId)
@@ -85,7 +86,7 @@ namespace Frontend.Web.Repository.Agents
                     }
                 };
             var request = new RouteBuilder<Agent>().SendMultiple(Endpoints.Agents, Methods.Default.DELETE, parameters);
-            return await _httpClientRepository.Put(request);
+            return (await _httpClientRepository.Put(request)).Success;        
         }
     }
 }
