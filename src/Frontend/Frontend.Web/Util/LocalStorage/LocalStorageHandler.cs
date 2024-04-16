@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Microsoft.JSInterop;
 
-namespace Frontend.Web.Util.Session
+namespace Frontend.Web.Util.LocalStorage
 {
-    public class SessionStorageAccessor : IAsyncDisposable
+    public class CookieHandler : IAsyncDisposable
     {
         private Lazy<IJSObjectReference> _accessorJsRef = new();
         private readonly IJSRuntime _jsRuntime;
 
-        public SessionStorageAccessor(IJSRuntime jsRuntime)
+        public CookieHandler(IJSRuntime jsRuntime)
         {
             _jsRuntime = jsRuntime;
         }
@@ -21,7 +21,7 @@ namespace Frontend.Web.Util.Session
         {
             if (_accessorJsRef.IsValueCreated is false)
             {
-                _accessorJsRef = new(await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "/assets/js/BrowserStorageHandler/SessionStorageAccessor.js"));
+                _accessorJsRef = new(await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "/assets/js/BrowserStorageHandler/LocalStorageHandler.js"));
             }
         }
 
