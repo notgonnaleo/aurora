@@ -1,6 +1,8 @@
 ﻿using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using System.Net.Http.Json;
@@ -17,31 +19,30 @@ namespace Frontend.Web.Repository.Agents
             _httpClientRepository = httpClientRepository;
         }
 
-        public async Task<Agent> CreateAgent(Agent agent)
+        public async Task<ApiResponse<Agent>> CreateAgent(Agent agent)
         {
             var model = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.POST, agent);
-            var response = await _httpClientRepository.Post(model);
-            return await response.Content.ReadFromJsonAsync<Agent>();
+            return await _httpClientRepository.Post(model);
         }
 
         public async Task<IEnumerable<Agent>> GetAgents(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = AgentsEnums.GET.GetAgents.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.GET, parameters);
-            return await _httpClientRepository.Get(request);
+            return (await _httpClientRepository.Get(request)).Result;
         }
 
         public async Task<AgentDetail> GetAgentWithDetail(string agentId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = AgentsEnums.GET.GetAgentWithDetail.Args.agentId, ParameterValue = agentId };
             var request = new RouteBuilder<AgentDetail>().Send(Endpoints.Agents, Methods.Agents.GET.GetAgentWithDetail.RouteName, parameters);
-            return await _httpClientRepository.GetById(request);
+            return (await _httpClientRepository.Find(request)).Result;
         }
 
         public async Task<IEnumerable<AgentType>> GetAgentTypes()
         {
             var request = new RouteBuilder<AgentType>().Send(Endpoints.AgentTypes, Methods.Default.GET);
-            return await _httpClientRepository.Get(request);
+            return (await _httpClientRepository.Get(request)).Result;
         }
 
         public async Task<Agent> GetAgent(string tenantId, string agentId)
@@ -60,13 +61,13 @@ namespace Frontend.Web.Repository.Agents
                 }
             };
             var request = new RouteBuilder<Agent>().SendMultiple(Endpoints.Agents, Methods.Default.FIND, parameters);
-            return await _httpClientRepository.GetById(request);
+            return (await _httpClientRepository.Find(request)).Result;
         }
 
         public async Task<bool> UpdateAgent(Agent agent)
         {
             var model = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.PUT, agent);
-            return await _httpClientRepository.Put(model);
+            return (await _httpClientRepository.Put(model)).Success;
         }
 
         public async Task<bool> DeleteAgent(string tenantId, string agentId)
@@ -85,7 +86,7 @@ namespace Frontend.Web.Repository.Agents
                     }
                 };
             var request = new RouteBuilder<Agent>().SendMultiple(Endpoints.Agents, Methods.Default.DELETE, parameters);
-            return await _httpClientRepository.Put(request);
+            return (await _httpClientRepository.Put(request)).Success;        
         }
     }
 }

@@ -47,32 +47,13 @@ else
     }
 }
 
-@code
-{
-    private async void TokenCheck()
-    {
-        var response = await _authService.Validate();
-        if (response)
-        {
-            isAuthenticated = false;
-            navigator.NavigateTo("/Login");
-        }
-        else
-        {
-            navigator.NavigateTo(navigator.Uri);
-        }
-    }
-}
-
 @code 
 {
     public bool isAuthenticated = false;
-
     protected override async Task OnInitializedAsync()
     {
         LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
-        TokenCheck();
         Redirect(isAuthenticated);
     }
 
@@ -87,7 +68,11 @@ else
     public async Task<bool> IsAuthenticated()
     {
         var response = await _authService.IsUserLogged();
-        return response.GetValueOrDefault();
+        if (response!.StatusCode == 404)
+        {
+            navigator.NavigateTo("/Login");
+        }
+        return response.Result;
     }
 }
 

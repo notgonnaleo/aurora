@@ -20,7 +20,7 @@ namespace Frontend.Web.Services.Stocks
 
         public async Task<Backend.Domain.Entities.Stocks.Stock> CreateStock(Backend.Domain.Entities.Stocks.Stock stock)
         {
-            return await _stockRepository.CreateStock(stock);
+            return (await _stockRepository.CreateStock(stock)).Result;
         }
 
         public async Task<IEnumerable<StockDetail>> GetStockWithDetail(string tenantId)

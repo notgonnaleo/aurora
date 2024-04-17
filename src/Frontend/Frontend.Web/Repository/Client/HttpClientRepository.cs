@@ -38,20 +38,47 @@ namespace Frontend.Web.Repository.Client
         /// <param name="key">Tenant Id</param>
         /// <returns>Returns a list of T</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public async Task<List<T>> Get<T>(RouteBuilder<T> route)
+        public async Task<ApiResponse<IEnumerable<T>>> Get<T>(RouteBuilder<T> route)
         {
             try
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
                 _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
-                return await _httpClient.GetFromJsonAsync<List<T>>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+                HttpResponseMessage response = await _httpClient.GetAsync(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    List<T> result = JsonConvert.DeserializeObject<List<T>>(responseContent);
+                    return new ApiResponse<IEnumerable<T>>()
+                    {
+                        StatusCode = 200,
+                        ErrorMessage = null,
+                        Result = result,
+                        Success = true,
+                    };
+                }
+                return new ApiResponse<IEnumerable<T>>
+                {
+                    StatusCode = (int)response.StatusCode,
+                    ErrorMessage = "Error: " + response.ReasonPhrase,
+                    Result = null,
+                    Success = false,
+                };
             }
-            catch (Exception ex)
+            catch (Exception ApiException)
             {
-                throw;
+                Console.WriteLine($"Aurora:");
+                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
+                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
+                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
+                return new ApiResponse<IEnumerable<T>>()
+                {
+                    StatusCode = 500,
+                    ErrorMessage = "Something wrong happened",
+                    Result = null,
+                    Success = false,
+                };
             }
-
         }
 
         /// <summary>
@@ -60,21 +87,48 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T">Type of return</typeparam>
         /// <param name="key">Tenant Id</param>
         /// <returns>Returns a list of T</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public async Task<T> GetById<T>(RouteBuilder<T> route)
+        /// <exception cref="ApiResponse<T>">404, 500</exception>
+        public async Task<ApiResponse<T>> Find<T>(RouteBuilder<T> route)
         {
             try
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Get, false, ContentTypeEnum.JSON);
                 _httpClient.DefaultRequestHeaders.Authorization = httpRequestHeader.Authorization;
-                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
-                return await _httpClient.GetFromJsonAsync<T>(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+                HttpResponseMessage response = await _httpClient.GetAsync(_httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
+                
+                if(response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse<T>()
+                    {
+                        StatusCode = 200,
+                        ErrorMessage = null,
+                        Result = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()),
+                        Success = true,
+                    };
+                }
 
+                return new ApiResponse<T>()
+                {
+                    StatusCode = (int)response.StatusCode,
+                    ErrorMessage = await response.Content.ReadAsStringAsync(),
+                    Result = default(T),
+                    Success = false,
+                };
+            }
+            catch (Exception ApiException)
+            {
+                Console.WriteLine($"Aurora:");
+                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
+                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
+                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
+                return new ApiResponse<T>()
+                {
+                    StatusCode = 500,
+                    ErrorMessage = "Something wrong happened",
+                    Result = default,
+                    Success = false,
+                };
+            }
         }
 
         /// <summary>
@@ -83,21 +137,48 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<HttpResponseMessage> Post<T>(RouteBuilder<T> route)
+        public async Task<ApiResponse<T>> Post<T>(RouteBuilder<T> route)
         {
             try
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
-                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 if (route.Body != null) 
                     request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-                return await _httpClient.SendAsync(request);
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse<T>()
+                    {
+                        StatusCode = 200,
+                        ErrorMessage = null,
+                        Result = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()),
+                        Success = true,
+                    };
+                }
+
+                return new ApiResponse<T>()
+                {
+                    StatusCode = (int)response.StatusCode,
+                    ErrorMessage = await response.Content.ReadAsStringAsync(),
+                    Result = default(T),
+                    Success = false,
+                };
             }
-            catch (Exception ex)
+            catch (Exception ApiException)
             {
-                throw;
+                Console.WriteLine($"Aurora:");
+                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
+                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
+                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
+                return new ApiResponse<T>()
+                {
+                    StatusCode = 500,
+                    ErrorMessage = "Something wrong happened",
+                    Result = default,
+                    Success = false,
+                };
             }
         }
 
@@ -107,24 +188,49 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<bool> Put<T>(RouteBuilder<T> route)
+        public async Task<ApiResponse<T>> Put<T>(RouteBuilder<T> route)
         {
             try
             {
-                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
-                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 if (route.Body != null)
                     request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
-                var response = await _httpClient.SendAsync(request);
-                return response.EnsureSuccessStatusCode().IsSuccessStatusCode;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+                HttpResponseMessage response = await _httpClient.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    return new ApiResponse<T>()
+                    {
+                        StatusCode = 200,
+                        ErrorMessage = null,
+                        Result = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()),
+                        Success = true,
+                    };
+                }
 
+                return new ApiResponse<T>()
+                {
+                    StatusCode = (int)response.StatusCode,
+                    ErrorMessage = await response.Content.ReadAsStringAsync(),
+                    Result = default(T),
+                    Success = false,
+                };
+            }
+            catch (Exception ApiException)
+            {
+                Console.WriteLine($"Aurora:");
+                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
+                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
+                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
+                return new ApiResponse<T>()
+                {
+                    StatusCode = 500,
+                    ErrorMessage = "Something wrong happened",
+                    Result = default,
+                    Success = false,
+                };
+            }
         }
 
         /* Public Methods */

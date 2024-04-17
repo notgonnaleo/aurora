@@ -1,10 +1,12 @@
 ﻿@page "/products/edit/{productId}"
 @using Backend.Domain.Entities.Products;
+@using Frontend.Web.Models.Client
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
 @inject NavigationManager NavigationManager
 @inject ProductService _productService
 @inject AuthenticationService _authenticationService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster
 
 <PageTitle>Aurora - Edit Product</PageTitle>
 <aside class="right-sidebar @formCssClass">
@@ -12,20 +14,33 @@
 {
     <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseProductVariantForm
         ToggleRightSidebar="ToggleProductVariantForm"
-        ParentProductDetail="@Model" 
+        ParentProductDetail="@Model.Result" 
     />
 }
 </aside>
 <div class="container-fluid">
-    <a class="btn" href="/report/@Model.TenantId.ToString()/product-summary/@productId">Generate report</a>
-    <Frontend.Web.Components.Products.Forms.Edit.EditProduct 
-        Model="@Model"
-    />
+    @if (Model.Result is null && isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+    }
+    else
+    {
+        @if (Model.StatusCode == 200)
+        {
+            <a class="btn" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Generate report</a>
+            <Frontend.Web.Components.Products.Forms.Edit.EditProduct Model="@Model.Result" />
 
-    <button class="btn btn-outline-primary" @onclick="ToggleProductVariantForm">
-        @btnText
-    </button>
-    <Frontend.Web.Components.ProductVariants.Table.ProductVariantsTable parentProductId="@productId" />
+            <button class="btn btn-outline-primary" @onclick="ToggleProductVariantForm">
+                @btnText
+            </button>
+            <Frontend.Web.Components.ProductVariants.Table.ProductVariantsTable parentProductId="@productId" />
+        }
+        else
+        {
+            <h6>Selected item does not exist...</h6>
+        }
+    }
+
 </div>
 
 @code
@@ -55,14 +70,21 @@
 
 @code
 {
-    private ProductDetail Model = new ProductDetail();
+    private bool isLoading = true;
+    private ApiResponse<ProductDetail> Model = new ApiResponse<ProductDetail>();
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         var context = await _authenticationService.GetContext();
-        Model.TenantId = context.Tenant.Id;
-        Model = await _productService.GetProductWithDetails(Model.TenantId.ToString(), productId.ToString());
+        Model = await _productService.GetProductWithDetails(context!.Tenant.Id.ToString(), productId.ToString());
+        if(Model.StatusCode != 200)
+        {
+            Toaster.Error(Model.ErrorMessage);
+        }
+        isLoading = false;
     }
 }
+
 
 @code
 {
