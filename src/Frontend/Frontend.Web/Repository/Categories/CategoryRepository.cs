@@ -50,10 +50,10 @@ namespace Frontend.Web.Repository.Categories
             var model = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.POST, category);
             return await _httpClientRepository.Post(model);
         }
-        public async Task<bool> UpdateCategory(Category category)
+        public async Task<ApiResponse<Category>> UpdateCategory(Category category)
         {
             var model = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.PUT, category);
-            return (await _httpClientRepository.Put(model)).Success;
+            return await _httpClientRepository.Put(model);
         }
         public async Task<bool> DeleteCategory(string tenantId, string categoryId)
         {

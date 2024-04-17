@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Categories;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Categories;
 
 namespace Frontend.Web.Services.Categories
@@ -22,13 +23,20 @@ namespace Frontend.Web.Services.Categories
         {
             return await _categoryRepository.GetCategoriesAndSubCategories(tenantId);
         }
-        public async Task<Category> CreateCategory(Category category)
+        public async Task<ApiResponse<Category>> CreateCategory(Category category)
         {
-            return (await _categoryRepository.CreateCategory(category)).Result;
+            return await _categoryRepository.CreateCategory(category);
         }
-        public async Task<bool> UpdateCategory(Category category)
+        public async Task<ApiResponse<bool>> UpdateCategory(Category category)
         {
-            return await _categoryRepository.UpdateCategory(category);
+            var response = await _categoryRepository.UpdateCategory(category);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
         public async Task<bool> DeleteCategory(string tenantId, string categoryId)
         {

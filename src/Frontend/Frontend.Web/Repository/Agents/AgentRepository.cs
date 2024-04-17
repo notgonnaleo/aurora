@@ -64,10 +64,10 @@ namespace Frontend.Web.Repository.Agents
             return (await _httpClientRepository.Find(request)).Result;
         }
 
-        public async Task<bool> UpdateAgent(Agent agent)
+        public async Task<ApiResponse<Agent>> UpdateAgent(Agent agent)
         {
             var model = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.PUT, agent);
-            return (await _httpClientRepository.Put(model)).Success;
+            return await _httpClientRepository.Put(model);
         }
 
         public async Task<bool> DeleteAgent(string tenantId, string agentId)

@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Addresses;
 using Backend.Domain.Entities.Contacts;
 using Backend.Domain.Entities.Profiles;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Contacts;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Addresses;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Phones;
@@ -38,14 +39,21 @@ namespace Frontend.Web.Services.Contacts
             return await _addressRepository.GetAddress(tenantId, addressId);
         }
 
-        public async Task<Address> CreateAddress(Address address)
+        public async Task<ApiResponse<Address>> CreateAddress(Address address)
         {
-            return (await _addressRepository.CreateAddress(address)).Result;
+            return await _addressRepository.CreateAddress(address);
         }
 
-        public async Task<bool> UpdateAddress(Address address)
+        public async Task<ApiResponse<bool>> UpdateAddress(Address address)
         {
-            return await _addressRepository.UpdateAddress(address);
+            var response = await _addressRepository.UpdateAddress(address);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
 
         public async Task<bool> DeleteAddress(string tenantId, string addressId)
@@ -64,14 +72,21 @@ namespace Frontend.Web.Services.Contacts
             return await _emailAddressRepository.GetEmail(tenantId, emailAddressId);
         }
 
-        public async Task<Email> CreateEmailAddress(Email email)
+        public async Task<ApiResponse<Email>> CreateEmailAddress(Email email)
         {
-            return (await _emailAddressRepository.CreateEmail(email)).Result;
+            return await _emailAddressRepository.CreateEmail(email);
         }
 
-        public async Task<bool> UpdateEmailAddress(Email email)
+        public async Task<ApiResponse<bool>> UpdateEmailAddress(Email email)
         {
-            return await _emailAddressRepository.UpdateEmail(email);
+            var response = await _emailAddressRepository.UpdateEmail(email);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
 
         public async Task<bool> DeleteEmailAddress(string tenantId, string emailAddressId)

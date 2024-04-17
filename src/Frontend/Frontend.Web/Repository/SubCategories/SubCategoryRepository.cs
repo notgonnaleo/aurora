@@ -39,10 +39,10 @@ namespace Frontend.Web.Repository.SubCategories
             var model = new RouteBuilder<SubCategory>().Send(Endpoints.SubCategory, Methods.Default.POST, category);
             return await _httpClientRepository.Post(model);
         }
-        public async Task<bool> UpdateSubCategory(SubCategory category)
+        public async Task<ApiResponse<SubCategory>> UpdateSubCategory(SubCategory category)
         {
             var model = new RouteBuilder<SubCategory>().Send(Endpoints.SubCategory, Methods.Default.PUT, category);
-            return (await _httpClientRepository.Put(model)).Success;
+            return await _httpClientRepository.Put(model);
         }
         public async Task<bool> DeleteSubCategory(string tenantId, string categoryId, string subCategoryId)
         {

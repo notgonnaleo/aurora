@@ -50,10 +50,10 @@ namespace Frontend.Web.Repository.Contacts
 
         }
 
-        public async Task<bool> UpdateEmail(Email email)
+        public async Task<ApiResponse<Email>> UpdateEmail(Email email)
         {
             var model = new RouteBuilder<Email>().Send(Endpoints.EmailAddresses, Methods.Default.PUT, email);
-            return (await _httpClientRepository.Put(model)).Success;
+            return await _httpClientRepository.Put(model);
         }
 
         public async Task<bool> DeleteEmail(string tenantId, string emailAddressId)

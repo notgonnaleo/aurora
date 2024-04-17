@@ -88,7 +88,7 @@ namespace Frontend.Web.Services.Products
                     }
                 };
             var request = new RouteBuilder<Product>().SendMultiple(Endpoints.Products, Methods.Default.DELETE, parameters);
-            return (await _httpClientRepository.Put(request)).Success;
+            return (await _httpClientRepository.Put(request)).ResultBoolean;
         }
     }
 }

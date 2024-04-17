@@ -11,6 +11,7 @@
 @inject AuthenticationService _authenticationService
 @inject ContactService _contactService;
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer m-2" @onclick="ToggleRightSidebar"></i>
@@ -242,10 +243,17 @@
         {
             address.CityName = Geolocation.Cities.List.FirstOrDefault(x => x.CityId == address.CityId)!.CityName;
         }
-        Address response = await _contactService.CreateAddress(address);
+        var response = await _contactService.CreateAddress(address);
 
-        if (response != null && response.AddressId != new Guid())
+        if (response.Success)
+        {
+            Toaster.Success("Item created successfully");
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
     }
 
     public async Task UpdateAddress()
@@ -257,9 +265,15 @@
         {
             Model.CityName = Geolocation.Cities.List.FirstOrDefault(x => x.CityId == Model.CityId)!.CityName;
         }
-        if (await _contactService.UpdateAddress(Model))
+        var response = await _contactService.UpdateAddress(Model);
+        if (response.ResultBoolean)
         {
+            Toaster.Success("Item updated successfully");
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }

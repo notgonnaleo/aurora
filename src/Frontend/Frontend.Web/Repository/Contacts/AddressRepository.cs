@@ -50,10 +50,10 @@ namespace Frontend.Web.Repository.Contacts
                 return await _httpClientRepository.Post(model);
             }
 
-            public async Task<bool> UpdateAddress(Address address)
+            public async Task<ApiResponse<Address>> UpdateAddress(Address address)
             {
                 var model = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.PUT, address);
-                return (await _httpClientRepository.Put(model)).Success;
+                return await _httpClientRepository.Put(model);
             }
 
             public async Task<bool> DeleteAddress(string tenantId, string addressId)

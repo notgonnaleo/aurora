@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Products;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Agents;
 using Frontend.Web.Services.Products;
 
@@ -35,14 +36,21 @@ namespace Frontend.Web.Services.Agents
             return await _agentRepository.GetAgentWithDetail(agentId);
         }
 
-        public async Task<Backend.Domain.Entities.Agents.Agent> CreateAgent(Backend.Domain.Entities.Agents.Agent agent)
+        public async Task<ApiResponse<Backend.Domain.Entities.Agents.Agent>> CreateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {
-            return (await _agentRepository.CreateAgent(agent)).Result;
+            return await _agentRepository.CreateAgent(agent);
         }
 
-        public async Task<bool> UpdateAgent(Backend.Domain.Entities.Agents.Agent agent)
+        public async Task<ApiResponse<bool>> UpdateAgent(Backend.Domain.Entities.Agents.Agent agent)
         {
-            return await _agentRepository.UpdateAgent(agent);
+            var response = await _agentRepository.UpdateAgent(agent);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
 
         public async Task<bool> DeleteAgent(string tenantId, string agentId)

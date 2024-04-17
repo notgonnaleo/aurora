@@ -78,11 +78,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Delete")]
-        public ActionResult Delete(Guid tenantId, Guid ProductId)
+        public ActionResult Delete(Guid tenantId, Guid productId)
         {
             try
             {
-                return Ok(_productService.Delete(tenantId, ProductId));
+                return Ok(_productService.Delete(tenantId, productId));
             }
             catch (Exception ex)
             {

@@ -7,6 +7,7 @@
 @inject AuthenticationService _authenticationService;
 @inject CategoryService _categoryService;
 @inject SubCategoryService _subCategoryService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <div class="card p-4">
@@ -47,10 +48,8 @@
     </div>
 </div>
 
-
 <Frontend.Web.Components.Categories.Modals.DeleteCategory ShowModal=@showModal_Category CategoryModel="@category" />
 <Frontend.Web.Components.Categories.Modals.DeleteSubCategory ShowModal=@showModal_SubCategory SubCategoryModel="@selectedSubCategory" />
-
 
 @code
 {
@@ -81,10 +80,7 @@
         var context = await _authenticationService.GetContext();
         category.TenantId = context.Tenant.Id;
         subCategory.TenantId = context.Tenant.Id;
-
         subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).ToList();
-
-        var queryString = navigator.Uri.Split('/').Last();
         category = (await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString()));
     }
 }
@@ -93,28 +89,29 @@
 {
     public async Task UpdateCategory()
     {
-        try
+        var response = await _categoryService.UpdateCategory(category);
+        if (response.ResultBoolean)
         {
-            if (await _categoryService.UpdateCategory(category)) 
-                navigator.NavigateTo("/categories");
+            Toaster.Success("Item updated successfully");
+            navigator.NavigateTo("/categories");
         }
-        catch (Exception ex)
+        else
         {
-            throw;
+            Toaster.Error(response.ErrorMessage);
         }
     }
 
     public async Task UpdateSubCategory(SubCategory selectedSubCategory)
     {
-        try
+        var response = await _subCategoryService.UpdateSubCategory(selectedSubCategory);
+        if (response.ResultBoolean)
         {
-            if (await _subCategoryService.UpdateSubCategory(selectedSubCategory))
-                navigator.NavigateTo("/categories");
+            Toaster.Success("Item updated successfully");
+            navigator.NavigateTo("/categories");
         }
-        catch (Exception ex)
+        else
         {
-            
-            throw;
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }
