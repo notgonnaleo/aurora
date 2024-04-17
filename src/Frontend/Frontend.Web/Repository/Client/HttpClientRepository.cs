@@ -17,6 +17,7 @@ using Frontend.Web.Util.Enums.ContentTypeEnums;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Route;
 using Microsoft.AspNetCore.Routing;
+using JsonException = Newtonsoft.Json.JsonException;
 
 namespace Frontend.Web.Repository.Client
 {
@@ -67,10 +68,6 @@ namespace Frontend.Web.Repository.Client
             }
             catch (Exception ApiException)
             {
-                Console.WriteLine($"Aurora:");
-                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
-                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
-                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
                 return new ApiResponse<IEnumerable<T>>()
                 {
                     StatusCode = 500,
@@ -117,10 +114,6 @@ namespace Frontend.Web.Repository.Client
             }
             catch (Exception ApiException)
             {
-                Console.WriteLine($"Aurora:");
-                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
-                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
-                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
                 return new ApiResponse<T>()
                 {
                     StatusCode = 500,
@@ -168,10 +161,6 @@ namespace Frontend.Web.Repository.Client
             }
             catch (Exception ApiException)
             {
-                Console.WriteLine($"Aurora:");
-                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
-                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
-                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
                 return new ApiResponse<T>()
                 {
                     StatusCode = 500,
@@ -192,7 +181,7 @@ namespace Frontend.Web.Repository.Client
         {
             try
             {
-                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, false, ContentTypeEnum.JSON);
+                HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Put, false, ContentTypeEnum.JSON);
                 var uri = _httpRequestHeader.BuildRequestUri(httpRequestHeader, route);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, uri);
                 if (route.Body != null)
@@ -200,13 +189,30 @@ namespace Frontend.Web.Repository.Client
                 HttpResponseMessage response = await _httpClient.SendAsync(request);
                 if (response.IsSuccessStatusCode)
                 {
-                    return new ApiResponse<T>()
+                    var data = await response.Content.ReadAsStringAsync();
+                    try
                     {
-                        StatusCode = 200,
-                        ErrorMessage = null,
-                        Result = JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()),
-                        Success = true,
-                    };
+                        var deserializedData = JsonConvert.DeserializeObject<T>(data);
+                        return new ApiResponse<T>()
+                        {
+                            StatusCode = 200,
+                            ErrorMessage = null,
+                            Result = deserializedData,
+                            Success = true,
+                        };
+                    }
+                    catch (JsonException)
+                    {
+                        // For boolean API responses.
+                        return new ApiResponse<T>()
+                        {
+                            StatusCode = 200,
+                            ErrorMessage = null,
+                            Result = default(T),
+                            ResultBoolean = JsonConvert.DeserializeObject<bool>(data),
+                            Success = true,
+                        };
+                    }
                 }
 
                 return new ApiResponse<T>()
@@ -219,14 +225,10 @@ namespace Frontend.Web.Repository.Client
             }
             catch (Exception ApiException)
             {
-                Console.WriteLine($"Aurora:");
-                Console.WriteLine($"Error Log when fetching: {route.Endpoint}/{route.ActionName}");
-                Console.WriteLine($"Exception caught at {DateTime.Now}: {ApiException.Message}");
-                Console.WriteLine($"StackTrace: {ApiException.StackTrace}");
                 return new ApiResponse<T>()
                 {
                     StatusCode = 500,
-                    ErrorMessage = "Something wrong happened",
+                    ErrorMessage = ApiException.Message,
                     Result = default,
                     Success = false,
                 };
@@ -247,7 +249,6 @@ namespace Frontend.Web.Repository.Client
             {
                 HttpRequestHeader httpRequestHeader = await _httpRequestHeader.BuildHttpRequestHeader(HttpMethod.Post, isPublic, ContentTypeEnum.JSON);
                 var request = new HttpRequestMessage(httpRequestHeader.Method, _httpRequestHeader.BuildRequestUri(httpRequestHeader, route));
-                //_httpClient.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "69420");
                 request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
                 return await _httpClient.SendAsync(request);
             }

@@ -36,14 +36,21 @@ namespace Frontend.Web.Services.Products
             return await _productRepository.GetProduct(tenantId, productId);
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public async Task<ApiResponse<Product>> CreateProduct(Product product)
         {
-            return (await _productRepository.CreateProduct(product)).Result;
+            return await _productRepository.CreateProduct(product);
         }
 
-        public async Task<bool> UpdateProduct(Product product)
+        public async Task<ApiResponse<bool>> UpdateProduct(Product product)
         {
-            return await _productRepository.UpdateProduct(product);
+            var response = await _productRepository.UpdateProduct(product);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
         public async Task<bool> DeleteProduct(string tenantId, string productId)
         {
