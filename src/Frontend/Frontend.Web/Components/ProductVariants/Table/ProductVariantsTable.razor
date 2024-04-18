@@ -3,6 +3,7 @@
 @using Frontend.Web.Services.Products;
 @inject ProductVariantService _productVariantService;
 @inject AuthenticationService _auth;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div class="card card-body">
     <h5 class="card-title fw-semibold mb-4">Variants</h5>
@@ -104,7 +105,15 @@
     {
         isLoading = true;
         var context = await _auth.GetContext();
-        variants = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), parentProductId);
+        var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), parentProductId);
+        if (response.Success && response.Result is not null)
+        {
+            variants = response.Result;
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
         isLoading = false;
     }
 }

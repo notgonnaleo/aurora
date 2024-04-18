@@ -17,14 +17,14 @@ namespace Frontend.Web.Repository.Contacts
             _httpClientRepository = httpClientRepository;
         }
 
-        public async Task<IEnumerable<Email>> GetEmails(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Email>>> GetEmails(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = EmailAddresses.GET.GetEmails.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Email>().Send(Endpoints.EmailAddresses, Methods.Default.GET, parameters);
-            return (await _httpClientRepository.Get(request)).Result;
+            return await _httpClientRepository.Get(request);
         }
 
-        public async Task<Email> GetEmail(string tenantId, string emailAddressId)
+        public async Task<ApiResponse<Email>> GetEmail(string tenantId, string emailAddressId)
         {
             var parameters = new List<RouteParameterRequest>()
             {
@@ -40,7 +40,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
             var request = new RouteBuilder<Email>().SendMultiple(Endpoints.EmailAddresses, Methods.Default.FIND, parameters);
-            return (await _httpClientRepository.Find(request)).Result;
+            return await _httpClientRepository.Find(request);
         }
 
         public async Task<ApiResponse<Email>> CreateEmail(Email email)

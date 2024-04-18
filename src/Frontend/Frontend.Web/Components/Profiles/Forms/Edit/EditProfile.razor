@@ -5,6 +5,7 @@
 @inject AuthenticationService _authenticationService;
 @inject ContactService _contactService;
 @inject NavigationManager navigator;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 @* Profile *@
 <div class="row m-4">
@@ -129,9 +130,13 @@
         NewProfile.TenantId = context.Tenant.Id;
         NewProfile.AgentId = AgentId;
         var response = await _contactService.CreateProfile(NewProfile);
-        if (response is not null)
+        if (response.Success && response.Result is not null)
         {
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }
@@ -143,9 +148,14 @@
         var context = await _authenticationService.GetContext();
         Profile.TenantId = context.Tenant.Id;
         Profile.AgentId = AgentId;
-        if (await _contactService.UpdateProfile(Profile))
+        var response = await _contactService.UpdateProfile(Profile);
+        if (response.Success && response.ResultBoolean)
         {
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }

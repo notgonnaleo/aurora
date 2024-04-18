@@ -18,14 +18,14 @@ namespace Frontend.Web.Repository.Contacts
                 _httpClientRepository = httpClientRepository;
             }
 
-            public async Task<IEnumerable<Address>> GetAddresses(string tenantId)
+            public async Task<ApiResponse<IEnumerable<Address>>> GetAddresses(string tenantId)
             {
                 var parameters = new RouteParameterRequest() { ParameterName = Methods.Addresses.GET.GetAddresses.tenantId, ParameterValue = tenantId };
                 var request = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.GET, parameters);
-                return (await _httpClientRepository.Get(request)).Result;
+                return await _httpClientRepository.Get(request);
             }
 
-            public async Task<Address> GetAddress(string tenantId, string addressId)
+            public async Task<ApiResponse<Address>> GetAddress(string tenantId, string addressId)
             {
                 var parameters = new List<RouteParameterRequest>()
             {
@@ -41,7 +41,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Address>().SendMultiple(Endpoints.Addresses, Methods.Default.FIND, parameters);
-                return (await _httpClientRepository.Find(request)).Result;
+                return await _httpClientRepository.Find(request);
             }
 
             public async Task<ApiResponse<Address>> CreateAddress(Address address)

@@ -19,8 +19,6 @@ namespace Frontend.Web.Repository.Stocks
             _httpClientRepository = httpClientRepository;
         }
 
-
-
         public async Task<ApiResponse<Stock>> CreateStock(Stock stock)
         {
             var model = new RouteBuilder<Stock>().Send(Endpoints.Stock, Methods.Default.POST, stock);

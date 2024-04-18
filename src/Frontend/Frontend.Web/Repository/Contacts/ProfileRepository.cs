@@ -19,14 +19,14 @@ namespace Frontend.Web.Repository.Contacts
                 _httpClientRepository = httpClientRepository;
             }
 
-            public async Task<IEnumerable<Profile>> GetProfiles(string tenantId)
+            public async Task<ApiResponse<IEnumerable<Profile>>> GetProfiles(string tenantId)
             {
                 var parameters = new RouteParameterRequest() { ParameterName = Methods.Profiles.GET.GetProfiles.tenantId, ParameterValue = tenantId };
                 var request = new RouteBuilder<Profile>().Send(Endpoints.Profiles, Methods.Default.GET, parameters);
-                return (await _httpClientRepository.Get(request)).Result;
+                return await _httpClientRepository.Get(request);
             }
 
-            public async Task<Profile> GetProfile(string tenantId, string profileId)
+            public async Task<ApiResponse<Profile>> GetProfile(string tenantId, string profileId)
             {
                 var parameters = new List<RouteParameterRequest>()
             {
@@ -42,7 +42,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Profile>().SendMultiple(Endpoints.Profiles, Methods.Default.FIND, parameters);
-                return (await _httpClientRepository.Find(request)).Result;
+                return await _httpClientRepository.Find(request);
             }
 
             public async Task<ApiResponse<Profile>> CreateProfile(Profile profile)
@@ -51,10 +51,17 @@ namespace Frontend.Web.Repository.Contacts
                 return await _httpClientRepository.Post(model);
             }
 
-            public async Task<bool> UpdateProfile(Profile profile)
+            public async Task<ApiResponse<bool>> UpdateProfile(Profile profile)
             {
                 var model = new RouteBuilder<Profile>().Send(Endpoints.Profiles, Methods.Default.PUT, profile);
-                return (await _httpClientRepository.Put(model)).Success;
+                var response = await _httpClientRepository.Put(model);
+                return new ApiResponse<bool>()
+                {
+                    Success = response.Success,
+                    ResultBoolean = response.ResultBoolean,
+                    ErrorMessage = response.ErrorMessage,
+                    StatusCode = response.StatusCode
+                };
             }
 
             public async Task<bool> DeleteProfile(string tenantId, string profileId)

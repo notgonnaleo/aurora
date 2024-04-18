@@ -80,8 +80,27 @@
         var context = await _authenticationService.GetContext();
         category.TenantId = context.Tenant.Id;
         subCategory.TenantId = context.Tenant.Id;
-        subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).Result.ToList();
-        category = (await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString())).Result;
+
+        var responseSubCategories = await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString());
+        if (responseSubCategories.Success && responseSubCategories.Result is not null)
+        {
+            subCategoryList = responseSubCategories.Result.ToList();
+
+        }
+        else
+        {
+            Toaster.Error(responseSubCategories.ErrorMessage);
+        }
+
+        var responseCategory = await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString());
+        if (responseCategory.Success && responseCategory.Result is not null)
+        {
+            category = responseCategory.Result;
+        }
+        else
+        {
+            Toaster.Error(responseCategory.ErrorMessage);
+        }
     }
 }
 

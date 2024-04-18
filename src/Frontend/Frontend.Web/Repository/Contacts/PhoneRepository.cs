@@ -18,14 +18,14 @@ namespace Frontend.Web.Repository.Contacts
                 _httpClientRepository = httpClientRepository;
             }
 
-            public async Task<IEnumerable<Phone>> GetPhones(string tenantId)
+            public async Task<ApiResponse<IEnumerable<Phone>>> GetPhones(string tenantId)
             {
                 var parameters = new RouteParameterRequest() { ParameterName = Methods.Phones.GET.GetPhones.tenantId, ParameterValue = tenantId };
                 var request = new RouteBuilder<Phone>().Send(Endpoints.Phones, Methods.Default.GET, parameters);
-                return (await _httpClientRepository.Get(request)).Result;
+                return await _httpClientRepository.Get(request);
             }
 
-            public async Task<Phone> GetPhone(string tenantId, string phoneId)
+            public async Task<ApiResponse<Phone>> GetPhone(string tenantId, string phoneId)
             {
                 var parameters = new List<RouteParameterRequest>()
             {
@@ -41,7 +41,7 @@ namespace Frontend.Web.Repository.Contacts
                 }
             };
                 var request = new RouteBuilder<Phone>().SendMultiple(Endpoints.Phones, Methods.Default.FIND, parameters);
-                return (await _httpClientRepository.Find(request)).Result;
+                return await _httpClientRepository.Find(request);
             }
 
             public async Task<ApiResponse<Phone>> CreatePhone(Phone phone)
@@ -50,10 +50,17 @@ namespace Frontend.Web.Repository.Contacts
                 return await _httpClientRepository.Post(model);
             }
 
-            public async Task<bool> UpdatePhone(Phone phone)
+            public async Task<ApiResponse<bool>> UpdatePhone(Phone phone)
             {
                 var model = new RouteBuilder<Phone>().Send(Endpoints.Phones, Methods.Default.PUT, phone);
-                return (await _httpClientRepository.Put(model)).Success;
+                var response = await _httpClientRepository.Put(model);
+                return new ApiResponse<bool>()
+                {
+                    Success = response.Success,
+                    ResultBoolean = response.ResultBoolean,
+                    ErrorMessage = response.ErrorMessage,
+                    StatusCode = response.StatusCode
+                };
             }
 
             public async Task<bool> DeletePhone(string tenantId, string phoneId)
