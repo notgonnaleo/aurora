@@ -13,8 +13,8 @@ namespace Frontend.Web.Models.Route
         /// <returns>Type of RouteBuilder<T> using the provided generic type.</returns>
         public RouteBuilder<T> Send(string moduleEndpoint, string moduleMethod, T body)
         {
-                return new RouteBuilder<T>()
-                    .BuildRoute(moduleEndpoint, moduleMethod, body);
+            return new RouteBuilder<T>()
+                .BuildRoute(moduleEndpoint, moduleMethod, body);
         }
 
         /// <summary>

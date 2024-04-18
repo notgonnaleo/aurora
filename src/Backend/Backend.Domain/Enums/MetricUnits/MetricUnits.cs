@@ -12,17 +12,20 @@ namespace Backend.Domain.Enums.MetricUnits
         {
             public static List<string> measurementUnitTypes = new List<string>()
             {
-                "KM",
+                "TON",
+                "CX",
+                "UNIT",
+                "LITRO",
+                "PARES",
                 "M",
-                "UNIT"
-            };
-        }
-        public static class Weight
-        {
-            public static List<string> weightUnitTypes = new List<string>()
-            {
-                "KG",
-                "G",
+                "M2",
+                "M3",
+                "MKW/H",
+                "QUILT",
+                "TML",
+                "GRAMA",
+                "BUI",
+                "KGBR"
             };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.Products;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Products;
 
 namespace Frontend.Web.Services.Products
@@ -11,14 +12,14 @@ namespace Frontend.Web.Services.Products
             _productVariantRepository = productVariantRepository;
         }
 
-        public async Task<IEnumerable<ProductVariant>> GetVariantsByProduct(string tenantId, string productId)
+        public async Task<ApiResponse<IEnumerable<ProductVariant>>> GetVariantsByProduct(string tenantId, string productId)
         {
             return await _productVariantRepository.GetAllVariantsByProduct(tenantId, productId);
         }
 
-        public async Task<ProductVariant> CreateVariant(ProductVariant productVariant)
+        public async Task<ApiResponse<ProductVariant>> CreateVariant(ProductVariant productVariant)
         {
             return await _productVariantRepository.CreateProductVariant(productVariant);
         }
     }
-}
+} 

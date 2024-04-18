@@ -7,27 +7,30 @@
 @inject NavigationManager NavigationManager
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <PageTitle>Aurora - Edit</PageTitle>
-
+@if (Model is not null && Model.Agent is not null)
+{
 <aside class="right-sidebar @formCssClass">
-@if (isPhoneNumberSidebar)
-{
-    <Frontend.Web.Components.PhoneNumbers.Forms.Add.AddPhoneNumber CollapseRightSidebar=collapsePhoneNumberForm
-        ToggleRightSidebar="TogglePhoneNumberForm" AgentId="Model.Agent.AgentId" Model="selectedPhoneNumber" />
-}
+    @if (isPhoneNumberSidebar)
+    {
+        <Frontend.Web.Components.PhoneNumbers.Forms.Add.AddPhoneNumber CollapseRightSidebar=collapsePhoneNumberForm
+            ToggleRightSidebar="TogglePhoneNumberForm" AgentId="Model.Agent.AgentId" Model="selectedPhoneNumber" />
+    }
 
-@if (isEmailSidebar)
-{
+    @if (isEmailSidebar)
+    {
         <Frontend.Web.Components.Emails.Forms.Add.AddEmail CollapseRightSidebar=collapseEmailForm
-            ToggleRightSidebar="ToggleEmailForm" AgentId="Model.Agent.AgentId" Model="selectedEmail"/>
-}
-@if (isAddressSidebar)
-{
+            ToggleRightSidebar="ToggleEmailForm" AgentId="Model.Agent.AgentId" Model="selectedEmail" />
+    }
+    @if (isAddressSidebar)
+    {
         <Frontend.Web.Components.Addresses.Forms.Add.AddAddress CollapseRightSidebar=collapseEmailForm
-            ToggleRightSidebar="ToggleAddressForm" AgentId="Model.Agent.AgentId" Model="selectedAddress"/>
-}
+            ToggleRightSidebar="ToggleAddressForm" AgentId="Model.Agent.AgentId" Model="selectedAddress" />
+    }
 </aside>
+}
 
 <div class="container-fluid">
     <nav aria-label="breadcrumb" class="mb-3">
@@ -43,7 +46,7 @@
             </li>
         </ol>
     </nav>
-    @if (isLoading)
+    @if (isLoading && Model is null)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
     }
@@ -235,7 +238,16 @@
     {
         isLoading = true;
         if (!string.IsNullOrEmpty(agentId)){
-            Model = await _agentService.GetAgentWithDetail(agentId.ToString());
+            var response = await _agentService.GetAgentWithDetail(agentId.ToString());
+            if (response.Successful())
+            {
+                Model = response.Result;
+            }
+            else
+            {
+                Model = new AgentDetail();
+                Toaster.Warning(response.ErrorMessage);
+            }
         }
         isLoading = false;
     }

@@ -168,7 +168,7 @@ namespace Backend.Infrastructure.Services.Stocks
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
         {
-            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId);
+            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId && x.Active);
             List<ProductDetail> products = _productService.GetProductsWithDetail(tenantId).ToList();
 
             return stock.Select(x => new StockDetail

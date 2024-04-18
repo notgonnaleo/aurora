@@ -49,16 +49,10 @@ namespace Frontend.Web.Util.Cookie
             await _accessorJsRef.Value.InvokeVoidAsync("setCookie", key, value, 1);
         }
 
-        public async Task Clear()
+        public async Task Clear(string key)
         {
             await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("clear");
-        }
-
-        public async Task RemoveAsync(string key)
-        {
-            await WaitForReference();
-            await _accessorJsRef.Value.InvokeVoidAsync("remove", key);
+            await _accessorJsRef.Value.InvokeVoidAsync("expireCookie", key);
         }
     }
 }

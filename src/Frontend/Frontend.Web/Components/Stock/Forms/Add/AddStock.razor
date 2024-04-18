@@ -14,7 +14,7 @@
 @inject ProductService _productService;
 @inject ProductVariantService _productVariantService
 @inject AgentService _agentService
-
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -119,8 +119,8 @@
     {
         var context = await _authenticationService.GetContext();
         var tenantId = context.Tenant.Id.ToString();
-        products = (await _productService.GetProducts(tenantId)).ToList();
-        agents = (await _agentService.GetAgents(tenantId)).ToList();
+        products = (await _productService.GetProducts(tenantId)).Result.ToList();
+        agents = (await _agentService.GetAgents(tenantId)).Result.ToList();
 
     }
 
@@ -131,7 +131,15 @@
         var context = await _authenticationService.GetContext();
         var tenantId = context.Tenant.Id.ToString();
         stock.ProductId = new Guid(selectedProductId);
-        variant = await _productVariantService.GetVariantsByProduct(tenantId, selectedProductId.ToString());
+        var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), selectedProductId);
+        if (response.Successful())
+        {
+            variant = response.Result;
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
 
     }
 

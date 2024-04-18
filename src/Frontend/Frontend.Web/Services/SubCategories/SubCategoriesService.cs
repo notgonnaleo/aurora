@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.SubCategories;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.SubCategories;
 
 namespace Frontend.Web.Services.SubCategories
@@ -10,18 +11,24 @@ namespace Frontend.Web.Services.SubCategories
         { 
             _subCategoryRepository = subCategoryRepository;
         }
-        public async Task<IEnumerable<SubCategory>> GetSubCategoriesByCategoryId(string tenantId, string categoryId)
+        public async Task<ApiResponse<IEnumerable<SubCategory>>> GetSubCategoriesByCategoryId(string tenantId, string categoryId)
         {
-            var result = await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId);
-            return result;
+            return await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId);
         }
-        public async Task<SubCategory> CreateSubCategory(SubCategory subCategory)
+        public async Task<ApiResponse<SubCategory>> CreateSubCategory(SubCategory subCategory)
         {
             return await _subCategoryRepository.CreateSubCategory(subCategory);
         }
-        public async Task<bool> UpdateSubCategory(SubCategory subCategory)
+        public async Task<ApiResponse<bool>> UpdateSubCategory(SubCategory subCategory)
         {
-            return await _subCategoryRepository.UpdateSubCategory(subCategory);
+            var response = await _subCategoryRepository.UpdateSubCategory(subCategory);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
         public async Task<bool> DeleteSubCategory(string tenantId, string categoryId, string subCategoryId)
         {

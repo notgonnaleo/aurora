@@ -50,7 +50,6 @@ else
 @code 
 {
     public bool isAuthenticated = false;
-
     protected override async Task OnInitializedAsync()
     {
         LoadAppTheme();
@@ -69,7 +68,11 @@ else
     public async Task<bool> IsAuthenticated()
     {
         var response = await _authService.IsUserLogged();
-        return response.GetValueOrDefault();
+        if (response!.StatusCode == 404)
+        {
+            navigator.NavigateTo("/Login");
+        }
+        return response.Result;
     }
 }
 

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,8 +47,8 @@ namespace Backend.Infrastructure.Services.Products
         public Product? GetById(Guid tenantId, Guid productId)
         {
             return _appDbContext.Products
-                .Where(x => x.TenantId == tenantId 
-                && x.ProductId == productId 
+                .Where(x => x.TenantId == tenantId
+                && x.ProductId == productId
                 && x.Active)
                 .FirstOrDefault();
         }
@@ -77,18 +78,29 @@ namespace Backend.Infrastructure.Services.Products
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public bool Delete(Guid tenantId, Guid ProductId)
+        public bool Delete(Guid tenantId, Guid productId)
         {
             var context = LoadContext();
+            
+            // Remove stock entries
+            var isEntriesDeleted = 0;
+            var invalidEntries = _appDbContext.Stocks.Where(x => x.ProductId == productId).ToList();
+            if (invalidEntries.Any())
+            {
+                invalidEntries.ForEach(x => x.Active = false);
+                _appDbContext.Stocks.UpdateRange(invalidEntries);
+                isEntriesDeleted = _appDbContext.SaveChanges();
+            }
+            
+            // Remove product
             Product product = _appDbContext.Products
-                .Where(x => x.ProductId == ProductId && x.TenantId == tenantId)
+                .Where(x => x.ProductId == productId && x.TenantId == tenantId)
                 .First();
-
-            product.Active = false;   
-            _appDbContext.Update(product);
-            var response = _appDbContext.SaveChanges();
-
-            if (response <= 0)
+            product.Active = false;
+            _appDbContext.Products.Update(product);
+            var isProductDeleted = _appDbContext.SaveChanges();
+            
+            if (isProductDeleted <= 0 || (invalidEntries.Any() && isEntriesDeleted <= 0))
                 throw new Exception(Localization.GenericValidations.ErrorDeleteItem(context.Language));
 
             return true;

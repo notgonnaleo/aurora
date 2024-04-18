@@ -56,7 +56,7 @@
     protected override async Task OnInitializedAsync()
     {
         var response = await _authenticationService.IsUserLogged();
-        if (response.GetValueOrDefault())
+        if (response.Result)
             Navigator.NavigateTo(Navigator.BaseUri, true);
     }
 

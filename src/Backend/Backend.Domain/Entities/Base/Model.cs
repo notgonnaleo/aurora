@@ -10,9 +10,6 @@ namespace Backend.Domain.Entities.Base
     public class Model
     {
         [NotMapped]
-        public ApiResponseError? ApiResponseError { get; set; } = null;
-
-        [NotMapped]
         public int Skip { get; set; }
         [NotMapped]
         public int Take { get; set; }

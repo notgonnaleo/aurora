@@ -119,7 +119,7 @@
 
     public async Task<List<Category>> GetCategoriesAndSubCategories(string tenantId)
     {
-        return (await _categoryService.GetCategoriesAndSubCategories(tenantId)).ToList();
+        return (await _categoryService.GetCategoriesAndSubCategories(tenantId)).Result.ToList();
     }
 
 }

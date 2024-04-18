@@ -10,6 +10,7 @@
 @inject AuthenticationService _authenticationService
 @inject ContactService _contactService;
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -61,10 +62,17 @@
         var context = await _authenticationService.GetContext();
         emailAddress.TenantId = context.Tenant.Id;
         emailAddress.AgentId = AgentId;
-        Email response = await _contactService.CreateEmailAddress(emailAddress);
 
-        if (response != null && response.EmailAddressId != new Guid())
+        var response = await _contactService.CreateEmailAddress(emailAddress);
+        if (response.Successful())
+        {
+            Toaster.Success("Item was created successfully!.");
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
     }
 
     public async Task UpdateEmailAddress()
@@ -72,8 +80,17 @@
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
         Model.AgentId = AgentId;
-        if (await _contactService.UpdateEmailAddress(Model))
+
+        var response = await _contactService.UpdateEmailAddress(Model);
+        if (response.Successful())
+        {
+            Toaster.Success("Item was created successfully!.");
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
     }
 }
 

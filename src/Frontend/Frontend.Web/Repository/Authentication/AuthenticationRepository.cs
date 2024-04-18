@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Authentication.Users.Login.Response;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Infrastructure.Enums.Modules;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using System.Net.Http.Json;
@@ -20,6 +21,12 @@ namespace Frontend.Web.Repository.Authentication
             RouteBuilder<LoginRequest> routeBuilder = new RouteBuilder<LoginRequest>().Send(Endpoints.Authentication, Methods.Authentication.Login, model);
             var response = await _httpClientRepository.Post(routeBuilder, true);
             return await response.Content.ReadFromJsonAsync<UserSessionContext>();
+        }
+
+        public async Task<ApiResponse<bool>> Validate()
+        {
+            RouteBuilder<bool> routeBuilder = new RouteBuilder<bool>().Send(Endpoints.Authentication, Methods.Authentication.Validate);
+            return await _httpClientRepository.Find(routeBuilder);
         }
     }
 }

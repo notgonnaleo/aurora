@@ -225,11 +225,15 @@
 
     public async Task GetProduct()
     {
-        Product = await _productService.GetProductWithDetails(tenantId, productId);
+        Product = (await _productService.GetProductWithDetails(tenantId, productId)).Result;
     }
 
     public async Task GetVariants()
     {
-        Variants = await _productVariantService.GetVariantsByProduct(tenantId, productId);
+        var response = await _productVariantService.GetVariantsByProduct(tenantId, productId);
+        if (response.Successful())
+        {
+            Variants = response.Result;
+        }
     }
 }

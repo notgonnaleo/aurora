@@ -6,6 +6,7 @@
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -43,9 +44,16 @@
     {
         var context = await _authenticationService.GetContext();
         agent.TenantId = context.Tenant.Id;
-        Agent newAgent = await _agentService.CreateAgent(agent);
-        if (newAgent is not null && newAgent.AgentId != Guid.Empty)
+        var response = await _agentService.CreateAgent(agent);
+        if (response.Success)
+        {
+            Toaster.Success("Added");
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
     }
 }
 
@@ -57,7 +65,10 @@
     public async Task LoadAgentTypes()
     {
         var response = await _agentService.GetAgentTypes();
-        agentTypes = response.ToList();
+        if (response.Success)
+        {
+            agentTypes = response.Result.ToList();
+        }
     }
 }
 
