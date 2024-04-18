@@ -50,7 +50,7 @@ else
     public async Task GetAgentTypes()
     {
         var response = await _agentService.GetAgentTypes();
-        agentTypes = response.ToList();
+        agentTypes = response.Result.ToList();
     }
 }
 

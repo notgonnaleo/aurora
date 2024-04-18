@@ -15,13 +15,13 @@ namespace Frontend.Web.Repository.Categories
         { 
             _httpClientRepository = httpClientRepository;
         }
-        public async Task<IEnumerable<Category>> GetCategories(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Category>>> GetCategories(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GET.GetCategories.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.GET, parameters);
-            return (await _httpClientRepository.Get(request)).Result;
+            return await _httpClientRepository.Get(request);
         }
-        public async Task<Category> GetCategory(string tenantId, string categoryId)
+        public async Task<ApiResponse<Category>> GetCategory(string tenantId, string categoryId)
         {
             var parameters = new List<RouteParameterRequest>()
             {
@@ -37,13 +37,13 @@ namespace Frontend.Web.Repository.Categories
                 },
             };
             var request = new RouteBuilder<Category>().SendMultiple(Endpoints.Category, Methods.Default.FIND, parameters);
-            return (await _httpClientRepository.Find(request)).Result;
+            return await _httpClientRepository.Find(request);
         }
-        public async Task<IEnumerable<Category>> GetCategoriesAndSubCategories(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Category>>> GetCategoriesAndSubCategories(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Categories.GET.GetCategoryAndSubCategoriesParameters.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Categories.GET.GetCategoryAndSubCategories, parameters);
-            return (await _httpClientRepository.Get(request)).Result;
+            return await _httpClientRepository.Get(request);
         }
         public async Task<ApiResponse<Category>> CreateCategory(Category category)
         {

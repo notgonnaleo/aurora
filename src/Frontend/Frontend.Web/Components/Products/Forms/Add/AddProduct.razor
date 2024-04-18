@@ -294,7 +294,8 @@
         {
             model.SKU = string.Empty;
         }
-        if (string.IsNullOrEmpty(model.ColorName)){
+        if (string.IsNullOrEmpty(model.ColorName))
+        {
             Toaster.Error("Color selected is invalid");
         }
         if (string.IsNullOrEmpty(model.GTIN))
@@ -326,7 +327,7 @@
     private List<SubCategory> subCategories = new List<SubCategory>();
     public async Task GetCategories()
     {
-        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).Result.ToList();
     }
 
     private async Task LoadSubCategories(ChangeEventArgs args)

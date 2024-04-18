@@ -80,8 +80,8 @@
         var context = await _authenticationService.GetContext();
         category.TenantId = context.Tenant.Id;
         subCategory.TenantId = context.Tenant.Id;
-        subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).ToList();
-        category = (await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString()));
+        subCategoryList = (await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString())).Result.ToList();
+        category = (await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString())).Result;
     }
 }
 

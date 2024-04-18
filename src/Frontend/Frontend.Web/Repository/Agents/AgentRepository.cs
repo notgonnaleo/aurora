@@ -25,27 +25,26 @@ namespace Frontend.Web.Repository.Agents
             return await _httpClientRepository.Post(model);
         }
 
-        public async Task<IEnumerable<Agent>> GetAgents(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Agent>>> GetAgents(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = AgentsEnums.GET.GetAgents.tenantId, ParameterValue = tenantId };
             var request = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.GET, parameters);
-            return (await _httpClientRepository.Get(request)).Result;
+            return await _httpClientRepository.Get(request);
         }
 
-        public async Task<AgentDetail> GetAgentWithDetail(string agentId)
+        public async Task<ApiResponse<AgentDetail>> GetAgentWithDetail(string agentId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = AgentsEnums.GET.GetAgentWithDetail.Args.agentId, ParameterValue = agentId };
             var request = new RouteBuilder<AgentDetail>().Send(Endpoints.Agents, Methods.Agents.GET.GetAgentWithDetail.RouteName, parameters);
-            return (await _httpClientRepository.Find(request)).Result;
+            return await _httpClientRepository.Find(request);
         }
 
-        public async Task<IEnumerable<AgentType>> GetAgentTypes()
+        public async Task<ApiResponse<IEnumerable<AgentType>>> GetAgentTypes()
         {
             var request = new RouteBuilder<AgentType>().Send(Endpoints.AgentTypes, Methods.Default.GET);
-            return (await _httpClientRepository.Get(request)).Result;
+            return await _httpClientRepository.Get(request);
         }
-
-        public async Task<Agent> GetAgent(string tenantId, string agentId)
+        public async Task<ApiResponse<Agent>> GetAgent(string tenantId, string agentId)
         {
             var parameters = new List<RouteParameterRequest>()
             {
@@ -61,7 +60,7 @@ namespace Frontend.Web.Repository.Agents
                 }
             };
             var request = new RouteBuilder<Agent>().SendMultiple(Endpoints.Agents, Methods.Default.FIND, parameters);
-            return (await _httpClientRepository.Find(request)).Result;
+            return await _httpClientRepository.Find(request);
         }
 
         public async Task<ApiResponse<Agent>> UpdateAgent(Agent agent)

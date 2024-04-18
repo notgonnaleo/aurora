@@ -65,7 +65,10 @@
     public async Task LoadAgentTypes()
     {
         var response = await _agentService.GetAgentTypes();
-        agentTypes = response.ToList();
+        if (response.Success)
+        {
+            agentTypes = response.Result.ToList();
+        }
     }
 }
 

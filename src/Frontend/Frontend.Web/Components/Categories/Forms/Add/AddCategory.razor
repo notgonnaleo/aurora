@@ -147,7 +147,7 @@
     public async Task GetCategories()
     {
         var context = await _authenticationService.GetContext();
-        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).Result.ToList();
     }
 
     private async Task SetSubCategories(ChangeEventArgs args)

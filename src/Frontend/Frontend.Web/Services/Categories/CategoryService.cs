@@ -11,15 +11,15 @@ namespace Frontend.Web.Services.Categories
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<IEnumerable<Category>> GetCategories(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Category>>> GetCategories(string tenantId)
         {
             return await _categoryRepository.GetCategories(tenantId);
         }
-        public async Task<Category> GetCategory(string tenantId, string categoryId)
+        public async Task<ApiResponse<Category>> GetCategory(string tenantId, string categoryId)
         {
             return await _categoryRepository.GetCategory(tenantId, categoryId);
         }
-        public async Task<IEnumerable<Category>> GetCategoriesAndSubCategories(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Category>>> GetCategoriesAndSubCategories(string tenantId)
         {
             return await _categoryRepository.GetCategoriesAndSubCategories(tenantId);
         }

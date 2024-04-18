@@ -71,7 +71,7 @@ namespace Frontend.Web.Repository.Client
                 return new ApiResponse<IEnumerable<T>>()
                 {
                     StatusCode = 500,
-                    ErrorMessage = "Something wrong happened",
+                    ErrorMessage = ApiException.Message,
                     Result = null,
                     Success = false,
                 };
@@ -117,7 +117,7 @@ namespace Frontend.Web.Repository.Client
                 return new ApiResponse<T>()
                 {
                     StatusCode = 500,
-                    ErrorMessage = "Something wrong happened",
+                    ErrorMessage = ApiException.Message,
                     Result = default,
                     Success = false,
                 };

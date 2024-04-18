@@ -11,9 +11,9 @@ namespace Frontend.Web.Services.SubCategories
         { 
             _subCategoryRepository = subCategoryRepository;
         }
-        public async Task<IEnumerable<SubCategory>> GetSubCategoriesByCategoryId(string tenantId, string categoryId)
+        public async Task<ApiResponse<IEnumerable<SubCategory>>> GetSubCategoriesByCategoryId(string tenantId, string categoryId)
         {
-            return (await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId)).Result;
+            return await _subCategoryRepository.GetSubCategoriesByCategory(tenantId, categoryId);
         }
         public async Task<ApiResponse<SubCategory>> CreateSubCategory(SubCategory subCategory)
         {
