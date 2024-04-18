@@ -132,7 +132,7 @@
         var tenantId = context.Tenant.Id.ToString();
         stock.ProductId = new Guid(selectedProductId);
         var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), selectedProductId);
-        if (response.Success && response.Result is not null)
+        if (response.Successful())
         {
             variant = response.Result;
         }

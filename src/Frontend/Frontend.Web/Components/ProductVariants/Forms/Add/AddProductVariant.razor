@@ -186,8 +186,8 @@
         model.ProductId = ParentProductDetail.ProductId;
         model.GTIN = ParentProductDetail.GTIN;
 
-        ProductVariant newProductVariant = await _productVariantService.CreateVariant(model);
-        if (newProductVariant != null && newProductVariant.VariantId != new Guid())
+        var response = await _productVariantService.CreateVariant(model);
+        if (response.Successful())
         {
             navigator.NavigateTo($"/products/edit/{model.ProductId}", true);
         }

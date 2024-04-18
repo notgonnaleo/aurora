@@ -93,7 +93,7 @@
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
         var response = await _productService.UpdateProduct(Model);
-        if (response.Success && response.ResultBoolean)
+        if (response.Successful())
         {
             navigator.NavigateTo(navigator.Uri, true);
             Toaster.Success("Updated successfully!");

@@ -96,7 +96,7 @@ else
         isLoading = true;
         var context = await _authenticationService.GetContext();
         Model = await _productService.GetProducts(context.Tenant.Id.ToString());
-        if (Model.Success)
+        if (Model.Successful())
         {
             Toaster.Error(Model.ErrorMessage);
         }

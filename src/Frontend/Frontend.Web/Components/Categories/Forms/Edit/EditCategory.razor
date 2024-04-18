@@ -82,7 +82,7 @@
         subCategory.TenantId = context.Tenant.Id;
 
         var responseSubCategories = await _subCategoryService.GetSubCategoriesByCategoryId(context.Tenant.Id.ToString(), categoryId.ToString());
-        if (responseSubCategories.Success && responseSubCategories.Result is not null)
+        if (responseSubCategories.Successful())
         {
             subCategoryList = responseSubCategories.Result.ToList();
 
@@ -93,7 +93,7 @@
         }
 
         var responseCategory = await _categoryService.GetCategory(category.TenantId.ToString(), categoryId.ToString());
-        if (responseCategory.Success && responseCategory.Result is not null)
+        if (responseCategory.Successful())
         {
             category = responseCategory.Result;
         }
@@ -109,7 +109,7 @@
     public async Task UpdateCategory()
     {
         var response = await _categoryService.UpdateCategory(category);
-        if (response.ResultBoolean)
+        if (response.Successful())
         {
             Toaster.Success("Item updated successfully");
             navigator.NavigateTo("/categories");

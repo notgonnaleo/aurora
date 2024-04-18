@@ -308,7 +308,7 @@
         }
 
         var response = await _productService.CreateProduct(model);
-        if (response.Success)
+        if (response.Successful())
         {
             Toaster.Success(response!.Result.Name, "was created successfully!.");
             navigator.NavigateTo("/products", true);

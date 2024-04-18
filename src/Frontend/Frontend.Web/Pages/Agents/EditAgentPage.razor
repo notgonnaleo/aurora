@@ -239,7 +239,7 @@
         isLoading = true;
         if (!string.IsNullOrEmpty(agentId)){
             var response = await _agentService.GetAgentWithDetail(agentId.ToString());
-            if (response.Success && response.Result is not null)
+            if (response.Successful())
             {
                 Model = response.Result;
             }

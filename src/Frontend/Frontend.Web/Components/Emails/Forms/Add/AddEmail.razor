@@ -64,7 +64,7 @@
         emailAddress.AgentId = AgentId;
 
         var response = await _contactService.CreateEmailAddress(emailAddress);
-        if (response.Success)
+        if (response.Successful())
         {
             Toaster.Success("Item was created successfully!.");
             navigator.NavigateTo(navigator.Uri, true);
@@ -82,7 +82,7 @@
         Model.AgentId = AgentId;
 
         var response = await _contactService.UpdateEmailAddress(Model);
-        if (response.Success)
+        if (response.Successful())
         {
             Toaster.Success("Item was created successfully!.");
             navigator.NavigateTo(navigator.Uri, true);

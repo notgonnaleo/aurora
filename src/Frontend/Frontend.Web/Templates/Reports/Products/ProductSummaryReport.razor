@@ -231,7 +231,7 @@
     public async Task GetVariants()
     {
         var response = await _productVariantService.GetVariantsByProduct(tenantId, productId);
-        if (response.Success && response.Result is not null)
+        if (response.Successful())
         {
             Variants = response.Result;
         }

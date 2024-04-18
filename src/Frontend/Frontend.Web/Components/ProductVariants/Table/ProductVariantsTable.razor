@@ -106,7 +106,7 @@
         isLoading = true;
         var context = await _auth.GetContext();
         var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), parentProductId);
-        if (response.Success && response.Result is not null)
+        if (response.Successful())
         {
             variants = response.Result;
         }

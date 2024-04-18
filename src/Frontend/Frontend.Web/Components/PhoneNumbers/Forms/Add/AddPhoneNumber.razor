@@ -89,7 +89,7 @@
         phoneNumber.TenantId = context.Tenant.Id;
         phoneNumber.AgentId = AgentId;
         var response = await _contactService.CreatePhone(phoneNumber);
-        if (response.Success && response.Result is not null)
+        if (response.Successful())
         {
             navigator.NavigateTo(navigator.Uri, true);
         }
@@ -107,7 +107,7 @@
             Model.TenantId = context.Tenant.Id;
             Model.AgentId = AgentId;
             var response = await _contactService.UpdatePhone(Model);
-            if (response.Success && response.ResultBoolean)
+            if (response.Successful())
             {
                 navigator.NavigateTo(navigator.Uri, true);
             }

@@ -111,7 +111,7 @@
         category.TenantId = context.Tenant.Id;
         var response = await _categoryService.CreateCategory(category);
 
-        if (response.Success)
+        if (response.Successful())
         {
             navigator.NavigateTo("/categories", true);
             Toaster.Success("Item created successfully!");
@@ -128,7 +128,7 @@
         subCategory.TenantId = context.Tenant.Id;
         var response = await _subCategoryService.CreateSubCategory(subCategory);
 
-        if (response.Success)
+        if (response.Successful())
         {
             navigator.NavigateTo("/categories", true);
             Toaster.Success("Item created successfully!");
