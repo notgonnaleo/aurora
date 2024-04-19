@@ -1,9 +1,10 @@
-﻿@page "/agents"
+﻿@page "/agents/{IdSelected}"
+@using Backend.Domain.Entities.Agents
 
 <PageTitle>Aurora - Agents</PageTitle>
 
 <aside class="right-sidebar @formCssClass">
-    <Frontend.Web.Components.Agents.Forms.Add.AddAgent CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm"/>                                                        
+    <Frontend.Web.Components.Agents.Forms.Add.AddAgent CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
 </aside>
 
 @code
@@ -15,24 +16,28 @@
     private void ToggleForm()
     {
         collapseForm = !collapseForm;
-
-
     }
 }
 
+@code {
+    [Parameter] public string? IdSelected { get; set; }
+}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="m-4">
-            <button class="btn btn-outline-primary" @onclick="ToggleForm">
-                @btnText
-            </button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="m-4">
+                <button class="btn btn-outline-primary" @onclick="ToggleForm">
+                    @btnText
+                </button>
+            </div>
+        </div>
+        <div class="row">
+        <Frontend.Web.Components.Agents.Table.AgentsTable IdSelected="@IdSelected" />
         </div>
     </div>
-    <div class="row">
-        <Frontend.Web.Components.Agents.Table.AgentsTable />
-    </div>
-</div>
+
+
+
 
 
 

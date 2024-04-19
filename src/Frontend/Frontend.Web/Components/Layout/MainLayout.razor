@@ -12,7 +12,7 @@
 @if (isAuthenticated)
 {
     <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
-        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme  />
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
             @Body
@@ -27,7 +27,8 @@ else
 }
 
 @code
-{
+{   
+    
     private bool Theme = true;
     private async void LoadAppTheme()
     {
