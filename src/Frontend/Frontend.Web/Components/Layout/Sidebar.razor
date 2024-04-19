@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Agents
 ﻿@using Backend.Domain.Entities.Authentication.Tenants;
+@using Backend.Domain.Enums.Agents;
 @using Frontend.Web.Services.Agents
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Tenants;
@@ -100,24 +101,28 @@
                         <span class="hide-menu">Agents</span>
                     </div>
                     <ul aria-expanded="false" class="@SubNavMenuCssClassAgent first-level">
-                        <li class="sidebar-item">
-
-                            @foreach (var agentType in agentTypes)
-                            {
-                                <a class="sidebar-link cursor-pointer" @onclick="() => SelectAgentType(agentType)">
-                                    <div class="round-16 d-flex align-items-center justify-content-center">
-                                        <i class="ti ti-circle-filled"></i>
-                                    </div>
-                                    <span class="hide-menu" value="@agentType.AgentTypeId">@agentType.AgentTypeName</span>
-                                </a>
-                            }
-
-                        </li>
+                        @if(agentTypes is not null && !isLoading)
+                        {
+                            <li class="sidebar-item">
+                                @foreach (var agentType in agentTypes)
+                                {
+                                    <a class="sidebar-link cursor-pointer" @onclick="() => SelectAgentType(agentType)">
+                                        <div class="round-16 d-flex align-items-center justify-content-center">
+                                            <i class="ti ti-circle-filled"></i>
+                                        </div>
+                                        <span class="hide-menu" value="@agentType.AgentTypeId">@agentType.AgentTypeName</span>
+                                    </a>
+                                }
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="p-2 mt-2">
+                                <Frontend.Web.Components.Loader.LoadingSpinner />
+                            </li>
+                        }
                     </ul>
                 </li>
-
-
-
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/stock" aria-expanded="false">
                         <span>
@@ -126,10 +131,7 @@
                         <span class="hide-menu">Stock</span>
                     </a>
                 </li>
-
-
             </ul>
-
         </nav>
     </div>
 </aside>
@@ -141,8 +143,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         await GetTenants();
         await LoadAgents();
+        isLoading = false;
     }
 
     private async Task GetTenants()
@@ -153,22 +157,18 @@
     private async Task LoadAgents()
     {
         var response = await _agentService.GetAgentTypes();
-        if (response.Successful())
-        {
-            agentTypes = response.Result;
-        }
+        agentTypes = response.Result;
     }
 
     
 
-    public async Task SelectAgentType(AgentType agentType)
+    public void SelectAgentType(AgentType agentType)
     {
          
         navigator.NavigateTo($"/agents/{agentType.AgentTypeId}",forceLoad:true );
     }
 
 }
-
 
 @code
 {
@@ -180,6 +180,11 @@
             throw new Exception("Could not change the tenant profile.");
         navigator.NavigateTo("/", forceLoad: true);
     }
+}
+
+@code
+{
+    private bool isLoading = false;
 }
 
 @code

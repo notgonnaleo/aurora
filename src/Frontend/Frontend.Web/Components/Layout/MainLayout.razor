@@ -12,9 +12,9 @@
 @if (isAuthenticated)
 {
     <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
-        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme  />
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme />
         <div class="body-wrapper">
-            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
+            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme />
             @if (isLoading)
             {
                 <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
@@ -29,7 +29,14 @@
 else
 {
     <div data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
-        @Body
+        @if (isLoading)
+        {
+            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+        }
+        else
+        {
+            @Body  
+        }
     </div>
 }
 
