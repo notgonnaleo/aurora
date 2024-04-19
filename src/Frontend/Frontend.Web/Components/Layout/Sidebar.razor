@@ -71,6 +71,20 @@
                 </li>
 
                 <li class="nav-small-cap">
+                    <i class="ti ti-users nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">PROFILE</span>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/settings" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-settings"></i>
+                        </span>
+                        <span class="hide-menu">Settings</span>
+                    </a>
+                </li>
+
+                <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                     <span class="hide-menu">COMMERCIAL</span>
                 </li>
@@ -160,14 +174,10 @@
         agentTypes = response.Result;
     }
 
-    
-
     public void SelectAgentType(AgentType agentType)
     {
-         
         navigator.NavigateTo($"/agents/{agentType.AgentTypeId}",forceLoad:true );
     }
-
 }
 
 @code

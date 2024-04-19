@@ -53,6 +53,7 @@
     else
     {
         <div class="row">
+            <h6 class="fw-bold text">Profile</h6>
             <div class="col-lg-6 align-items-strech">
                 <div class="card w-100">
                     @* Agent basic info *@
@@ -65,6 +66,7 @@
             <div class="col-lg-6">
                 @* Phones *@
                 <div class="row">
+                    <h6 class="fw-bold text">Phone Number</h6>
                     <div class="card">
                         <div class="col-sm-12">
                             <div class="col-sm-2 p-4">
@@ -80,6 +82,7 @@
 
                 @* Emails *@
                 <div class="row">
+                    <h6 class="fw-bold text">Email Address</h6>
                     <div class="card">
                         <div class="col-sm-12">
                             <div class="col-sm-2 p-4">
@@ -96,14 +99,13 @@
         </div>
         @* Address numbers  *@
         <div class="row">
-            <div class="card">
-                <div class="col-sm-12">
-                    <div class="col-sm-2 p-4">
-                        <button type="button" class="btn btn-outline-primary" @onclick="AddAddress">
-                            <i class="ti ti-circle-plus cursor-pointer p-4">
-                            </i>
-                        </button>
-                    </div>
+            <h6 class="fw-bold text">Address</h6>
+            <div class="card col-lg-6 align-items-strech w-100">
+                <div class="col-sm-2 p-4">
+                    <button type="button" class="btn btn-outline-primary" @onclick="AddAddress">
+                        <i class="ti ti-circle-plus cursor-pointer p-4">
+                        </i>
+                    </button>
                 </div>
                 <Frontend.Web.Components.Addresses.Table.AddressesTable Addresses="Model?.Addresses" ShowModal="ShowAddressModal" SelectedItem="EditAddress"/>
             </div>

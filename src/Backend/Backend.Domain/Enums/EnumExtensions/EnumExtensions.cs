@@ -15,7 +15,6 @@ namespace Backend.Domain.Enums.EnumExtensions
         /// </summary>
         /// <param name="enumValue"></param>
         /// <returns></returns>
-        /// I NEED TO MAKE A METHOD THAT WORKS THIS ONE SUCKS AS FUCK ITS A PIECE OF SHIT DO NOT USE LOLOLOLOL
         public static string GetDescription(this Enum value)
         {
             var field = value.GetType().GetField(value.ToString());

@@ -1,4 +1,5 @@
 ﻿@using Backend.Domain.Entities.Addresses;
+
 <div class="card-body">
     @if (Addresses.Any())
     {
@@ -34,7 +35,7 @@
     }
     else
     {
-        <p>No phone numbers created to this agent yet.</p>
+        <p>No addresses.</p>
     }
 </div>
 @if (selectedAddress is not null)
