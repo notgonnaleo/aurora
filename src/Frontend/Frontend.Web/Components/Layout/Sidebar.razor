@@ -102,7 +102,7 @@
                     <ul aria-expanded="false" class="@SubNavMenuCssClassAgent first-level">
                         <li class="sidebar-item">
 
-                            @foreach (var agentType in agentype)
+                            @foreach (var agentType in agentTypes)
                             {
                                 <a class="sidebar-link cursor-pointer" @onclick="() => SelectAgentType(agentType)">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
@@ -136,7 +136,7 @@
 
 @code {
     private IEnumerable<Tenant> tenants = new List<Tenant>();
-    private IEnumerable<AgentType>? agentype;
+    private IEnumerable<AgentType>? agentTypes;
 
 
     protected override async Task OnInitializedAsync()
@@ -152,8 +152,11 @@
 
     private async Task LoadAgents()
     {
-
-        agentype = await _agentService.GetAgentTypes();
+        var response = await _agentService.GetAgentTypes();
+        if (response.Successful())
+        {
+            agentTypes = response.Result;
+        }
     }
 
     

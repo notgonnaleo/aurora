@@ -15,7 +15,14 @@
         <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme  />
         <div class="body-wrapper">
             <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
-            @Body
+            @if (isLoading)
+            {
+                <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+            }
+            else
+            {
+                @Body
+            }
         </div>
     </div>
 }
@@ -51,11 +58,14 @@ else
 @code 
 {
     public bool isAuthenticated = false;
+    private bool isLoading = false;
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
         Redirect(isAuthenticated);
+        isLoading = false;
     }
 
     public void Redirect(bool isAuthenticated)

@@ -80,26 +80,23 @@ else
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        var allAgents = await _agentService.GetAgents(context.Tenant.Id.ToString());
 
-        if (!string.IsNullOrEmpty(IdSelected))
-        {
-            var id = Convert.ToInt32(IdSelected);
-            agents = allAgents.Where(agent => agent.AgentTypeId == id);
-
-            if (agents.Count() == 0)
-            {
-                agents = allAgents;
-            }
-        }
-        else
-        {
-            agents = allAgents;
-        }
         var response = await _agentService.GetAgents(context.Tenant.Id.ToString());
-        if (response.Success)
+        if (response.Successful())
         {
-            agents = response.Result;
+            if (!string.IsNullOrEmpty(IdSelected))
+            {
+                var id = Convert.ToInt32(IdSelected);
+                agents = response.Result.Where(agent => agent.AgentTypeId == id);
+                if (agents.Count() == 0)
+                {
+                    agents = response.Result;
+                }
+            }
+            else
+            {
+                agents = response.Result;
+            }
         }
         else
         {
