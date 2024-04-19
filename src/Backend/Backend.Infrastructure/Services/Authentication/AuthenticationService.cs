@@ -81,20 +81,27 @@ namespace Backend.Infrastructure.Services.Authentication
 
         private string GenerateToken(User user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JWTKeySettings:SecretKey").Value);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                // COLOCA DADOS DO USUARIO AQUI
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                Issuer = "https://localhost:7299/", // Application that will generate the token
-                Audience = "https://localhost:7299/", // Application that will consume it. (Can be a list of APIs that will use it)
-                IssuedAt = DateTime.UtcNow,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration.GetSection("JWTKeySettings:SecretKey").Value);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    // COLOCA DADOS DO USUARIO AQUI
+                    Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    Issuer = "https://localhost:7299/", // Application that will generate the token
+                    Audience = "https://localhost:7299/", // Application that will consume it. (Can be a list of APIs that will use it)
+                    IssuedAt = DateTime.UtcNow,
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
