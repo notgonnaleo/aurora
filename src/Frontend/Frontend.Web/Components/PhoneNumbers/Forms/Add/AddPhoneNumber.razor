@@ -10,6 +10,7 @@
 @inject AuthenticationService _authenticationService
 @inject ContactService _contactService;
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer m-2" @onclick="ToggleRightSidebar"></i>
@@ -87,9 +88,15 @@
         var context = await _authenticationService.GetContext();
         phoneNumber.TenantId = context.Tenant.Id;
         phoneNumber.AgentId = AgentId;
-        Phone response = await _contactService.CreatePhone(phoneNumber);
-        if (response != null && response.PhoneId != new Guid())
+        var response = await _contactService.CreatePhone(phoneNumber);
+        if (response.Successful())
+        {
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
     }
 
     public async Task UpdatePhoneNumber()
@@ -99,9 +106,14 @@
             var context = await _authenticationService.GetContext();
             Model.TenantId = context.Tenant.Id;
             Model.AgentId = AgentId;
-            if (await _contactService.UpdatePhone(Model))
+            var response = await _contactService.UpdatePhone(Model);
+            if (response.Successful())
             {
                 navigator.NavigateTo(navigator.Uri, true);
+            }
+            else
+            {
+                Toaster.Error(response.ErrorMessage);
             }
         }
 

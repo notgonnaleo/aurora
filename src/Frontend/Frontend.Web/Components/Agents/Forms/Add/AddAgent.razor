@@ -6,6 +6,7 @@
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -22,7 +23,7 @@
             <div class="mb-2 col-sm-12 p-2">
                 <label for="colors" class="form-label">Agent Type</label>
                 <select class="form-select" @bind="@agent.AgentTypeId">
-                    <option value="" disabled hidden selected>Color of your product</option>
+                    <option value="0" disabled hidden selected>Select the type of agent</option>
                     @foreach (var agentType in agentTypes)
                     {
                         <option value="@agentType.AgentTypeId">@agentType.AgentTypeName</option>
@@ -43,9 +44,20 @@
     {
         var context = await _authenticationService.GetContext();
         agent.TenantId = context.Tenant.Id;
-        Agent newAgent = await _agentService.CreateAgent(agent);
-        if (newAgent is not null && newAgent.AgentId != Guid.Empty)
+        if(agent.AgentTypeId == 0)
+        {
+            Toaster.Warning("Agent type must be selected");
+        }
+        var response = await _agentService.CreateAgent(agent);
+        if (response.Success)
+        {
+            Toaster.Success("Added");
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
     }
 }
 
@@ -57,7 +69,10 @@
     public async Task LoadAgentTypes()
     {
         var response = await _agentService.GetAgentTypes();
-        agentTypes = response.ToList();
+        if (response.Successful())
+        {
+            agentTypes = response.Result.ToList();
+        }
     }
 }
 

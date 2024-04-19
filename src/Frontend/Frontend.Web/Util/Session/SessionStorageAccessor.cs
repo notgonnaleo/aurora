@@ -21,7 +21,7 @@ namespace Frontend.Web.Util.Session
         {
             if (_accessorJsRef.IsValueCreated is false)
             {
-                _accessorJsRef = new(await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "/js/SessionStorageAccessor.js"));
+                _accessorJsRef = new(await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "/assets/js/BrowserStorageHandler/SessionStorageAccessor.js"));
             }
         }
 

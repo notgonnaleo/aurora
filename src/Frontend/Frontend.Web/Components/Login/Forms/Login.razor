@@ -5,59 +5,45 @@
 @inject NavigationManager Navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 
-<div class="row vh-100 justify-content-end">
-    <div class="col-md-6 ">
-        <div class="login-wrap p-0">
-            <div class="card d-flex justify-content-center bg-white text-dark half-width right-side full-height">
-
-                @if (isLoading)
-                {
-                    <div class="z-3 position absolute h-100 d-flex align-items-center justify-content-center">
-                        <Frontend.Web.Components.Loader.LoadingSpinner />
-                    </div>
-                }
-                else
-                {
-                    @if (logged.HasValue && logged.Value)
-                    {
-                        <div class="alert alert-success fade-in" role="alert">
-                            Success, redirecting to main page.
-                        </div>
-                    }
-                    else if (logged.HasValue && !logged.Value)
-                    {
-                        <div class="alert alert-warning fade-in" role="alert">
-                            Something went wrong.
-                        </div>
-                    }
-
-                    <a class="text-nowrap logo-img text-center d-block py-3 w-100">
-                        <h1 class="panel-title"><strong>Aurora</strong></h1>
-                    </a>
-
-                    <form action="#" class="signin-form">
-                        <div class="form-group ">
-
-                            <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username" @onkeydown="@Enter">
-                        </div>
-                        <div class="form-group ">
-
-                            <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password" @onkeydown="@Enter">
-                            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">Log in</button>
-                        </div>
-                        <div class="form-group d-md-flex justify-content-center align-items-center">
-                            <span>Don't have an account?</span>
-                            <a class="ms-2">Sign Up</a>
-                        </div>
-
-                    </form>
-
-                }
+<div class="card mb-0 col-lg-4 h-100 rounded-0">
+    <div class="card-body rounded-0">
+        @if (isLoading)
+        {
+            <div class="z-3 position absolute h-100 d-flex align-items-center justify-content-center">
+                <Frontend.Web.Components.Loader.LoadingSpinner />
             </div>
-        </div>
+        }
+        else
+        {
+        <a class="text-nowrap logo-img text-center d-block py-3 w-100">
+            <h3 class="panel-title"><strong>Aurora</strong></h3>
+        </a>
+        <p class="text-center">Log in your account</p>
+
+        @if (logged.HasValue && logged.Value)
+        {
+            <div class="alert alert-success fade-in" role="alert">
+                Success, redirecting to main page.
+            </div>
+        }
+        else if (logged.HasValue && !logged.Value)
+        {
+            <div class="alert alert-warning fade-in" role="alert">
+                Something went wrong.
+            </div>
+        }
+        <form>
+            <div class="mb-3 w-100">
+                <label for="username" class="form-label">Username</label>
+                <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username" @onkeydown="@Enter">
+            </div>
+            <div class="mb-4 w-100">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password" @onkeydown="@Enter">
+            </div>
+            <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2 w-100">Log in</button>
+        </form>
+        }
     </div>
 </div>
 
@@ -70,7 +56,7 @@
     protected override async Task OnInitializedAsync()
     {
         var response = await _authenticationService.IsUserLogged();
-        if (response.GetValueOrDefault())
+        if (response.Result)
             Navigator.NavigateTo(Navigator.BaseUri, true);
     }
 

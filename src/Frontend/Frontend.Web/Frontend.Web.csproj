@@ -46,8 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Img\" />
-    <Folder Include="wwwroot\css\icons\tabler-icons\fonts\" />
+    <Folder Include="Components\Addresses\Forms\Edit\" />
   </ItemGroup>
 
 </Project>

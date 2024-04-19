@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Addresses;
 using Backend.Domain.Entities.Contacts;
 using Backend.Domain.Entities.Profiles;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Contacts;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Addresses;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Phones;
@@ -28,24 +29,31 @@ namespace Frontend.Web.Services.Contacts
         }
 
         // Address methods
-        public async Task<IEnumerable<Address>> GetAddresses(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Address>>> GetAddresses(string tenantId)
         {
             return await _addressRepository.GetAddresses(tenantId);
         }
 
-        public async Task<Address> GetAddress(string tenantId, string addressId)
+        public async Task<ApiResponse<Address>> GetAddress(string tenantId, string addressId)
         {
             return await _addressRepository.GetAddress(tenantId, addressId);
         }
 
-        public async Task<Address> CreateAddress(Address address)
+        public async Task<ApiResponse<Address>> CreateAddress(Address address)
         {
             return await _addressRepository.CreateAddress(address);
         }
 
-        public async Task<bool> UpdateAddress(Address address)
+        public async Task<ApiResponse<bool>> UpdateAddress(Address address)
         {
-            return await _addressRepository.UpdateAddress(address);
+            var response = await _addressRepository.UpdateAddress(address);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
 
         public async Task<bool> DeleteAddress(string tenantId, string addressId)
@@ -54,24 +62,31 @@ namespace Frontend.Web.Services.Contacts
         }
 
         // Email Address methods
-        public async Task<IEnumerable<Email>> GetEmailAddresses(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Email>>> GetEmailAddresses(string tenantId)
         {
             return await _emailAddressRepository.GetEmails(tenantId);
         }
 
-        public async Task<Email> GetEmailAddress(string tenantId, string emailAddressId)
+        public async Task<ApiResponse<Email>> GetEmailAddress(string tenantId, string emailAddressId)
         {
             return await _emailAddressRepository.GetEmail(tenantId, emailAddressId);
         }
 
-        public async Task<Email> CreateEmailAddress(Email email)
+        public async Task<ApiResponse<Email>> CreateEmailAddress(Email email)
         {
             return await _emailAddressRepository.CreateEmail(email);
         }
 
-        public async Task<bool> UpdateEmailAddress(Email email)
+        public async Task<ApiResponse<bool>> UpdateEmailAddress(Email email)
         {
-            return await _emailAddressRepository.UpdateEmail(email);
+            var response = await _emailAddressRepository.UpdateEmail(email);
+            return new ApiResponse<bool>()
+            {
+                Success = response.Success,
+                ResultBoolean = response.ResultBoolean,
+                ErrorMessage = response.ErrorMessage,
+                StatusCode = response.StatusCode
+            };
         }
 
         public async Task<bool> DeleteEmailAddress(string tenantId, string emailAddressId)
@@ -80,22 +95,22 @@ namespace Frontend.Web.Services.Contacts
         }
 
         // Phone methods
-        public async Task<IEnumerable<Phone>> GetPhones(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Phone>>> GetPhones(string tenantId)
         {
             return await _phoneRepository.GetPhones(tenantId);
         }
 
-        public async Task<Phone> GetPhone(string tenantId, string phoneId)
+        public async Task<ApiResponse<Phone>> GetPhone(string tenantId, string phoneId)
         {
             return await _phoneRepository.GetPhone(tenantId, phoneId);
         }
 
-        public async Task<Phone> CreatePhone(Phone phone)
+        public async Task<ApiResponse<Phone>> CreatePhone(Phone phone)
         {
             return await _phoneRepository.CreatePhone(phone);
         }
 
-        public async Task<bool> UpdatePhone(Phone phone)
+        public async Task<ApiResponse<bool>> UpdatePhone(Phone phone)
         {
             return await _phoneRepository.UpdatePhone(phone);
         }
@@ -106,22 +121,22 @@ namespace Frontend.Web.Services.Contacts
         }
 
         // Profile methods
-        public async Task<IEnumerable<Profile>> GetProfiles(string tenantId)
+        public async Task<ApiResponse<IEnumerable<Profile>>> GetProfiles(string tenantId)
         {
             return await _profileRepository.GetProfiles(tenantId);
         }
 
-        public async Task<Profile> GetProfile(string tenantId, string profileId)
+        public async Task<ApiResponse<Profile>> GetProfile(string tenantId, string profileId)
         {
             return await _profileRepository.GetProfile(tenantId, profileId);
         }
 
-        public async Task<Profile> CreateProfile(Profile profile)
+        public async Task<ApiResponse<Profile>> CreateProfile(Profile profile)
         {
             return await _profileRepository.CreateProfile(profile);
         }
 
-        public async Task<bool> UpdateProfile(Profile profile)
+        public async Task<ApiResponse<bool>> UpdateProfile(Profile profile)
         {
             return await _profileRepository.UpdateProfile(profile);
         }

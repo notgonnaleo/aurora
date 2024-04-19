@@ -4,6 +4,7 @@
 @inject AgentService _agentService;
 @inject NavigationManager navigator;
 @inject AuthenticationService _authenticationService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 @if (isLoading)
 {
@@ -49,7 +50,7 @@ else
     public async Task GetAgentTypes()
     {
         var response = await _agentService.GetAgentTypes();
-        agentTypes = response.ToList();
+        agentTypes = response.Result.ToList();
     }
 }
 
@@ -69,9 +70,14 @@ else
     {
         // Objeto de navegacao ta atualizando o registro na agenttypes por isso ta dando merda - arrumar 
         Agent.AgentType = agentTypes.FirstOrDefault(x => x.AgentTypeId == Agent.AgentTypeId);
-        if (await _agentService.UpdateAgent(Agent))
+        var response = await _agentService.UpdateAgent(Agent);
+        if (response.Success)
         {
             navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }

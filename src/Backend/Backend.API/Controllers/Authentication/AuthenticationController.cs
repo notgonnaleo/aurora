@@ -45,6 +45,19 @@ namespace Backend.API.Controllers.Authentication
             return NotFound(response.Message);
         }
 
+        [HttpGet]
+        [Route("Validate")]
+        public async Task<ActionResult> Validate()
+        {
+            string token = HttpContext.Request.Headers.Authorization.ToString().Replace("Bearer", "").Trim();
+            var userContext = _cache.Get<UserSessionContext>(token);
+            if (userContext is null)
+            {
+                return NotFound(false);
+            }
+            return Ok(true);
+        }
+
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("SetTenant")]

@@ -12,9 +12,6 @@
 @using Frontend.Web.Services.SubCategories;
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Internal;
-
-
-
 @inject ProductService _productService
 @inject AgentService _agentService
 @inject AuthenticationService _authenticationService
@@ -22,8 +19,6 @@
 @inject SubCategoryService _subCategoryService;
 @inject NavigationManager navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
-
-
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -73,8 +68,6 @@
                                         
                                     </div>
                                 </div> *@
-
-                                
 
                                 <!-- Name -->
                                 <div class="row">
@@ -244,11 +237,6 @@
     }
 }
 
-
-
-
-
-
 @code
 {
     private UserSessionContext context = new UserSessionContext();
@@ -302,14 +290,12 @@
         var context = await _authenticationService.GetContext();
         model.TenantId = context.Tenant.Id;
 
-        // Doe no meu coração fazer validação aqui mas o tempo é curto e por hora isso resolve problemas enormes
-        // O ideal mesmo seria adaptar a layer de retorno de api para lidar com erros oque já existe na API mas
-        // isso vai requer um tempo maior que posso olhar mais no futuro, por hora isso é o melhor
         if(model.SKU is null && isAutoGenerateSKU)
         {
             model.SKU = string.Empty;
         }
-        if (string.IsNullOrEmpty(model.ColorName)){
+        if (string.IsNullOrEmpty(model.ColorName))
+        {
             Toaster.Error("Color selected is invalid");
         }
         if (string.IsNullOrEmpty(model.GTIN))
@@ -321,15 +307,15 @@
             Toaster.Error("Name is invalid");
         }
 
-        Product newProduct = await _productService.CreateProduct(model);
-        if (newProduct != null && newProduct.ProductId != new Guid())
+        var response = await _productService.CreateProduct(model);
+        if (response.Successful())
         {
-            Toaster.Success(newProduct.Name, "was created successfully!.");
+            Toaster.Success(response!.Result.Name, "was created successfully!.");
             navigator.NavigateTo("/products", true);
         }
         else
         {
-            Toaster.Error("Error while creating, Check the fields again");
+            Toaster.Error(response.ErrorMessage);
         }
 
     }
@@ -341,7 +327,7 @@
     private List<SubCategory> subCategories = new List<SubCategory>();
     public async Task GetCategories()
     {
-        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).Result.ToList();
     }
 
     private async Task LoadSubCategories(ChangeEventArgs args)

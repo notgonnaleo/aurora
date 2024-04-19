@@ -32,7 +32,7 @@
     {
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
-        Model = await _productService.GetProductWithDetails(Model.TenantId.ToString(), productId);
+        Model = (await _productService.GetProductWithDetails(Model.TenantId.ToString(), productId)).Result;
     }
 }
 @code

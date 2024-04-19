@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Products;
 using Backend.Infrastructure.Enums.Modules;
+using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
 using Frontend.Web.Repository.Client;
 using System.Net.Http.Json;
@@ -16,7 +17,7 @@ namespace Frontend.Web.Repository.Products
             _httpClientRepository = httpClientRepository;
         }
 
-        public async Task<IEnumerable<ProductVariant>> GetAllVariantsByProduct(string tenantId, string productId)
+        public async Task<ApiResponse<IEnumerable<ProductVariant>>> GetAllVariantsByProduct(string tenantId, string productId)
         {
             var parameters = new List<RouteParameterRequest>()
             {
@@ -34,11 +35,10 @@ namespace Frontend.Web.Repository.Products
             var request = new RouteBuilder<ProductVariant>().SendMultiple(Endpoints.ProductVariants, GET.GetAllVariantsByProduct.GetAllVariantsByProductEndpoint, parameters);
             return await _httpClientRepository.Get(request);
         }
-        public async Task<ProductVariant> CreateProductVariant(ProductVariant variant)
+        public async Task<ApiResponse<ProductVariant>> CreateProductVariant(ProductVariant variant)
         {
             var model = new RouteBuilder<ProductVariant>().Send(Endpoints.ProductVariants, Methods.Default.POST, variant);
-            var response = await _httpClientRepository.Post(model);
-            return await response.Content.ReadFromJsonAsync<ProductVariant>();
+            return await _httpClientRepository.Post(model);
         }
     }
 }

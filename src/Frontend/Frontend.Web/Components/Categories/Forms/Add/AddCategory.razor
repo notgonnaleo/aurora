@@ -8,6 +8,7 @@
 @inject CategoryService _categoryService;
 @inject SubCategoryService _subCategoryService;
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div>
     <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
@@ -106,36 +107,35 @@
 
     public async Task CreateCategory()
     {
-        try
-        {
-            var context = await _authenticationService.GetContext();
-            category.TenantId = context.Tenant.Id;
-            Category newCategory = await _categoryService.CreateCategory(category);
+        var context = await _authenticationService.GetContext();
+        category.TenantId = context.Tenant.Id;
+        var response = await _categoryService.CreateCategory(category);
 
-            if (newCategory != null && newCategory.CategoryId != new Guid())
-                navigator.NavigateTo("/categories", true);
+        if (response.Successful())
+        {
+            navigator.NavigateTo("/categories", true);
+            Toaster.Success("Item created successfully!");
         }
-        catch (Exception)
+        else
         {
-
-            throw;
+            Toaster.Error(response.ErrorMessage);
         }
     }
 
     public async Task CreateSubCategory()
     {
-        try
-        {
-            var context = await _authenticationService.GetContext();
-            subCategory.TenantId = context.Tenant.Id;
-            SubCategory newSubCategory = await _subCategoryService.CreateSubCategory(subCategory);
+        var context = await _authenticationService.GetContext();
+        subCategory.TenantId = context.Tenant.Id;
+        var response = await _subCategoryService.CreateSubCategory(subCategory);
 
-            if (newSubCategory != null && newSubCategory.SubCategoryId != new Guid())
-                navigator.NavigateTo("/categories", true);
-        }
-        catch (Exception)
+        if (response.Successful())
         {
-            throw;
+            navigator.NavigateTo("/categories", true);
+            Toaster.Success("Item created successfully!");
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }
@@ -147,7 +147,7 @@
     public async Task GetCategories()
     {
         var context = await _authenticationService.GetContext();
-        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).ToList();
+        categories = (await _categoryService.GetCategoriesAndSubCategories(context.Tenant.Id.ToString())).Result.ToList();
     }
 
     private async Task SetSubCategories(ChangeEventArgs args)

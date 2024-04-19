@@ -1,43 +1,40 @@
 <!DOCTYPE html>
-<html   lang="en">
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>Aurora</title>
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Aurora</title>
-    <base href="/" />
-    <link href="css/app.css" rel="stylesheet" />
-    <link href="css/report-template.css" rel="stylesheet" />
-    <link href="css/styles.css" rel="stylesheet" />
-    <link href="_content/Sotsera.Blazor.Toaster/toastr.min.css" rel="stylesheet" />
+        <!-- URI Base Reference -->
+        <base href="/" />
 
-    <link href="css/custom.css" rel="stylesheet" />
-</head>
+        <!-- Modernize UI -->
+        <link href="assets/css/stylesheets/default/modernize-ui/modernize-stylesheet.css" rel="stylesheet" />
+        <!-- Blazor UI -->
+        <link href="assets/css/stylesheets/default/blazor-ui/app.css" rel="stylesheet" />
+        <!-- Toastr -->
+        <link href="_content/Sotsera.Blazor.Toaster/toastr.min.css" rel="stylesheet" />
+        <!-- Loaders -->
+        <link href="assets/css/stylesheets/loaders/loader-circle.css" rel="stylesheet" />
+        <link href="assets/css/stylesheets/loaders/loader-dots.css" rel="stylesheet" />
+        <!-- Backgrounds -->
+        <link href="assets/css/stylesheets/animations/backgrounds/cubes-floating-bg.css" rel="stylesheet" />
 
-<body>
-    <div id="app">
-        <div class="center-screen">
-            <svg viewBox="25 25 50 50">
-                <circle r="20" cy="50" cx="50"></circle>
-            </svg>
-        </div>
-    </div>
-
-    <style>
-        .center-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            min-height: 100vh;
-        }
-    </style>
-
-    <script src="_framework/blazor.webassembly.js"></script>
-    <script src="js/reportPrinter.js"></script>
-</body>
-
-</html>
+    </head>
+        <body>
+            <div id="app">
+                <div style=" display: flex; justify-content: center; align-items: center; text-align: center; min-height: 100vh;">
+                    <svg viewBox="25 25 50 50">
+                        <circle r="20" cy="50" cx="50"></circle>
+                    </svg>
+                </div>
+            </div>
+            <!-- Web Assembly -->
+            <script src="_framework/blazor.webassembly.js"></script>
+            <!-- Scripts -->
+            <script src="assets/js/ReportEditorHandler/ReportExportTools.js"></script>
+        </body>
+    </html>
 
 
 

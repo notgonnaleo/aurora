@@ -92,11 +92,15 @@
     {
         var context = await _authenticationService.GetContext();
         Model.TenantId = context.Tenant.Id;
-        bool updated = await _productService.UpdateProduct(Model);
-        if (updated)
+        var response = await _productService.UpdateProduct(Model);
+        if (response.Successful())
         {
-            Toaster.Success("Product updated!");
             navigator.NavigateTo(navigator.Uri, true);
+            Toaster.Success("Updated successfully!");
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
         }
     }
 }

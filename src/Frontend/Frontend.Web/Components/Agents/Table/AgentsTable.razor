@@ -5,8 +5,9 @@
 @inject AgentService _agentService;
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager NavigationManager;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
-@if (agents == null)
+@if (agents is null && isLoading)
 {
     <Frontend.Web.Components.Loader.LoadingSpinner />
 }
@@ -14,33 +15,35 @@ else
 {
     @foreach (var agent in agents)
     {
-        <div class="col-sm-6 col-xl-3">
-            <div class="card overflow-hidden rounded-2">
-                <div class="card-body pt-3 p-4">
-                    <div>
-                        <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(agent)">
-                            CPF ou CNPJ fica aqui
-                        </h6>
-                    </div>
-                    <div>
-                        <span class="mb-2 badge rounded-pill font-small bg-info-subtle text-info">Vendor/Employee</span>
-                    </div>
-                    <div>
-                        <h6 class="fw-semibold fs-4 mb-2">
-                            @agent.Name
-                        </h6>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
+        <div class="row ">
+            <div class="col-sm-6 col-xl-3 w-100">
+                <div class="card overflow-hidden rounded-2">
+                    <div class="card-body pt-3 p-4">
+                        <div class="d-flex justify-content-between">
+                            <h6 class="fw-semibold fs-4 mb-2">
+                                @agent.Name
+                            </h6>
 
-                        <div>
-                            <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(agent)">
-                                <i class="ti ti-edit"></i>
-                            </a>
+                            <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(agent)">
+                                CPF ou CNPJ fica aqui
+                            </h6>
                         </div>
                         <div>
-                            <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(agent)">
-                                <i class="ti ti-trash-x"></i>
-                            </a>
+                            <span class="mb-2 badge rounded-pill font-small bg-info-subtle text-info">Vendor/Employ</span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center justify-content-between">
+
+                            <div>
+                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(agent)">
+                                    <i class="ti ti-edit"></i>
+                                </a>
+                            </div>
+                            <div>
+                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(agent)">
+                                    <i class="ti ti-trash-x"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,11 +69,41 @@ else
 }
 
 @code {
+    [Parameter] public string? IdSelected { get; set; }
+}
+
+@code 
+{
+    private bool isLoading = true;
     private IEnumerable<Agent>? agents;
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         var context = await _authenticationService.GetContext();
-        agents = await _agentService.GetAgents(context.Tenant.Id.ToString());
+
+        var response = await _agentService.GetAgents(context.Tenant.Id.ToString());
+        if (response.Successful())
+        {
+            if (!string.IsNullOrEmpty(IdSelected))
+            {
+                var id = Convert.ToInt32(IdSelected);
+                agents = response.Result.Where(agent => agent.AgentTypeId == id);
+                if (agents.Count() == 0)
+                {
+                    agents = response.Result;
+                }
+            }
+            else
+            {
+                agents = response.Result;
+            }
+        }
+        else
+        {
+            agents = null;
+            Toaster.Warning(response.ErrorMessage);
+        }
+        isLoading = false;
     }
 
     private void Edit(Agent agent)

@@ -1,27 +1,54 @@
 ﻿@using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Components.Settings.Theme
 @using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Util.Cookie
 @inject IJSRuntime JS
 @inherits LayoutComponentBase
 @inject AuthenticationService _authService
 @inject NavigationManager navigator
+@inject CookieHandler _cookies
+@inject ThemeSettingsFeatureSet _themeSettings
 
 @if (isAuthenticated)
 {
-    // If authenticated we are going to show the side and topbar.
-    // because they are supposed to be everywhere in the system so that's why we need this if statement.
-    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme="dark">
-        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu"/>
+    <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme />
         <div class="body-wrapper">
-            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" />
-            @Body
+            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme />
+            @if (isLoading)
+            {
+                <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+            }
+            else
+            {
+                @Body
+            }
         </div>
     </div>
 }
 else
 {
-    <div class="page-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
-        @Body
+    <div data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
+        @if (isLoading)
+        {
+            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+        }
+        else
+        {
+            @Body  
+        }
     </div>
+}
+
+@code
+{   
+    
+    private bool Theme = true;
+    private async void LoadAppTheme()
+    {
+        var theme = await _themeSettings.GetUserTheme();
+        Theme = _themeSettings.ReturnThemeIdAsBoolean(theme.ThemeId);
+    }
 }
 
 @code 
@@ -38,11 +65,14 @@ else
 @code 
 {
     public bool isAuthenticated = false;
-
+    private bool isLoading = false;
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
+        LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
         Redirect(isAuthenticated);
+        isLoading = false;
     }
 
     public void Redirect(bool isAuthenticated)
@@ -56,7 +86,11 @@ else
     public async Task<bool> IsAuthenticated()
     {
         var response = await _authService.IsUserLogged();
-        return response.GetValueOrDefault();
+        if (response!.StatusCode == 404)
+        {
+            navigator.NavigateTo("/Login");
+        }
+        return response.Result;
     }
 }
 
