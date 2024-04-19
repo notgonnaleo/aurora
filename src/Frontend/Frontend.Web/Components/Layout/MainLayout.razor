@@ -12,22 +12,37 @@
 @if (isAuthenticated)
 {
     <div class="page-wrapper @NavMenuCssClass" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
-        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
+        <Sidebar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme />
         <div class="body-wrapper">
-            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme/>
-            @Body
+            <Topbar CollapseNavMenu="collapseNavMenu" ToggleNavMenu="ToggleNavMenu" Theme=Theme />
+            @if (isLoading)
+            {
+                <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+            }
+            else
+            {
+                @Body
+            }
         </div>
     </div>
 }
 else
 {
     <div data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-bs-theme=@(Theme ? "light" : "dark")>
-        @Body
+        @if (isLoading)
+        {
+            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+        }
+        else
+        {
+            @Body  
+        }
     </div>
 }
 
 @code
-{
+{   
+    
     private bool Theme = true;
     private async void LoadAppTheme()
     {
@@ -50,11 +65,14 @@ else
 @code 
 {
     public bool isAuthenticated = false;
+    private bool isLoading = false;
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
         Redirect(isAuthenticated);
+        isLoading = false;
     }
 
     public void Redirect(bool isAuthenticated)

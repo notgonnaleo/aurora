@@ -23,7 +23,7 @@
             <div class="mb-2 col-sm-12 p-2">
                 <label for="colors" class="form-label">Agent Type</label>
                 <select class="form-select" @bind="@agent.AgentTypeId">
-                    <option value="" disabled hidden selected>Color of your product</option>
+                    <option value="0" disabled hidden selected>Select the type of agent</option>
                     @foreach (var agentType in agentTypes)
                     {
                         <option value="@agentType.AgentTypeId">@agentType.AgentTypeName</option>
@@ -44,6 +44,10 @@
     {
         var context = await _authenticationService.GetContext();
         agent.TenantId = context.Tenant.Id;
+        if(agent.AgentTypeId == 0)
+        {
+            Toaster.Warning("Agent type must be selected");
+        }
         var response = await _agentService.CreateAgent(agent);
         if (response.Success)
         {
@@ -65,7 +69,7 @@
     public async Task LoadAgentTypes()
     {
         var response = await _agentService.GetAgentTypes();
-        if (response.Success)
+        if (response.Successful())
         {
             agentTypes = response.Result.ToList();
         }

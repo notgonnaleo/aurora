@@ -140,7 +140,7 @@ else
 {
     private bool isAuthenticated = false;
     private bool isLoading = true;
-    private UserSessionContext dashboardProfile = new UserSessionContext();
+    private UserSessionContext? dashboardProfile = null;
 
     public async Task<bool?> IsAuthenticated()
     {
@@ -154,7 +154,7 @@ else
 
     public async void GetDashboardProfile()
     {
-        dashboardProfile = (await _authenticationService.GetContext());
+        dashboardProfile = await _authenticationService.GetContext();
         StateHasChanged();
     }
 
