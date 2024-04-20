@@ -6,15 +6,6 @@ using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities.Payments
 {
-    public class OrderPayment
-    {
-        public Guid OrderId { get; set; }
-        public Guid OrderPaymentId { get; set; }
-        public decimal OrderPaymentTotalAmount { get; set; }
-        public int OrderPaymentParcels { get; set; }
-        public PaymentType PaymentType { get; set; }
-    }
-
     public class Payment
     {
         public Guid PaymentId { get; set; }
@@ -25,7 +16,6 @@ namespace Backend.Domain.Entities.Payments
         public decimal TotalAmount { get; set; }
         public PaymentType PaymentType { get; set; }
     }
-
     public class PaymentType
     {
         public int PaymentTypeId { get; set; }
