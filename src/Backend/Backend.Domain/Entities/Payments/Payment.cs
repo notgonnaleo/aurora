@@ -16,6 +16,12 @@ namespace Backend.Domain.Entities.Payments
         public decimal TotalAmount { get; set; }
         public PaymentType PaymentType { get; set; }
     }
+    
+    public class PaymentStatus
+    {
+        // TODO
+    }
+
     public class PaymentType
     {
         public int PaymentTypeId { get; set; }

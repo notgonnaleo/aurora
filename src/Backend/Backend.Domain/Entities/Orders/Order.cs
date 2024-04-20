@@ -16,14 +16,14 @@ namespace Backend.Domain.Entities.Orders
         public DateTime OrderEstimatedDate { get; set; }
         public DateTime OrderEffectiveDate { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public PaymentType PaymentType { get; set; }
+        public Payment OrderPayment { get; set; }
         public decimal OrderTotalAmount { get; set; }
     }
 
     public class OrderStatus
     {
         public int OrderStatusId { get; set; }
-        public string ÓrderStatusName { get; set; }
+        public string OrderStatusName { get; set; }
     }
 
     public class OrderItems
@@ -31,6 +31,7 @@ namespace Backend.Domain.Entities.Orders
         public Guid OrderId { get; set; }
         public Guid OrderItemId { get; set; }
         public Product Item { get; set; }
+        public ProductVariant? ItemVariant { get; set; }
         public int ItemQuantity { get; set; }
         public decimal ItemUnitAmount { get; set; }
         public decimal ItemTotalAmount { get; set; }
