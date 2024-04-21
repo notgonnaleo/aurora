@@ -42,7 +42,7 @@ namespace Backend.Infrastructure.Context
         public DbSet<SubCategory> SubCategories { get; set; }
 
         public DbSet<Stock> Stocks { get; set; }
-        
+
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
 

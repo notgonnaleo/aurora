@@ -3,6 +3,7 @@ using System;
 using Backend.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigration
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240421175020_orders")]
+    partial class orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(8942),
+                            Created = new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9625),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -413,6 +416,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.Property<decimal>("OrderTotalAmount")
                         .HasColumnType("numeric");
 
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp with time zone");
 
@@ -531,9 +537,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("PayerId")
                         .HasColumnType("uuid");
 
@@ -565,8 +568,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .HasColumnType("uuid");
 
                     b.HasKey("PaymentId");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("PayerId");
 
@@ -698,11 +699,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("897adb05-04b3-40c7-8f85-4f3272f34ecf"),
+                            ProductId = new Guid("c90fc99b-719b-4f42-9b2a-5464f63b0e34"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(9086),
+                            Created = new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9832),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -717,10 +718,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         },
                         new
                         {
-                            ProductId = new Guid("4d7172fe-35f3-4a34-a3d6-4bf24c35ef61"),
+                            ProductId = new Guid("7d4e6b9f-4522-4ed2-9f6c-c37d7f6716fb"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(9092),
+                            Created = new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9841),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -996,7 +997,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(9048),
+                            Created = new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9726),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -1059,10 +1060,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
 
             modelBuilder.Entity("Backend.Domain.Entities.Payments.Payment", b =>
                 {
-                    b.HasOne("Backend.Domain.Entities.Orders.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId");
-
                     b.HasOne("Backend.Domain.Entities.Agents.Agent", "Payer")
                         .WithMany()
                         .HasForeignKey("PayerId")
@@ -1074,8 +1071,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("Payer");
 

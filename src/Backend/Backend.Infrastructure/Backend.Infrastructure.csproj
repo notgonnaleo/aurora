@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\AppDbMigrations\**" />
     <Compile Remove="Repository\**" />
+    <EmbeddedResource Remove="Migrations\AppDbMigrations\**" />
     <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Migrations\AppDbMigrations\**" />
     <None Remove="Repository\**" />
   </ItemGroup>
 
@@ -39,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\AppDbMigrations\" />
+    <Folder Include="Migrations\AppDbMigration\" />
     <Folder Include="Migrations\AuthDbMigrations\" />
   </ItemGroup>
 

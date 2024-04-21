@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigration
 {
     /// <inheritdoc />
-    public partial class APPSNAPSHOT : Migration
+    public partial class orders : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -79,24 +79,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItems",
-                columns: table => new
-                {
-                    OrderItemId = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
-                    VariantId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ItemTotalWeight = table.Column<decimal>(type: "numeric", nullable: true),
-                    ItemQuantity = table.Column<int>(type: "integer", nullable: false),
-                    ItemUnitAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    ItemTotalAmount = table.Column<decimal>(type: "numeric", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -106,7 +88,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     OrderEstimatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     OrderEffectiveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     OrderStatusId = table.Column<int>(type: "integer", nullable: false),
-                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentId = table.Column<Guid>(type: "uuid", nullable: true),
                     OrderTotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -117,51 +99,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Parcels",
-                columns: table => new
-                {
-                    ParcelId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ParcelEffectiveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ParcelEstimatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ParcelAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    Sequence = table.Column<int>(type: "integer", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Parcels", x => x.ParcelId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Payments",
-                columns: table => new
-                {
-                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PayerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SellerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TotalParcels = table.Column<int>(type: "integer", nullable: false),
-                    PaymentStatusId = table.Column<int>(type: "integer", nullable: false),
-                    PaymentTypeId = table.Column<int>(type: "integer", nullable: false),
-                    PaymentEffectiveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PaymentEstimatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
                 });
 
             migrationBuilder.CreateTable(
@@ -306,6 +243,35 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    OrderItemId = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uuid", nullable: false),
+                    VariantId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ItemTotalWeight = table.Column<decimal>(type: "numeric", nullable: true),
+                    ItemQuantity = table.Column<int>(type: "integer", nullable: false),
+                    ItemUnitAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    ItemTotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Emails",
                 columns: table => new
                 {
@@ -326,6 +292,42 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     table.ForeignKey(
                         name: "FK_Emails_Agent_AgentId",
                         column: x => x.AgentId,
+                        principalTable: "Agent",
+                        principalColumn: "AgentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PayerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SellerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TotalParcels = table.Column<int>(type: "integer", nullable: false),
+                    PaymentStatusId = table.Column<int>(type: "integer", nullable: false),
+                    PaymentTypeId = table.Column<int>(type: "integer", nullable: false),
+                    PaymentEffectiveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    PaymentEstimatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
+                    table.ForeignKey(
+                        name: "FK_Payments_Agent_PayerId",
+                        column: x => x.PayerId,
+                        principalTable: "Agent",
+                        principalColumn: "AgentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Payments_Agent_SellerId",
+                        column: x => x.SellerId,
                         principalTable: "Agent",
                         principalColumn: "AgentId",
                         onDelete: ReferentialAction.Cascade);
@@ -404,6 +406,33 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 });
 
             migrationBuilder.CreateTable(
+                name: "Parcels",
+                columns: table => new
+                {
+                    ParcelId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ParcelEffectiveDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ParcelEstimatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ParcelAmount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Sequence = table.Column<int>(type: "integer", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parcels", x => x.ParcelId);
+                    table.ForeignKey(
+                        name: "FK_Parcels_Payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payments",
+                        principalColumn: "PaymentId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductMedia",
                 columns: table => new
                 {
@@ -450,7 +479,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
             migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "CategoryId", "Active", "CategoryName", "Created", "CreatedBy", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8113), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), true, "Eletronic", new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9625), null, new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "ProductType",
@@ -480,12 +509,12 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "Active", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("afb1bb06-107d-40ff-887f-16e362d532ad"), true, null, "Azul-Marinho", new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8297), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
+                values: new object[] { new Guid("7d4e6b9f-4522-4ed2-9f6c-c37d7f6716fb"), true, null, "Azul-Marinho", new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9841), null, "Produto de teste gerado na migration - SampleCompany", "012345678910111213", 0.0, "G", "Motorola Moto E", 3, "202401", null, new Guid("ae100414-8fbb-4286-839a-5bafc51a84fb"), 0.0, null, null, 100.0 });
 
             migrationBuilder.InsertData(
                 table: "SubCategory",
                 columns: new[] { "SubCategoryId", "Active", "CategoryId", "Created", "CreatedBy", "SubCategoryName", "TenantId", "Updated", "UpdatedBy" },
-                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8208), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
+                values: new object[] { new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9726), null, "Smartphone", new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), null, null });
 
             migrationBuilder.InsertData(
                 table: "Emails",
@@ -504,7 +533,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
             migrationBuilder.InsertData(
                 table: "Product",
                 columns: new[] { "ProductId", "Active", "CategoryId", "ColorName", "Created", "CreatedBy", "Description", "GTIN", "LiquidWeight", "MetricUnitName", "Name", "ProductTypeId", "SKU", "SubCategoryId", "TenantId", "TotalWeight", "Updated", "UpdatedBy", "Value" },
-                values: new object[] { new Guid("88289620-607f-4b86-b76c-c1a137f1d0ca"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8290), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
+                values: new object[] { new Guid("c90fc99b-719b-4f42-9b2a-5464f63b0e34"), true, new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"), "Preto", new DateTime(2024, 4, 21, 17, 50, 20, 650, DateTimeKind.Utc).AddTicks(9832), null, "Produto de teste gerado na migration - Aurora", "012345678910111213", 0.13, "G", "Samsung Galaxy S4", 3, "202401", new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"), new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5"), 0.13, null, null, 604.99000000000001 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Agent_AgentTypeId",
@@ -515,6 +544,26 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 name: "IX_Emails_AgentId",
                 table: "Emails",
                 column: "AgentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parcels_PaymentId",
+                table: "Parcels",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_PayerId",
+                table: "Payments",
+                column: "PayerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_SellerId",
+                table: "Payments",
+                column: "SellerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Phones_AgentId",
@@ -560,13 +609,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
                 name: "Parcels");
-
-            migrationBuilder.DropTable(
-                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Phones");
@@ -584,19 +627,25 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 name: "Stock");
 
             migrationBuilder.DropTable(
-                name: "Agent");
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Product");
 
             migrationBuilder.DropTable(
-                name: "AgentType");
+                name: "Agent");
 
             migrationBuilder.DropTable(
                 name: "ProductType");
 
             migrationBuilder.DropTable(
                 name: "SubCategory");
+
+            migrationBuilder.DropTable(
+                name: "AgentType");
 
             migrationBuilder.DropTable(
                 name: "Category");

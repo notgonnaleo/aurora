@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigration
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240421050702_APP-SNAPSHOT")]
-    partial class APPSNAPSHOT
+    [Migration("20240421182917_payment-change")]
+    partial class paymentchange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8113),
+                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(8942),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -416,9 +416,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.Property<decimal>("OrderTotalAmount")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("uuid");
-
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp with time zone");
 
@@ -434,6 +431,15 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                 {
                     b.Property<Guid>("OrderItemId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<int>("ItemQuantity")
@@ -454,10 +460,18 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid?>("VariantId")
                         .HasColumnType("uuid");
 
                     b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
                 });
@@ -500,6 +514,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
 
                     b.HasKey("ParcelId");
 
+                    b.HasIndex("PaymentId");
+
                     b.ToTable("Parcels");
                 });
 
@@ -516,6 +532,9 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("OrderId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("PayerId")
@@ -549,6 +568,12 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .HasColumnType("uuid");
 
                     b.HasKey("PaymentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PayerId");
+
+                    b.HasIndex("SellerId");
 
                     b.ToTable("Payments");
                 });
@@ -676,11 +701,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("88289620-607f-4b86-b76c-c1a137f1d0ca"),
+                            ProductId = new Guid("897adb05-04b3-40c7-8f85-4f3272f34ecf"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8290),
+                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(9086),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -695,10 +720,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         },
                         new
                         {
-                            ProductId = new Guid("afb1bb06-107d-40ff-887f-16e362d532ad"),
+                            ProductId = new Guid("4d7172fe-35f3-4a34-a3d6-4bf24c35ef61"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8297),
+                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(9092),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -974,7 +999,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 4, 21, 5, 7, 2, 600, DateTimeKind.Utc).AddTicks(8208),
+                            Created = new DateTime(2024, 4, 21, 18, 29, 17, 202, DateTimeKind.Utc).AddTicks(9048),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -1011,6 +1036,53 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .IsRequired();
 
                     b.Navigation("Agent");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Orders.OrderItem", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Orders.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Payments.Parcel", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Payments.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Payments.Payment", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Orders.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Payer")
+                        .WithMany()
+                        .HasForeignKey("PayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Payer");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>
