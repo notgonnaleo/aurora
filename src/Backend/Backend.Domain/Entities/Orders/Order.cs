@@ -1,22 +1,31 @@
-﻿using Backend.Domain.Entities.Payments;
+﻿using Backend.Domain.Entities.Base;
+using Backend.Domain.Entities.Payments;
 using Backend.Domain.Entities.Products;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities.Orders
 {
-    public class Order
+    [Table("Orders")]
+    public class Order : Model
     {
+        [Key]
         public Guid OrderId { get; set; }
+        [Required]
         public string OrderCode { get; set; }
+        [Required]
         public DateTime OrderOpeningDate { get; set; }
+        [Required]
         public DateTime OrderEstimatedDate { get; set; }
         public DateTime OrderEffectiveDate { get; set; }
-        public OrderStatus OrderStatus { get; set; }
-        public Payment OrderPayment { get; set; }
+        public int OrderStatusId { get; set; }
+        [ForeignKey("PaymentId")]
+        public Guid? PaymentId { get; set; }
         public decimal OrderTotalAmount { get; set; }
     }
 
@@ -26,23 +35,20 @@ namespace Backend.Domain.Entities.Orders
         public string OrderStatusName { get; set; }
     }
 
-    public class OrderItems
+    [Table("OrderItems")]
+    public class OrderItem
     {
-        public Guid OrderId { get; set; }
+        [Required]
         public Guid OrderItemId { get; set; }
-        public Product Item { get; set; }
-        public ProductVariant? ItemVariant { get; set; }
+        [ForeignKey("OrderId")]
+        public Guid OrderId { get; set; }
+        [Required]
+        public Guid ProductId { get; set; }
+        public Guid? VariantId { get; set; }
+        public decimal? ItemTotalWeight { get; set; }
         public int ItemQuantity { get; set; }
         public decimal ItemUnitAmount { get; set; }
         public decimal ItemTotalAmount { get; set; }
-    }
-    public class OrderPayment
-    {
-        public Guid OrderId { get; set; }
-        public Guid OrderPaymentId { get; set; }
-        public decimal OrderPaymentTotalAmount { get; set; }
-        public int OrderPaymentParcels { get; set; }
-        public PaymentType PaymentType { get; set; }
     }
 
 }
