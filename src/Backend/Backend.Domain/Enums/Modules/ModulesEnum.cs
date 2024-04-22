@@ -179,6 +179,12 @@ namespace Backend.Infrastructure.Enums.Modules
             {
                 public static string AddProductVariant = "ProductVariant/Add";
             }
+
+            public static class PUT
+            {
+
+                public static string UpdateProductVariant = "ProductVariant/Update";
+            }
         }
 
         /// <summary>

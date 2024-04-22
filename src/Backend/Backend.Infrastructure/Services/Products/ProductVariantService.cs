@@ -34,7 +34,7 @@ namespace Backend.Infrastructure.Services.Products
         public IEnumerable<ProductVariant> GetAllVariantsByProduct(Guid tenantId, Guid productId)
         {
             return _appDbContext.ProductVariants
-                .Where(x => x.TenantId == tenantId && 
+                .Where(x => x.TenantId == tenantId &&
                 x.ProductId == productId &&
                 x.Active);
         }
@@ -66,12 +66,12 @@ namespace Backend.Infrastructure.Services.Products
             if (model.TotalWeight is null && model.LiquidWeight is null || model.OverwriteValue)
             {
                 var parentProduct = _productService.GetById(model.TenantId, model.ProductId);
-                if(parentProduct is not null)
+                if (parentProduct is not null)
                 {
                     return await CreateVariant(new ProductVariant()
                     {
                         TenantId = model.TenantId,
-                        VariantId = model.VariantId, 
+                        VariantId = model.VariantId,
                         ProductId = parentProduct.ProductId,
                         SKU = new SKU(parentProduct.Name, parentProduct.ProductTypeId, model.ColorName).SKUValue,
                         GTIN = model.GTIN,
@@ -87,6 +87,19 @@ namespace Backend.Infrastructure.Services.Products
             }
             return await CreateVariant(model);
 
+        }
+
+
+        public bool Update(ProductVariant model)
+        {
+            var context = LoadContext();
+            ValidateTenant(model.TenantId);
+            model.Updated = DateTime.Now;
+            model.UpdatedBy = context.UserId;
+            model.Active = true;
+            _appDbContext.Update(model);
+
+            return _appDbContext.SaveChanges() > 0;
         }
     }
 }

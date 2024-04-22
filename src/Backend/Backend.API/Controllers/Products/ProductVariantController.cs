@@ -41,5 +41,21 @@ namespace Backend.API.Controllers.Products
                 return BadRequest(ex.Message);
             }
         }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPut]
+        [Route("Update")]
+        public ActionResult Update(ProductVariant product)
+        {
+            try
+            {
+                return Ok(_productVariantService.Update(product));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
