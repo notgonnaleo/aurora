@@ -30,22 +30,4 @@ namespace Backend.Domain.Entities.Orders
         public int OrderStatusId { get; set; }
         public string OrderStatusName { get; set; }
     }
-
-    [Table("OrderItems")]
-    public class OrderItem : Model
-    {
-        [Key]
-        public Guid OrderItemId { get; set; }
-        [ForeignKey("OrderId")]
-        public Guid OrderId { get; set; }
-        [Required]
-        public Guid ProductId { get; set; }
-        public Guid? VariantId { get; set; }
-        public decimal? ItemTotalWeight { get; set; }
-        public int ItemQuantity { get; set; }
-        public decimal ItemUnitAmount { get; set; }
-        public decimal ItemTotalAmount { get; set; }
-
-        public Order? Order { get; set; }
-    }
 }

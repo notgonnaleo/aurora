@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Contacts;
+using Backend.Domain.Entities.OrderItems;
 using Backend.Domain.Entities.Orders;
 using Backend.Domain.Entities.Payments;
 using Backend.Domain.Entities.Products;
