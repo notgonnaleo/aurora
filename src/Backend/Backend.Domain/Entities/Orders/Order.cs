@@ -6,16 +6,45 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Orders.Request;
+using Backend.Domain.Enums.Orders;
 
 namespace Backend.Domain.Entities.Orders
 {
     [Table("Orders")]
     public class Order : Model
     {
+        public Order() { }
+        public Order(OrderRequest orderRequest)
+        {
+            var openingDate = DateTime.UtcNow;
+
+            OrderId = Guid.NewGuid();
+            OrderCode = GenerateOrderCode(openingDate);
+            OrderOpeningDate = openingDate;
+            OrderStatusId = (int)OrdersStatusEnums.Open;
+            SellerId = orderRequest.SellerId;
+            CustomerId = orderRequest.CustomerId;
+        }
+
+        public string GenerateOrderCode(DateTime openingDate)
+        {
+            return $"{openingDate.Day}{openingDate.Month}{openingDate.Year}{new Random().Next(100, 1000)}";
+        }
+
+        [Required]
+        public Guid TenantId { get; set; }
         [Key]
         public Guid OrderId { get; set; }
         [Required]
         public string OrderCode { get; set; }
+        [Required]
+        [ForeignKey("AgentId")]
+        public Guid SellerId { get; set; }
+        [Required]
+        [ForeignKey("AgentId")]
+        public Guid CustomerId { get; set; }
         [Required]
         public DateTime OrderOpeningDate { get; set; }
         [Required]
@@ -23,6 +52,9 @@ namespace Backend.Domain.Entities.Orders
         public DateTime OrderEffectiveDate { get; set; }
         public int OrderStatusId { get; set; }
         public decimal OrderTotalAmount { get; set; }
+
+        public Agent? Customer { get; set; }
+        public Agent? Seller { get; set; }
     }
 
     public class OrderStatus

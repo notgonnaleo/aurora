@@ -8,8 +8,9 @@ namespace Backend.Domain.Entities.Orders.Request
 {
     public class OrderRequest
     {
+        public Guid TenantId { get; set; }
         public Guid SellerId { get; set; }
-        public Guid PayerId { get; set; }
+        public Guid CustomerId { get; set; }
         public int PaymentTypeId { get; set; }
         public int ParcelsQuantity { get; set; }
     }

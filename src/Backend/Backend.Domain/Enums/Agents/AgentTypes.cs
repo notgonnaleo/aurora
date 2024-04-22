@@ -13,6 +13,6 @@ namespace Backend.Domain.Enums.Agents
         Customer = 2,
         Employee = 3,
         Vendor = 4,
-        Physical_Store = 5
+        Seller = 5
     }
 }

@@ -13,6 +13,8 @@ namespace Backend.Domain.Entities.OrderItems
     [Table("OrderItems")]
     public class OrderItem : Model
     {
+        [Required]
+        public Guid TenantId { get; set; }
         [Key]
         public Guid OrderItemId { get; set; }
         [ForeignKey("OrderId")]

@@ -19,7 +19,7 @@ namespace Backend.Domain.Entities.Payments
         [ForeignKey("OrderId")]
         public Guid? OrderId { get; set; }
         [ForeignKey("AgentId")]
-        public Guid PayerId { get; set; }
+        public Guid CustomerId { get; set; }
         [ForeignKey("AgentId")]
         public Guid SellerId { get; set; }
         public int TotalParcels { get; set; }
@@ -29,7 +29,7 @@ namespace Backend.Domain.Entities.Payments
         public DateTime PaymentEstimatedDate { get; set; }
         public decimal TotalAmount { get; set; }
 
-        public Agent? Payer { get; set; }
+        public Agent? Customer { get; set; }
         public Agent? Seller { get; set; }
         public Order? Order { get; set; }
     }

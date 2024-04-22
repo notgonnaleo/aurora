@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Backend.Domain.Entities.OrderItems.Request
 {
-    public class OrderRequest
+    public class OrderItemsRequest
     {
+        public Guid TenantId { get; set; }
         public Guid OrderId { get; set; }
         public Guid ItemId { get; set; }
         public Guid? ItemVariantId { get; set; }
