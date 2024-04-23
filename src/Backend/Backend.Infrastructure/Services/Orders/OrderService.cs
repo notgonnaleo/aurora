@@ -76,6 +76,12 @@ namespace Backend.Infrastructure.Services.Orders
             var customer = _agentService.GetCustomer(newOrder.TenantId, newOrder.CustomerId);
             var seller = _agentService.GetSeller(newOrder.TenantId, newOrder.SellerId);
 
+            // Abstract this
+            if (customer is null)
+                throw new Exception("Customer must be selected");
+            if (seller is null)
+                throw new Exception("Seller must be selected");
+
             if (AddOrder(newOrder)) 
             {
                 if (orderRequest.OrderItems is not null && orderRequest.OrderItems.Any())
@@ -106,6 +112,8 @@ namespace Backend.Infrastructure.Services.Orders
 
         public bool BulkInsertItemsIntoOrder(IEnumerable<OrderItemsRequest> orderItems)
         {
+            // Someone with more expertise knows that this sucks.
+            // better approach is bulking insert through SQL
             var orderLines = new List<OrderItem>();
             foreach (var item in orderItems)
             {
@@ -118,13 +126,12 @@ namespace Backend.Infrastructure.Services.Orders
                 }
                 if(variant is not null)
                 {
-                    orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, 5);
+                    orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, item.ItemQuantity);
                     orderLines.Add(orderLine);
                     AddOrderItem(orderLine);
-                    _appDbContext.SaveChanges();
                     continue;
                 }
-                orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, 5);
+                orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, item.ItemQuantity);
                 orderLines.Add(orderLine);
                 AddOrderItem(orderLine);
             }
