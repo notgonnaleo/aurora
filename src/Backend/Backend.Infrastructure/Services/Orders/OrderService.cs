@@ -119,6 +119,9 @@ namespace Backend.Infrastructure.Services.Orders
             var orderLines = new List<OrderItem>();
             foreach (var item in orderItems)
             {
+                if (item.ItemQuantity == 0)
+                    throw new Exception("By selecting an item you must provide the desired quantity");
+
                 item.OrderId = orderId;
                 var product = _productService.GetProductThumbnail(item.TenantId, item.ItemId);
                 OrderItem orderLine = new OrderItem();
@@ -129,12 +132,12 @@ namespace Backend.Infrastructure.Services.Orders
                 }
                 if(variant is not null)
                 {
-                    orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, item.ItemQuantity);
+                    orderLine = new OrderItem(item, Convert.ToDecimal(product.TotalWeight), Convert.ToDecimal(product.Value), item.ItemQuantity);
                     orderLines.Add(orderLine);
                     AddOrderItem(orderLine);
                     continue;
                 }
-                orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, item.ItemQuantity);
+                orderLine = new OrderItem(item, Convert.ToDecimal(product.TotalWeight), Convert.ToDecimal(product.Value), item.ItemQuantity);
                 orderLines.Add(orderLine);
                 AddOrderItem(orderLine);
             }

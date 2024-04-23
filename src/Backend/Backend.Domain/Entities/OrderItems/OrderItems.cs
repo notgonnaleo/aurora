@@ -27,6 +27,7 @@ namespace Backend.Domain.Entities.OrderItems
             ItemUnitAmount = unitValue;
             ItemTotalWeight = totalWeight * itemQuantity;
             ItemTotalAmount = unitValue * itemQuantity;
+            Active = true;
         }
 
         [Required]
