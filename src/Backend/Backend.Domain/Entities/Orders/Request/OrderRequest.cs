@@ -13,5 +13,6 @@ namespace Backend.Domain.Entities.Orders.Request
         public Guid CustomerId { get; set; }
         public int PaymentTypeId { get; set; }
         public int ParcelsQuantity { get; set; }
+        public DateTime OrderEstimatedDate { get; set; }
     }
 }

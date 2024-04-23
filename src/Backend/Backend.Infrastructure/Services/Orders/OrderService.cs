@@ -1,9 +1,12 @@
-﻿using Backend.Domain.Entities.OrderItems.Response;
+﻿using Backend.Domain.Entities.OrderItems.Request;
+using Backend.Domain.Entities.OrderItems.Response;
 using Backend.Domain.Entities.Orders;
 using Backend.Domain.Entities.Orders.Request;
 using Backend.Domain.Entities.Orders.Response;
 using Backend.Domain.Enums.Orders;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Migrations.AppDbMigration;
+using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Products;
@@ -20,11 +23,13 @@ namespace Backend.Infrastructure.Services.Orders
         private readonly AppDbContext _appDbContext;
         private readonly ProductService _productService;
         private readonly ProductVariantService _productVariantService;
-        public OrderService(UserContextService userContextService, AppDbContext appDbContext, ProductService productService, ProductVariantService productVariantService) : base(userContextService)
+        private readonly AgentService _agentService;
+        public OrderService(UserContextService userContextService, AppDbContext appDbContext, ProductService productService, ProductVariantService productVariantService, AgentService agentService) : base(userContextService)
         {
             _appDbContext = appDbContext;
             _productService = productService;
             _productVariantService = productVariantService;
+            _agentService = agentService;
         }
 
         public OrderResponse GetOrder(Guid tenantId, Guid orderId, string? orderCode)
@@ -41,7 +46,7 @@ namespace Backend.Infrastructure.Services.Orders
                     TenantId = orderItem.TenantId,
                     OrderItemId = orderItem.OrderItemId,
                     Item = _productService.GetProductThumbnail(tenantId, orderItem.ProductId),
-                    ItemVariant = orderItem.VariantId.HasValue ? _productVariantService.GetVariant(tenantId, orderItem.ProductId, orderItem.VariantId.Value) : null,
+                    ItemVariant = null,
                     ItemQuantity = orderItem.ItemQuantity,
                     ItemTotalAmount = orderItem.ItemTotalAmount,
                     ItemUnitAmount = orderItem.ItemUnitAmount,
@@ -51,9 +56,9 @@ namespace Backend.Infrastructure.Services.Orders
             return new OrderResponse()
             {
                 OrderId = orders.OrderId,
-                OrderEffectiveDate = orders.OrderEffectiveDate,
-                OrderEstimatedDate = orders.OrderEstimatedDate, 
-                OrderOpeningDate = orders.OrderOpeningDate, 
+                OrderEffectiveDate = orders.OrderEffectiveDate.GetValueOrDefault(),
+                OrderEstimatedDate = orders.OrderEstimatedDate,
+                OrderOpeningDate = orders.OrderOpeningDate,
                 OrderCode = orders.OrderCode,
                 OrderItems = orderItemsResponse,
                 OrderStatus = new OrderStatus() { OrderStatusId = orders.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)orders.OrderStatusId).ToString(), },
@@ -63,8 +68,33 @@ namespace Backend.Infrastructure.Services.Orders
         public OrderOpeningConfirmation OpenNewOrder(OrderRequest orderRequest)
         {
             var newOrder = new Order(orderRequest);
+            newOrder.CreatedBy = LoadContext().UserId;
+
+            var customer = _agentService.GetCustomer(newOrder.TenantId, newOrder.CustomerId);
+            var seller = _agentService.GetSeller(newOrder.TenantId, newOrder.SellerId);
+
             _appDbContext.Orders.Add(newOrder);
-            return new OrderOpeningConfirmation();
+            _appDbContext.SaveChanges();
+
+            return new OrderOpeningConfirmation()
+            {
+                TenantId = newOrder.TenantId,
+                OrderId = newOrder.OrderId,
+                OrderCode = newOrder.OrderCode,
+                OrderEstimatedDate = newOrder.OrderEstimatedDate,
+                OrderOpeningDate = newOrder.OrderOpeningDate,
+                OrderStatus = new OrderStatus() { OrderStatusId = newOrder.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)newOrder.OrderStatusId).ToString(), },
+                Customer = new Domain.Entities.Agents.Response.CustomerThumbnail()
+                {
+                    AgentId = customer.AgentId,
+                    AgentDisplayName = customer.Name
+                },
+                Seller = new Domain.Entities.Agents.Response.SellerThumbnail()
+                {
+                    AgentId = seller.AgentId,
+                    AgentDisplayName = seller.Name
+                },
+            };
         }
     }
 }

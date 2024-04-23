@@ -20,12 +20,19 @@ namespace Backend.Domain.Entities.Orders
         {
             var openingDate = DateTime.UtcNow;
 
+            TenantId = orderRequest.TenantId;
             OrderId = Guid.NewGuid();
             OrderCode = GenerateOrderCode(openingDate);
             OrderOpeningDate = openingDate;
+            OrderEstimatedDate = orderRequest.OrderEstimatedDate;
             OrderStatusId = (int)OrdersStatusEnums.Open;
             SellerId = orderRequest.SellerId;
             CustomerId = orderRequest.CustomerId;
+            Active = true;
+            Created = DateTime.UtcNow;
+            CreatedBy = orderRequest.CustomerId;
+            Updated = null;
+            UpdatedBy = null;
         }
 
         public string GenerateOrderCode(DateTime openingDate)
@@ -49,7 +56,7 @@ namespace Backend.Domain.Entities.Orders
         public DateTime OrderOpeningDate { get; set; }
         [Required]
         public DateTime OrderEstimatedDate { get; set; }
-        public DateTime OrderEffectiveDate { get; set; }
+        public DateTime? OrderEffectiveDate { get; set; }
         public int OrderStatusId { get; set; }
         public decimal OrderTotalAmount { get; set; }
 
