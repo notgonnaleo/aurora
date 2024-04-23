@@ -85,7 +85,9 @@ namespace Backend.Infrastructure.Services.Orders
             if (AddOrder(newOrder)) 
             {
                 if (orderRequest.OrderItems is not null && orderRequest.OrderItems.Any())
-                    BulkInsertItemsIntoOrder(orderRequest.OrderItems);
+                {
+                    BulkInsertItemsIntoOrder(orderRequest.OrderItems, newOrder.OrderId);
+                }
 
                 return new OrderOpeningConfirmation()
                 {
@@ -110,13 +112,14 @@ namespace Backend.Infrastructure.Services.Orders
             throw new Exception("Could not create a new order request.");
         }
 
-        public bool BulkInsertItemsIntoOrder(IEnumerable<OrderItemsRequest> orderItems)
+        public bool BulkInsertItemsIntoOrder(IEnumerable<OrderItemsRequest> orderItems, Guid orderId)
         {
             // Someone with more expertise knows that this sucks.
             // better approach is bulking insert through SQL
             var orderLines = new List<OrderItem>();
             foreach (var item in orderItems)
             {
+                item.OrderId = orderId;
                 var product = _productService.GetProductThumbnail(item.TenantId, item.ItemId);
                 OrderItem orderLine = new OrderItem();
                 ProductVariant? variant = null;
