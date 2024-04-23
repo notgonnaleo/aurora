@@ -19,7 +19,14 @@ namespace Backend.API.Controllers.Orders
         [HttpGet, Route("GetOrder")]
         public ActionResult GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {
-            return Ok(_orderService.GetOrder(tenantId, orderId, orderCode));
+            try
+            {
+                return Ok(_orderService.GetOrder(tenantId, orderId, orderCode));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost, Route("OpenNewOrder")]

@@ -55,9 +55,9 @@ namespace Backend.Infrastructure.Services.Orders
                     ItemUnitAmount = orderItem.ItemUnitAmount,
                 });
             }
-            // TODO: Calculate amount, weights, product quantity
             return new OrderResponse()
             {
+                TenantId = orders.TenantId,
                 OrderId = orders.OrderId,
                 OrderEffectiveDate = orders.OrderEffectiveDate.GetValueOrDefault(),
                 OrderEstimatedDate = orders.OrderEstimatedDate,
