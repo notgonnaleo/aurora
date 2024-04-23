@@ -1,8 +1,10 @@
-﻿using Backend.Domain.Entities.OrderItems.Request;
+﻿using Backend.Domain.Entities.OrderItems;
+using Backend.Domain.Entities.OrderItems.Request;
 using Backend.Domain.Entities.OrderItems.Response;
 using Backend.Domain.Entities.Orders;
 using Backend.Domain.Entities.Orders.Request;
 using Backend.Domain.Entities.Orders.Response;
+using Backend.Domain.Entities.Products;
 using Backend.Domain.Enums.Orders;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Migrations.AppDbMigration;
@@ -10,6 +12,7 @@ using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Products;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,28 +76,71 @@ namespace Backend.Infrastructure.Services.Orders
             var customer = _agentService.GetCustomer(newOrder.TenantId, newOrder.CustomerId);
             var seller = _agentService.GetSeller(newOrder.TenantId, newOrder.SellerId);
 
-            _appDbContext.Orders.Add(newOrder);
-            _appDbContext.SaveChanges();
-
-            return new OrderOpeningConfirmation()
+            if (AddOrder(newOrder)) 
             {
-                TenantId = newOrder.TenantId,
-                OrderId = newOrder.OrderId,
-                OrderCode = newOrder.OrderCode,
-                OrderEstimatedDate = newOrder.OrderEstimatedDate,
-                OrderOpeningDate = newOrder.OrderOpeningDate,
-                OrderStatus = new OrderStatus() { OrderStatusId = newOrder.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)newOrder.OrderStatusId).ToString(), },
-                Customer = new Domain.Entities.Agents.Response.CustomerThumbnail()
+                if (orderRequest.OrderItems is not null && orderRequest.OrderItems.Any())
+                    BulkInsertItemsIntoOrder(orderRequest.OrderItems);
+
+                return new OrderOpeningConfirmation()
                 {
-                    AgentId = customer.AgentId,
-                    AgentDisplayName = customer.Name
-                },
-                Seller = new Domain.Entities.Agents.Response.SellerThumbnail()
-                {
-                    AgentId = seller.AgentId,
-                    AgentDisplayName = seller.Name
-                },
+                    TenantId = newOrder.TenantId,
+                    OrderId = newOrder.OrderId,
+                    OrderCode = newOrder.OrderCode,
+                    OrderEstimatedDate = newOrder.OrderEstimatedDate,
+                    OrderOpeningDate = newOrder.OrderOpeningDate,
+                    OrderStatus = new OrderStatus() { OrderStatusId = newOrder.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)newOrder.OrderStatusId).ToString(), },
+                    Customer = new Domain.Entities.Agents.Response.CustomerThumbnail()
+                    {
+                        AgentId = customer.AgentId,
+                        AgentDisplayName = customer.Name
+                    },
+                    Seller = new Domain.Entities.Agents.Response.SellerThumbnail()
+                    {
+                        AgentId = seller.AgentId,
+                        AgentDisplayName = seller.Name
+                    },
+                };
             };
+            throw new Exception("Could not create a new order request.");
+        }
+
+        public bool BulkInsertItemsIntoOrder(IEnumerable<OrderItemsRequest> orderItems)
+        {
+            var orderLines = new List<OrderItem>();
+            foreach (var item in orderItems)
+            {
+                var product = _productService.GetProductThumbnail(item.TenantId, item.ItemId);
+                OrderItem orderLine = new OrderItem();
+                ProductVariant? variant = null;
+                if (item.ItemVariantId is not null)
+                {
+                    variant = _productVariantService.GetVariant(item.TenantId, item.ItemId, item.ItemVariantId.Value);
+                }
+                if(variant is not null)
+                {
+                    orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, 5);
+                    orderLines.Add(orderLine);
+                    AddOrderItem(orderLine);
+                    _appDbContext.SaveChanges();
+                    continue;
+                }
+                orderLine = new OrderItem(item, (decimal)product.TotalWeight, (decimal)product.Value, 5);
+                orderLines.Add(orderLine);
+                AddOrderItem(orderLine);
+            }
+            return orderLines.Any();
+        }
+
+        public bool AddOrderItem(OrderItem orderItem)
+        {
+            _appDbContext.OrderItems.Add(orderItem);
+            return _appDbContext.SaveChanges() > 0;
+        }
+
+        public bool AddOrder(Order order)
+        {
+            _appDbContext.Orders.Add(order);
+            return _appDbContext.SaveChanges() > 0;
         }
     }
 }

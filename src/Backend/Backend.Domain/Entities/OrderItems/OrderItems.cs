@@ -7,12 +7,28 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Domain.Entities.OrderItems.Request;
+using Backend.Domain.Entities.Products;
 
 namespace Backend.Domain.Entities.OrderItems
 {
     [Table("OrderItems")]
     public class OrderItem : Model
     {
+        public OrderItem() { }
+        public OrderItem(OrderItemsRequest orderItemsRequest, decimal totalWeight, decimal unitValue, int itemQuantity)
+        {
+            TenantId = orderItemsRequest.TenantId;
+            OrderId = orderItemsRequest.OrderId;
+            OrderItemId = Guid.NewGuid();
+            ProductId = orderItemsRequest.ItemId;
+            VariantId = orderItemsRequest.ItemVariantId.GetValueOrDefault();
+            ItemQuantity = itemQuantity;
+            ItemUnitAmount = unitValue;
+            ItemTotalWeight = totalWeight * itemQuantity;
+            ItemTotalAmount = unitValue * itemQuantity;
+        }
+
         [Required]
         public Guid TenantId { get; set; }
         [Key]

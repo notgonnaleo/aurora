@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Backend.Domain.Entities.OrderItems.Request;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,6 @@ namespace Backend.Domain.Entities.Orders.Request
         public int PaymentTypeId { get; set; }
         public int ParcelsQuantity { get; set; }
         public DateTime OrderEstimatedDate { get; set; }
+        public IEnumerable<OrderItemsRequest>? OrderItems { get; set; }
     }
 }

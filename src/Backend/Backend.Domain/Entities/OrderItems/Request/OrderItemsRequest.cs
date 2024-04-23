@@ -10,6 +10,7 @@ namespace Backend.Domain.Entities.OrderItems.Request
     {
         public Guid TenantId { get; set; }
         public Guid OrderId { get; set; }
+        public Guid OrderItemId { get; set; }
         public Guid ItemId { get; set; }
         public Guid? ItemVariantId { get; set; }
         public int ItemQuantity { get; set; }
