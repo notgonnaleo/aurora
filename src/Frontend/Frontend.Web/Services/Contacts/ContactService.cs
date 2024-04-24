@@ -11,13 +11,13 @@ namespace Frontend.Web.Services.Contacts
 {
     public class ContactService
     {
-        private readonly AddressRepository _addressRepository;
+        private readonly OrderRepository _addressRepository;
         private readonly EmailAddressRepository _emailAddressRepository;
         private readonly PhoneRepository _phoneRepository;
         private readonly ProfileRepository _profileRepository;
 
         public ContactService(
-            AddressRepository addressRepository,
+            OrderRepository addressRepository,
             EmailAddressRepository emailAddressRepository,
             PhoneRepository phoneRepository,
             ProfileRepository profileRepository)

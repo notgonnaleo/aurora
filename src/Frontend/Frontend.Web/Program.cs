@@ -62,7 +62,7 @@ builder.Services.AddScoped<ProductVariantRepository>();
 builder.Services.AddScoped<ProductVariantService>();
 builder.Services.AddScoped<AgentRepository>();
 builder.Services.AddScoped<AgentService>();
-builder.Services.AddScoped<AddressRepository>();
+builder.Services.AddScoped<OrderRepository>();
 builder.Services.AddScoped<EmailAddressRepository>();
 builder.Services.AddScoped<PhoneRepository>();
 builder.Services.AddScoped<ProfileRepository>();

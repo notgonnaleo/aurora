@@ -149,7 +149,18 @@ namespace Backend.Infrastructure.Services.Orders
             _appDbContext.OrderItems.Add(orderItem);
             return _appDbContext.SaveChanges() > 0;
         }
-
+        public bool UpdateOrderItem(OrderItemsRequest orderItemRequest)
+        {
+            var orderItem = new OrderItem(orderItemRequest);
+            _appDbContext.OrderItems.Update(orderItem);
+            return _appDbContext.SaveChanges() > 0;
+        }
+        public bool RemoveOrderItem(OrderItemsRequest orderItemRequest)
+        {
+            var orderItem = new OrderItem(orderItemRequest);
+            _appDbContext.OrderItems.Remove(orderItem);
+            return _appDbContext.SaveChanges() > 0;
+        }
         public bool AddOrder(Order order)
         {
             _appDbContext.Orders.Add(order);

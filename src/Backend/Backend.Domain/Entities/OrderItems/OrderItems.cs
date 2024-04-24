@@ -30,6 +30,17 @@ namespace Backend.Domain.Entities.OrderItems
             Active = true;
         }
 
+        public OrderItem(OrderItemsRequest orderItemsRequest)
+        {
+            TenantId = orderItemsRequest.TenantId;
+            OrderId = orderItemsRequest.OrderId;
+            OrderItemId = Guid.NewGuid();
+            ProductId = orderItemsRequest.ItemId;
+            VariantId = orderItemsRequest.ItemVariantId.GetValueOrDefault();
+            ItemQuantity = orderItemsRequest.ItemQuantity;
+            Active = true;
+        }
+
         [Required]
         public Guid TenantId { get; set; }
         [Key]

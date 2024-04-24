@@ -7,7 +7,7 @@ using Frontend.Web.Models.Client;
 
 namespace Frontend.Web.Repository.Contacts
 {
-    namespace Frontend.Web.Services.Orders
+    namespace Frontend.Web.Services.Addresses
     {
         public class OrderRepository
         {
@@ -16,6 +16,13 @@ namespace Frontend.Web.Repository.Contacts
             public OrderRepository(HttpClientRepository httpClientRepository)
             {
                 _httpClientRepository = httpClientRepository;
+            }
+
+            public async Task<ApiResponse<IEnumerable<Address>>> GetAddresses(string tenantId)
+            {
+                var parameters = new RouteParameterRequest() { ParameterName = Methods.Addresses.GET.GetAddresses.tenantId, ParameterValue = tenantId };
+                var request = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.GET, parameters);
+                return await _httpClientRepository.Get(request);
             }
 
             public async Task<ApiResponse<Address>> GetAddress(string tenantId, string addressId)
@@ -52,18 +59,18 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<bool> DeleteAddress(string tenantId, string addressId)
             {
                 var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
                 {
-                    new RouteParameterRequest()
-                    {
-                        ParameterName = Methods.Addresses.DELETE.DeleteAddress.tenantId,
-                        ParameterValue = tenantId,
-                    },
-                    new RouteParameterRequest()
-                    {
-                        ParameterName = Methods.Addresses.DELETE.DeleteAddress.addressId,
-                        ParameterValue = addressId,
-                    }
-                };
+                    ParameterName = Methods.Addresses.DELETE.DeleteAddress.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.Addresses.DELETE.DeleteAddress.addressId,
+                    ParameterValue = addressId,
+                }
+            };
                 var request = new RouteBuilder<Address>().SendMultiple(Endpoints.Addresses, Methods.Default.DELETE, parameters);
                 return (await _httpClientRepository.Put(request)).Success;
             }

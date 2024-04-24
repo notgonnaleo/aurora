@@ -41,5 +41,31 @@ namespace Backend.API.Controllers.Orders
                 return BadRequest(ex.Message);
             }
         }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPut, Route("UpdateOrderItem")]
+        public ActionResult UpdateOrderItem(OrderItemsRequest orderRequest)
+        {
+            try
+            {
+                return Ok(_orderService.UpdateOrderItem(orderRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpDelete, Route("RemoveOrderItem")]
+        public ActionResult RemoveOrderItem(OrderItemsRequest orderRequest)
+        {
+            try
+            {
+                return Ok(_orderService.RemoveOrderItem(orderRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
