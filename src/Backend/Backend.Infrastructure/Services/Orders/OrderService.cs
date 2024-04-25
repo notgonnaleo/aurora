@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Backend.Infrastructure.Enums.Modules.Methods;
 
 namespace Backend.Infrastructure.Services.Orders
 {
@@ -34,6 +35,46 @@ namespace Backend.Infrastructure.Services.Orders
             _productVariantService = productVariantService;
             _agentService = agentService;
         }
+
+        public IEnumerable<OrderResponse> GetOrders(Guid tenantId)
+        {
+            // this sucks part 2
+            var orders = _appDbContext.Orders.Where(x => x.TenantId == tenantId).ToList();
+            if (orders is null) return new List<OrderResponse>();
+            var ordersThumbnails = new List<OrderResponse>();
+
+            foreach (var order in orders)
+            {
+                var orderItems = _appDbContext.OrderItems.Where(x => x.TenantId == tenantId && x.OrderId == order.OrderId).ToList();
+                IEnumerable<OrderItemsResponse> orderItemsResponse = new List<OrderItemsResponse>();
+                if (orderItems.Any())
+                {
+                    orderItemsResponse = orderItems.Select(orderItem => new OrderItemsResponse()
+                    {
+                        TenantId = orderItem.TenantId,
+                        OrderItemId = orderItem.OrderItemId,
+                        Item = _productService.GetProductThumbnail(tenantId, orderItem.ProductId),
+                        ItemVariant = null,
+                        ItemQuantity = orderItem.ItemQuantity,
+                        ItemTotalAmount = orderItem.ItemTotalAmount,
+                        ItemUnitAmount = orderItem.ItemUnitAmount,
+                    });                    
+                }
+                ordersThumbnails.Add(new OrderResponse()
+                {
+                    TenantId = order.TenantId,
+                    OrderId = order.OrderId,
+                    OrderEffectiveDate = order.OrderEffectiveDate.GetValueOrDefault(),
+                    OrderEstimatedDate = order.OrderEstimatedDate,
+                    OrderOpeningDate = order.OrderOpeningDate,
+                    OrderCode = order.OrderCode,
+                    OrderItems = orderItemsResponse,
+                    OrderStatus = new OrderStatus() { OrderStatusId = order.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)order.OrderStatusId).ToString(), },
+                });
+            }
+            return ordersThumbnails;
+        }
+
 
         public OrderResponse GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {

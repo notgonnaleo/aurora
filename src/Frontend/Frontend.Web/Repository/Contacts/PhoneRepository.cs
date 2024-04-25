@@ -47,7 +47,7 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<ApiResponse<Phone>> CreatePhone(Phone phone)
             {
                 var model = new RouteBuilder<Phone>().Send(Endpoints.Phones, Methods.Default.POST, phone);
-                return await _httpClientRepository.Post(model);
+                return await _httpClientRepository.Post<Phone, Phone>(model);
             }
 
             public async Task<ApiResponse<bool>> UpdatePhone(Phone phone)

@@ -584,13 +584,22 @@ namespace Backend.Infrastructure.Enums.Modules
         {
             public static class GET
             {
-                public static class GetOrders 
+                public static class GetOrders
                 {
                     public static string GetOrdersEndpointName = "GetOrders";
                     public static class Args
                     {
                         public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetOrder
+                {
+                    public static string GetOrderEndpointName = "GetOrder";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
                         public static string orderId = "orderId";
+                        public static string orderCode = "orderCode";
                     }
                 }
             }

@@ -4,7 +4,6 @@ using Frontend.Web.Repository.Agents;
 using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Categories;
 using Frontend.Web.Repository.Client;
-using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Addresses;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Phones;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Profiles;
 using Frontend.Web.Repository.Contacts;
@@ -27,6 +26,8 @@ using Frontend.Web.Services.Contacts;
 using Sotsera.Blazor.Toaster.Core.Models;
 using Frontend.Web.Util.Cookie;
 using Frontend.Web.Components.Settings.Theme;
+using Frontend.Web.Repository.Orders;
+using Frontend.Web.Services.Orders;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -63,6 +64,7 @@ builder.Services.AddScoped<ProductVariantService>();
 builder.Services.AddScoped<AgentRepository>();
 builder.Services.AddScoped<AgentService>();
 builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<EmailAddressRepository>();
 builder.Services.AddScoped<PhoneRepository>();
 builder.Services.AddScoped<ProfileRepository>();

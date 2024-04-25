@@ -9,11 +9,11 @@ namespace Frontend.Web.Repository.Contacts
 {
     namespace Frontend.Web.Services.Orders
     {
-        public class OrderRepository
+        public class AddressRepository
         {
             private readonly HttpClientRepository _httpClientRepository;
 
-            public OrderRepository(HttpClientRepository httpClientRepository)
+            public AddressRepository(HttpClientRepository httpClientRepository)
             {
                 _httpClientRepository = httpClientRepository;
             }
@@ -40,7 +40,7 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<ApiResponse<Address>> CreateAddress(Address address)
             {
                 var model = new RouteBuilder<Address>().Send(Endpoints.Addresses, Methods.Default.POST, address);
-                return await _httpClientRepository.Post(model);
+                return await _httpClientRepository.Post<Address, Address>(model);
             }
 
             public async Task<ApiResponse<Address>> UpdateAddress(Address address)

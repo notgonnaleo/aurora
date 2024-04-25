@@ -16,6 +16,19 @@ namespace Backend.API.Controllers.Orders
             _orderService = orderService;
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet, Route("GetOrders")]
+        public ActionResult GetOrders(Guid tenantId) // in the future filter by date or even client bcuz this is going to be huge 
+        {
+            try
+            {
+                return Ok(_orderService.GetOrders(tenantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpGet, Route("GetOrder")]
         public ActionResult GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {

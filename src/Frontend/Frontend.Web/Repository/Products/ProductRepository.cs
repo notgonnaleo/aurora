@@ -65,7 +65,7 @@ namespace Frontend.Web.Services.Products
         public async Task<ApiResponse<Product>> CreateProduct(Product product)
         {
             var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<Product, Product>(model);
         }
         public async Task<ApiResponse<Product>> UpdateProduct(Product product)
         {
