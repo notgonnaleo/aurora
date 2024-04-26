@@ -173,6 +173,8 @@ namespace Backend.Infrastructure.Enums.Modules
                 {
                     public static string GetAllVariantsByProductEndpoint = "GetAllVariantsByProduct";
                 }
+
+
             }
 
             public static class POST
@@ -182,8 +184,17 @@ namespace Backend.Infrastructure.Enums.Modules
 
             public static class PUT
             {
-
                 public static string UpdateProductVariant = "ProductVariant/Update";
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteVariant
+                {
+                    public static string tenantId = "tenantId";
+                    public static string variantId = "variantId";
+                }
+                
             }
         }
 

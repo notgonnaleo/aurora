@@ -101,5 +101,20 @@ namespace Backend.Infrastructure.Services.Products
 
             return _appDbContext.SaveChanges() > 0;
         }
+
+        public bool Delete(Guid tenantId, Guid variantId)
+        {
+            var context = LoadContext();
+            ProductVariant Variant = _appDbContext.ProductVariants.Where(x => x.VariantId == variantId && x.TenantId == context.Tenant.Id).First();
+            Variant.Active = false;
+
+            _appDbContext.Update(Variant);
+            var response = _appDbContext.SaveChanges();
+
+            if (response <= 0)
+                throw new Exception(Localization.GenericValidations.ErrorDeleteItem(context.Language));
+
+            return true;
+        }
     }
 }

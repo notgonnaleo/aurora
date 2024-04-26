@@ -43,7 +43,7 @@ else
                                     </div>
 
 
-                                    <p class=" mt-4 mb-4 mb-md-0">
+                                    <p class=" mt-4 mb-4 mb-md-0" >
                                         There are many variations of passages of Lorem Ipsum available, but the
                                         majority have suffered alteration in some form, by injected humour, or
                                         randomised words which don't look even slightly believable.
@@ -58,7 +58,7 @@ else
                                         <div class="d-flex justify-content-between">
                                             <div>
                                                 <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
-                                                    <i class="ti ti-edit" style="font-size:20px"></i>
+                                                    <i class="ti ti-edit" style="font-size:15px"></i>
                                                 </a>
                                             </div>
                                             <div>
@@ -68,14 +68,14 @@ else
                                             </div>
                                             <div>
                                                 <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(product)">
-                                                    <i class="ti ti-trash-x" style="font-size:20px"></i>
+                                                    <i class="ti ti-trash-x" style="font-size:15px"></i>
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                
+
                             </div>
                         </div>
                     </div>
@@ -103,8 +103,8 @@ else
 
 }
 
-    @code
-    {
+@code
+{
     private bool isLoading = true;
     private ApiResponse<IEnumerable<ProductDetail>>? Model;
     protected override async Task OnInitializedAsync()
@@ -120,16 +120,16 @@ else
     }
 }
 
-    @code
-    {
+@code
+{
     private void Edit(ProductDetail product)
     {
         NavigationManager.NavigateTo($"/products/edit/{product.ProductId}");
     }
 }
 
-    @code
-    {
+@code
+{
     [Parameter]
     public EventCallback<ProductDetail> OnCreateNewVariant { get; set; }
 

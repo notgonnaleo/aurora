@@ -57,5 +57,20 @@ namespace Backend.API.Controllers.Products
                 return BadRequest(ex.Message);
             }
         }
+
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPut]
+        [Route("Delete")]
+        public ActionResult Delete(Guid tenantId, Guid variantId)
+        {
+            try
+            {
+                return Ok(_productVariantService.Delete(tenantId, variantId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
