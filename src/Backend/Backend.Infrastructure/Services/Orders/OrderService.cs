@@ -52,6 +52,7 @@ namespace Backend.Infrastructure.Services.Orders
                     orderItemsResponse = orderItems.Select(orderItem => new OrderItemsResponse()
                     {
                         TenantId = orderItem.TenantId,
+                        OrderId = orderItem.OrderId,
                         OrderItemId = orderItem.OrderItemId,
                         Item = _productService.GetProductThumbnail(tenantId, orderItem.ProductId),
                         ItemVariant = null,

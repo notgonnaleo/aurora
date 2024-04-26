@@ -14,6 +14,7 @@ namespace Backend.Domain.Entities.OrderItems.Response
     public class OrderItemsResponse
     {
         public Guid TenantId { get; set; }
+        public Guid OrderId { get; set; }
         public Guid OrderItemId { get; set; }
         public ProductDetail Item { get; set; }
         public ProductVariant? ItemVariant { get; set; }

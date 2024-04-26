@@ -21,7 +21,7 @@ namespace Frontend.Web.Repository.Orders
         public async Task<ApiResponse<IEnumerable<OrderResponse>>> GetOrders(string tenantId)
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Orders.GET.GetOrders.Args.tenantId, ParameterValue = tenantId };
-            var request = new RouteBuilder<OrderResponse>().Send(Endpoints.Orders, Methods.Orders.GET.GetOrder.GetOrderEndpointName, parameters);
+            var request = new RouteBuilder<OrderResponse>().Send(Endpoints.Orders, Methods.Orders.GET.GetOrders.GetOrdersEndpointName, parameters);
             return await _httpClientRepository.Get(request);
         }
 

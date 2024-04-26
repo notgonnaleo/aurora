@@ -11,13 +11,13 @@ namespace Frontend.Web.Services.Contacts
 {
     public class ContactService
     {
-        private readonly OrderRepository _addressRepository;
+        private readonly AddressRepository _addressRepository;
         private readonly EmailAddressRepository _emailAddressRepository;
         private readonly PhoneRepository _phoneRepository;
         private readonly ProfileRepository _profileRepository;
 
         public ContactService(
-            OrderRepository addressRepository,
+            AddressRepository addressRepository,
             EmailAddressRepository emailAddressRepository,
             PhoneRepository phoneRepository,
             ProfileRepository profileRepository)
@@ -29,11 +29,6 @@ namespace Frontend.Web.Services.Contacts
         }
 
         // Address methods
-        public async Task<ApiResponse<IEnumerable<Address>>> GetAddresses(string tenantId)
-        {
-            return await _addressRepository.GetAddresses(tenantId);
-        }
-
         public async Task<ApiResponse<Address>> GetAddress(string tenantId, string addressId)
         {
             return await _addressRepository.GetAddress(tenantId, addressId);

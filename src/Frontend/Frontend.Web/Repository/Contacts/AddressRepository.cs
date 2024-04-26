@@ -7,7 +7,7 @@ using Frontend.Web.Models.Client;
 
 namespace Frontend.Web.Repository.Contacts
 {
-    namespace Frontend.Web.Services.Orders
+    namespace Frontend.Web.Services.Addresses
     {
         public class AddressRepository
         {
