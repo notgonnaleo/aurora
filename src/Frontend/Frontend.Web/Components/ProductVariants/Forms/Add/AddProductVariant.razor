@@ -14,8 +14,9 @@
 @inject NavigationManager navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
+<br />
 <div>
-    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+    <i class="ti ti-x cursor-pointer p-2 text-black " style="font-size:20px" @onclick="ToggleRightSidebar"></i>
 </div>
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
@@ -231,11 +232,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-2 col-sm-6">
-                    <button @onclick="UpdateVariant" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                        Save <i class="ti ti-device-floppy"></i>
-                    </button>
+                <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+                    <button type="button" @onclick="UpdateVariant" class="btn btn-primary"> Save <i class="ti ti-device-floppy"></i></button>
                 </div>
+               
             }   
         </form>
     </div>

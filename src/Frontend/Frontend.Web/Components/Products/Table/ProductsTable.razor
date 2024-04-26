@@ -23,7 +23,7 @@ else
     {
         @foreach (var product in Model.Result)
         {
-            <div class="row justify-content-center mb-3">
+            <div class="row justify-content-center mb-1">
                 <div class="col-md-12 col-xl-10">
                     <div class="card shadow-0 ">
                         <div class="card-body">
@@ -44,9 +44,7 @@ else
 
 
                                     <p class=" mt-4 mb-4 mb-md-0" >
-                                        There are many variations of passages of Lorem Ipsum available, but the
-                                        majority have suffered alteration in some form, by injected humour, or
-                                        randomised words which don't look even slightly believable.
+                                        @product.Description
                                     </p>
                                 </div>
                                 <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start d-flex flex-column">
@@ -54,28 +52,17 @@ else
                                         <h4 class="mb-1 me-1">R$ @product.Value</h4>
                                     </div>
                                     <h6 class="text-success">Free shipping</h6>
-                                    <div class="mt-auto">
-                                        <div class="d-flex justify-content-between">
-                                            <div>
-                                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(product)">
-                                                    <i class="ti ti-edit" style="font-size:15px"></i>
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => CreateNewVariant(product)">
-                                                    Add variant
-                                                </a>
-                                            </div>
-                                            <div>
-                                                <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(product)">
-                                                    <i class="ti ti-trash-x" style="font-size:15px"></i>
-                                                </a>
-                                            </div>
-                                        </div>
+                                   
+
+                                    <div class="d-flex flex-column mt-4">
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => CreateNewVariant(product)">Add Variant</button>
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => Edit(product)">Edit<i class="ti ti-edit m-1"></i></button>
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => DeleteModalAction(product)">Delete<i class="ti ti-trash-x m-1"></i> </button>
+
                                     </div>
                                 </div>
 
-
+                               
                             </div>
                         </div>
                     </div>

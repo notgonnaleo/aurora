@@ -27,12 +27,16 @@
     {
         @if (Model.StatusCode == 200)
         {
-            <a class="btn" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Generate report</a>
+            <a class="btn btn-outline-primary" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Generate report</a>
+            <br />
+            <br />
             <Frontend.Web.Components.Products.Forms.Edit.EditProduct Model="@Model.Result" />
 
             <button class="btn btn-outline-primary" @onclick="AddVariant">
                 @btnText
             </button>
+            <br />
+            <br />
             <Frontend.Web.Components.ProductVariants.Table.ProductVariantsTable parentProductId="@productId"  ShowModal="ShowVariantModal" SelectedItemVariant="EditVariant"/>
         }
         else
