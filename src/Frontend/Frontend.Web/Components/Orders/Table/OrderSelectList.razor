@@ -1,0 +1,39 @@
+﻿@using Backend.Domain.Entities.Orders.Response;
+<ul class="overflow-auto invoice-users" data-simplebar="init">
+    @if (Orders is not null)
+    {
+        @foreach (var order in Orders)
+        {
+            <li style="" @onclick="() => PreviewOrder(order)">
+                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="invoice-123" data-invoice-id="123">
+                    <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
+                        <i class="ti ti-user fs-6"></i>
+                    </div>
+                    <div class="ms-3 d-inline-block w-75">
+                        <h6 class="mb-0 invoice-customer"><strong>#@order.OrderCode</strong></h6>
+
+                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">@order.OrderStatus.OrderStatusName</span>
+                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">@order.OrderOpeningDate</span>
+                    </div>
+                </a>
+            </li>
+        }
+    }
+</ul>
+
+@code
+{
+    private void PreviewOrder(OrderResponse order)
+    {
+        SelectedItem.InvokeAsync(order);
+    }
+}
+
+@code 
+{
+    [Parameter]
+    public IEnumerable<OrderResponse> Orders { get; set; }
+
+    [Parameter]
+    public EventCallback<OrderResponse> SelectedItem { get; set; }
+}

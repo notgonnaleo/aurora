@@ -1,0 +1,43 @@
+﻿@using Backend.Domain.Entities.Orders.Response;
+<h1>TESTE: @Order.OrderId</h1>
+<div>
+    <address>
+        <h6>&nbsp;From,</h6>
+        <h6 class="fw-bold">&nbsp;Steve Jobs</h6>
+        <p class="ms-1">
+            1108, Clair Street,
+            <br>Massachusetts,
+            <br>Woods Hole - 02543
+        </p>
+    </address>
+</div>
+<div class="text-end">
+    <address>
+        <h6>To,</h6>
+        <h6 class="fw-bold invoice-customer">
+            James Anderson,
+        </h6>
+        <p class="ms-4">
+            455, Shobe Lane,
+            <br>Colorado,
+            <br>Fort
+            Collins - 80524
+        </p>
+        <p class="mt-4 mb-1">
+            <span>Invoice Date :</span>
+            <i class="ti ti-calendar"></i>
+            23rd Jan 2021
+        </p>
+        <p>
+            <span>Due Date :</span>
+            <i class="ti ti-calendar"></i>
+            25th Jan 2021
+        </p>
+    </address>
+</div>
+
+@code 
+{
+    [Parameter]
+    public OrderResponse Order { get; set; }
+}
