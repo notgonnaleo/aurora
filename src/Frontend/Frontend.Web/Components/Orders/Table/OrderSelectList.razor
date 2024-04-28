@@ -1,26 +1,78 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
-<ul class="overflow-auto invoice-users" data-simplebar="init">
-    @if (Orders is not null)
-    {
-        @foreach (var order in Orders)
+@using Backend.Domain.Enums.Orders;
+<div class="scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
+    <ul class="overflow-auto invoice-users simplebar-scrollable-y" data-simplebar="init">
+        @if (Orders is not null)
         {
-            <li style="" @onclick="() => PreviewOrder(order)">
-                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="invoice-123" data-invoice-id="123">
-                    <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
-                        <i class="ti ti-user fs-6"></i>
-                    </div>
-                    <div class="ms-3 d-inline-block w-75">
-                        <h6 class="mb-0 invoice-customer"><strong>#@order.OrderCode</strong></h6>
-
-                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">@order.OrderStatus.OrderStatusName</span>
-                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">@order.OrderOpeningDate</span>
-                    </div>
-                </a>
-            </li>
+            @foreach (var order in Orders)
+            {
+                <li style="" @onclick="() => PreviewOrder(order)">
+                    <a class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="@order.OrderCode" data-invoice-id="@order.OrderCode">
+                        @switch (order.OrderStatus.OrderStatusId)
+                        {
+                            case ((int)OrdersStatusEnums.Open):
+                                <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock fs-6"></i>
+                                </div>
+                                break;
+                            case ((int)OrdersStatusEnums.Canceled):
+                                <div class="btn btn-danger round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock-x fs-6"></i>
+                                </div>
+                                break;
+                            case ((int)OrdersStatusEnums.Overdue):
+                                <div class="btn btn-warning round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock-question fs-6"></i>
+                                </div>
+                                break;
+                            case ((int)OrdersStatusEnums.InProgress):
+                                <div class="btn btn-info round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock-play fs-6"></i>
+                                </div>
+                                break;
+                            case ((int)OrdersStatusEnums.Done):
+                                <div class="btn btn-success round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock-check fs-6"></i>
+                                </div>
+                                break;
+                            default:
+                                <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock fs-6"></i>
+                                </div>
+                                break;
+                        }
+                       
+                        <div class="ms-3 d-inline-block w-75">
+                            <h6 class="mb-1 invoice-customer"><strong>#@order.OrderCode</strong></h6>
+                            <span class="mb-1 fs-3 invoice-date text-nowrap text-body-color d-block">@order.OrderOpeningDate.ToShortDateString()</span>
+                            @switch (order.OrderStatus.OrderStatusId)
+                            {
+                                case ((int)OrdersStatusEnums.Open):
+                                    <span class="mb-1 badge rounded-pill text-bg-primary">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                                case ((int)OrdersStatusEnums.Canceled):
+                                    <span class="mb-1 badge rounded-pill text-bg-danger">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                                case ((int)OrdersStatusEnums.Overdue):
+                                    <span class="mb-1 badge rounded-pill text-bg-warning">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                                case ((int)OrdersStatusEnums.InProgress):
+                                    <span class="mb-1 badge rounded-pill text-bg-info">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                                case ((int)OrdersStatusEnums.Done):
+                                    <span class="mb-1 badge rounded-pill text-bg-success">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                                default:
+                                    <span class="mb-1 badge rounded-pill text-bg-primary">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                            }
+                        </div>
+                    </a>
+                </li>
+            }
         }
-    }
-</ul>
-
+    </ul>
+</div>
 @code
 {
     private void PreviewOrder(OrderResponse order)

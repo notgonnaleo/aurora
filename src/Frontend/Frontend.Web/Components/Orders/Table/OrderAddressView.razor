@@ -1,5 +1,5 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
-<h1>TESTE: @Order.OrderId</h1>
+@using Backend.Domain.Enums.Orders;
 <div>
     <address>
         <h6>&nbsp;From,</h6>
@@ -24,15 +24,23 @@
             Collins - 80524
         </p>
         <p class="mt-4 mb-1">
-            <span>Invoice Date :</span>
+            <span>Opening Date :</span>
             <i class="ti ti-calendar"></i>
-            23rd Jan 2021
+            @Order.OrderOpeningDate
         </p>
         <p>
             <span>Due Date :</span>
             <i class="ti ti-calendar"></i>
-            25th Jan 2021
+            @Order.OrderEstimatedDate
         </p>
+        @if (Order.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Done)
+        {
+            <p>
+                <span>Closed Date :</span>
+                <i class="ti ti-calendar"></i>
+                @Order.OrderEffectiveDate
+            </p>
+        }
     </address>
 </div>
 
