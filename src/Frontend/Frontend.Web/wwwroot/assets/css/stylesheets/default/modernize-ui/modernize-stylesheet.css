@@ -158,6 +158,7 @@
     --bs-breakpoint-xl: 1200px;
     --bs-breakpoint-xxl: 1400px;
     --bs-font-color: #000;
+    --bs-table-on-hover-color: red;
 }
 
 [data-bs-theme=dark] {
@@ -210,6 +211,7 @@
     --bs-border-color: #25384f;
     --bs-border-color-translucent: rgba(255,255,255,0.15);
     --bs-font-color: #fff;
+    --bs-table-on-hover-color: blue;
 }
 
 *, :after, :before {
@@ -243,6 +245,7 @@ hr {
     border: 0;
     border-top: var(--bs-border-width) solid;
     opacity: 0.25
+
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
@@ -2474,7 +2477,7 @@ progress {
     --bs-table-active-color: var(--bs-body-color);
     --bs-table-active-bg: rgba(0,0,0,0.1);
     --bs-table-hover-color: var(--bs-body-color);
-    --bs-table-hover-bg: #F6F9FC;
+    --bs-table-hover-bg: var(--bs-table-on-hover-color);
     width: 100%;
     margin-bottom: 1rem;
     color: var(--bs-table-color);

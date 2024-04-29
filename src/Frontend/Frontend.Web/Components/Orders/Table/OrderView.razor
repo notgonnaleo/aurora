@@ -183,8 +183,13 @@
             {
                 if (order.OrderItems is not null && order.OrderItems.Count() > 0 && order.OrderId == order.OrderItems.First().OrderId)
                 {
-                    OrdersItems = order.OrderItems;       
+                    OrdersItems = order.OrderItems;
                 }
+            }
+
+            if (Orders.Any())
+            {
+                ShowOrderPreview(Orders.First());
             }
         }
         else
