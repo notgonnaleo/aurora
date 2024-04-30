@@ -1,0 +1,73 @@
+﻿@using Backend.Domain.Entities.Orders.Request
+@using Backend.Domain.Entities.Products
+@using Backend.Domain.Entities.Stocks
+@using Frontend.Web.Services.Authentication
+@using Frontend.Web.Services.Products
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
+@inject ProductService _productService;
+@inject ProductVariantService _productVariantService
+
+<div>
+    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+</div>
+
+<div class="container scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
+<div class="row">
+    <div class="mb-2 col-sm-12">
+        <ProductDropdown ProductId="SetProduct" />
+    </div>
+</div>
+
+@code{
+    private Guid? selectedProductId = null;
+    private void SetProduct(Guid productId) => selectedProductId = productId;
+}
+
+@if (variant.Any())
+{
+    <div class="row">
+        <div class="mb-2 col-sm-12 p-2">
+            <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+            <label>Insert product variant</label>
+        </div>
+    </div>
+}
+
+@if (isInsertVariant)
+{
+    <div class="row">
+        <div class="mb-2 col-sm-12">
+            <label for="variantId" class="form-label"> Variant Name</label>
+            <select class="form-select" @bind="@stock.VariantId">
+                <option value="" disabled hidden selected>Select a Variant</option>
+                @foreach (var Variant in variant)
+                {
+                    @if (stock.ProductId == Variant.ProductId)
+                    {
+                        stock.VariantId = Variant.VariantId;
+                        <option value="@Variant.VariantId">@Variant.Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+}
+</div>
+@code 
+{
+    private StockDetail stock = new StockDetail();
+    private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
+
+    private bool isInsertVariant = false;
+    private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
+
+    private bool isSelectingVariant = false;
+}
+
+@code
+{
+    [Parameter] public Action? ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+}

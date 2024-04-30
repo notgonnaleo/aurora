@@ -1,0 +1,42 @@
+﻿@using Backend.Domain.Entities.Products
+@using Frontend.Web.Services.Authentication
+@using Frontend.Web.Services.Products
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
+@inject ProductService _productService;
+@inject ProductVariantService _productVariantService;
+
+<label for="productId" class="form-label"> Product Name</label>
+<select class="form-select" @onchange="OnProductChange">
+    <option value="" disabled hidden selected>Select a Product</option>
+    @foreach (var product in products)
+    {
+        <option value="@product.ProductId">@product.Name</option>
+    }
+</select>
+
+@code 
+{
+    private IEnumerable<ProductDetail> products = new List<ProductDetail>();
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        var response = await _productService.GetProducts(context.Tenant.Id.ToString());
+        if (response.Successful())
+        {
+            products = response.Result;
+        }
+    }
+    private async Task OnProductChange(ChangeEventArgs e)
+    {
+        string selectedProductId = e.Value.ToString();
+        await ProductId.InvokeAsync(Guid.Parse(selectedProductId));
+    }
+}
+
+@code
+{
+    [Parameter]
+    public EventCallback<Guid> ProductId { get; set; }
+}
