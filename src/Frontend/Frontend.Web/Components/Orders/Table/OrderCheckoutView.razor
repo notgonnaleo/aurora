@@ -1,16 +1,13 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
 <div class="pull-right mt-4 text-end">
-    <p>Parcels: x@(Order.TotalParcels)/@Order.OrderParcelAmount </p>
-    <hr>
+    <p>Parcels: @(Order.TotalParcels)/@Order.OrderParcelAmount </p>
     <h3>
-        <b>Total :</b> @Order.OrderTotalAmount
+        <b>Total: R$</b> @(Order.OrderTotalAmount is null ? "0.00" : Order.OrderTotalAmount)
     </h3>
 </div>
-<div class="clearfix"></div>
-<hr>
 <div class="text-end">
     <button class="btn bg-danger-subtle text-danger" type="submit">
-        Proceed to payment
+        View Details
     </button>
     <button class="btn btn-primary btn-default print-page ms-6" type="button">
         <span>

@@ -1,13 +1,13 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
 @using Backend.Domain.Enums.Orders;
 <div class="scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
-    <ul class="overflow-auto invoice-users simplebar-scrollable-y" data-simplebar="init">
+    <ul class="sidebar-nav overflow-auto invoice-users simplebar-scrollable-y" data-simplebar="init">
         @if (Orders is not null)
         {
             @foreach (var order in Orders)
             {
-                <li style="" @onclick="() => PreviewOrder(order)">
-                    <a class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="@order.OrderCode" data-invoice-id="@order.OrderCode">
+                <li class="sidebar-item cursor-pointer" @onclick="() => PreviewOrder(order)">
+                    <a class="sidebar-link p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="@order.OrderCode" data-invoice-id="@order.OrderCode">
                         @switch (order.OrderStatus.OrderStatusId)
                         {
                             case ((int)OrdersStatusEnums.Open):

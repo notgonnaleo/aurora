@@ -158,7 +158,7 @@
     --bs-breakpoint-xl: 1200px;
     --bs-breakpoint-xxl: 1400px;
     --bs-font-color: #000;
-    --bs-table-on-hover-color: red;
+    --bs-table-on-hover-color: #5A6A85;
 }
 
 [data-bs-theme=dark] {
@@ -211,7 +211,7 @@
     --bs-border-color: #25384f;
     --bs-border-color-translucent: rgba(255,255,255,0.15);
     --bs-font-color: #fff;
-    --bs-table-on-hover-color: blue;
+    --bs-table-on-hover-color: #5A6A85;
 }
 
 *, :after, :before {
