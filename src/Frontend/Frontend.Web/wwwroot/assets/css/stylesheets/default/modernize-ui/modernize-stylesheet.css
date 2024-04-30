@@ -19979,3 +19979,40 @@ textarea.form-control-lg {
     background: var(--bs-gray-400); /*On hover, it will turn grey*/
     border-radius: 5px;
 }
+
+.progresses {
+    display: flex;
+    align-items: center;
+}
+
+.line {
+    width: 210px;
+    height: 6px;
+    background: #ebe8e8;
+}
+
+    .line.active {
+        background: var(--bs-primary) !important;
+    }
+
+.steps {
+    display: flex;
+    background-color: #ebe8e8;
+    color: #fff;
+    font-size: 14px;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+    .steps.active {
+        display: flex;
+        background-color: var(--bs-primary) !important;
+        color: #fff;
+        font-size: 14px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }

@@ -1,0 +1,52 @@
+﻿@using Backend.Domain.Entities.Orders
+@using Backend.Domain.Enums.Orders
+<div class="card card-body">
+    <div class="progresses">
+        <div class="steps active">
+            <i class="ti ti-clock fs-6 text-light"></i>
+            <p>Open</p>
+        </div>
+        <span class="line active"></span>
+        @if (Status.OrderStatusId == (int)OrdersStatusEnums.Canceled)
+        {
+            <div class="steps active">
+                <i class="ti ti-clock-play fs-6 text-light"></i>
+            </div>
+            <span class="line"></span>
+        }
+        else
+        {
+            @if (Status.OrderStatusId == (int)OrdersStatusEnums.Overdue)
+            {
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line"></span>
+            }
+            else
+            {
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line"></span>
+            }
+
+            @if (Status.OrderStatusId == (int)OrdersStatusEnums.PartiallyDone)
+            {
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line"></span>
+            }
+
+            <div class="steps">
+                <i class="ti ti-clock-check fs-6 text-primary"></i>
+            </div>
+        }
+    </div>
+</div>
+
+@code{
+ [Parameter]
+ public OrderStatus Status { get; set; }
+}

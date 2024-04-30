@@ -1,185 +1,12 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
 @using Backend.Domain.Enums.Orders;
-<div>
-    <div class="col-md-12 d-flex">
-        <div class="col-md-3 card">
-            <div class="card-body p-4">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs nav-fill" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link rounded active" data-bs-toggle="tab" href="#home" role="tab" aria-selected="true">
-                            <span>Buy</span>
-                        </a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link rounded" data-bs-toggle="tab" href="#profile" role="tab" aria-selected="false" tabindex="-1">
-                            <span>Sell</span>
-                        </a>
-                    </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content mt-4">
-                    <div class="tab-pane active" id="home" role="tabpanel">
-                        <form>
-                            <span class="d-block mb-1">Amount</span>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control  border-end-0" aria-label="Text input with dropdown button" value="0.20125">
-                                <button class="btn btn-sm arrow-none p-0 border-top border-bottom border-end border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="bg-danger-subtle text-danger p-6 rounded">
-                                        <span> USD </span>
-                                        <i class="ti ti-chevron-down ms-1 fs-4"></i>
-                                    </span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">INR</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">CLP</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">AMD</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <span class="d-block mb-1">Amount</span>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control  border-end-0" aria-label="Text input with dropdown button" value="0.20125">
-                                <button class="btn btn-sm arrow-none p-0 border-top border-bottom border-end border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="bg-primary-subtle text-primary p-6 rounded">
-                                        <span> BTC </span>
-                                        <i class="ti ti-chevron-down ms-1 fs-4"></i>
-                                    </span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">LTC</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">XRP</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">ETH</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <button class="btn btn-primary w-100">Buy BTC</button>
-                        </form>
-                    </div>
-                    <div class="tab-pane" id="profile" role="tabpanel">
-                        <form>
-                            <span class="d-block mb-1">Amount</span>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control  border-end-0" aria-label="Text input with dropdown button" value="0.20125">
-                                <button class="btn btn-sm arrow-none p-0 border-top border-bottom border-end border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="bg-danger-subtle text-danger p-6 rounded">
-                                        <span> USD </span>
-                                        <i class="ti ti-chevron-down ms-1 fs-4"></i>
-                                    </span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">INR</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">CLP</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">AMD</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <span class="d-block mb-1">Amount</span>
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control  border-end-0" aria-label="Text input with dropdown button" value="0.20125">
-                                <button class="btn btn-sm arrow-none p-0 border-top border-bottom border-end border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <span class="bg-primary-subtle text-primary p-6 rounded">
-                                        <span> BTC </span>
-                                        <i class="ti ti-chevron-down ms-1 fs-4"></i>
-                                    </span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">LTC</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">XRP</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="javascript:void(0)">ETH</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <button class="btn btn-danger w-100">Sell BTC</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3 card">
-            <div class="card-body p-4">
-                <div class="mb-9">
-                    <h4 class="card-title fw-semibold">Converter</h4>
-                    <p class="card-subtitle">The Future of Quick Transfers</p>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control  border-end-0" aria-label="Text input with dropdown button" value="$1000">
-                    <button class="btn arrow-none p-0 border-top border-bottom border-end border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="bg-primary-subtle text-primary p-6 rounded">
-                            <span> USD </span>
-                            <i class="ti ti-chevron-down ms-1 fs-4"></i>
-                        </span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Action</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Another action</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Separated link</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control  border-end-0" aria-label="Text input with dropdown button" value="0.20125">
-                    <button class="btn arrow-none p-0 border-top border-bottom border-end border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="bg-danger-subtle text-danger p-6 rounded">
-                            <span> ETH </span>
-                            <i class="ti ti-chevron-down ms-1 fs-4"></i>
-                        </span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Action</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Another action</a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Something else here</a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="javascript:void(0)">Separated link</a>
-                        </li>
-                    </ul>
-                </div>
-                <button class="btn btn-primary w-100">Convert</button>
-            </div>
-        </div>
-    </div>
+@using Frontend.Web.Components.Orders.OrderStatusBar
+<div class="row">
+    <OrderStatusProgressBar Status="Order.OrderStatus"/>
 </div>
-<div class="text-end">
+
+<div class="row">
+    <div class="text-end">
         <p class="mt-4 mb-1">
             <span>Opening Date :</span>
             <i class="ti ti-calendar"></i>
@@ -198,7 +25,9 @@
                 @Order.OrderEffectiveDate
             </p>
         }
+    </div>
 </div>
+
 
 @code 
 {
