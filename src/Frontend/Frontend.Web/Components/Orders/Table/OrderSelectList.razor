@@ -6,7 +6,7 @@
         {
             @foreach (var order in Orders)
             {
-                <li class="order-sidebar cursor-pointer" @onclick="() => PreviewOrder(order)">
+                <li class="table-item-hover cursor-pointer" @onclick="() => PreviewOrder(order)">
                     <a class="sidebar-link p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="@order.OrderCode" data-invoice-id="@order.OrderCode">
                         @switch (order.OrderStatus.OrderStatusId)
                         {

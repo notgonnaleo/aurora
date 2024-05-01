@@ -1,5 +1,7 @@
 ﻿@using Backend.Domain.Entities.OrderItems.Response;
 @using Backend.Domain.Entities.Orders.Response;
+@using Backend.Domain.Enums.EnumExtensions;
+@using Backend.Domain.Enums.Orders;
 @using Frontend.Web.Components.Orders.OrderStatusBar
 @using Frontend.Web.Models.Client;
 @using Frontend.Web.Services.Authentication;
@@ -191,6 +193,7 @@ else
     public void ShowOrderPreview(OrderResponse selectedItem)
     {
         SelectedOrder = selectedItem;
+        SelectedOrder.OrderStatus.OrderStatusName = ((OrdersStatusEnums)SelectedOrder.OrderStatus.OrderStatusId).GetDescription();
         SelectOrderItems();
     }
     public void SelectOrderItems()

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Backend.Domain.Enums.EnumExtensions;
 
 namespace Backend.Domain.Enums.StockMovements
 {
