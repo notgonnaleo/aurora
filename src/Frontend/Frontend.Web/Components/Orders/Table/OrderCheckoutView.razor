@@ -1,23 +1,37 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
-<div class="pull-right mt-4 text-end">
-    <p>Parcels: @(Order.TotalParcels)/@Order.OrderParcelAmount </p>
-    <h3>
-        <b>Total: R$</b> @(Order.OrderTotalAmount is null ? "0.00" : Order.OrderTotalAmount)
-    </h3>
-</div>
+@inject NavigationManager NavigationManager;
+@if (Order.OrderTotalAmount is null && Order.OrderItems is null || Order!.OrderItems!.Count() == 0)
+{
+    <p>Add items to your order to calculate the invoice value.</p>
+    <a class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
+        Calculate order
+    </a>
+}
+else
+{
+    <div class="pull-right mt-4 text-end">
+        <p>Parcels: @(Order.TotalParcels)/@Order.OrderParcelAmount </p>
+        <h5>
+            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "0.00" : Order.OrderTotalAmount)</strong>
+        </h5>
+    </div>
+}
 <div class="text-end">
-    <button class="btn bg-danger-subtle text-danger" type="submit">
+    <button class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
         View Details
     </button>
-    <button class="btn btn-primary btn-default print-page ms-6" type="button">
-        <span>
-            <i class="ti ti-printer fs-5"></i>
-            Print
-        </span>
+    <button class="btn btn-outline-primary" type="button">
+        <i class="ti ti-printer fs-5"></i>
+            Generate Report
     </button>
 </div>
 
 @code {
+    public void RedirectToOrderEditPage()
+    {
+        NavigationManager.NavigateTo($"/order-summary/{Order.OrderId}");
+    }
+
     [Parameter]
     public OrderResponse Order { get; set; }
 }

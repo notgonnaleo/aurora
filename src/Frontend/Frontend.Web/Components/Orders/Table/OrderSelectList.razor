@@ -6,7 +6,7 @@
         {
             @foreach (var order in Orders)
             {
-                <li class="sidebar-item cursor-pointer" @onclick="() => PreviewOrder(order)">
+                <li class="order-sidebar cursor-pointer" @onclick="() => PreviewOrder(order)">
                     <a class="sidebar-link p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="@order.OrderCode" data-invoice-id="@order.OrderCode">
                         @switch (order.OrderStatus.OrderStatusId)
                         {
@@ -22,12 +22,17 @@
                                 break;
                             case ((int)OrdersStatusEnums.Overdue):
                                 <div class="btn btn-warning round rounded-circle d-flex align-items-center justify-content-center px-2">
-                                    <i class="ti ti-clock-question fs-6"></i>
+                                    <i class="ti ti-clock-exclamation fs-6"></i>
                                 </div>
                                 break;
                             case ((int)OrdersStatusEnums.InProgress):
-                                <div class="btn btn-info round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
                                     <i class="ti ti-clock-play fs-6"></i>
+                                </div>
+                                break;
+                            case ((int)OrdersStatusEnums.PartiallyDone):
+                                <div class="btn btn-info round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-clock-up fs-6"></i>
                                 </div>
                                 break;
                             case ((int)OrdersStatusEnums.Done):
@@ -57,6 +62,9 @@
                                     <span class="mb-1 badge rounded-pill text-bg-warning">@order.OrderStatus.OrderStatusName</span>
                                     break;
                                 case ((int)OrdersStatusEnums.InProgress):
+                                    <span class="mb-1 badge rounded-pill text-bg-primary">@order.OrderStatus.OrderStatusName</span>
+                                    break;
+                                case ((int)OrdersStatusEnums.PartiallyDone):
                                     <span class="mb-1 badge rounded-pill text-bg-info">@order.OrderStatus.OrderStatusName</span>
                                     break;
                                 case ((int)OrdersStatusEnums.Done):

@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.OrderItems.Response;
 @using Backend.Domain.Entities.Orders.Response;
+@using Frontend.Web.Components.Orders.OrderStatusBar
 @using Frontend.Web.Models.Client;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Orders;
@@ -7,61 +8,86 @@
 @inject OrderService _orderService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
-<div class="card overflow-hidden invoice-application">
-    @* Mobile - Show Orders (Sidebar) *@
-    <div class="d-flex align-items-center justify-content-between gap-6 m-3 d-lg-none">
-        <button class="btn btn-primary d-flex" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat-sidebar" aria-controls="chat-sidebar">
-            <i class="ti ti-menu-2 fs-5"></i>
-        </button>
+@if (isLoading)
+{
+    <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+}
+else
+{
+    @code
+    {
+        private bool collapseOrderMobileSidebar = true;
+        private void ToggleOrderMobileSider() => collapseOrderMobileSidebar = !collapseOrderMobileSidebar;
+    }
+    <div class="card overflow-hidden invoice-application">
+        @* Mobile - Show Orders Button *@
+        <div class="d-flex align-items-center justify-content-between gap-6 m-3 d-lg-none">
+            <button class="btn btn-primary d-flex" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat-sidebar" aria-controls="chat-sidebar" @onclick="() => ToggleOrderMobileSider()">
+                <i class="ti ti-menu-2 fs-5"></i>
+            </button>
 
-        <form class="position-relative w-100">
-            <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search Contact">
-            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
-        </form>
-    </div>
-
-    @* Main panel *@
-    <div class="d-flex">
-        @* Orders *@
-        <div class="w-25 d-none d-lg-block border-end user-chat-box">
-            <div class="p-3 border-bottom">
-                <form class="position-relative">
-                    <input type="search" class="form-control search-invoice ps-5" id="text-srh" placeholder="Search Invoice">
-                    <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
-                </form>
-            </div>
-
-            <div class="app-invoice">
-                <OrderSelectList Orders="Orders" SelectedItem="ShowOrderPreview" />
-            </div>
+            <form class="position-relative w-100">
+                <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search Contact">
+                <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+            </form>
         </div>
 
-        @* Order details + Order Items  *@
-        <div class="w-75 w-xs-100 chat-container">
-            <div class="invoice-inner-part h-100">
-                <div class="invoiceing-box">
-                    <div class="invoice-header d-flex align-items-center border-bottom p-3">
-                        <h4 class=" text-uppercase mb-0">Order</h4>
-                        <div class="ms-auto">
-                            <h4 class="invoice-number">#@SelectedOrder.OrderCode</h4>
+        @* Main panel *@
+        <div class="d-flex">
+            @* Mobile - Show Orders Sidebar *@
+            <div class="w-25 d-none d-lg-block border-end user-chat-box @(collapseOrderMobileSidebar ? "" : "show")">
+                <div class="p-3 border-bottom">
+                    <form class="position-relative">
+                        <input type="search" class="form-control search-invoice ps-5" id="text-srh" placeholder="Search Invoice">
+                        <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                    </form>
+                </div>
+
+                <div class="app-invoice">
+                    @if(Orders is not null)
+                    {
+                        <OrderSelectList Orders="Orders" SelectedItem="ShowOrderPreview" />
+                    }
+                    else
+                    {
+                        <p>No orders found.</p>
+                    }
+                </div>
+            </div>
+
+            @* Order details + Order Items  *@
+            <div class="w-75 w-xs-100 chat-container">
+                <div class="invoice-inner-part h-100">
+                    <div class="invoiceing-box">
+                        <div class="invoice-header d-flex align-items-center border-bottom p-3">
+                            <h5 class=" text mb-0">Overview</h5>
+                            <div class="ms-auto">
+                                <h4 class="invoice-number"><strong>#@SelectedOrder.OrderCode</strong></h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-3" id="custom-invoice" style="display: block;">
-                        <div class="invoice-123" id="printableArea" style="display: block;">
-                            <div class="row pt-3">
-                                <div class="col-md-12">
-                                    <OrderAddressView Order="SelectedOrder" />
-                                </div>
-                                
-                                @* Order items *@
-                                <div class="col-md-12">
-                                    <OrderItemsTable OrdersItems="OrdersItems" />
-                                </div>
+                        <div class="p-3" id="custom-invoice" style="display: block;">
+                            <div class="invoice-123" id="printableArea" style="display: block;">
+                                <div class="row pt-3">
+                                    <div class="col-md-12 mb-3">
+                                        <Frontend.Web.Components.Orders.OrderStatusBar.OrderStatusLabel Status="SelectedOrder.OrderStatus"/>                                   
+                                    </div>
+                                    <div class="col-md-12">
+                                        <OrderStatusProgressBar Status="SelectedOrder.OrderStatus" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <OrderAddressView Order="SelectedOrder" />
+                                    </div>
 
-                                <div class="col-md-12">
-                                    <OrderCheckoutView Order="SelectedOrder" />
-                                </div>
+                                    @* Order items *@
+                                    <div class="col-md-12 mb-3">
+                                        <OrderItemsTable OrdersItems="OrdersItems" OrderId="SelectedOrder.OrderId" />
+                                    </div>
 
+                                    <div class="col-md-12 mb-3">
+                                        <OrderCheckoutView Order="SelectedOrder" />
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,7 +95,8 @@
             </div>
         </div>
     </div>
-</div>
+
+}
 
 @* Mobile Orders Sidebar *@
 <div class="offcanvas offcanvas-start user-chat-box" tabindex="-1" id="chat-sidebar" aria-labelledby="offcanvasExampleLabel">

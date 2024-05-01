@@ -1,4 +1,5 @@
 ﻿@using Backend.Domain.Entities.OrderItems.Response;
+@inject NavigationManager NavigationManager
 @if (OrdersItems is not null && OrdersItems.Count() > 0)
 {
     <div class="table-responsive mt-5">
@@ -34,10 +35,20 @@
 }
 else
 {
-    <h1>Mensagem legal</h1>
+    <h6>No items were found for this order.</h6>
+    <a class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
+        View order details
+    </a>
 }
 @code 
 {
+    public void RedirectToOrderEditPage()
+    {
+        NavigationManager.NavigateTo($"/order-summary/{OrderId}");
+    }
+
+    [Parameter]
+    public Guid OrderId { get; set; }
     [Parameter]
     public IEnumerable<OrderItemsResponse> OrdersItems { get; set; }
 }

@@ -1,51 +1,102 @@
 ﻿@using Backend.Domain.Entities.Orders
 @using Backend.Domain.Enums.Orders
 <div class="card card-body">
-    <div class="progresses">
-        <div class="steps active">
-            <i class="ti ti-clock fs-6 text-light"></i>
-        </div>
-        <span class="line active"></span>
-        @if (Status.OrderStatusId == (int)OrdersStatusEnums.Canceled)
+    <div class="progresses center">
+        @switch (Status.OrderStatusId)
         {
-            <div class="steps active">
-                <i class="ti ti-clock-play fs-6 text-light"></i>
-            </div>
-            <span class="line"></span>
-        }
-        else
-        {
-            @if (Status.OrderStatusId == (int)OrdersStatusEnums.Overdue)
-            {
+            case ((int)OrdersStatusEnums.Open):
                 <div class="steps active">
-                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                    <i class="ti ti-clock fs-6 text-light"></i>
                 </div>
                 <span class="line"></span>
-            }
-            else
-            {
-                <div class="steps active">
-                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                <div class="steps">
+                    <i class="ti ti-clock-play fs-6 text-primary"></i>
                 </div>
                 <span class="line"></span>
-            }
+                <div class="steps">
+                    <i class="ti ti-clock-check fs-6 text-primary"></i>
+                </div>
+                break;
 
-            @if (Status.OrderStatusId == (int)OrdersStatusEnums.PartiallyDone)
-            {
+            case ((int)OrdersStatusEnums.InProgress):
+                <div class="steps active">
+                    <i class="ti ti-clock fs-6 text-light"></i>
+                </div>
+                <span class="line active"></span>
                 <div class="steps active">
                     <i class="ti ti-clock-play fs-6 text-light"></i>
                 </div>
                 <span class="line"></span>
-            }
+                <div class="steps">
+                    <i class="ti ti-clock-check fs-6 text-primary"></i>
+                </div>
+                break;
 
-            <div class="steps">
-                <i class="ti ti-clock-check fs-6 text-primary"></i>
-            </div>
+            case ((int)OrdersStatusEnums.PartiallyDone):
+                <div class="steps active">
+                    <i class="ti ti-clock fs-6 text-light"></i>
+                </div>
+                <span class="line active"></span>
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line active-left-partial-done"></span>
+                <div class="steps bg-info">
+                    <i class="ti ti-clock-up fs-6 text-light"></i>
+                </div>
+                <span class="line active-right-partial-done"></span>
+                <div class="steps">
+                    <i class="ti ti-clock-check fs-6 text-primary"></i>
+                </div>
+                break;
+
+            case ((int)OrdersStatusEnums.Done):
+                <div class="steps active">
+                    <i class="ti ti-clock fs-6 text-light"></i>
+                </div>
+                <span class="line active"></span>
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line active"></span>
+                <div class="steps active">
+                    <i class="ti ti-clock-check fs-6 text-light"></i>
+                </div>
+                break;
+
+            case ((int)OrdersStatusEnums.Overdue):
+                <div class="steps active">
+                    <i class="ti ti-clock fs-6 text-light"></i>
+                </div>
+                <span class="line active"></span>
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line active-left-overdue"></span>
+                <div class="steps bg-warning">
+                    <i class="ti ti-clock-exclamation fs-6 text-light"></i>
+                </div>
+                <span class="line active-right-overdue"></span>
+                <div class="steps">
+                    <i class="ti ti-clock-check fs-6 text-primary"></i>
+                </div>
+                break;
+
+            case ((int)OrdersStatusEnums.Canceled):
+                <div class="steps active">
+                    <i class="ti ti-clock fs-6 text-light"></i>
+                </div>
+                <span class="line active-left-canceled"></span>
+                <div class="steps bg-danger">
+                    <i class="ti ti-clock-x fs-6 text-light"></i>
+                </div>
+                break;
         }
     </div>
 </div>
 
-@code{
- [Parameter]
- public OrderStatus Status { get; set; }
+@code
+{
+     [Parameter]
+     public OrderStatus Status { get; set; }
 }

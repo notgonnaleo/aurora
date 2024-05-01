@@ -13,20 +13,24 @@
 <div class="row">
     <div class="col-lg-12 d-flex align-items-stretch">
         <div class="card-body">
-            @if (!showPlaceholder)
+            @if (IsLoading)
             {
-                <div class="card w-100">
-                    <div class="accordion" id="accordionExample">
-                        <Frontend.Web.Components.Categories.Accordion.CategoryAccordion Categories="@items" ToggleAccordionItem="ToggleAccordionItem" EditCategory="EditCategory" />
-                    </div>
-                </div>
+                <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
             }
             else
             {
-                <h1>Nothing here yet.. :(</h1>
-                <p>But we got cat pics take a look</p>
-                <img src="https://t4.ftcdn.net/jpg/02/66/72/41/360_F_266724172_Iy8gdKgMa7XmrhYYxLCxyhx6J7070Pr8.jpg">
-                <img src="https://cdn.theatlantic.com/thumbor/B7U27JF25tScMZkCe5Pl9EqXjao=/0x131:2555x1568/960x540/media/img/mt/2017/06/shutterstock_319985324/original.jpg">
+                @if (!showPlaceholder)
+                {
+                    <div class="card card-body w-100">
+                        <div class="accordion" id="accordionExample">
+                            <Frontend.Web.Components.Categories.Accordion.CategoryAccordion Categories="@items" ToggleAccordionItem="ToggleAccordionItem" EditCategory="EditCategory" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <h6>No categories were found.</h6>
+                }
             }
         </div>
     </div>
@@ -101,14 +105,15 @@
             }).ToList();
             items.Add(new AccordionItem(itemSequence++, category.CategoryId, category.CategoryName, mappedAccordionSubItem));
         }
-        IsLoading = false;
     }
 
     protected override async Task OnInitializedAsync()
     {
+        IsLoading = true;
         if (await LoadComponentData())
         {
             BuildComponent();
+            IsLoading = false;
         }
         else
         {
