@@ -2,6 +2,7 @@
 @using Backend.Domain.Entities.SubCategories;
 @using Backend.Domain.Entities.Categories;
 @using Frontend.Web.Components.Layout.Accordion;
+@using Frontend.Web.Components.Placeholders.EmptyMessages
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Categories;
 @using Frontend.Web.Services.SubCategories;
@@ -31,13 +32,7 @@ else
     }
     else
     {
-        <div class="center" style="flex-direction: column">
-            <img class="mb-3" width="300" height="300" src="/assets/images/placeholder/undraw_add_notes.svg" />
-            <h4>
-                <strong>There's nothing here...</strong>
-            </h4>
-            <p>The information you are looking for does not exist.</p>
-        </div>
+        <EmptyListVersionA />
     }
 }
 
