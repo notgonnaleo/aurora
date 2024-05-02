@@ -21,9 +21,17 @@
     </div>
 </div>
 
-@code{
+@code
+{
     private Guid? selectedProductId = null;
+    private Guid? selectedVariantId = null;
+    private Guid? selectedEmployeeId = null;
+    private Guid? selectedCustomerId = null;
+
     private void SetProduct(Guid productId) => selectedProductId = productId;
+    private void SetVariant(Guid variantId) => selectedVariantId = variantId;
+    private void SetEmployee(Guid employeeId) => selectedEmployeeId = employeeId;
+    private void SetCustomer(Guid customerId) => selectedCustomerId = customerId;
 }
 
 @if (variant.Any())
@@ -40,21 +48,20 @@
 {
     <div class="row">
         <div class="mb-2 col-sm-12">
-            <label for="variantId" class="form-label"> Variant Name</label>
-            <select class="form-select" @bind="@stock.VariantId">
-                <option value="" disabled hidden selected>Select a Variant</option>
-                @foreach (var Variant in variant)
-                {
-                    @if (stock.ProductId == Variant.ProductId)
-                    {
-                        stock.VariantId = Variant.VariantId;
-                        <option value="@Variant.VariantId">@Variant.Name</option>
-                    }
-                }
-            </select>
+            <Frontend.Web.Components.ProductVariants.Dropdowns.VariantDropdown SelectedProductId="selectedProductId.Value" VariantId="SetVariant" />
         </div>
     </div>
 }
+    <div class="row">
+        <div class="mb-2 col-sm-12">
+            <Frontend.Web.Components.Agents.Dropdowns.EmployeeDropdown EmployeeId="SetEmployee" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-2 col-sm-12">
+            <Frontend.Web.Components.Agents.Dropdowns.CustomerDropdown CustomerId="SetCustomer" />
+        </div>
+    </div>
 </div>
 @code 
 {

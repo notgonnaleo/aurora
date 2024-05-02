@@ -1,13 +1,14 @@
 ﻿@using Backend.Domain.Entities.Agents;
+@using Backend.Domain.Enums.Agents
 @using Frontend.Web.Services.Agents;
 @using Frontend.Web.Services.Authentication;
 @inject AgentService _agentService;
 @inject AuthenticationService _authenticationService;
 
-<label for="variandId" class="form-label">Employee</label>
+<label for="employeeId" class="form-label">Employee</label>
 <select class="form-select" @onchange="OnEmployeeChange">
     <option value="" disabled hidden selected>Select a Employee</option>
-    @foreach (var agent in agents)
+    @foreach (var agent in agents.Where(x => x.AgentTypeId == (int)AgentTypes.Employee))
     {
         <option value="@agent.AgentId">@agent.Name</option>
     }
