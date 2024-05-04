@@ -1,0 +1,88 @@
+﻿@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Components.Products.Dropdowns
+@using Frontend.Web.Services.Categories;
+
+@inject NavigationManager navigator;
+@inject CategoryService _categoryService;
+
+<div class="modal fade  @(ShowModal ? "show" : string.Empty)" id="bs-example-modal-md" tabindex="-1" style="@(ShowModal ? "display: block;" : "display: none;")" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myModalLabel">
+                    Warning
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <ProductDropdown ProductId="SetProduct" />
+                    </div>
+                </div>
+            </div>
+
+            @if (variant.Any())
+            {
+                <div class="row">
+                    <div class="mb-2 col-sm-12 p-2">
+                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                        <label>Insert product variant</label>
+                    </div>
+                </div>
+            }
+
+            @if (isInsertVariant)
+            {
+                <div class="row">
+                    <div class="mb-2 col-sm-12">
+                        <Frontend.Web.Components.ProductVariants.Dropdowns.VariantDropdown SelectedProductId="selectedProductId.Value" VariantId="SetVariant" />
+                    </div>
+                </div>
+            }
+            <div class="modal-footer">
+                <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                    Close
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ShowModal)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code
+{
+    private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
+
+    private bool isInsertVariant = false;
+    private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
+
+    private bool isSelectingVariant = false;
+}
+
+@code
+{
+    private Guid? selectedProductId = null;
+    private Guid? selectedVariantId = null;
+
+    private void SetProduct(Guid productId) => selectedProductId = productId;
+    private void SetVariant(Guid variantId) => selectedVariantId = variantId;
+}
+
+@code
+{
+    public void CloseModal() => ShowModal = !ShowModal;
+}
+
+@code
+{
+    [Parameter] public bool ShowModal { get; set; }
+}

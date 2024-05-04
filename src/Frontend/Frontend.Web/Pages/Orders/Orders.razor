@@ -1,7 +1,7 @@
 ﻿@page "/orders"
 
 <aside class="right-sidebar @formCssClass">
-    <Frontend.Web.Components.Orders.Forms.AddOrderItems CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" />
+    <Frontend.Web.Components.Orders.Forms.AddOrder CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" ShowModal="OpenAddItemsModal"/>
 </aside>
 
 <div class="container-fluid">
@@ -17,6 +17,14 @@
     </div>
 </div>
 
+<Frontend.Web.Components.Orders.Modals.AddItems ShowModal="ShowModal" />
+
+@code
+{
+    public bool ShowModal = false;
+    public void OpenAddItemsModal() => ShowModal = !ShowModal;
+
+}
 
 @code
 {
