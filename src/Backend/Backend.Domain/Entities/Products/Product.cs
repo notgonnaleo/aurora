@@ -103,4 +103,12 @@ namespace Backend.Domain.Entities.Products
         public string? SubCategoryName { get; set; }
         public string ProductTypeName { get; set; }
     }
+
+    public class ItemThumbnail
+    {
+        public int ItemSequence { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid? VariantId { get; set; }
+        public string ItemName { get; set; }
+    }
 }

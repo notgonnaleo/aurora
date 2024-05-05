@@ -21,7 +21,24 @@
                         <ProductDropdown ProductId="SetProduct" />
                     </div>
                 </div>
+                <button type="button" class="btn btn-outline-primary" @onclick="AddItemCart">Teste</button>
             </div>
+            
+            @code
+            {
+                private void AddItemCart()
+                {
+                    int sequence = 0;
+                    if (selectedVariantId.HasValue)
+                    {
+                        Items.Add(new ItemThumbnail() { ProductId = selectedProductId.Value, ItemName = "Yo", ItemSequence = sequence+1, VariantId = selectedVariantId.Value });
+                    }
+                    else
+                    {
+                        Items.Add(new ItemThumbnail() { ProductId = selectedProductId.Value, ItemName = "Gang", ItemSequence = sequence+1, VariantId = null });
+                    }
+                }
+            }
 
             @if (variant.Any())
             {
@@ -60,6 +77,7 @@
 
 @code
 {
+    private List<ItemThumbnail> Items = new List<ItemThumbnail>();
     private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
 
     private bool isInsertVariant = false;
