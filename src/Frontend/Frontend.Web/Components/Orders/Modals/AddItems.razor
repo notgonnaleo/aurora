@@ -6,8 +6,8 @@
 @inject NavigationManager navigator;
 @inject CategoryService _categoryService;
 
-<div class="modal fade  @(ShowModal ? "show" : string.Empty)" id="bs-example-modal-md" tabindex="-1" style="@(ShowModal ? "display: block;" : "display: none;")" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+<div class="modal fade @(ShowModal ? "show" : string.Empty)" id="bs-example-modal-md" tabindex="-1" style="@(ShowModal ? "display: block;" : "display: none;")" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h4 class="modal-title" id="myModalLabel">
@@ -18,45 +18,76 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="mb-2 col-sm-12">
-                        <ProductDropdown ProductId="SetProduct" />
+                        <label for="productId" class="form-label">Item</label>
+                        <div class="input-group">
+                            <ProductDropdown Product="SetProduct" />
+                            <button class="btn btn-primary" type="button" @onclick="AddItemCart">
+                                Add
+                            </button>
+                        </div>
+                        <label for="productId" class="form-label">Quantity</label>
+                        <input class="form-control" type="number" @bind="ItemQuantity" />
                     </div>
+                    @if (variant.Any())
+                    {
+                        <div class="row">
+                            <div class="mb-2 col-sm-12 p-2">
+                                <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                                <label>Insert product variant</label>
+                            </div>
+                        </div>
+                        @if (isInsertVariant)
+                        {
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <Frontend.Web.Components.ProductVariants.Dropdowns.VariantDropdown SelectedProductId="selectedProduct.ProductId" Variant="SetVariant" />
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
-                <button type="button" class="btn btn-outline-primary" @onclick="AddItemCart">Teste</button>
+                <div class="row">
+                    @if (Items is not null || Items.Any())
+                    {
+                        @foreach (var item in Items)
+                        {
+                            <p>@item.ItemSequence | @item.ItemName | @item.Quantity</p>
+                        }
+                    }
+                </div>
             </div>
             
             @code
             {
+                private int ItemQuantity = 0;
                 private void AddItemCart()
                 {
-                    int sequence = 0;
-                    if (selectedVariantId.HasValue)
+                    var count = Items is not null ? Items.Count() : 0;
+                    if (selectedVariant is not null)
                     {
-                        Items.Add(new ItemThumbnail() { ProductId = selectedProductId.Value, ItemName = "Yo", ItemSequence = sequence+1, VariantId = selectedVariantId.Value });
+                        Items.Add(new ItemThumbnail() 
+                        {
+                            ProductId = selectedProduct.ProductId,
+                            ItemName = selectedVariant.ProductName,
+                            ItemSequence = count+1,
+                            VariantId = selectedVariant.ProductId,
+                            Quantity = ItemQuantity
+                        });
                     }
                     else
                     {
-                        Items.Add(new ItemThumbnail() { ProductId = selectedProductId.Value, ItemName = "Gang", ItemSequence = sequence+1, VariantId = null });
+                        Items.Add(new ItemThumbnail() 
+                        {
+                            ProductId = selectedProduct.ProductId,
+                            ItemName = selectedProduct.ProductName,
+                            ItemSequence = count+1, 
+                            VariantId = null,
+                            Quantity = ItemQuantity
+                        });
                     }
+                    ItemQuantity = 0;
+                    selectedProduct = null;
                 }
-            }
-
-            @if (variant.Any())
-            {
-                <div class="row">
-                    <div class="mb-2 col-sm-12 p-2">
-                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
-                        <label>Insert product variant</label>
-                    </div>
-                </div>
-            }
-
-            @if (isInsertVariant)
-            {
-                <div class="row">
-                    <div class="mb-2 col-sm-12">
-                        <Frontend.Web.Components.ProductVariants.Dropdowns.VariantDropdown SelectedProductId="selectedProductId.Value" VariantId="SetVariant" />
-                    </div>
-                </div>
             }
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
@@ -88,11 +119,11 @@
 
 @code
 {
-    private Guid? selectedProductId = null;
-    private Guid? selectedVariantId = null;
+    private ProductThumbnail? selectedProduct = null;
+    private ProductThumbnail? selectedVariant = null;
 
-    private void SetProduct(Guid productId) => selectedProductId = productId;
-    private void SetVariant(Guid variantId) => selectedVariantId = variantId;
+    private void SetProduct(ProductThumbnail product) => selectedProduct = product;
+    private void SetVariant(ProductThumbnail variant) => selectedVariant = variant;
 }
 
 @code

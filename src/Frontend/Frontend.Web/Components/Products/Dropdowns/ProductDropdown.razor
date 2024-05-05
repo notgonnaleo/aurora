@@ -7,7 +7,6 @@
 @inject ProductService _productService;
 @inject ProductVariantService _productVariantService;
 
-<label for="productId" class="form-label"> Product Name</label>
 <select class="form-select" @onchange="OnProductChange">
     <option value="" disabled hidden selected>Select a Product</option>
     @foreach (var product in products)
@@ -30,13 +29,14 @@
     }
     private async Task OnProductChange(ChangeEventArgs e)
     {
-        string selectedProductId = e.Value.ToString();
-        await ProductId.InvokeAsync(Guid.Parse(selectedProductId));
+        var selectedProductId = e.Value.ToString();
+        ProductDetail selectedProduct = products.Where(x => x.ProductId == Guid.Parse(selectedProductId)).FirstOrDefault();
+        await Product.InvokeAsync(new ProductThumbnail() { ProductId = selectedProduct.ProductId, ProductName = selectedProduct.Name });
     }
 }
 
 @code
 {
     [Parameter]
-    public EventCallback<Guid> ProductId { get; set; }
+    public EventCallback<ProductThumbnail> Product { get; set; }
 }

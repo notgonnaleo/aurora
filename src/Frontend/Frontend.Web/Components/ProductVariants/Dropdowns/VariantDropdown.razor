@@ -28,7 +28,8 @@
     private async Task OnVariantChange(ChangeEventArgs e)
     {
         string selectedVariantId = e.Value.ToString();
-        await VariantId.InvokeAsync(Guid.Parse(selectedVariantId));
+        var selectedVariant = variants.Where(x => x.VariantId == Guid.Parse(selectedVariantId)).FirstOrDefault();
+        await Variant.InvokeAsync(new ProductThumbnail() { ProductId = selectedVariant.VariantId, ProductName = selectedVariant.Name });
     }
 }
 
@@ -38,5 +39,5 @@
     public Guid SelectedProductId { get; set; }
 
     [Parameter]
-    public EventCallback<Guid> VariantId { get; set; }
+    public EventCallback<ProductThumbnail> Variant { get; set; }
 }
