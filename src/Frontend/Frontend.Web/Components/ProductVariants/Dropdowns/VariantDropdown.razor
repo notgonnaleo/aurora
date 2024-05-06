@@ -4,25 +4,31 @@
 @inject ProductVariantService _productVariantService;
 @inject AuthenticationService _authenticationService;
 
-<label for="variandId" class="form-label"> Variant</label>
-<select class="form-select" @onchange="OnVariantChange">
-    <option value="" disabled hidden selected>Select a Product</option>
-    @foreach (var variant in variants)
-    {
-        <option value="@variant.VariantId">@variant.Name</option>
-    }
-</select>
+@if (SelectedProduct is not null && variants is not null)
+{
+    <label for="variandId" class="form-label"> Variant</label>
+    <select class="form-select" @onchange="OnVariantChange">
+        <option value="" disabled hidden selected>Select a Product</option>
+        @foreach (var variant in variants)
+        {
+            <option value="@variant.VariantId">@variant.Name</option>
+        }
+    </select>    
+}
 
 @code
 {
-    private IEnumerable<ProductVariant> variants = new List<ProductVariant>();
+    private IEnumerable<ProductVariant>? variants = null;
     protected override async Task OnInitializedAsync()
     {
         var context = await _authenticationService.GetContext();
-        var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), SelectedProductId.ToString());
-        if (response.Successful())
+        if (SelectedProduct is not null)
         {
-            variants = response.Result;
+            var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), SelectedProduct.ProductId.ToString());
+            if (response.Successful())
+            {
+                variants = response.Result;
+            }    
         }
     }
     private async Task OnVariantChange(ChangeEventArgs e)
@@ -36,7 +42,7 @@
 @code
 {
     [Parameter]
-    public Guid SelectedProductId { get; set; }
+    public ProductThumbnail? SelectedProduct { get; set; }
 
     [Parameter]
     public EventCallback<ProductThumbnail> Variant { get; set; }
