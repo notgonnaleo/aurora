@@ -1,10 +1,16 @@
 ﻿@using Backend.Domain.Entities.Categories;
 @using Backend.Domain.Entities.Products;
 @using Frontend.Web.Components.Products.Dropdowns
+@using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Products;
+@using Sotsera.Blazor.Toaster;
 
 @inject NavigationManager navigator;
 @inject CategoryService _categoryService;
+@inject AuthenticationService _authenticationService;
+@inject ProductVariantService _productVariantService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div class="modal fade @(ShowModal ? "show" : string.Empty)" id="bs-example-modal-md" tabindex="-1" style="@(ShowModal ? "display: block;" : "display: none;")" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -28,27 +34,23 @@
                         <label for="productId" class="form-label">Quantity</label>
                         <input class="form-control" type="number" @bind="ItemQuantity" />
                     </div>
-                    @if (variant.Any())
+                    <div class="row">
+                        <div class="mb-2 col-sm-12 p-2">
+                            <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                            <label>Insert product variant</label>
+                        </div>
+                    </div>
+                    @if (isInsertVariant)
                     {
                         <div class="row">
-                            <div class="mb-2 col-sm-12 p-2">
-                                <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
-                                <label>Insert product variant</label>
+                            <div class="mb-2 col-sm-12">
+                                <Frontend.Web.Components.ProductVariants.Dropdowns.VariantDropdown SelectedProductId="selectedProduct.ProductId" Variant="SetVariant" />
                             </div>
                         </div>
-                        @if (isInsertVariant)
-                        {
-                            <div class="row">
-                                <div class="mb-2 col-sm-12">
-                                    <Frontend.Web.Components.ProductVariants.Dropdowns.VariantDropdown SelectedProductId="selectedProduct.ProductId" Variant="SetVariant" />
-                                </div>
-                            </div>
-                        }
                     }
-                </div>
-                <div class="row">
-                    @if (Items is not null || Items.Any())
+                    @if (Items is not null)
                     {
+                        <h1>preta</h1>
                         @foreach (var item in Items)
                         {
                             <p>@item.ItemSequence | @item.ItemName | @item.Quantity</p>
@@ -122,8 +124,28 @@
     private ProductThumbnail? selectedProduct = null;
     private ProductThumbnail? selectedVariant = null;
 
-    private void SetProduct(ProductThumbnail product) => selectedProduct = product;
+    private void SetProduct(ProductThumbnail product)
+    {
+        selectedProduct = product;
+        if (selectedProduct is not null) OnProductChange();
+    }
     private void SetVariant(ProductThumbnail variant) => selectedVariant = variant;
+
+    private async Task OnProductChange()
+    {
+        var context = await _authenticationService.GetContext();
+        var tenantId = context.Tenant.Id.ToString();
+        var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), selectedProduct.ProductId.ToString());
+        if (response.Successful())
+        {
+            variant = response.Result;
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
+
+    }
 }
 
 @code
