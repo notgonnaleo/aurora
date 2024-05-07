@@ -18,13 +18,13 @@
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h4 class="modal-title" id="myModalLabel">
-                    Warning
+                    Order Items
                 </h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="mb-2 col-sm-12">
+                    <div class="mb-4 col-sm-12">
                         <label for="productId" class="form-label">Item</label>
                         <div class="input-group mb-2">
                             <ProductDropdown Product="SetProduct" />
@@ -56,19 +56,12 @@
                         <label for="productId" class="form-label">Quantity</label>
                         <input class="form-control" type="number" @bind="ItemQuantity" />
                     </div>
-@*                     <div class="row">
-                        <div class="mb-2 col-sm-12 p-2">
-                            <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
-                            <label>Insert product variant</label>
-                        </div>
-                    </div> *@
-                    <hr />
-
-                        <div class="row">
-                        @if (Items is not null && Items.Count() > 0)
-                        {
-                            <div class="table-responsive">
-                                <table id="table" class="table w-100 table-bordered display text-nowrap dataTable">
+                </div>
+                <div class="row">
+                    @if (Items is not null && Items.Count() > 0)
+                    {
+                        <div class="table-responsive">
+                            <table id="table" class="table w-100 table-bordered display text-nowrap dataTable">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -76,21 +69,19 @@
                                         <th>Quantity</th>
                                     </tr>
                                 </thead>
-                                    <tbody>
+                                <tbody>
                                     @foreach (var item in Items)
                                     {
                                         <tr>
                                             <td>@item.ItemSequence</td>
                                             <td>@item.ItemName</td>
                                             <td>@item.Quantity</td>
-                                        </tr> 
+                                        </tr>
                                     }
-                                    </tbody>
-                                </table>
-                            </div>
-                        }
-
+                                </tbody>
+                            </table>
                         </div>
+                    }
                 </div>
             </div>
             <div class="modal-footer">
@@ -145,6 +136,13 @@
                 });
         }
         ItemQuantity = 0;
+
+        // Means it's the first item being inserted so it's going to initialize the table
+        if (count == 1) InitializeTable();
+    }
+
+    private async void InitializeTable()
+    {
         await OnAfterRenderAsync(true);
     }
 }

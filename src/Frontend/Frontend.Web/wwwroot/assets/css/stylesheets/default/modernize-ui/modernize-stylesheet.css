@@ -2999,7 +2999,7 @@ textarea.form-control-lg {
     background-repeat: no-repeat;
     background-position: right 16px center;
     background-size: 16px 12px;
-    border: var(--bs-border-width) solid #DFE5EF;
+    border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: 7px;
     -webkit-box-shadow: unset;
     box-shadow: unset;
@@ -3125,7 +3125,7 @@ textarea.form-control-lg {
 
     .form-check-input:checked {
         background-color: #5D87FF;
-        border-color: #5D87FF
+        border-color: var(--bs-border-color)
     }
 
         .form-check-input:checked[type=checkbox] {
@@ -20085,3 +20085,92 @@ textarea.form-control-lg {
     color: var(--bs-primary-text);
     transition: 0.3s;
 }
+
+/*Custom DataTable Plugin*/
+.dt-paging {
+    text-align: center !important
+}
+
+.dt-paging-button {
+    color: var(--bs-font-color);
+    width: 40px;
+    padding: 5px !important;
+    background-color: var(--bs-card-color) !important;
+    border: 1px solid var(--bs-border-color) !important;
+}
+    .dt-paging-button:hover {
+        background-color: var(--bs-primary) !important;
+        color: var(--bs-light-text) !important;
+        transition: 0.3s !important;
+    }
+
+.dt-end{
+    text-align: end !important;
+}
+
+.dt-start{
+    text-align: initial !important;
+}
+
+.dt-layout-cell {
+    margin-bottom: 10px !important;
+}
+
+.dt-search-0 {
+    margin-bottom: 10px !important;
+    margin-right: 10px !important;
+}
+
+.dt-input {
+    padding: 5px 5px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5A6A85;
+    background-color: transparent;
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 7px;
+    -webkit-box-shadow: unset;
+    box-shadow: unset;
+    -webkit-transition: border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out margin-right: 10px !important;
+    margin-left: 10px !important;
+}
+    .dt-input:focus {
+        color: #5A6A85;
+        background-color: transparent;
+        border-color: #aec3ff;
+        outline: 0;
+        -webkit-box-shadow: unset,0 0 0 0.25rem rgba(93,135,255,0.25);
+        box-shadow: unset,0 0 0 0.25rem rgba(93,135,255,0.25)
+    }
+
+.first {
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+}
+
+.last {
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+}
+
+.dt-button {
+    color: var(--bs-font-color);
+    width: 40px;
+    padding: 5px !important;
+    background-color: var(--bs-card-color) !important;
+    border: 1px solid var(--bs-border-color) !important;
+}
+
+    .dt-button:hover {
+        background-color: var(--bs-primary) !important;
+        color: var(--bs-light-text) !important;
+        transition: 0.3s !important;
+    }
