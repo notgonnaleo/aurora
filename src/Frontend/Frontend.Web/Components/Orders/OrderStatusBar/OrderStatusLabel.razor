@@ -1,0 +1,34 @@
+﻿@using Backend.Domain.Entities.Orders;
+@using Backend.Domain.Enums.Orders;
+<h5>
+    <strong>
+        Status:
+    </strong>
+    @code
+    {
+        private string CurrentStatus()
+        {
+            switch (Status.OrderStatusId)
+            {
+                case ((int)OrdersStatusEnums.Open):
+                    return "text-bg-primary";
+                case ((int)OrdersStatusEnums.InProgress):
+                    return "text-bg-primary";
+                case ((int)OrdersStatusEnums.PartiallyDone):
+                    return "text-bg-info";
+                case ((int)OrdersStatusEnums.Done):
+                    return "text-bg-success";
+                case ((int)OrdersStatusEnums.Overdue):
+                    return "text-bg-warning";
+                case ((int)OrdersStatusEnums.Canceled):
+                    return "text-bg-danger";
+            };
+            return "text-bg-primary";
+        }
+    }
+    <span class="badge @CurrentStatus()">@Status.OrderStatusName</span>
+</h5>
+@code {
+    [Parameter]
+    public OrderStatus Status { get; set; }
+}

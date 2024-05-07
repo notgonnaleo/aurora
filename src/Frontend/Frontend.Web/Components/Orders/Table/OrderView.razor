@@ -1,0 +1,236 @@
+﻿@using Backend.Domain.Entities.OrderItems.Response;
+@using Backend.Domain.Entities.Orders.Response;
+@using Backend.Domain.Enums.EnumExtensions;
+@using Backend.Domain.Enums.Orders;
+@using Frontend.Web.Components.Orders.OrderStatusBar
+@using Frontend.Web.Models.Client;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Orders;
+@inject AuthenticationService _authenticationService;
+@inject OrderService _orderService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
+
+@if (isLoading)
+{
+    <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+}
+else
+{
+    @code
+    {
+        private bool collapseOrderMobileSidebar = true;
+        private void ToggleOrderMobileSider() => collapseOrderMobileSidebar = !collapseOrderMobileSidebar;
+    }
+    <div class="card overflow-hidden invoice-application">
+        @* Mobile - Show Orders Button *@
+        <div class="d-flex align-items-center justify-content-between gap-6 m-3 d-lg-none">
+            <button class="btn btn-primary d-flex" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat-sidebar" aria-controls="chat-sidebar" @onclick="() => ToggleOrderMobileSider()">
+                <i class="ti ti-menu-2 fs-5"></i>
+            </button>
+
+            <form class="position-relative w-100">
+                <input type="text" class="form-control search-chat py-2 ps-5" id="text-srh" placeholder="Search Contact">
+                <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+            </form>
+        </div>
+
+        @* Main panel *@
+        <div class="d-flex">
+            @* Mobile - Show Orders Sidebar *@
+            <div class="w-25 d-none d-lg-block border-end user-chat-box @(collapseOrderMobileSidebar ? "" : "show")">
+                <div class="p-3 border-bottom">
+                    <form class="position-relative">
+                        <input type="search" class="form-control search-invoice ps-5" id="text-srh" placeholder="Search Invoice">
+                        <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                    </form>
+                </div>
+
+                <div class="app-invoice">
+                    @if(Orders is not null)
+                    {
+                        <OrderSelectList Orders="Orders" SelectedItem="ShowOrderPreview" />
+                    }
+                    else
+                    {
+                        <div class="center" style="flex-direction: column">
+                            <img class="mb-1" width="100" height="200" src="/assets/images/placeholder/undraw_blank_canvas.svg">
+                            <h6><strong>There's nothing here...</strong></h6>
+                            <p class="mb-5"><small>Start adding some new info here.</small></p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @* Order details + Order Items  *@
+            <div class="w-75 w-xs-100 chat-container">
+                <div class="invoice-inner-part h-100">
+                    <div class="invoiceing-box">
+                        <div class="invoice-header d-flex align-items-center border-bottom p-3">
+                            <h5 class=" text mb-0">Overview</h5>
+                            <div class="ms-auto">
+                                <h4 class="invoice-number"><strong>#@SelectedOrder.OrderCode</strong></h4>
+                            </div>
+                        </div>
+                        <div class="p-3" id="custom-invoice" style="display: block;">
+                            <div class="invoice-123" id="printableArea" style="display: block;">
+                                <div class="row pt-3">
+                                    <div class="col-md-12 mb-3">
+                                        <Frontend.Web.Components.Orders.OrderStatusBar.OrderStatusLabel Status="SelectedOrder.OrderStatus"/>                                   
+                                    </div>
+                                    <div class="col-md-12">
+                                        <OrderStatusProgressBar Status="SelectedOrder.OrderStatus" />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <OrderAddressView Order="SelectedOrder" />
+                                    </div>
+
+                                    @* Order items *@
+                                    <div class="col-md-12 mb-3">
+                                        <OrderItemsTable OrdersItems="OrdersItems" OrderId="SelectedOrder.OrderId" />
+                                    </div>
+
+                                    <div class="col-md-12 mb-3">
+                                        <OrderCheckoutView Order="SelectedOrder" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@* Mobile Orders Sidebar *@
+<div class="offcanvas offcanvas-start user-chat-box" tabindex="-1" id="chat-sidebar" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">
+            Invoice
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="p-3 border-bottom">
+        <form class="position-relative">
+            <input type="search" class="form-control search-invoice ps-5" id="text-srh" placeholder="Search Invoice">
+            <i class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+        </form>
+    </div>
+    <div class="app-invoice overflow-auto">
+        <ul class="invoice-users">
+            <li style="">
+                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user bg-light" id="invoice-123" data-invoice-id="123">
+                    <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
+                        <i class="ti ti-user fs-6"></i>
+                    </div>
+                    <div class="ms-3 d-inline-block w-75">
+                        <h6 class="mb-0 invoice-customer">James Anderson</h6>
+
+                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">Id: #123</span>
+                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">9 Fab 2020</span>
+                    </div>
+                </a>
+            </li>
+            <li style="">
+                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="invoice-124" data-invoice-id="124">
+                    <div class="btn btn-danger round rounded-circle d-flex align-items-center justify-content-center px-2">
+                        <i class="ti ti-user fs-6"></i>
+                    </div>
+                    <div class="ms-3 d-inline-block w-75">
+                        <h6 class="mb-0 invoice-customer">Bianca Doe</h6>
+                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">#124</span>
+                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">9 Fab 2020</span>
+                    </div>
+                </a>
+            </li>
+            <li style="">
+                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="invoice-125" data-invoice-id="125">
+                    <div class="btn btn-info round rounded-circle d-flex align-items-center justify-content-center px-2">
+                        <i class="ti ti-user fs-6"></i>
+                    </div>
+                    <div class="ms-3 d-inline-block w-75">
+                        <h6 class="mb-0 invoice-customer">Angelina Rhodes</h6>
+                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">#125</span>
+                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">9 Fab 2020</span>
+                    </div>
+                </a>
+            </li>
+            <li style="">
+                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user bg-light-subtle" id="invoice-126" data-invoice-id="126">
+                    <div class="btn btn-warning round rounded-circle d-flex align-items-center justify-content-center px-2">
+                        <i class="ti ti-user fs-6"></i>
+                    </div>
+                    <div class="ms-3 d-inline-block w-75">
+                        <h6 class="mb-0 invoice-customer">Samuel Smith</h6>
+                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">#126</span>
+                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">9 Fab 2020</span>
+                    </div>
+                </a>
+            </li>
+            <li style="">
+                <a href="javascript:void(0)" class="p-3 bg-hover-light-black border-bottom d-flex align-items-start invoice-user listing-user" id="invoice-127" data-invoice-id="127">
+                    <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
+                        <i class="ti ti-user fs-6"></i>
+                    </div>
+                    <div class="ms-3 d-inline-block w-75">
+                        <h6 class="mb-0 invoice-customer">Gabriel Jobs</h6>
+                        <span class="fs-3 invoice-id text-truncate text-body-color d-block w-85">#127</span>
+                        <span class="fs-3 invoice-date text-nowrap text-body-color d-block">9 Fab 2020</span>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+@code
+{
+    private bool isLoading = true;
+
+    private IEnumerable<OrderResponse>? Orders;
+    private IEnumerable<OrderItemsResponse>? OrdersItems;
+
+    private OrderResponse SelectedOrder = new OrderResponse();
+    public void ShowOrderPreview(OrderResponse selectedItem)
+    {
+        SelectedOrder = selectedItem;
+        SelectedOrder.OrderStatus.OrderStatusName = ((OrdersStatusEnums)SelectedOrder.OrderStatus.OrderStatusId).GetDescription();
+        SelectOrderItems();
+    }
+    public void SelectOrderItems()
+    {
+        OrdersItems = SelectedOrder.OrderItems;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        var context = await _authenticationService.GetContext();
+        var response = await _orderService.GetOrders(context.Tenant.Id.ToString());
+        if (response.Successful())
+        {
+            Orders = response.Result;
+            foreach (var order in Orders!)
+            {
+                if (order.OrderItems is not null && order.OrderItems.Count() > 0 && order.OrderId == order.OrderItems.First().OrderId)
+                {
+                    OrdersItems = order.OrderItems;
+                }
+            }
+
+            if (Orders.Any())
+            {
+                ShowOrderPreview(Orders.First());
+            }
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
+        isLoading = false;
+    }
+
+}

@@ -1,4 +1,5 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Components.Placeholders.EmptyMessages
 @using Frontend.Web.Models.Client
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
@@ -15,9 +16,9 @@
 }
 else
 {
-    if(Model!.Result is null)
+    if(Model!.Result is null || !Model.Result.Any())
     {
-        <h6>No items registered yet...</h6>
+        <EmptyListVersionA />
     }
     else
     {
@@ -95,8 +96,12 @@ else
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        Model = await _productService.GetProducts(context.Tenant.Id.ToString());
-        if (Model.Successful())
+        var response = await _productService.GetProducts(context.Tenant.Id.ToString());
+        if (response.Successful())
+        {
+            Model = response;
+        }
+        else
         {
             Toaster.Error(Model.ErrorMessage);
         }

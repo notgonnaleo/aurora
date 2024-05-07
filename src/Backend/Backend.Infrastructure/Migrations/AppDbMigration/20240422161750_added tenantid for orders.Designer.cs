@@ -9,11 +9,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backend.Infrastructure.Migrations.AppDbMigrations
+namespace Backend.Infrastructure.Migrations.AppDbMigration
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240329043214_stock")]
-    partial class stock
+    [Migration("20240422161750_added tenantid for orders")]
+    partial class addedtenantidfororders
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5844),
+                            Created = new DateTime(2024, 4, 22, 16, 17, 50, 287, DateTimeKind.Utc).AddTicks(2146),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -380,6 +380,208 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             Primary = true,
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.OrderItems.OrderItem", b =>
+                {
+                    b.Property<Guid>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ItemQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("ItemTotalAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("ItemTotalWeight")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("ItemUnitAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("VariantId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Orders.Order", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OrderCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("OrderEffectiveDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("OrderEstimatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("OrderOpeningDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("OrderStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("OrderTotalAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("OrderId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Payments.Parcel", b =>
+                {
+                    b.Property<Guid>("ParcelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("ParcelAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("ParcelEffectiveDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("ParcelEstimatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Sequence")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ParcelId");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("Parcels");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Payments.Payment", b =>
+                {
+                    b.Property<Guid>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PayerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("PaymentEffectiveDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("PaymentEstimatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PaymentStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PaymentTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("TotalParcels")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PayerId");
+
+                    b.HasIndex("SellerId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.ProductTypes.ProductType", b =>
@@ -505,11 +707,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("21d0406c-d7cc-434a-abb0-35bdfef54202"),
+                            ProductId = new Guid("d80a1102-6260-4f79-9b06-e97ce78916ee"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5981),
+                            Created = new DateTime(2024, 4, 22, 16, 17, 50, 287, DateTimeKind.Utc).AddTicks(2389),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -524,10 +726,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         },
                         new
                         {
-                            ProductId = new Guid("a4508f34-761c-4b22-9ca0-d9fc8d5ac644"),
+                            ProductId = new Guid("c93b0a6c-258e-4932-b41d-08f436d15a05"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5988),
+                            Created = new DateTime(2024, 4, 22, 16, 17, 50, 287, DateTimeKind.Utc).AddTicks(2397),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -803,7 +1005,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 3, 29, 4, 32, 14, 633, DateTimeKind.Utc).AddTicks(5940),
+                            Created = new DateTime(2024, 4, 22, 16, 17, 50, 287, DateTimeKind.Utc).AddTicks(2291),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
@@ -840,6 +1042,53 @@ namespace Backend.Infrastructure.Migrations.AppDbMigrations
                         .IsRequired();
 
                     b.Navigation("Agent");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.OrderItems.OrderItem", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Orders.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Payments.Parcel", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Payments.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("Backend.Domain.Entities.Payments.Payment", b =>
+                {
+                    b.HasOne("Backend.Domain.Entities.Orders.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Payer")
+                        .WithMany()
+                        .HasForeignKey("PayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Backend.Domain.Entities.Agents.Agent", "Seller")
+                        .WithMany()
+                        .HasForeignKey("SellerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Payer");
+
+                    b.Navigation("Seller");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.Products.Product", b =>

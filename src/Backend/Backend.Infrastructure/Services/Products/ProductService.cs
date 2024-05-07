@@ -151,6 +151,8 @@ namespace Backend.Infrastructure.Services.Products
                 x.ProductId == productId &&
                 x.Active);
 
+            if (product is null) throw new Exception("No products were found.");
+
             var types = _productType.Get();
             var category = _categoryService.GetCategoryAndSubCategoriesById(product.CategoryId.Value);
 

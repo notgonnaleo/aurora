@@ -37,7 +37,7 @@ namespace Frontend.Web.Repository.SubCategories
         public async Task<ApiResponse<SubCategory>> CreateSubCategory(SubCategory category)
         {
             var model = new RouteBuilder<SubCategory>().Send(Endpoints.SubCategory, Methods.Default.POST, category);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<SubCategory, SubCategory>(model);
         }
         public async Task<ApiResponse<SubCategory>> UpdateSubCategory(SubCategory category)
         {
