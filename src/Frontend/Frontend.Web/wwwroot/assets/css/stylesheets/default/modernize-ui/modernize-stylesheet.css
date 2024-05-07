@@ -20162,15 +20162,20 @@ textarea.form-control-lg {
 }
 
 .dt-button {
+    border-radius: 5px;
+    font-size: 12px !important;
     color: var(--bs-font-color);
-    width: 40px;
-    padding: 5px !important;
+    width: 50px !important;
+    padding: 10px !important;
     background-color: var(--bs-card-color) !important;
     border: 1px solid var(--bs-border-color) !important;
 }
 
     .dt-button:hover {
         background-color: var(--bs-primary) !important;
-        color: var(--bs-light-text) !important;
         transition: 0.3s !important;
+    }
+
+    .dt-button:hover span {
+        color: #fff !important;
     }

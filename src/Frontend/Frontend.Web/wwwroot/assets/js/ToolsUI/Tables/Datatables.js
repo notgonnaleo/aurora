@@ -1,6 +1,11 @@
-﻿function startSmartTables() {
+﻿function startSmartTables(tableId) {
     $(document).ready(function () {
-        $("#table").DataTable({
+        //if ($("#" + tableId).length > 0) {
+        //    console.log("Table with ID '" + tableId + "' already exists.");
+        //    return;
+        //}
+
+        $("#" + tableId).DataTable({
             layout: {
                 topStart: {
                     buttons: ['copy', 'csv', 'excel', 'pdf', 'print']

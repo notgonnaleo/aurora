@@ -28,8 +28,10 @@
     {
         await ShowModal.InvokeAsync(IsModalOnScreen);
     }
+}
 
-
+@code
+{
     private Guid? selectedProductId = null;
     private Guid? selectedVariantId = null;
     private Guid? selectedEmployeeId = null;
@@ -51,16 +53,15 @@
             <Frontend.Web.Components.Agents.Dropdowns.CustomerDropdown CustomerId="SetCustomer" />
         </div>
     </div>
+    <div class="row">
+        <Frontend.Web.Components.Orders.Table.ItemsTable ItemList="SelectedOrderItems" />
+    </div>
 </div>
 @code 
 {
-    private StockDetail stock = new StockDetail();
     private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
-
     private bool isInsertVariant = false;
     private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
-
-    private bool isSelectingVariant = false;
 }
 
 @code
@@ -68,4 +69,5 @@
     [Parameter] public Action? ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
     [Parameter] public EventCallback<bool> ShowModal { get; set; }
+    [Parameter] public IEnumerable<ItemThumbnail>? SelectedOrderItems { get; set; }
 }

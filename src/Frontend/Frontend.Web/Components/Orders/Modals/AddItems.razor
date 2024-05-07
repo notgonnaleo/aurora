@@ -61,7 +61,7 @@
                     @if (Items is not null && Items.Count() > 0)
                     {
                         <div class="table-responsive">
-                            <table id="table" class="table w-100 table-bordered display text-nowrap dataTable">
+                            <table id="table-items-order-creation" class="table w-100 table-bordered display text-nowrap dataTable">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -88,20 +88,20 @@
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
                     Close
                 </button>
-                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal">
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => SendItemList(Items)">
                     Confirm
                 </button>
             </div>
         </div>
     </div>
 </div>
-@code {
-
+@code 
+{
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            await JSRuntime.InvokeVoidAsync("startSmartTables");
+            await JSRuntime.InvokeVoidAsync("startSmartTables", "table-items-order-creation");
         }
     }
 
@@ -112,14 +112,14 @@
     private int ItemQuantity = 0;
     private async void AddItemCart()
     {
-        var count = Items is not null ? Items.Count() : 0;
+        var sequenceId = Items is not null ? Items.Count() + 1 : 0;
         if (selectedVariant is not null)
         {
             Items.Add(new ItemThumbnail()
                 {
                     ProductId = selectedProduct.ProductId,
                     ItemName = selectedVariant.ProductName,
-                    ItemSequence = count+1,
+                    ItemSequence = sequenceId,
                     VariantId = selectedVariant.ProductId,
                     Quantity = ItemQuantity
                 });
@@ -130,20 +130,21 @@
                 {
                     ProductId = selectedProduct.ProductId,
                     ItemName = selectedProduct.ProductName,
-                    ItemSequence = count+1,
+                    ItemSequence = sequenceId,
                     VariantId = null,
                     Quantity = ItemQuantity
                 });
         }
         ItemQuantity = 0;
-
-        // Means it's the first item being inserted so it's going to initialize the table
-        if (count == 1) InitializeTable();
+        InitializeTable();
     }
 
     private async void InitializeTable()
     {
-        await OnAfterRenderAsync(true);
+        if(Items.Count() == 1)
+        {
+            await OnAfterRenderAsync(true);
+        }
     }
 }
 
@@ -206,9 +207,15 @@
 @code
 {
     public void CloseModal() => ShowModal = !ShowModal;
+
+    public void SendItemList(IEnumerable<ItemThumbnail> orderItems)
+    {
+        if(orderItems is not null) ItemList.InvokeAsync(orderItems);
+    }
 }
 
 @code
 {
     [Parameter] public bool ShowModal { get; set; }
+    [Parameter] public EventCallback<IEnumerable<ItemThumbnail>> ItemList { get; set; }
 }
