@@ -41,7 +41,7 @@ namespace Frontend.Web.Repository.Products
         public async Task<ApiResponse<ProductVariant>> CreateProductVariant(ProductVariant variant)
         {
             var model = new RouteBuilder<ProductVariant>().Send(Endpoints.ProductVariants, Methods.Default.POST, variant);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<ProductVariant, ProductVariant>(model);
         }
 
         public async Task<ApiResponse<ProductVariant>> UpdateProductVariant(ProductVariant variant)

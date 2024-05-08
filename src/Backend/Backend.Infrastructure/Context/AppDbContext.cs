@@ -2,6 +2,9 @@
 using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Contacts;
+using Backend.Domain.Entities.OrderItems;
+using Backend.Domain.Entities.Orders;
+using Backend.Domain.Entities.Payments;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Entities.ProductTypes;
 using Backend.Domain.Entities.Profiles;
@@ -33,11 +36,19 @@ namespace Backend.Infrastructure.Context
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<ProductMedia> ProductMedia { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
-        public DbSet<ProductMedia> ProductMedia { get; set; }
+
         public DbSet<Stock> Stocks { get; set; }
-        public DbSet<ProductVariant> ProductVariants { get; set; }
+
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Parcel> Parcels { get; set; }
 
         public DbSet<Agent> Agents { get; set; }
         public DbSet<AgentType> AgentTypes { get; set; }

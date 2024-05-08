@@ -13,7 +13,8 @@ using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Enums.Localization;
 using Backend.Domain.Entities.Products;
 using static Backend.Infrastructure.Enums.Modules.Methods;
-
+using Backend.Domain.Entities.Agents.Response;
+using Backend.Domain.Enums.Agents;
 
 namespace Backend.Infrastructure.Services.Agents
 {
@@ -60,6 +61,43 @@ namespace Backend.Infrastructure.Services.Agents
             ValidateTenant(tenantId);
             return _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.TenantId == context.Tenant.Id);
         }
+
+        public Domain.Entities.Agents.Agent? GetSeller(Guid tenantId, Guid agentId)
+        {
+            if (tenantId == Guid.Empty || agentId == Guid.Empty)
+                return null;
+
+            var context = LoadContext();
+            ValidateTenant(tenantId);
+            var seller = _appDbContext.Agents
+                .FirstOrDefault(x => x.AgentId == agentId && 
+                x.TenantId == context.Tenant.Id &&
+                x.AgentTypeId == (int)AgentTypes.Seller);
+
+            if(seller is null)
+                throw new Exception("Seller is invalid or could not be found");
+
+            return seller;
+        }
+
+        public Domain.Entities.Agents.Agent? GetCustomer(Guid tenantId, Guid agentId)
+        {
+            if (tenantId == Guid.Empty || agentId == Guid.Empty)
+                return null;
+
+            var context = LoadContext();
+            ValidateTenant(tenantId);
+            var customer = _appDbContext.Agents
+                .FirstOrDefault(x => x.AgentId == agentId &&
+                x.TenantId == context.Tenant.Id &&
+                x.AgentTypeId == (int)AgentTypes.Customer);
+
+            if(customer is null)
+                throw new Exception("Customer is invalid or could not be found");
+
+            return customer;
+        }
+
 
         public bool Update(Domain.Entities.Agents.Agent model)
         {

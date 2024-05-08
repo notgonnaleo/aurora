@@ -1,0 +1,43 @@
+﻿@page "/orders"
+@using Backend.Domain.Entities.Products
+
+<aside class="right-sidebar @formCssClass">
+    <Frontend.Web.Components.Orders.Forms.AddOrder SelectedOrderItems="Items" CollapseRightSidebar=collapseForm ToggleRightSidebar="ToggleForm" ShowModal="OpenAddItemsModal"/>
+</aside>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleForm">
+                @btnText
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <Frontend.Web.Components.Orders.Table.OrderView />
+    </div>
+</div>
+
+<Frontend.Web.Components.Orders.Modals.AddItems ItemList="SetItems" ShowModal="ShowModal" />
+
+@code
+{
+    public bool ShowModal = false;
+    public void OpenAddItemsModal() => ShowModal = !ShowModal;
+
+    private IEnumerable<ItemThumbnail>? Items = null;
+    private void SetItems(IEnumerable<ItemThumbnail>? orderItems) => Items = orderItems;
+
+}
+
+@code
+{
+    private bool collapseForm = true;
+    private string? formCssClass => collapseForm ? null : "show-menu";
+    private string? btnText => collapseForm ? "New" : "Hide menu";
+
+    private void ToggleForm()
+    {
+        collapseForm = !collapseForm;
+    }
+}

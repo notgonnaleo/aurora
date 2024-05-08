@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Stocks;
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Backend.Domain.Enums.EnumExtensions;
 @using Frontend.Web.Services.Stocks;
 @using Frontend.Web.Services.Authentication;
 @using Microsoft.AspNetCore.Components.Forms;
@@ -37,14 +38,14 @@
                             </th>
                             <th>SKU</th>
                             <th>Product Name</th>
-                            <th>Movement Type</th>
                             <th>Quantity</th>
+                            <th>Movement Type</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            <tr class="search-items">
+                            <tr class="table-item-hover search-items">
                                 <td>
                                     <div class="n-chk align-self-center text-center">
                                         <div class="form-check">
@@ -54,16 +55,20 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no cursor-pointer" @onclick="() => Edit(item)">@item.Product.SKU</span>
+                                    <p class="smart-link cursor-pointer m-0" @onclick="() => Edit(item)">@item.Product.SKU</p>
                                 </td>
                                 <td>
-                                    <span class="usr-ph-no">@item.Product.Name</span>
+                                    <span>@item.Product.Name</span>
                                 </td>
                                 <td>
-                                    <span class="usr-location">@item.TotalAmount</span>
+                                    <div style="width: 50px" class="text-end">
+                                        <span>@item.TotalAmount</span>
+                                    </div>
                                 </td>
                                 <td>
-                                    <span class="badge @(item.Status.StatusId == (int)InventoryStatus.MovementStatus.Available ? "bg-primary" : "bg-danger")">@item.Status.StatusDescription</span>
+                                    <span class="text-light badge @(item.Status.StatusId == (int)InventoryStatus.MovementStatus.Available ? "bg-primary" : "bg-danger")">
+                                        @(((InventoryStatus.MovementStatus)@item.Status.StatusId).GetDescription())
+                                    </span>
                                 </td>
                             </tr>
                         }

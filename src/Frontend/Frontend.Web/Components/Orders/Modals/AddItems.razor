@@ -1,0 +1,221 @@
+﻿@using Backend.Domain.Entities.Categories;
+@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Components.Products.Dropdowns
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Categories;
+@using Frontend.Web.Services.Products;
+@using Sotsera.Blazor.Toaster;
+
+@inject NavigationManager navigator;
+@inject CategoryService _categoryService;
+@inject AuthenticationService _authenticationService;
+@inject ProductVariantService _productVariantService;
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
+@inject IJSRuntime JSRuntime
+
+<div class="modal fade @(ShowModal ? "show" : string.Empty)" id="bs-example-modal-md" tabindex="-1" style="@(ShowModal ? "display: block;" : "display: none;")" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header d-flex align-items-center">
+                <h4 class="modal-title" id="myModalLabel">
+                    Order Items
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="mb-4 col-sm-12">
+                        <label for="productId" class="form-label">Item</label>
+                        <div class="input-group mb-2">
+                            <ProductDropdown Product="SetProduct" />
+                            <button class="btn btn-primary" type="button" @onclick="AddItemCart">
+                                Add
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="mb-2 col-sm-12 p-2">
+                                <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
+                                <label>Insert item variant</label>
+                            </div>
+                        </div>
+                        @if (isInsertVariant)
+                        {
+                            <div class="row">
+                                <div class="mb-2 col-sm-12">
+                                    <label for="variandId" class="form-label"> Variant</label>
+                                    <select class="form-select" @onchange="OnVariantChange">
+                                        <option value="" disabled hidden selected>Select a Variant</option>
+                                        @foreach (var variant in variants)
+                                        {
+                                            <option value="@variant.VariantId">@variant.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+                        <label for="productId" class="form-label">Quantity</label>
+                        <input class="form-control" type="number" @bind="ItemQuantity" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Items is not null && Items.Count() > 0)
+                    {
+                        <div class="table-responsive">
+                            <table id="table-items-order-creation" class="table w-100 table-bordered display text-nowrap dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Items)
+                                    {
+                                        <tr>
+                                            <td>@item.ItemSequence</td>
+                                            <td>@item.ItemName</td>
+                                            <td>@item.Quantity</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
+                    Close
+                </button>
+                <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => SendItemList(Items)">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@code 
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("startSmartTables", "table-items-order-creation");
+        }
+    }
+
+}
+
+@code
+{
+    private int ItemQuantity = 0;
+    private async void AddItemCart()
+    {
+        var sequenceId = Items is not null ? Items.Count() + 1 : 0;
+        if (selectedVariant is not null)
+        {
+            Items.Add(new ItemThumbnail()
+                {
+                    ProductId = selectedProduct.ProductId,
+                    ItemName = selectedVariant.ProductName,
+                    ItemSequence = sequenceId,
+                    VariantId = selectedVariant.ProductId,
+                    Quantity = ItemQuantity
+                });
+        }
+        else
+        {
+            Items.Add(new ItemThumbnail()
+                {
+                    ProductId = selectedProduct.ProductId,
+                    ItemName = selectedProduct.ProductName,
+                    ItemSequence = sequenceId,
+                    VariantId = null,
+                    Quantity = ItemQuantity
+                });
+        }
+        ItemQuantity = 0;
+        InitializeTable();
+    }
+
+    private async void InitializeTable()
+    {
+        if(Items.Count() == 1)
+        {
+            await OnAfterRenderAsync(true);
+        }
+    }
+}
+
+@if (ShowModal)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code
+{
+    private List<ItemThumbnail> Items = new List<ItemThumbnail>();
+    private IEnumerable<ProductVariant> variants = new List<ProductVariant>();
+
+    private bool isInsertVariant = false;
+    private void ShowVariantsDropdown() 
+    {
+        isInsertVariant = !isInsertVariant;
+        if (!isInsertVariant) selectedVariant = null;
+    }
+
+    private bool isSelectingVariant = false;
+}
+
+@code
+{
+    private ProductThumbnail? selectedProduct = null;
+    private ProductThumbnail? selectedVariant = null;
+
+    private async void SetProduct(ProductThumbnail product)
+    {
+        selectedProduct = product;
+        if (selectedProduct is not null) await OnProductChange();
+    }
+    private void SetVariant(ProductThumbnail variant) => selectedVariant = variant;
+
+    private async Task OnProductChange()
+    {
+        var context = await _authenticationService.GetContext();
+        var tenantId = context.Tenant.Id.ToString();
+        var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), selectedProduct.ProductId.ToString());
+        if (response.Successful())
+        {
+            variants = response.Result;
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
+        StateHasChanged();
+    }
+
+    private async Task OnVariantChange(ChangeEventArgs e)
+    {
+        string selectedVariantId = e.Value.ToString();
+        var selectedVariantSearch = variants.Where(x => x.VariantId == Guid.Parse(selectedVariantId)).FirstOrDefault();
+        selectedVariant = new ProductThumbnail() { ProductId = selectedVariantSearch.VariantId, ProductName = selectedVariantSearch.Name };
+    }
+}
+
+@code
+{
+    public void CloseModal() => ShowModal = !ShowModal;
+
+    public void SendItemList(IEnumerable<ItemThumbnail> orderItems)
+    {
+        if(orderItems is not null) ItemList.InvokeAsync(orderItems);
+    }
+}
+
+@code
+{
+    [Parameter] public bool ShowModal { get; set; }
+    [Parameter] public EventCallback<IEnumerable<ItemThumbnail>> ItemList { get; set; }
+}
