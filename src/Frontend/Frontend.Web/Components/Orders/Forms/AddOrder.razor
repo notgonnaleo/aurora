@@ -74,14 +74,6 @@
 
 @code
 {
-    protected override Task OnInitializedAsync()
-    {
-        return Reload.InvokeAsync(false);
-    }
-}
-
-@code
-{
     private OrderRequest? newOrder = null;
     private async void CreateNewOrder()
     {
