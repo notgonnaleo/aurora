@@ -116,7 +116,7 @@ namespace Backend.Infrastructure.Services.Orders
             newOrder.CreatedBy = LoadContext().UserId;
 
             var customer = _agentService.GetCustomer(newOrder.TenantId, newOrder.CustomerId);
-            var seller = _agentService.GetSeller(newOrder.TenantId, newOrder.SellerId);
+            var seller = _agentService.GetEmployee(newOrder.TenantId, newOrder.SellerId);
 
             // Abstract this
             if (customer is null)
@@ -144,7 +144,7 @@ namespace Backend.Infrastructure.Services.Orders
                         AgentId = customer.AgentId,
                         AgentDisplayName = customer.Name
                     },
-                    Seller = new Domain.Entities.Agents.Response.SellerThumbnail()
+                    Seller = new Domain.Entities.Agents.Response.EmployeeThumbnail()
                     {
                         AgentId = seller.AgentId,
                         AgentDisplayName = seller.Name

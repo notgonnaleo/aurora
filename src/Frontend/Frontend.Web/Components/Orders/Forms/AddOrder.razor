@@ -1,14 +1,18 @@
-﻿@using Backend.Domain.Entities.Orders.Request
+﻿@using Backend.Domain.Entities.OrderItems.Request;
+@using Backend.Domain.Entities.Orders.Request
 @using Backend.Domain.Entities.Products
 @using Backend.Domain.Entities.Stocks
 @using Frontend.Web.Components.Products.Dropdowns
 @using Frontend.Web.Services.Authentication
+@using Frontend.Web.Services.Orders;
 @using Frontend.Web.Services.Products
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager navigator;
 @inject ProductService _productService;
 @inject ProductVariantService _productVariantService
+@inject OrderService _orderService;
+@inject AuthenticationService _authenticationService;
 
 <div class="m-2 p-2">
     <i class="text ti ti-x cursor-pointer" @onclick="ToggleRightSidebar"></i>
@@ -57,12 +61,43 @@
         <Frontend.Web.Components.Orders.Table.ItemsTable ItemList="SelectedOrderItems" />
     </div>
 </div>
+
 @code 
 {
     private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
     private bool isInsertVariant = false;
     private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
 }
+
+@code
+{
+    private OrderRequest? newOrder = null;
+    private async void CreateNewOrder()
+    {
+        var context = await _authenticationService.GetContext();
+        newOrder.CustomerId = selectedCustomerId.Value;
+        newOrder.SellerId = selectedEmployeeId.Value;
+        newOrder.ParcelsQuantity = 0;
+        newOrder.PaymentTypeId = 0;
+        newOrder.TenantId = context.Tenant.Id;
+        newOrder.OrderItems = BuildOrderItems(SelectedOrderItems, context.Tenant.Id);
+        var response = await _orderService.OpenNewOrder(newOrder);
+    }
+
+    private IEnumerable<OrderItemsRequest> BuildOrderItems(IEnumerable<ItemThumbnail>? items, Guid tenantId)
+    {
+        return items.Select(x => new OrderItemsRequest()
+        {
+            ItemId = x.ProductId,
+            ItemQuantity = x.Quantity,
+            ItemVariantId = x.VariantId,
+            OrderItemId = Guid.Empty,
+            OrderId = Guid.Empty,
+            TenantId = tenantId
+        });
+    }
+}
+
 
 @code
 {

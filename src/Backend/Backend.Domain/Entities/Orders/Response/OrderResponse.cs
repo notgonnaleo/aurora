@@ -34,7 +34,7 @@ namespace Backend.Domain.Entities.Orders.Response
         public DateTime OrderOpeningDate { get; set; }
         public DateTime OrderEstimatedDate { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public SellerThumbnail Seller { get; set; }
+        public EmployeeThumbnail Seller { get; set; }
         public CustomerThumbnail Customer { get; set; }
     }
 }
