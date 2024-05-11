@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
 @inject NavigationManager NavigationManager;
+
 @if (Order.OrderTotalAmount is null && Order.OrderItems is null || Order!.OrderItems!.Count() == 0)
 {
     <p>Add items to your order to calculate the invoice value.</p>
