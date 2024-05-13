@@ -8,7 +8,7 @@
 @inject AuthenticationService _authenticationService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
-<PageTitle>Aurora - Order Summary</PageTitle>
+<PageTitle>Aurora - Order Summary #@(OrderDetails.OrderCode)</PageTitle>
 <div class="container-fluid">
     @if (isLoading)
     {
@@ -22,7 +22,7 @@
                 <div class="col-lg-4 d-flex align-items-stretch">
                     <div class="card w-100">
                         <div class="card-header">
-                            <h6>Status</h6>
+                            <h6>Status #@OrderDetails.OrderCode</h6>
                             <h5>
                                 <strong class="smart-link cursor-pointer">
                                     @OrderDetails.OrderStatus.OrderStatusName
@@ -48,7 +48,7 @@
                 <div class="col-lg-8 d-flex align-items-stretch">
                     <div class="card w-100">
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-semibold mb-4">Payment & Deadline</h5>
+                            <h5 class="text card-title fw-semibold mb-4">Payment & Deadline</h5>
                             @OrderDetails.OrderParcelAmount
                             @OrderDetails.TotalParcels
                             @OrderDetails.OrderTotalAmount
@@ -57,9 +57,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                adicionar card de contato etc
+                <div class="col-lg-4 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body p-4">
+                            <h5 class="text card-title fw-semibold mb-4">Contact</h5>
+                            @OrderDetails.OrderCode
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="card card-body">
@@ -103,7 +108,9 @@
                 ItemName = item.Item.Name,
                 ProductId = item.Item.ProductId,
                 Quantity = item.ItemQuantity,
-                VariantId = item.ItemVariant != null ? item.ItemVariant.VariantId : null
+                VariantId = item.ItemVariant != null ? item.ItemVariant.VariantId : null,
+                ItemValue = Convert.ToDecimal(item.Item.Value),
+                Value = item.ItemTotalAmount
             });
         }
     }

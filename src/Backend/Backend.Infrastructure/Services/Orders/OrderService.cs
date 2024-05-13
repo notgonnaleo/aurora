@@ -70,6 +70,8 @@ namespace Backend.Infrastructure.Services.Orders
                     OrderOpeningDate = order.OrderOpeningDate,
                     OrderCode = order.OrderCode,
                     OrderItems = orderItemsResponse,
+                    OrderParcelAmount = order.ParcelsQuantity,
+                    OrderTotalAmount = order.OrderTotalAmount,
                     OrderStatus = new OrderStatus() { OrderStatusId = order.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)order.OrderStatusId).ToString(), },
                 });
             }

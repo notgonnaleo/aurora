@@ -10,10 +10,10 @@
 }
 else
 {
-    <div class="pull-right mt-4 text-end">
-        <p>Parcels: @(Order.TotalParcels)/@Order.OrderParcelAmount </p>
+    <div class="pull-right mt-4 mb-4 text-end">
+        <p>Parcels: x@(Order.OrderParcelAmount) | @(Order.OrderTotalAmount/Order.OrderParcelAmount) </p>
         <h5>
-            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "0.00" : Order.OrderTotalAmount)</strong>
+            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "Not calculated" : Order.OrderTotalAmount)</strong>
         </h5>
     </div>
 }

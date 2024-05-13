@@ -67,6 +67,7 @@
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>Quantity</th>
+                                        <th>Value</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,6 +77,7 @@
                                             <td>@item.ItemSequence</td>
                                             <td>@item.ItemName</td>
                                             <td>@item.Quantity</td>
+                                            <td>@(item.Quantity * @item.Value)</td>
                                         </tr>
                                     }
                                 </tbody>
@@ -121,6 +123,8 @@
                     ItemName = selectedVariant.ProductName,
                     ItemSequence = sequenceId,
                     VariantId = selectedVariant.ProductId,
+                    ItemValue = selectedVariant.ItemValue,
+                    Value = selectedVariant.ItemValue * ItemQuantity,
                     Quantity = ItemQuantity
                 });
         }
@@ -132,6 +136,8 @@
                     ItemName = selectedProduct.ProductName,
                     ItemSequence = sequenceId,
                     VariantId = null,
+                    ItemValue = selectedProduct.ItemValue,
+                    Value = selectedProduct.ItemValue * ItemQuantity,
                     Quantity = ItemQuantity
                 });
         }
@@ -200,7 +206,7 @@
     {
         string selectedVariantId = e.Value.ToString();
         var selectedVariantSearch = variants.Where(x => x.VariantId == Guid.Parse(selectedVariantId)).FirstOrDefault();
-        selectedVariant = new ProductThumbnail() { ProductId = selectedVariantSearch.VariantId, ProductName = selectedVariantSearch.Name };
+        selectedVariant = new ProductThumbnail() { ProductId = selectedVariantSearch.VariantId, ProductName = selectedVariantSearch.Name, ItemValue = Convert.ToDecimal(selectedVariantSearch.Value) };
     }
 }
 
