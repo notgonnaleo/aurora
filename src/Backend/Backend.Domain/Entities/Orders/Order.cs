@@ -59,7 +59,8 @@ namespace Backend.Domain.Entities.Orders
         public DateTime? OrderEffectiveDate { get; set; }
         public int OrderStatusId { get; set; }
         public decimal OrderTotalAmount { get; set; }
-
+        public int ParcelsQuantity { get; set; }
+        public int PaymentMethodId { get; set; }
         public Agent? Customer { get; set; }
         public Agent? Seller { get; set; }
     }

@@ -20165,7 +20165,6 @@ textarea.form-control-lg {
     border-radius: 5px;
     font-size: 12px !important;
     color: var(--bs-font-color);
-    width: 50px !important;
     padding: 10px !important;
     background-color: var(--bs-card-color) !important;
     border: 1px solid var(--bs-border-color) !important;
@@ -20179,3 +20178,14 @@ textarea.form-control-lg {
     .dt-button:hover span {
         color: #fff !important;
     }
+
+.order-icon {
+    display: flex;
+    color: #fff;
+    font-size: 14px;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}

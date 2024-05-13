@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Agents.Response;
+﻿using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Agents.Response;
 using Backend.Domain.Entities.OrderItems.Response;
 using System;
 using System.Collections.Generic;
@@ -36,5 +37,15 @@ namespace Backend.Domain.Entities.Orders.Response
         public OrderStatus OrderStatus { get; set; }
         public EmployeeThumbnail Seller { get; set; }
         public CustomerThumbnail Customer { get; set; }
+    }
+
+    public class OrderEntity
+    {
+        public Guid TenantId { get; set; }
+        public Guid OrderId { get; set; }
+        public string OrderCode { get; set; }
+        public AgentDetail Seller { get; set; }
+        public AgentDetail Customer { get; set; }
+
     }
 }

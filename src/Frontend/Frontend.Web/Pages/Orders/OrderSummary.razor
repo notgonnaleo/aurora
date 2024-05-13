@@ -1,5 +1,7 @@
 ﻿@page "/order-summary/{orderId}"
+@using Backend.Domain.Entities.OrderItems.Response;
 @using Backend.Domain.Entities.Orders.Response;
+@using Backend.Domain.Entities.Products;
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Orders;
 @inject OrderService _orderService;
@@ -19,11 +21,18 @@
             <div class="row">
                 <div class="col-lg-4 d-flex align-items-stretch">
                     <div class="card w-100">
+                        <div class="card-header">
+                            <h6>Status</h6>
+                            <h5>
+                                <strong class="smart-link cursor-pointer">
+                                    @OrderDetails.OrderStatus.OrderStatusName
+                                </strong>
+                            </h5>
+                        </div>
                         <div class="card-body p-4">
-                            <div class="mb-4">
-                                <h5 class="card-title fw-semibold">Status</h5>
+                            <div class="center m-4">
+                                <Frontend.Web.Components.Orders.OrderStatusBar.OrderStatusIcon Status="OrderDetails.OrderStatus" />
                             </div>
-                            @OrderDetails!.OrderStatus.OrderStatusName
                         </div>
                     </div>
                 </div>
@@ -36,10 +45,26 @@
                 </div>
             </div>
             <div class="row">
-                @foreach (var item in OrderDetails!.OrderItems)
-                {
-                    <h6>@item.Item.Name</h6>
-                }
+                <div class="col-lg-8 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-semibold mb-4">Payment & Deadline</h5>
+                            @OrderDetails.OrderParcelAmount
+                            @OrderDetails.TotalParcels
+                            @OrderDetails.OrderTotalAmount
+                            @OrderDetails.OrderEffectiveDate
+                            @OrderDetails.OrderEstimatedDate
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                adicionar card de contato etc
+            </div>
+            <div class="row">
+                <div class="card card-body">
+                    <Frontend.Web.Components.Orders.Table.ItemsTableReview ItemList="Items" />
+                </div>
             </div>
         }
         else
@@ -57,11 +82,31 @@
     protected override async Task OnInitializedAsync()
     {
         await GetOrder();
+        if(OrderDetails is not null)
+        {
+            MapItems(OrderDetails.OrderItems);
+        }
         isLoading = false;
     }
 
     [Parameter] public string orderId { get; set; }
     private OrderResponse? OrderDetails = null;
+    private List<ItemThumbnail>? Items = null;
+
+    private void MapItems(IEnumerable<OrderItemsResponse>? orderItems)
+    {
+        Items = new List<ItemThumbnail>();
+        foreach (var item in orderItems)
+        {
+            Items.Add(new ItemThumbnail()
+            {
+                ItemName = item.Item.Name,
+                ProductId = item.Item.ProductId,
+                Quantity = item.ItemQuantity,
+                VariantId = item.ItemVariant != null ? item.ItemVariant.VariantId : null
+            });
+        }
+    }
 
     private async Task GetOrder()
     {

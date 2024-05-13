@@ -76,6 +76,10 @@ namespace Backend.Infrastructure.Services.Orders
             return ordersThumbnails;
         }
 
+        public void GetOrderEntities(Guid tenantId, Guid orderId, string? orderCode)
+        {
+
+        }
 
         public OrderResponse GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {
