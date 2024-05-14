@@ -1,4 +1,6 @@
-﻿using Backend.Domain.Entities.OrderItems;
+﻿using Backend.Domain.Entities.OrderHistories;
+using Backend.Domain.Entities.OrderHistories.Response;
+using Backend.Domain.Entities.OrderItems;
 using Backend.Domain.Entities.OrderItems.Request;
 using Backend.Domain.Entities.OrderItems.Response;
 using Backend.Domain.Entities.Orders;
@@ -210,6 +212,23 @@ namespace Backend.Infrastructure.Services.Orders
         {
             _appDbContext.Orders.Add(order);
             return _appDbContext.SaveChanges() > 0;
+        }
+
+        public IEnumerable<OrderMovementEntryHistoryResponse> GetOrderEntryHistoryLog(Guid orderId)
+        {
+            var history = _appDbContext.OrderHistories.Where(x => x.OrderId == orderId).ToList();
+            var items = _appDbContext.OrderItems.Where(x => x.OrderId == orderId).ToList();
+            var entries = new List<OrderMovementEntryHistoryResponse>();
+            foreach (var historyItem in history)
+            {
+                entries.Add(new OrderMovementEntryHistoryResponse()
+                {
+                    OrderId = historyItem.OrderId,
+                    OrderHistoryId = historyItem.OrderHistoryId,
+                    OrderTotalItemsMovement = historyItem.OrderTotalItemsMovement,
+                    OrderMovementType = historyItem.OrderMovementType,
+                });
+            }
         }
     }
 }
