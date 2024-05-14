@@ -6,6 +6,9 @@ using System.Net.Http.Json;
 using Frontend.Web.Models.Client;
 using Backend.Domain.Entities.Orders.Response;
 using Backend.Domain.Entities.Orders.Request;
+using Backend.Domain.Entities.OrderHistories.Request;
+using Backend.Domain.Entities.OrderHistories.Response;
+using static Backend.Infrastructure.Enums.Modules.Methods;
 
 namespace Frontend.Web.Repository.Orders
 {
@@ -67,20 +70,44 @@ namespace Frontend.Web.Repository.Orders
         public async Task<bool> DeleteAddress(string tenantId, string addressId)
         {
             var parameters = new List<RouteParameterRequest>()
-        {
-            new RouteParameterRequest()
             {
-                ParameterName = Methods.Addresses.DELETE.DeleteAddress.tenantId,
-                ParameterValue = tenantId,
-            },
-            new RouteParameterRequest()
-            {
-                ParameterName = Methods.Addresses.DELETE.DeleteAddress.addressId,
-                ParameterValue = addressId,
-            }
-        };
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.Addresses.DELETE.DeleteAddress.tenantId,
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = Methods.Addresses.DELETE.DeleteAddress.addressId,
+                    ParameterValue = addressId,
+                }
+            };
             var request = new RouteBuilder<Address>().SendMultiple(Endpoints.Addresses, Methods.Default.DELETE, parameters);
             return (await _httpClientRepository.Put(request)).Success;
+        }
+
+        public async Task<ApiResponse<IEnumerable<OrderMovementEntryHistoryResponse>>> GetOrderEntryHistoryLog(string tenantId, string orderId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = "tenantId",
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = "orderId",
+                    ParameterValue = orderId,
+                }
+            };
+            var model = new RouteBuilder<OrderMovementEntryHistoryResponse>().Send(Endpoints.Orders, "GetOrderEntryHistoryLog", parameters);
+            return await _httpClientRepository.Get(model);
+        }
+        public async Task<ApiResponse<bool>> ExecuteOrderMovement(OrderMovementEntryHistoryRequest request)
+        {
+            var model = new RouteBuilder<OrderMovementEntryHistoryRequest>().Send(Endpoints.Orders, "ExecuteOrderMovementAction", request);
+            return await _httpClientRepository.Post<OrderMovementEntryHistoryRequest, bool>(model);
         }
     }
 }

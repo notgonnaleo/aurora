@@ -1,4 +1,5 @@
 ﻿@page "/order-summary/{orderId}"
+@using Backend.Domain.Entities.OrderHistories.Response
 @using Backend.Domain.Entities.OrderItems.Response;
 @using Backend.Domain.Entities.Orders.Response;
 @using Backend.Domain.Entities.Products;
@@ -85,6 +86,11 @@
             </div>
             <div class="row">
                 <div class="card card-body">
+                    <Frontend.Web.Components.Orders.Table.OrderLogsTable Logs="Logs"></Frontend.Web.Components.Orders.Table.OrderLogsTable>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card card-body">
                     <Frontend.Web.Components.Orders.Table.ItemsTableReview ItemList="Items" />
                 </div>
             </div>
@@ -143,6 +149,17 @@
         else
         {
             Toaster.Error(response.ErrorMessage);
+        }
+    }
+
+    private IEnumerable<OrderMovementEntryHistoryResponse>? Logs = null;
+    private async Task GetLogs()
+    {
+        var context = await _authenticationService.GetContext();
+        var response = await _orderService.GetOrderLogs(context.Tenant.Id.ToString(), orderId.ToString());
+        if (response.Successful())
+        {
+            Logs = response.Result;
         }
     }
 }

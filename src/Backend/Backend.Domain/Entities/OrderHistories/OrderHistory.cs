@@ -12,6 +12,7 @@ namespace Backend.Domain.Entities.OrderHistories
     {
         [Key]
         public Guid OrderHistoryId { get; set; }
+        public Guid TenantId { get; set; }
         public Guid OrderId { get; set; }
         public Guid OrderItemId { get; set; }
         public Guid OrderMovementType { get; set; }

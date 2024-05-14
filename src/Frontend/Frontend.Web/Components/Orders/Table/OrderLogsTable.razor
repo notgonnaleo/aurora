@@ -1,0 +1,42 @@
+﻿@using Backend.Domain.Entities.OrderHistories.Response
+@using Backend.Domain.Entities.Products
+@using Frontend.Web.Repository.Orders
+@using Frontend.Web.Services.Authentication
+@using MovementTypes = Backend.Domain.Enums.StockMovements.MovementType.MovementTypes;
+@inject OrderRepository _orderRepository;
+@inject AuthenticationService _authService;
+
+<div class="table-responsive @(Logs is not null && Logs.Any() ? string.Empty : "collapse")">
+    <table id="table" class="table w-100 table-bordered display text-nowrap dataTable">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Quantity</th>
+                <th>Movement Type</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Logs is not null && Logs.Any())
+            {
+                @foreach (var log in Logs)
+                {
+                    <tr>
+                        <td>@log.From.Agent.Name</td>
+                        <td>@log.To.Agent.Name</td>
+                        <td>@(((MovementTypes)log.OrderTotalItemsMovement).ToString()))</td>
+                        <td>@log.OrderMovementType</td>
+                        <td>@log.Item.ItemName</td>
+                        <td>@log.MovementTimestamp</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@code
+{
+    [Parameter] public IEnumerable<OrderMovementEntryHistoryResponse>? Logs { get; set; }
+}

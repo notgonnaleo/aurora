@@ -1,4 +1,5 @@
 ﻿using Backend.Domain.Entities.OrderHistories;
+using Backend.Domain.Entities.OrderHistories.Request;
 using Backend.Domain.Entities.OrderHistories.Response;
 using Backend.Domain.Entities.OrderItems;
 using Backend.Domain.Entities.OrderItems.Request;
@@ -214,10 +215,10 @@ namespace Backend.Infrastructure.Services.Orders
             return _appDbContext.SaveChanges() > 0;
         }
 
-        public IEnumerable<OrderMovementEntryHistoryResponse> GetOrderEntryHistoryLog(Guid orderId)
+        public IEnumerable<OrderMovementEntryHistoryResponse> GetOrderEntryHistoryLog(Guid tenantId, Guid orderId)
         {
-            var history = _appDbContext.OrderHistories.Where(x => x.OrderId == orderId).ToList();
-            var items = _appDbContext.OrderItems.Where(x => x.OrderId == orderId).ToList();
+            var history = _appDbContext.OrderHistories.Where(x => x.TenantId == tenantId && x.OrderId == orderId).ToList();
+            var items = _appDbContext.OrderItems.Where(x => x.TenantId == tenantId && x.OrderId == orderId).ToList();
             var entries = new List<OrderMovementEntryHistoryResponse>();
             foreach (var historyItem in history)
             {
@@ -227,8 +228,35 @@ namespace Backend.Infrastructure.Services.Orders
                     OrderHistoryId = historyItem.OrderHistoryId,
                     OrderTotalItemsMovement = historyItem.OrderTotalItemsMovement,
                     OrderMovementType = historyItem.OrderMovementType,
+                    From = _agentService.GetAgentDetails(historyItem.From),
+                    To = _agentService.GetAgentDetails(historyItem.To),
+                    MovementTimestamp = historyItem.Created.Value
                 });
             }
+            return entries;
+        }
+
+        public bool ExecuteOrderMovementAction(OrderMovementEntryHistoryRequest action)
+        {
+            var context = LoadContext();
+            var orderHistory = new OrderHistory()
+            {
+                TenantId = context.Tenant.Id,
+                OrderHistoryId = action.OrderHistoryId,
+                OrderId = action.OrderId,
+                OrderItemId = action.OrderItemId,
+                OrderMovementType = action.OrderMovementType,
+                OrderTotalItemsMovement = action.OrderTotalItemsMovement,
+                From = action.From,
+                To = action.To,
+                Active = true,
+                Created = DateTime.UtcNow,
+                CreatedBy = context.UserId, 
+                Updated = null,
+                UpdatedBy = null,                
+            };
+            _appDbContext.OrderHistories.Add(orderHistory);
+            return _appDbContext.SaveChanges() > 0;
         }
     }
 }

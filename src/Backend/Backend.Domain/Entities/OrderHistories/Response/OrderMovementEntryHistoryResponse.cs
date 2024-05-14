@@ -12,10 +12,11 @@ namespace Backend.Domain.Entities.OrderHistories.Response
     {
         public Guid OrderHistoryId { get; set; }
         public Guid OrderId { get; set; }
-        public Guid OrderMovementType { get; set; }
+        public int OrderMovementType { get; set; }
         public int OrderTotalItemsMovement { get; set; }
         public ItemThumbnail Item { get; set; }
         public AgentDetail From { get; set; }
         public AgentDetail To { get; set; }
+        public DateTime MovementTimestamp { get; set; }
     }
 }
