@@ -49,11 +49,10 @@
                     <div class="card w-100">
                         <div class="card-body p-4">
                             <h5 class="text card-title fw-semibold mb-4">Payment & Deadline</h5>
-                            @OrderDetails.OrderParcelAmount
-                            @OrderDetails.TotalParcels
-                            @OrderDetails.OrderTotalAmount
-                            @OrderDetails.OrderEffectiveDate
-                            @OrderDetails.OrderEstimatedDate
+                            <p>@OrderDetails.OrderParcelAmount</p>
+                            <p>@OrderDetails.TotalParcels</p>
+                            <p>@OrderDetails.OrderEffectiveDate</p>
+                            <p>@OrderDetails.OrderEstimatedDate</p>
                         </div>
                     </div>
                 </div>
@@ -61,7 +60,25 @@
                     <div class="card w-100">
                         <div class="card-body p-4">
                             <h5 class="text card-title fw-semibold mb-4">Contact</h5>
-                            @OrderDetails.OrderCode
+                            @if (OrderDetails.Customer.PhoneNumbers is not null && 
+                            OrderDetails.Customer.EmailAddresses is not null && 
+                            OrderDetails.Customer.Addresses is not null)
+                            {
+                                @foreach (var phone in OrderDetails.Customer.PhoneNumbers)
+                                {
+                                    <p>@phone.PhoneNumber</p>
+                                }
+                                @foreach (var email in OrderDetails.Customer.EmailAddresses)
+                                {
+                                    <p>@email.EmailAddress</p>
+                                }
+                                @foreach (var addr in OrderDetails.Customer.Addresses)
+                                {
+                                    <p>@addr.CityName @addr.Reference, @addr.CountryName</p>
+                                }
+                            }
+                            <p><strong>Customer Name</strong></p>: <p>@OrderDetails.Customer.Agent.Name</p>
+                            <p><strong>Seller Name</strong></p>: <p>@OrderDetails.Seller.Agent.Name</p>
                         </div>
                     </div>
                 </div>

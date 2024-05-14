@@ -25,6 +25,9 @@ namespace Backend.Domain.Entities.Orders.Response
         public DateTime OrderOpeningDate { get; set; }
         public DateTime OrderEstimatedDate { get; set; }
         public DateTime OrderEffectiveDate { get; set; }
+
+        public AgentDetail Seller { get; set; }
+        public AgentDetail Customer { get; set; }
     }
 
     public class OrderOpeningConfirmation
@@ -37,15 +40,5 @@ namespace Backend.Domain.Entities.Orders.Response
         public OrderStatus OrderStatus { get; set; }
         public EmployeeThumbnail Seller { get; set; }
         public CustomerThumbnail Customer { get; set; }
-    }
-
-    public class OrderEntity
-    {
-        public Guid TenantId { get; set; }
-        public Guid OrderId { get; set; }
-        public string OrderCode { get; set; }
-        public AgentDetail Seller { get; set; }
-        public AgentDetail Customer { get; set; }
-
     }
 }

@@ -78,11 +78,6 @@ namespace Backend.Infrastructure.Services.Orders
             return ordersThumbnails;
         }
 
-        public void GetOrderEntities(Guid tenantId, Guid orderId, string? orderCode)
-        {
-
-        }
-
         public OrderResponse GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {
             var orders = _appDbContext.Orders.Where(x => x.TenantId == tenantId && x.OrderId == orderId).FirstOrDefault();
@@ -111,6 +106,8 @@ namespace Backend.Infrastructure.Services.Orders
                 OrderEstimatedDate = orders.OrderEstimatedDate,
                 OrderOpeningDate = orders.OrderOpeningDate,
                 OrderCode = orders.OrderCode,
+                Customer = _agentService.GetAgentDetails(orders.CustomerId),
+                Seller = _agentService.GetAgentDetails(orders.SellerId),
                 OrderItems = orderItemsResponse,
                 OrderStatus = new OrderStatus() { OrderStatusId = orders.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)orders.OrderStatusId).ToString(), },
             };

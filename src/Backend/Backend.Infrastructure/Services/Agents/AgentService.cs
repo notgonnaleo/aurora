@@ -20,9 +20,7 @@ namespace Backend.Infrastructure.Services.Agents
 {
     public class AgentService : Service
     {
-
         private readonly AppDbContext _appDbContext;
-
         public AgentService(AppDbContext appDbContext, UserContextService main) : base(main)
         {
             _appDbContext = appDbContext;
@@ -112,15 +110,16 @@ namespace Backend.Infrastructure.Services.Agents
 
         public AgentDetail GetAgentDetails(Guid agentId)
         {
-            var agent = _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.Active);
+            var tenantId = LoadContext().Tenant.Id;
+            var agent = _appDbContext.Agents.FirstOrDefault(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active);
             agent.AgentType = _appDbContext.AgentTypes.FirstOrDefault(x => x.AgentTypeId == agent.AgentTypeId);    
             return new AgentDetail
             {
                 Agent = agent,
-                Profile = _appDbContext.Profiles.FirstOrDefault(x => x.AgentId == agent.AgentId && x.Active),
-                PhoneNumbers = _appDbContext.Phones.Where(x => x.AgentId == agentId && x.Active),
-                EmailAddresses = _appDbContext.Emails.Where(x => x.AgentId == agentId && x.Active),
-                Addresses = _appDbContext.Addresses.Where(x => x.AgentId == agentId && x.Active)
+                Profile = _appDbContext.Profiles.FirstOrDefault(x => x.TenantId == tenantId && x.AgentId == agent.AgentId && x.Active),
+                PhoneNumbers = _appDbContext.Phones.Where(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active),
+                EmailAddresses = _appDbContext.Emails.Where(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active),
+                Addresses = _appDbContext.Addresses.Where(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active)
             };
         }
 
