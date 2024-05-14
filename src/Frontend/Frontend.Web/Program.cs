@@ -4,7 +4,6 @@ using Frontend.Web.Repository.Agents;
 using Frontend.Web.Repository.Authentication;
 using Frontend.Web.Repository.Categories;
 using Frontend.Web.Repository.Client;
-using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Addresses;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Phones;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Profiles;
 using Frontend.Web.Repository.Contacts;
@@ -27,6 +26,9 @@ using Frontend.Web.Services.Contacts;
 using Sotsera.Blazor.Toaster.Core.Models;
 using Frontend.Web.Util.Cookie;
 using Frontend.Web.Components.Settings.Theme;
+using Frontend.Web.Repository.Orders;
+using Frontend.Web.Services.Orders;
+using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Addresses;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -43,13 +45,16 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }); // this should move to environment handler file
+builder.Services.AddScoped<AddressRepository>();
+builder.Services.AddScoped<AuthenticationRepository>();
+builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<AgentRepository>();
+builder.Services.AddScoped<AgentService>();
 builder.Services.AddScoped<CookieHandler>();
 builder.Services.AddScoped<SessionStorageAccessor>();
 builder.Services.AddScoped<HttpClientRepository>();
 builder.Services.AddScoped<HttpRequestHeader>();
 builder.Services.AddScoped<EnvironmentHandler>();
-builder.Services.AddScoped<AuthenticationService>();
-builder.Services.AddScoped<AuthenticationRepository>();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<TenantRepository>();
@@ -60,9 +65,8 @@ builder.Services.AddScoped<SubCategoryRepository>();
 builder.Services.AddScoped<SubCategoryService>();
 builder.Services.AddScoped<ProductVariantRepository>();
 builder.Services.AddScoped<ProductVariantService>();
-builder.Services.AddScoped<AgentRepository>();
-builder.Services.AddScoped<AgentService>();
-builder.Services.AddScoped<AddressRepository>();
+builder.Services.AddScoped<OrderRepository>();
+builder.Services.AddScoped<OrderService>();
 builder.Services.AddScoped<EmailAddressRepository>();
 builder.Services.AddScoped<PhoneRepository>();
 builder.Services.AddScoped<ProfileRepository>();

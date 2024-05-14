@@ -46,7 +46,7 @@ namespace Frontend.Web.Repository.Contacts
         public async Task<ApiResponse<Email>> CreateEmail(Email email)
         {
             var model = new RouteBuilder<Email>().Send(Endpoints.EmailAddresses, Methods.Default.POST, email);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<Email, Email>(model);
 
         }
 

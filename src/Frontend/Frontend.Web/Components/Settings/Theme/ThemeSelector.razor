@@ -2,10 +2,10 @@
 @inject ThemeSettingsFeatureSet _themeSettings
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 @inject NavigationManager Navigator
+@inject IJSRuntime JSRuntime
 
 <h5><strong>User theme</strong></h5>
 <div class="card card-body">
-    <label>Theme color</label>
     <div class="row">
         @foreach (var theme in Enum.GetValues(typeof(Themes)))
         {
@@ -17,7 +17,7 @@
         }
         @* Pelo amor de deus alguem coloca esse botao pra direita porque eu nao consigo  *@
         <div class="ml-auto">
-            <button class="btn btn-primary float-right" type="button" @onclick="SaveTheme">Save</button>
+            <button class="btn btn-primary text-end float-right" type="button" @onclick="SaveTheme">Save</button>
         </div>
     </div>
 </div>
@@ -29,6 +29,7 @@
     {
         var userTheme = await GetUserTheme();
         selectedThemeId = userTheme.ThemeId;
+        await JSRuntime.InvokeVoidAsync("changeAppTheme", selectedThemeId.ToString());
     }
     private bool IsThemeSelected(int themeId)
     {
@@ -42,13 +43,14 @@
     {
         selectedThemeId = Convert.ToInt32(e.Value);  
     }
-    private void SaveTheme()
+    private async void SaveTheme()
     {
         if(selectedThemeId > 1)
         {
             Toaster.Error("Invalid theme selected");
         }
         _themeSettings.SaveTheme(selectedThemeId);
+        await JSRuntime.InvokeVoidAsync("changeAppTheme", selectedThemeId.ToString());
         Navigator.NavigateTo(Navigator.Uri, true);
     }
 }

@@ -130,7 +130,7 @@ namespace Frontend.Web.Repository.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ApiResponse<T>> Post<T>(RouteBuilder<T> route)
+        public async Task<ApiResponse<TResponse>> Post<TRequest, TResponse>(RouteBuilder<TRequest> route)
         {
             try
             {
@@ -143,42 +143,28 @@ namespace Frontend.Web.Repository.Client
                 if (response.IsSuccessStatusCode)
                 {
                     var data = await response.Content.ReadAsStringAsync();
-                    try
+                    var deserializedData = JsonConvert.DeserializeObject<TResponse>(data);
+                    return new ApiResponse<TResponse>()
                     {
-                        var deserializedData = JsonConvert.DeserializeObject<T>(data);
-                        return new ApiResponse<T>()
-                        {
-                            StatusCode = 200,
-                            ErrorMessage = null,
-                            Result = deserializedData,
-                            Success = true,
-                        };
-                    }
-                    catch (JsonException)
-                    {
-                        // For boolean API responses.
-                        return new ApiResponse<T>()
-                        {
-                            StatusCode = 200,
-                            ErrorMessage = null,
-                            Result = default(T),
-                            ResultBoolean = JsonConvert.DeserializeObject<bool>(data),
-                            Success = true,
-                        };
-                    }
+                        StatusCode = 200,
+                        ErrorMessage = null,
+                        Result = deserializedData,
+                        Success = true,
+                    };
+ 
                 }
 
-                return new ApiResponse<T>()
+                return new ApiResponse<TResponse>()
                 {
                     StatusCode = (int)response.StatusCode,
                     ErrorMessage = await response.Content.ReadAsStringAsync(),
-                    Result = default(T),
+                    Result = default(TResponse),
                     Success = false,
                 };
             }
             catch (Exception ApiException)
             {
-                return new ApiResponse<T>()
+                return new ApiResponse<TResponse>()
                 {
                     StatusCode = 500,
                     ErrorMessage = ApiException.Message,
@@ -269,9 +255,9 @@ namespace Frontend.Web.Repository.Client
                 request.Content = new StringContent(JsonSerializer.Serialize(route.Body), httpRequestHeader.Encoding, httpRequestHeader.ContentType);
                 return await _httpClient.SendAsync(request);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
 
         }

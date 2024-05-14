@@ -26,6 +26,7 @@ using Backend.Infrastructure.Services.Profiles;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Stocks;
 using Microsoft.AspNetCore.Mvc;
+using Backend.Infrastructure.Services.Orders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,7 +62,6 @@ builder.Services.AddScoped<TenantService>();
 // Stock 
 builder.Services.AddScoped<StockService>();
 
-
 // User
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<UserContextService>();
@@ -71,6 +71,9 @@ builder.Services.AddScoped<PhoneService>();
 builder.Services.AddScoped<EmailAddressService>();
 builder.Services.AddScoped<AddressService>();
 builder.Services.AddScoped<ProfileService>();
+
+// Order
+builder.Services.AddScoped<OrderService>();
 
 /*
  * HOW TO UPDATE AND GENERATE MIGRATIONS:

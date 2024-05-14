@@ -1,4 +1,5 @@
 ﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Components.Placeholders.EmptyMessages
 @using Frontend.Web.Models.Client
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Products;
@@ -15,9 +16,9 @@
 }
 else
 {
-    if (Model!.Result is null)
+    if(Model!.Result is null || !Model.Result.Any())
     {
-        <h6>No items registered yet...</h6>
+        <EmptyListVersionA />
     }
     else
     {
@@ -28,7 +29,7 @@ else
                     <div class="card shadow-0 ">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                                <div class="col-md-12 col-lg-3 col-xl-3 mb-lg-0">
                                     <div class="bg-image hover-zoom ripple rounded ripple-surface">
                                         <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png"
                                              class="w-100" />
@@ -98,8 +99,12 @@ else
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        Model = await _productService.GetProducts(context.Tenant.Id.ToString());
-        if (Model.Successful())
+        var response = await _productService.GetProducts(context.Tenant.Id.ToString());
+        if (response.Successful())
+        {
+            Model = response;
+        }
+        else
         {
             Toaster.Error(Model.ErrorMessage);
         }

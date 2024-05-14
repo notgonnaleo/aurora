@@ -48,6 +48,7 @@ else
     {
         var theme = await _themeSettings.GetUserTheme();
         Theme = _themeSettings.ReturnThemeIdAsBoolean(theme.ThemeId);
+        await JS.InvokeVoidAsync("changeAppTheme", theme.ThemeId.ToString());
     }
 }
 

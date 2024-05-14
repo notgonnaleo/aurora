@@ -39,6 +39,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Addresses = "Addresses";
         public static string EmailAddresses = "EmailAddresses";
         public static string Stock = "Stock";
+        public static string Orders = "Orders";
     }
 
     /// <summary>
@@ -531,9 +532,9 @@ namespace Backend.Infrastructure.Enums.Modules
         }
         #endregion
 
+        #region Stocks
         public class Stock
         {
-
             public static class GET
             {
                 public static class GetStocks
@@ -581,7 +582,6 @@ namespace Backend.Infrastructure.Enums.Modules
                     }
                 }
             }
-
             public static class POST
             {
                 public static class AddStock
@@ -589,7 +589,6 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                 }
             }
-
             public static class PUT
             {
                 public static class UpdateStock
@@ -598,7 +597,6 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                 }
             }
-
             public static class DELETE
             {
                 public static class DeleteStock
@@ -607,8 +605,39 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                 }
             }
+        }
+        #endregion
 
-
+        public class Orders
+        {
+            public static class GET
+            {
+                public static class GetOrders
+                {
+                    public static string GetOrdersEndpointName = "GetOrders";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetOrder
+                {
+                    public static string GetOrderEndpointName = "GetOrder";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string orderId = "orderId";
+                        public static string orderCode = "orderCode";
+                    }
+                }
+            }
+            public static class POST
+            {
+                public static class OpenNewOrder
+                {
+                    public static string OpenNewOrderEndpointName = "OpenNewOrder";
+                }
+            }
         }
     }
 }
