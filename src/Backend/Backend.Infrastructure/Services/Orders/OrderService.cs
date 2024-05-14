@@ -70,12 +70,13 @@ namespace Backend.Infrastructure.Services.Orders
                     OrderOpeningDate = order.OrderOpeningDate,
                     OrderCode = order.OrderCode,
                     OrderItems = orderItemsResponse,
+                    OrderParcelAmount = order.ParcelsQuantity,
+                    OrderTotalAmount = order.OrderTotalAmount,
                     OrderStatus = new OrderStatus() { OrderStatusId = order.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)order.OrderStatusId).ToString(), },
                 });
             }
             return ordersThumbnails;
         }
-
 
         public OrderResponse GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {
@@ -105,6 +106,8 @@ namespace Backend.Infrastructure.Services.Orders
                 OrderEstimatedDate = orders.OrderEstimatedDate,
                 OrderOpeningDate = orders.OrderOpeningDate,
                 OrderCode = orders.OrderCode,
+                Customer = _agentService.GetAgentDetails(orders.CustomerId),
+                Seller = _agentService.GetAgentDetails(orders.SellerId),
                 OrderItems = orderItemsResponse,
                 OrderStatus = new OrderStatus() { OrderStatusId = orders.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)orders.OrderStatusId).ToString(), },
             };
@@ -116,7 +119,7 @@ namespace Backend.Infrastructure.Services.Orders
             newOrder.CreatedBy = LoadContext().UserId;
 
             var customer = _agentService.GetCustomer(newOrder.TenantId, newOrder.CustomerId);
-            var seller = _agentService.GetSeller(newOrder.TenantId, newOrder.SellerId);
+            var seller = _agentService.GetEmployee(newOrder.TenantId, newOrder.SellerId);
 
             // Abstract this
             if (customer is null)
@@ -144,7 +147,7 @@ namespace Backend.Infrastructure.Services.Orders
                         AgentId = customer.AgentId,
                         AgentDisplayName = customer.Name
                     },
-                    Seller = new Domain.Entities.Agents.Response.SellerThumbnail()
+                    Seller = new Domain.Entities.Agents.Response.EmployeeThumbnail()
                     {
                         AgentId = seller.AgentId,
                         AgentDisplayName = seller.Name

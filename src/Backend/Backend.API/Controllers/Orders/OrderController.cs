@@ -42,6 +42,19 @@ namespace Backend.API.Controllers.Orders
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet, Route("GetOrderEntities")]
+        public ActionResult GetOrderEntities(Guid tenantId, Guid orderId, string? orderCode)
+        {
+            try
+            {
+                return Ok(_orderService.GetOrder(tenantId, orderId, orderCode));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost, Route("OpenNewOrder")]
         public ActionResult OpenNewOrder(OrderRequest orderRequest)
         {

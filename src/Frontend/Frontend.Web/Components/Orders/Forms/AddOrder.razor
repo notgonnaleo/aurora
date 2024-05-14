@@ -1,14 +1,19 @@
-﻿@using Backend.Domain.Entities.Orders.Request
+﻿@using Backend.Domain.Entities.OrderItems.Request;
+@using Backend.Domain.Entities.Orders.Request
 @using Backend.Domain.Entities.Products
 @using Backend.Domain.Entities.Stocks
+@using Backend.Domain.Enums.EnumExtensions
 @using Frontend.Web.Components.Products.Dropdowns
 @using Frontend.Web.Services.Authentication
+@using Frontend.Web.Services.Orders;
 @using Frontend.Web.Services.Products
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager navigator;
 @inject ProductService _productService;
 @inject ProductVariantService _productVariantService
+@inject OrderService _orderService;
+@inject AuthenticationService _authenticationService;
 
 <div class="m-2 p-2">
     <i class="text ti ti-x cursor-pointer" @onclick="ToggleRightSidebar"></i>
@@ -56,12 +61,84 @@
     <div class="row">
         <Frontend.Web.Components.Orders.Table.ItemsTable ItemList="SelectedOrderItems" />
     </div>
+    <div class="row">
+        <div class="mb-2 col-sm-6">
+            <label for="parcel" class="form-label">Parcel Amount</label>
+            <input type="number" class="form-control" id="parcel" placeholder="Amount of parcels" min="1" @bind="newOrder.ParcelsQuantity">
+        </div>
+        <div class="mb-2 col-sm-6">
+            <label for="parcel" class="form-label">Payment Method</label>
+            <select class="form-select" @bind="newOrder.PaymentMethodId">
+                <option value="" disabled hidden selected>Select a payment method</option>
+                @foreach (var paymentTypeMethod in Enum.GetValues(typeof(Backend.Domain.Enums.Payments.PaymentTypesEnum)))
+                {
+                    <option value="@((int)paymentTypeMethod)">@(paymentTypeMethod.ToString())</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-2 col-sm-12">
+            <label for="date" class="form-label">Estimated Date</label>
+            <input type="datetime-local" class="form-control" id="date" placeholder="Estimated Date" @bind="newOrder.OrderEstimatedDate">
+        </div>
+    </div>
+</div>
+
+<div class="position-fixed bottom-0 m-9 mt-5 rounded">
+    <button type="button" @onclick="() => CreateNewOrder()" class="btn btn-primary">
+        Save <i class="ti ti-device-floppy"></i>
+    </button>
 </div>
 @code 
 {
     private IEnumerable<ProductVariant> variant = new List<ProductVariant>();
     private bool isInsertVariant = false;
     private void ShowVariantsDropdown() => isInsertVariant = !isInsertVariant;
+}
+
+@code
+{
+    private OrderRequest? newOrder = new OrderRequest();
+    private async void CreateNewOrder()
+    {
+        decimal TotalAmount = 0;
+        foreach (var item in SelectedOrderItems)
+        {
+            TotalAmount = item.Value;
+        }
+
+        var context = await _authenticationService.GetContext();
+        // criar construtor ficaria melhor mas to com preguica agr btw
+        newOrder.CustomerId = selectedCustomerId.Value;
+        newOrder.SellerId = selectedEmployeeId.Value;
+        newOrder.OrderTotalAmount = TotalAmount;
+        newOrder.TenantId = context.Tenant.Id;
+        newOrder.OrderItems = BuildOrderItems(SelectedOrderItems, context.Tenant.Id);
+        var response = await _orderService.OpenNewOrder(newOrder);
+        if (response.Successful())
+        {
+            Toaster.Success("OK");
+            navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
+    }
+
+    private IEnumerable<OrderItemsRequest> BuildOrderItems(IEnumerable<ItemThumbnail>? items, Guid tenantId)
+    {
+        return items.Select(x => new OrderItemsRequest()
+        {
+            ItemId = x.ProductId,
+            ItemQuantity = x.Quantity,
+            ItemVariantId = x.VariantId,
+            OrderItemId = Guid.Empty,
+            OrderId = Guid.Empty,
+            TenantId = tenantId
+        });
+    }
 }
 
 @code

@@ -33,6 +33,16 @@ namespace Backend.Domain.Entities.Orders
             CreatedBy = orderRequest.CustomerId;
             Updated = null;
             UpdatedBy = null;
+            PaymentMethodId = orderRequest.PaymentMethodId;
+            OrderTotalAmount = orderRequest.OrderTotalAmount;
+            ParcelsQuantity = ValidateParcelQuantity(orderRequest.ParcelsQuantity);
+        }
+
+        private int ValidateParcelQuantity(int parcelQuantity)
+        {
+            if (parcelQuantity <= 0) 
+                throw new ArgumentOutOfRangeException("Invalid parcel amount.");
+            return parcelQuantity;
         }
 
         public string GenerateOrderCode(DateTime openingDate)
@@ -59,7 +69,8 @@ namespace Backend.Domain.Entities.Orders
         public DateTime? OrderEffectiveDate { get; set; }
         public int OrderStatusId { get; set; }
         public decimal OrderTotalAmount { get; set; }
-
+        public int ParcelsQuantity { get; set; }
+        public int PaymentMethodId { get; set; }
         public Agent? Customer { get; set; }
         public Agent? Seller { get; set; }
     }

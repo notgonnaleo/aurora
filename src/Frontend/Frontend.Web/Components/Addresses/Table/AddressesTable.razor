@@ -1,6 +1,6 @@
 ﻿@using Backend.Domain.Entities.Addresses;
 <div class="card-body">
-    @if (Addresses.Any())
+    @if (Addresses is null || Addresses.Any())
     {
         <div class="table-responsive">
             <table class="table search-table align-middle text-nowrap">
@@ -54,7 +54,7 @@
 @code
 {
     [Parameter]
-    public IEnumerable<Address> Addresses { get; set; }
+    public IEnumerable<Address>? Addresses { get; set; }
 
     [Parameter]
     public bool ShowModal { get; set; }

@@ -12,8 +12,9 @@ namespace Backend.Domain.Entities.Orders.Request
         public Guid TenantId { get; set; }
         public Guid SellerId { get; set; }
         public Guid CustomerId { get; set; }
-        public int PaymentTypeId { get; set; }
+        public int PaymentMethodId { get; set; }
         public int ParcelsQuantity { get; set; }
+        public decimal OrderTotalAmount { get; set; }
         public DateTime OrderEstimatedDate { get; set; }
         public IEnumerable<OrderItemsRequest>? OrderItems { get; set; }
     }
