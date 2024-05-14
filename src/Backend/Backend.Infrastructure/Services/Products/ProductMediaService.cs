@@ -47,6 +47,7 @@ namespace Backend.Infrastructure.Services.Products
 
         public async Task<ProductMedia> Add(ProductMedia model)
         {
+
             var context = LoadContext();
             model.TenantId = context.Tenant.Id;
 
@@ -60,7 +61,7 @@ namespace Backend.Infrastructure.Services.Products
         public bool Update(ProductMedia model)
         {
             var context = LoadContext();
-            if(model.TenantId != context.Tenant.Id) throw new Exception(Localization.GenericValidations.ErrorWrongTenant(context.Language));
+            if (model.TenantId != context.Tenant.Id) throw new Exception(Localization.GenericValidations.ErrorWrongTenant(context.Language));
 
             model.Updated = DateTime.UtcNow;
             model.UpdatedBy = context.UserId;
@@ -78,6 +79,8 @@ namespace Backend.Infrastructure.Services.Products
             _appDbContext.Update(model);
             return _appDbContext.SaveChanges() > 0;
         }
+
+        
 
     }
 }
