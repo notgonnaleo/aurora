@@ -69,29 +69,5 @@ namespace Frontend.Web.Repository.Products
             return (await _httpClientRepository.Put(request)).Success;
         }
 
-        public async Task<ApiResponse<ProductVariant>> UpdateProductVariant(ProductVariant variant)
-        {
-            var model = new RouteBuilder<ProductVariant>().Send(Endpoints.ProductVariants, Methods.Default.PUT, variant);
-            return await _httpClientRepository.Put(model);
-        }
-
-        public async Task<bool> DeleteVariant(string tenantId, string variantId)
-        {
-            var parameters = new List<RouteParameterRequest>()
-                {
-                    new RouteParameterRequest()
-                    {
-                        ParameterName = Methods.ProductVariants.DELETE.DeleteVariant.tenantId,
-                        ParameterValue = tenantId,
-                    },
-                    new RouteParameterRequest()
-                    {
-                        ParameterName = Methods.ProductVariants.DELETE.DeleteVariant.variantId,
-                        ParameterValue = variantId,
-                    }
-                };
-            var request = new RouteBuilder<ProductVariant>().SendMultiple(Endpoints.ProductVariants, Methods.Default.DELETE, parameters);
-            return (await _httpClientRepository.Put(request)).Success;
-        }
     }
 }

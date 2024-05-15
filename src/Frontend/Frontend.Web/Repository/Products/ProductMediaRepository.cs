@@ -21,7 +21,9 @@ namespace Frontend.Web.Repository.Products
         public async Task<ApiResponse<ProductMedia>> CreateProductMedia(ProductMedia productmedia)
         {
             var model = new RouteBuilder<ProductMedia>().Send(Endpoints.ProductMedia, Methods.Default.POST, productmedia);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<ProductMedia,ProductMedia>(model);
         }
+
+        
     }
 }
