@@ -101,7 +101,7 @@ namespace Frontend.Web.Repository.Orders
                     ParameterValue = orderId,
                 }
             };
-            var model = new RouteBuilder<OrderMovementEntryHistoryResponse>().Send(Endpoints.Orders, "GetOrderEntryHistoryLog", parameters);
+            var model = new RouteBuilder<OrderMovementEntryHistoryResponse>().SendMultiple(Endpoints.Orders, "GetOrderEntryHistoryLog", parameters);
             return await _httpClientRepository.Get(model);
         }
         public async Task<ApiResponse<bool>> ExecuteOrderMovement(OrderMovementEntryHistoryRequest request)

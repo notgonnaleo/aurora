@@ -6,31 +6,35 @@
 @inject OrderRepository _orderRepository;
 @inject AuthenticationService _authService;
 
-<div class="table-responsive @(Logs is not null && Logs.Any() ? string.Empty : "collapse")">
-    <table id="table" class="table w-100 table-bordered display text-nowrap dataTable">
+<div class="table-responsive">
+    <table id="table" class="table search-table align-middle text-nowrap table-fixed">
         <thead>
             <tr>
-                <th>From</th>
-                <th>To</th>
+                <th>From - To</th>
                 <th>Quantity</th>
                 <th>Movement Type</th>
+                <th>Item Name</th>
                 <th>Date</th>
             </tr>
         </thead>
         <tbody>
-            @if (Logs is not null && Logs.Any())
+            @foreach (var log in Logs)
             {
-                @foreach (var log in Logs)
-                {
-                    <tr>
-                        <td>@log.From.Agent.Name</td>
-                        <td>@log.To.Agent.Name</td>
-                        <td>@(((MovementTypes)log.OrderTotalItemsMovement).ToString()))</td>
-                        <td>@log.OrderMovementType</td>
-                        <td>@log.Item.ItemName</td>
-                        <td>@log.MovementTimestamp</td>
-                    </tr>
-                }
+                <tr>
+                    <td>
+                        @log.From.Agent.Name
+                        <span>
+                            <i class="@(log.OrderMovementType == (int)MovementTypes.Input ? "ti ti-arrow-right text-success fs-4" : "ti ti-arrow-left text-danger fs-4")"></i>
+                        </span>
+                        @log.To.Agent.Name
+                    </td>
+                    <td>@log.OrderTotalItemsMovement</td>
+                    <td>
+                        <span class="badge @(log.OrderMovementType == (int)MovementTypes.Input ? "bg-primary" : "bg-danger")">@(((MovementTypes)log.OrderMovementType).ToString())</span>
+                    </td>
+                    <td>@log.Item.ItemName</td>
+                    <td>@log.MovementTimestamp</td>
+                </tr>
             }
         </tbody>
     </table>

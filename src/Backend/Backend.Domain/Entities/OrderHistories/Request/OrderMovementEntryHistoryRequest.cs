@@ -11,7 +11,7 @@ namespace Backend.Domain.Entities.OrderHistories.Request
         public Guid OrderHistoryId { get; set; }
         public Guid OrderId { get; set; }
         public Guid OrderItemId { get; set; }
-        public Guid OrderMovementType { get; set; }
+        public int OrderMovementType { get; set; }
         public int OrderTotalItemsMovement { get; set; }
         public Guid From { get; set; }
         public Guid To { get; set; }

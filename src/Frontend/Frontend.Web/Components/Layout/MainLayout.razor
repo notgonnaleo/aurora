@@ -42,7 +42,6 @@ else
 
 @code
 {   
-    
     private bool Theme = true;
     private async void LoadAppTheme()
     {
@@ -73,6 +72,7 @@ else
         LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
         Redirect(isAuthenticated);
+        await JS.InvokeVoidAsync("googleTranslateElementInit");
         isLoading = false;
     }
 

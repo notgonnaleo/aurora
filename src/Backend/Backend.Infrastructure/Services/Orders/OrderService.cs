@@ -42,7 +42,7 @@ namespace Backend.Infrastructure.Services.Orders
         public IEnumerable<OrderResponse> GetOrders(Guid tenantId)
         {
             // this sucks part 2
-            var orders = _appDbContext.Orders.Where(x => x.TenantId == tenantId).ToList();
+            var orders = _appDbContext.Orders.Where(x => x.TenantId == tenantId && x.Active).ToList();
             if (orders is null) return new List<OrderResponse>();
             var ordersThumbnails = new List<OrderResponse>();
 
@@ -222,6 +222,12 @@ namespace Backend.Infrastructure.Services.Orders
             var entries = new List<OrderMovementEntryHistoryResponse>();
             foreach (var historyItem in history)
             {
+                var orderItem = _appDbContext.OrderItems.FirstOrDefault(x => x.OrderItemId == historyItem.OrderItemId);
+                if (orderItem is null)
+                {
+                    continue;
+                }
+
                 entries.Add(new OrderMovementEntryHistoryResponse()
                 {
                     OrderId = historyItem.OrderId,
@@ -230,7 +236,19 @@ namespace Backend.Infrastructure.Services.Orders
                     OrderMovementType = historyItem.OrderMovementType,
                     From = _agentService.GetAgentDetails(historyItem.From),
                     To = _agentService.GetAgentDetails(historyItem.To),
-                    MovementTimestamp = historyItem.Created.Value
+                    MovementTimestamp = historyItem.Created.Value,
+                    Item = new ItemThumbnail()
+                    {
+                        ProductId = orderItem.ProductId,
+                        VariantId = orderItem.VariantId,
+                        ItemName = orderItem.VariantId.HasValue && orderItem.VariantId.Value != Guid.Empty 
+                        ? _productVariantService.GetVariant(orderItem.TenantId, orderItem.ProductId, orderItem.VariantId.Value).Name : _productService.GetById(orderItem.TenantId, orderItem.ProductId).Name,
+                        OrderItemId = orderItem.OrderItemId,
+                        ItemValue = orderItem.ItemUnitAmount,
+                        Quantity = orderItem.ItemQuantity,
+                        Value = orderItem.ItemTotalAmount
+                    }
+
                 });
             }
             return entries;
