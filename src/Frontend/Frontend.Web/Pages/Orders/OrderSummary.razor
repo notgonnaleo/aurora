@@ -10,7 +10,6 @@
 @inject AuthenticationService _authenticationService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
-<PageTitle>Aurora - Order Summary #@(OrderDetails.OrderCode)</PageTitle>
 @if(Items is not null && Items.Any())
 {
     <aside class="right-sidebar @formCssClass">
@@ -62,24 +61,23 @@
                     <div class="card w-100">
                         
                         <div class="card-body p-4">
-
                             <h5 class="card-title fw-semibold mb-4">Actions</h5>
-                            <div class="row text-center">
+                            <div class="row text-center pt-4">
                                 <div class="col">
-                                    <span><i class="ti ti-file-like fs-13"></i></span>
-                                    <p>Aprovar</p>
+                                    <span><i class="ti ti-file-like fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer">Aprovar</p>
                                 </div>
                                 <div class="col">
-                                    <span><i class="ti ti-file-description fs-13"></i></span>
-                                    <p>Relatório</p>
+                                    <span><i class="ti ti-file-description fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer">Relatório</p>
                                 </div>
                                 <div class="col">
-                                    <span><i class="ti ti-mail fs-13"></i></span>
-                                    <p>Email</p>
+                                    <span><i class="ti ti-mail fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer">Email</p>
                                 </div>
                                 <div class="col">
-                                    <span><i class="ti ti-file-off fs-13"></i></span>
-                                    <p>Recusar</p>
+                                    <span><i class="ti ti-file-off fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer">Recusar</p>
                                 </div>
                             </div>
                         </div>
@@ -97,26 +95,21 @@
                                 <div class="col">
                                     <p><strong>Cliente:</strong></p>
                                     <p>@OrderDetails.Customer.Agent.Name</p>
-                                    
                                 </div>
-                                <div class="col">
-                                    <p><strong>Data de Abertura</strong></p>
-                                    <p>@OrderDetails.OrderOpeningDate.Date</p>
-                                </div>
-                                <div class="col">
-                                    <p><strong>Método de Pagamento</strong></p>
-                                    <p>Cartão</p>
-                                </div>
-                            </div>
-
-                            <div class="row text-center mb-4 align-items-center">
                                 <div class="col">
                                     <p><strong>Emissor:</strong></p>
                                     <p>Aurora</p>
                                 </div>
                                 <div class="col">
-                                    <p><strong>Data Estimada</strong></p>
-                                    <p>@OrderDetails.OrderEstimatedDate</p>
+                                    <p><strong>Responsável</strong></p>
+                                    <p>@OrderDetails.Seller.Agent.Name</p>
+                                </div>
+                            </div>
+
+                            <div class="row text-center mb-4 align-items-center">
+                                <div class="col">
+                                    <p><strong>Método de Pagamento</strong></p>
+                                    <p>Cartão</p>
                                 </div>
                                 <div class="col">
                                     <p><strong>Total de Parcelas</strong></p>
@@ -126,19 +119,21 @@
 
                             <div class="row text-center mb-4 align-items-center">
                                 <div class="col">
-                                    <p><strong>Responsável</strong></p>
-                                    <p>@OrderDetails.Seller.Agent.Name</p>
+                                    <p><strong>Data Estimada</strong></p>
+                                    <p>@OrderDetails.OrderEstimatedDate</p>
                                 </div>
                                 <div class="col">
-                                    <p><strong></strong></p>
-                                    <p></p>
+                                    <p><strong>Data de Abertura</strong></p>
+                                    <p>@OrderDetails.OrderOpeningDate.Date</p>
                                 </div>
+                            </div>
+
+                            <div class="row text-center mb-4 align-items-center">
                                 <div class="col">
                                     <p><strong>Valor Total</strong></p>
                                     <p>@(OrderDetails.OrderTotalAmount == null ? 5000 : OrderDetails.OrderTotalAmount)</p>
                                 </div>
                             </div>
-                           
 
                             @* <p>@OrderDetails.OrderParcelAmount</p>
                             <p>@OrderDetails.TotalParcels</p>
