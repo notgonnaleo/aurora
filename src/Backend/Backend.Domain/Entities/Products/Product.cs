@@ -106,6 +106,7 @@ namespace Backend.Domain.Entities.Products
 
     public class ItemThumbnail
     {
+        public Guid? OrderItemId { get; set; }
         public int ItemSequence { get; set; }
         public Guid ProductId { get; set; }
         public Guid? VariantId { get; set; }

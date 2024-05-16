@@ -9,7 +9,6 @@
 @inject NavigationManager navigator;
 @inject AgentService _agentService;
 
-
 <aside class="left-sidebar d-print-none" data-bs-theme=@(Theme ? "light" : "dark")>
     <div class="">
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -21,6 +20,7 @@
                     <strong>Aurora</strong>
                 </h3>
             </a>
+            <div id="google_translate_element"></div>
             <div class="close-btn text d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse" @onclick="ToggleNavMenu">
                 <i class="ti ti-x fs-8"></i>
             </div>

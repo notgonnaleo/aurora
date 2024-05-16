@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.Contacts;
+using Backend.Domain.Entities.OrderHistories;
 using Backend.Domain.Entities.OrderItems;
 using Backend.Domain.Entities.Orders;
 using Backend.Domain.Entities.Payments;
@@ -56,6 +57,8 @@ namespace Backend.Infrastructure.Context
         public DbSet<Phone> Phones { get; set; }
         public DbSet<Email> Emails { get; set; }
         public DbSet<Profile> Profiles { get; set; }
+
+        public DbSet<OrderHistory> OrderHistories { get; set; }
 
     }
 }

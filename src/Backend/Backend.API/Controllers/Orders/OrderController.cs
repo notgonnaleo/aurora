@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.OrderItems.Request;
+﻿using Backend.Domain.Entities.OrderHistories.Request;
+using Backend.Domain.Entities.OrderItems.Request;
 using Backend.Domain.Entities.Orders.Request;
 using Backend.Domain.Entities.Orders.Response;
 using Backend.Infrastructure.Services.Orders;
@@ -87,6 +88,32 @@ namespace Backend.API.Controllers.Orders
             try
             {
                 return Ok(_orderService.RemoveOrderItem(orderRequest));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpGet, Route("GetOrderEntryHistoryLog")]
+        public ActionResult GetOrderEntryHistoryLog(Guid tenantId, Guid orderId)
+        {
+            try
+            {
+                return Ok(_orderService.GetOrderEntryHistoryLog(tenantId, orderId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPost, Route("ExecuteOrderMovementAction")]
+        public ActionResult ExecuteOrderMovementAction(OrderMovementEntryHistoryRequest action)
+        {
+            try
+            {
+                return Ok(_orderService.ExecuteOrderMovementAction(action));
             }
             catch (Exception ex)
             {
