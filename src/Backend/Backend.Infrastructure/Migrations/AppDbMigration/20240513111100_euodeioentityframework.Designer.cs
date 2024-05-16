@@ -3,6 +3,7 @@ using System;
 using Backend.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Infrastructure.Migrations.AppDbMigration
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240513111100_euodeioentityframework")]
+    partial class euodeioentityframework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -259,7 +262,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(836),
+                            Created = new DateTime(2024, 5, 13, 11, 10, 59, 802, DateTimeKind.Utc).AddTicks(970),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -377,53 +380,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             Primary = true,
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
-                });
-
-            modelBuilder.Entity("Backend.Domain.Entities.OrderHistories.OrderHistory", b =>
-                {
-                    b.Property<Guid>("OrderHistoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedBy")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("From")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("OrderItemId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("OrderMovementType")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrderTotalItemsMovement")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("To")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("UpdatedBy")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("OrderHistoryId");
-
-                    b.ToTable("OrderHistories");
                 });
 
             modelBuilder.Entity("Backend.Domain.Entities.OrderItems.OrderItem", b =>
@@ -767,11 +723,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("97901075-f6da-48b1-8216-97302f5576f6"),
+                            ProductId = new Guid("82296685-02da-4904-9d16-603216b8c45a"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(1015),
+                            Created = new DateTime(2024, 5, 13, 11, 10, 59, 802, DateTimeKind.Utc).AddTicks(1150),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -786,10 +742,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         },
                         new
                         {
-                            ProductId = new Guid("39cafd27-f6be-4bb8-9553-ce8e2dad46da"),
+                            ProductId = new Guid("1fe0e6a9-b474-432d-93df-5d4bd3debbdf"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(1025),
+                            Created = new DateTime(2024, 5, 13, 11, 10, 59, 802, DateTimeKind.Utc).AddTicks(1156),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -1065,7 +1021,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(973),
+                            Created = new DateTime(2024, 5, 13, 11, 10, 59, 802, DateTimeKind.Utc).AddTicks(1101),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });

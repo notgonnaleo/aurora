@@ -1,4 +1,7 @@
-﻿using Backend.Domain.Entities.OrderItems;
+﻿using Backend.Domain.Entities.OrderHistories;
+using Backend.Domain.Entities.OrderHistories.Request;
+using Backend.Domain.Entities.OrderHistories.Response;
+using Backend.Domain.Entities.OrderItems;
 using Backend.Domain.Entities.OrderItems.Request;
 using Backend.Domain.Entities.OrderItems.Response;
 using Backend.Domain.Entities.Orders;
@@ -39,7 +42,7 @@ namespace Backend.Infrastructure.Services.Orders
         public IEnumerable<OrderResponse> GetOrders(Guid tenantId)
         {
             // this sucks part 2
-            var orders = _appDbContext.Orders.Where(x => x.TenantId == tenantId).ToList();
+            var orders = _appDbContext.Orders.Where(x => x.TenantId == tenantId && x.Active).ToList();
             if (orders is null) return new List<OrderResponse>();
             var ordersThumbnails = new List<OrderResponse>();
 
@@ -70,12 +73,13 @@ namespace Backend.Infrastructure.Services.Orders
                     OrderOpeningDate = order.OrderOpeningDate,
                     OrderCode = order.OrderCode,
                     OrderItems = orderItemsResponse,
+                    OrderParcelAmount = order.ParcelsQuantity,
+                    OrderTotalAmount = order.OrderTotalAmount,
                     OrderStatus = new OrderStatus() { OrderStatusId = order.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)order.OrderStatusId).ToString(), },
                 });
             }
             return ordersThumbnails;
         }
-
 
         public OrderResponse GetOrder(Guid tenantId, Guid orderId, string? orderCode)
         {
@@ -105,6 +109,8 @@ namespace Backend.Infrastructure.Services.Orders
                 OrderEstimatedDate = orders.OrderEstimatedDate,
                 OrderOpeningDate = orders.OrderOpeningDate,
                 OrderCode = orders.OrderCode,
+                Customer = _agentService.GetAgentDetails(orders.CustomerId),
+                Seller = _agentService.GetAgentDetails(orders.SellerId),
                 OrderItems = orderItemsResponse,
                 OrderStatus = new OrderStatus() { OrderStatusId = orders.OrderStatusId, OrderStatusName = ((OrdersStatusEnums)orders.OrderStatusId).ToString(), },
             };
@@ -116,7 +122,7 @@ namespace Backend.Infrastructure.Services.Orders
             newOrder.CreatedBy = LoadContext().UserId;
 
             var customer = _agentService.GetCustomer(newOrder.TenantId, newOrder.CustomerId);
-            var seller = _agentService.GetSeller(newOrder.TenantId, newOrder.SellerId);
+            var seller = _agentService.GetEmployee(newOrder.TenantId, newOrder.SellerId);
 
             // Abstract this
             if (customer is null)
@@ -144,7 +150,7 @@ namespace Backend.Infrastructure.Services.Orders
                         AgentId = customer.AgentId,
                         AgentDisplayName = customer.Name
                     },
-                    Seller = new Domain.Entities.Agents.Response.SellerThumbnail()
+                    Seller = new Domain.Entities.Agents.Response.EmployeeThumbnail()
                     {
                         AgentId = seller.AgentId,
                         AgentDisplayName = seller.Name
@@ -206,6 +212,68 @@ namespace Backend.Infrastructure.Services.Orders
         public bool AddOrder(Order order)
         {
             _appDbContext.Orders.Add(order);
+            return _appDbContext.SaveChanges() > 0;
+        }
+
+        public IEnumerable<OrderMovementEntryHistoryResponse> GetOrderEntryHistoryLog(Guid tenantId, Guid orderId)
+        {
+            var history = _appDbContext.OrderHistories.Where(x => x.TenantId == tenantId && x.OrderId == orderId).ToList();
+            var items = _appDbContext.OrderItems.Where(x => x.TenantId == tenantId && x.OrderId == orderId).ToList();
+            var entries = new List<OrderMovementEntryHistoryResponse>();
+            foreach (var historyItem in history)
+            {
+                var orderItem = _appDbContext.OrderItems.FirstOrDefault(x => x.OrderItemId == historyItem.OrderItemId);
+                if (orderItem is null)
+                {
+                    continue;
+                }
+
+                entries.Add(new OrderMovementEntryHistoryResponse()
+                {
+                    OrderId = historyItem.OrderId,
+                    OrderHistoryId = historyItem.OrderHistoryId,
+                    OrderTotalItemsMovement = historyItem.OrderTotalItemsMovement,
+                    OrderMovementType = historyItem.OrderMovementType,
+                    From = _agentService.GetAgentDetails(historyItem.From),
+                    To = _agentService.GetAgentDetails(historyItem.To),
+                    MovementTimestamp = historyItem.Created.Value,
+                    Item = new ItemThumbnail()
+                    {
+                        ProductId = orderItem.ProductId,
+                        VariantId = orderItem.VariantId,
+                        ItemName = orderItem.VariantId.HasValue && orderItem.VariantId.Value != Guid.Empty 
+                        ? _productVariantService.GetVariant(orderItem.TenantId, orderItem.ProductId, orderItem.VariantId.Value).Name : _productService.GetById(orderItem.TenantId, orderItem.ProductId).Name,
+                        OrderItemId = orderItem.OrderItemId,
+                        ItemValue = orderItem.ItemUnitAmount,
+                        Quantity = orderItem.ItemQuantity,
+                        Value = orderItem.ItemTotalAmount
+                    }
+
+                });
+            }
+            return entries;
+        }
+
+        public bool ExecuteOrderMovementAction(OrderMovementEntryHistoryRequest action)
+        {
+            var context = LoadContext();
+            var orderHistory = new OrderHistory()
+            {
+                TenantId = context.Tenant.Id,
+                OrderHistoryId = action.OrderHistoryId,
+                OrderId = action.OrderId,
+                OrderItemId = action.OrderItemId,
+                OrderMovementType = action.OrderMovementType,
+                OrderTotalItemsMovement = action.OrderTotalItemsMovement,
+                From = action.From,
+                To = action.To,
+                Active = true,
+                Created = DateTime.UtcNow,
+                CreatedBy = context.UserId, 
+                Updated = null,
+                UpdatedBy = null,                
+            };
+            _appDbContext.OrderHistories.Add(orderHistory);
             return _appDbContext.SaveChanges() > 0;
         }
     }

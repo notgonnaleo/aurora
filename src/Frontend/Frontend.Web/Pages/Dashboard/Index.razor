@@ -5,8 +5,6 @@
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager Navigator
 
-<PageTitle>Aurora - Dashboard</PageTitle>
-
 @if (isLoading)
 {
     <Frontend.Web.Components.Loader.LoadingSpinner />
@@ -19,7 +17,7 @@ else
                 <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated Profile=@dashboardProfile />
             </div>
             <div class="col-md-2">
-                <div class="card card-body bg-success">
+                <div class="card card-body bg-success" style="height: 205px;">
                     <h2>
                         <i class="ti ti-building-store cursor-pointer m-2" style="color: #fff"></i>
                     </h2>
@@ -30,7 +28,7 @@ else
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="card card-body bg-warning">
+                <div class="card card-body bg-warning" style="height: 205px;">
                     <h2>
                         <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
                     </h2>
@@ -41,7 +39,7 @@ else
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="card card-body bg-danger">
+                <div class="card card-body bg-danger" style="height: 205px;">
                     <h2>
                         <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
                     </h2>
@@ -52,14 +50,14 @@ else
                 </div>
             </div>
             <div class="col-md-2">
-                <div class="card card-body" style="background-color: #5e00c5">
+                <div class="card card-body" style="background-color: #5e00c5; height: 205px;">
                     <h2>
                         <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
                     </h2>
                     <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
                         <strong>65</strong>
                     </h3>
-                    <p class="text-light mb-0"><strong>Closed orders</strong> (30 days ago)</p>
+                    <p class="text-light mb-0"><strong>Closed orders</strong></p>
                 </div>
             </div>
         </div>

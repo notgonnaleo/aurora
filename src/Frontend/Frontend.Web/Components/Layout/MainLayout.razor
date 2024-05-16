@@ -42,12 +42,12 @@ else
 
 @code
 {   
-    
     private bool Theme = true;
     private async void LoadAppTheme()
     {
         var theme = await _themeSettings.GetUserTheme();
         Theme = _themeSettings.ReturnThemeIdAsBoolean(theme.ThemeId);
+        await JS.InvokeVoidAsync("changeAppTheme", theme.ThemeId.ToString());
     }
 }
 

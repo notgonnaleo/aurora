@@ -31,7 +31,7 @@
     {
         var selectedProductId = e.Value.ToString();
         ProductDetail selectedProduct = products.Where(x => x.ProductId == Guid.Parse(selectedProductId)).FirstOrDefault();
-        await Product.InvokeAsync(new ProductThumbnail() { ProductId = selectedProduct.ProductId, ProductName = selectedProduct.Name });
+        await Product.InvokeAsync(new ProductThumbnail() { ProductId = selectedProduct.ProductId, ProductName = selectedProduct.Name, ItemValue = Convert.ToDecimal(selectedProduct.Value) });
     }
 }
 

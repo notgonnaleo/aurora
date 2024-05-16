@@ -18,8 +18,8 @@ namespace Backend.Domain.Entities.Agents.Response
         public AgentType AgentType { get; set; } = new AgentType() { AgentTypeId = (int)AgentTypes.Customer, AgentTypeName = (AgentTypes.Customer).ToString() }; 
     }
 
-    public class SellerThumbnail : AgentThumbnailResponse
+    public class EmployeeThumbnail : AgentThumbnailResponse
     {
-        public AgentType AgentType { get; set; } = new AgentType() { AgentTypeId = (int)AgentTypes.Seller, AgentTypeName = (AgentTypes.Seller).ToString() };
+        public AgentType AgentType { get; set; } = new AgentType() { AgentTypeId = (int)AgentTypes.Employee, AgentTypeName = (AgentTypes.Employee).ToString() };
     }
 }

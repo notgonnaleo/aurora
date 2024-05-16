@@ -1,4 +1,5 @@
-﻿using Backend.Domain.Entities.Agents.Response;
+﻿using Backend.Domain.Entities.Agents;
+using Backend.Domain.Entities.Agents.Response;
 using Backend.Domain.Entities.OrderItems.Response;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,9 @@ namespace Backend.Domain.Entities.Orders.Response
         public DateTime OrderOpeningDate { get; set; }
         public DateTime OrderEstimatedDate { get; set; }
         public DateTime OrderEffectiveDate { get; set; }
+
+        public AgentDetail Seller { get; set; }
+        public AgentDetail Customer { get; set; }
     }
 
     public class OrderOpeningConfirmation
@@ -34,7 +38,7 @@ namespace Backend.Domain.Entities.Orders.Response
         public DateTime OrderOpeningDate { get; set; }
         public DateTime OrderEstimatedDate { get; set; }
         public OrderStatus OrderStatus { get; set; }
-        public SellerThumbnail Seller { get; set; }
+        public EmployeeThumbnail Seller { get; set; }
         public CustomerThumbnail Customer { get; set; }
     }
 }

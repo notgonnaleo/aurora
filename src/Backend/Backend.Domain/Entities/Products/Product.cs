@@ -106,16 +106,20 @@ namespace Backend.Domain.Entities.Products
 
     public class ItemThumbnail
     {
+        public Guid? OrderItemId { get; set; }
         public int ItemSequence { get; set; }
         public Guid ProductId { get; set; }
         public Guid? VariantId { get; set; }
         public string ItemName { get; set; }
         public int Quantity { get; set; }
+        public decimal ItemValue { get; set; }
+        public decimal Value { get; set; }
     }
 
     public class ProductThumbnail 
     {
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
+        public decimal ItemValue { get; set; }
     }
 }

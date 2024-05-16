@@ -1,4 +1,6 @@
-﻿using Backend.Domain.Entities.Orders.Request;
+﻿using Backend.Domain.Entities.OrderHistories.Request;
+using Backend.Domain.Entities.OrderHistories.Response;
+using Backend.Domain.Entities.Orders.Request;
 using Backend.Domain.Entities.Orders.Response;
 using Frontend.Web.Models.Client;
 using Frontend.Web.Repository.Orders;
@@ -23,6 +25,14 @@ namespace Frontend.Web.Services.Orders
         public async Task<ApiResponse<OrderOpeningConfirmation>> OpenNewOrder(OrderRequest orderRequest)
         {
             return await _orderRepository.OpenNewOrder(orderRequest);
+        }
+        public async Task<ApiResponse<IEnumerable<OrderMovementEntryHistoryResponse>>> GetOrderLogs(string tenantId, string orderId)
+        {
+            return await _orderRepository.GetOrderEntryHistoryLog(tenantId, orderId);
+        }
+        public async Task<ApiResponse<bool>> ExecuteMovement(OrderMovementEntryHistoryRequest orderRequest)
+        {
+            return await _orderRepository.ExecuteOrderMovement(orderRequest);
         }
     }
 }
