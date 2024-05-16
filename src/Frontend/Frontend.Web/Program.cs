@@ -74,5 +74,9 @@ builder.Services.AddScoped<ContactService>();
 builder.Services.AddScoped<StockRepository>();
 builder.Services.AddScoped<StockService>();
 builder.Services.AddScoped<ThemeSettingsFeatureSet>();
+builder.Services.AddScoped<ProductMediaService>();
+builder.Services.AddScoped<ProductMediaRepository>();
+
+
 
 await builder.Build().RunAsync();
