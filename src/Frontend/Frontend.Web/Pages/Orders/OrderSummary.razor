@@ -60,21 +60,91 @@
                 </div>
                 <div class="col-lg-8 d-flex align-items-stretch">
                     <div class="card w-100">
+                        
                         <div class="card-body p-4">
+
                             <h5 class="card-title fw-semibold mb-4">Actions</h5>
+                            <div class="row text-center">
+                                <div class="col">
+                                    <span><i class="ti ti-file-like fs-13"></i></span>
+                                    <p>Aprovar</p>
+                                </div>
+                                <div class="col">
+                                    <span><i class="ti ti-file-description fs-13"></i></span>
+                                    <p>Relatório</p>
+                                </div>
+                                <div class="col">
+                                    <span><i class="ti ti-mail fs-13"></i></span>
+                                    <p>Email</p>
+                                </div>
+                                <div class="col">
+                                    <span><i class="ti ti-file-off fs-13"></i></span>
+                                    <p>Recusar</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-8 d-flex align-items-stretch">
                     <div class="card w-100">
                         <div class="card-body p-4">
-                            <h5 class="text card-title fw-semibold mb-4">Payment & Deadline</h5>
-                            <p>@OrderDetails.OrderParcelAmount</p>
+                            <h5 class="text card-title fw-semibold mb-5">Payment & Deadline</h5>
+
+                            <div class="row text-center mb-4 align-items-center">
+                                <div class="col">
+                                    <p><strong>Cliente:</strong></p>
+                                    <p>@OrderDetails.Customer.Agent.Name</p>
+                                    
+                                </div>
+                                <div class="col">
+                                    <p><strong>Data de Abertura</strong></p>
+                                    <p>@OrderDetails.OrderOpeningDate.Date</p>
+                                </div>
+                                <div class="col">
+                                    <p><strong>Método de Pagamento</strong></p>
+                                    <p>Cartão</p>
+                                </div>
+                            </div>
+
+                            <div class="row text-center mb-4 align-items-center">
+                                <div class="col">
+                                    <p><strong>Emissor:</strong></p>
+                                    <p>Aurora</p>
+                                </div>
+                                <div class="col">
+                                    <p><strong>Data Estimada</strong></p>
+                                    <p>@OrderDetails.OrderEstimatedDate</p>
+                                </div>
+                                <div class="col">
+                                    <p><strong>Total de Parcelas</strong></p>
+                                    <p>@(OrderDetails.TotalParcels == null ? 10 : OrderDetails.TotalParcels)</p>
+                                </div>
+                            </div>
+
+                            <div class="row text-center mb-4 align-items-center">
+                                <div class="col">
+                                    <p><strong>Responsável</strong></p>
+                                    <p>@OrderDetails.Seller.Agent.Name</p>
+                                </div>
+                                <div class="col">
+                                    <p><strong></strong></p>
+                                    <p></p>
+                                </div>
+                                <div class="col">
+                                    <p><strong>Valor Total</strong></p>
+                                    <p>@(OrderDetails.OrderTotalAmount == null ? 5000 : OrderDetails.OrderTotalAmount)</p>
+                                </div>
+                            </div>
+                           
+
+                            @* <p>@OrderDetails.OrderParcelAmount</p>
                             <p>@OrderDetails.TotalParcels</p>
                             <p>@OrderDetails.OrderEffectiveDate</p>
-                            <p>@OrderDetails.OrderEstimatedDate</p>
+                            <p>@OrderDetails.OrderEstimatedDate</p>   *@                          
+                            
                         </div>
                     </div>
                 </div>
@@ -83,8 +153,8 @@
                         <div class="card-body p-4">
                             <h5 class="text card-title fw-semibold mb-4">Contact</h5>
                             @if (OrderDetails.Customer.PhoneNumbers is not null &&
-                            OrderDetails.Customer.EmailAddresses is not null &&
-                            OrderDetails.Customer.Addresses is not null)
+                           OrderDetails.Customer.EmailAddresses is not null &&
+                           OrderDetails.Customer.Addresses is not null)
                             {
                                 @foreach (var phone in OrderDetails.Customer.PhoneNumbers)
                                 {
@@ -99,8 +169,15 @@
                                     <p>@addr.CityName @addr.Reference, @addr.CountryName</p>
                                 }
                             }
-                            <p><strong>Customer Name</strong></p>: <p>@OrderDetails.Customer.Agent.Name</p>
-                            <p><strong>Seller Name</strong></p>: <p>@OrderDetails.Seller.Agent.Name</p>
+
+                            <div class="mb-4">
+                                <p class="d-inline"><strong>Customer Name:</strong></p>
+                                <p class="d-inline ml-2">@OrderDetails.Customer.Agent.Name</p>
+                            </div>
+                            <div class="mb-4">
+                                <p class="d-inline"><strong>Seller Name:</strong></p>
+                                <p class="d-inline ml-2">@OrderDetails.Seller.Agent.Name</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,7 +216,7 @@
     protected override async Task OnInitializedAsync()
     {
         await GetOrder();
-        if(OrderDetails is not null)
+        if (OrderDetails is not null)
         {
             MapItems(OrderDetails.OrderItems);
         }

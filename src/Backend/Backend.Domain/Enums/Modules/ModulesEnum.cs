@@ -28,6 +28,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
+        public static string ProductMedia = "ProductMedia";
         public static string ProductVariants = "ProductVariants";
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
@@ -158,6 +159,16 @@ namespace Backend.Infrastructure.Enums.Modules
                 public static string UpdateProductType = "ProductTypes/Update";
             }
         }
+
+        public class ProductMedia
+        {
+            public static class POST
+            {
+                public static string AddProductMedia = "ProductMedia/Add";
+            }
+        }
+
+
 
         /// <summary>
         /// 
