@@ -1,6 +1,7 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.Products.Request;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
@@ -62,10 +63,10 @@ namespace Frontend.Web.Services.Products
             var request = new RouteBuilder<ProductDetail>().SendMultiple(Endpoints.Products, Methods.Default.FIND, parameters);
             return await _httpClientRepository.Find(request);
         }
-        public async Task<ApiResponse<Product>> CreateProduct(Product product)
+        public async Task<ApiResponse<Product>> CreateProduct(ProductRequest product)
         {
-            var model = new RouteBuilder<Product>().Send(Endpoints.Products, Methods.Default.POST, product);
-            return await _httpClientRepository.Post<Product, Product>(model);
+            var model = new RouteBuilder<ProductRequest>().Send(Endpoints.Products, Methods.Default.POST, product);
+            return await _httpClientRepository.Post<ProductRequest, Product>(model);
         }
         public async Task<ApiResponse<Product>> UpdateProduct(Product product)
         {

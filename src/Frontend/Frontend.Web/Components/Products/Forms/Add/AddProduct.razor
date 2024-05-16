@@ -2,6 +2,7 @@
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
 @using Backend.Domain.Entities.Categories;
 @using Backend.Domain.Entities.Products;
+@using Backend.Domain.Entities.Products.Request;
 @using Backend.Domain.Entities.SubCategories;
 @using Backend.Domain.Enums.Colors;
 @using Backend.Domain.Enums.MetricUnits;
@@ -59,15 +60,13 @@
                                     </div>
                                 </div>
 
-                                @* <!-- upload img -->
+                                <!-- upload img -->
                                 <div class="row">
                                     <div class="mb-2 col-sm-12 p-2">
                                         <label for="productImage" class="form-label">Product Image</label>
                                         <InputFile id="productImage" OnChange="HandleFileUpload" accept="image/*" />
-
-                                        
                                     </div>
-                                </div> *@
+                                </div> 
 
                                 <!-- Name -->
                                 <div class="row">
@@ -239,54 +238,47 @@
 
 @code
 {
+
+    public async Task HandleFileUpload(InputFileChangeEventArgs e)
+    {
+        var browserFile = e.File;
+        if (browserFile != null)
+        {   
+            var productMedia = new ProductMedia
+            {
+                MediaType = ProductMediaType.Image,
+                MediaURL = browserFile.Name,
+                Priority = 0,
+                ProductId = model.ProductId,
+                TenantId = context.Tenant.Id
+            };
+            
+            try
+            {
+                var fileStream = browserFile.OpenReadStream(5000 * 1024);
+                var file = Path.GetTempFileName();
+                var extension = Path.GetExtension(browserFile.Name);
+                var target = Path.ChangeExtension(file, extension);
+                var targetStream = new FileStream(target, FileMode.Create);
+                await fileStream.CopyToAsync(targetStream);
+                targetStream.Close();
+            }
+            catch (Exception ex)
+            {
+                Toaster.Error(ex.Message);
+            }
+
+
+        }   
+    }
+}
+
+@code
+{
     private UserSessionContext context = new UserSessionContext();
     private Product model = new Product();
-    // public IFormFile productImageFile;
-
-    // private async Task HandleFileUpload(InputFileChangeEventArgs e)
-    // {
-    //     var browserFile = e.File;
-    //     var fileName = Path.GetFileName(browserFile.Name);
-    //     var contentType = browserFile.ContentType;
-
-    //     using (var stream = browserFile.OpenReadStream())
-    //     {
-    //         productImageFile = new FormFile(stream, 0, stream.Length, null, fileName)
-    //             {
-    //                 Headers = new HeaderDictionary(),
-    //                 ContentType = contentType
-    //             };
-    //     }
-
-    //     // Verifique se há uma imagem selecionada antes de salvar
-    //     if (productImageFile != null)
-    //     {
-    //         // Caminho onde a imagem será salva no projeto do Frontend
-    //         var basePath = System.Environment.CurrentDirectory;
-    //         var imagePath = Path.Combine(basePath, "wwwroot", "images", "products", productImageFile.FileName);
-
-    //         // Verifique se o diretório onde a imagem será salva existe
-    //         var directory = Path.GetDirectoryName(imagePath);
-    //         if (!Directory.Exists(directory))
-    //         {
-    //             // Se o diretório não existir, crie-o
-    //             Directory.CreateDirectory(directory);
-    //         }
-
-    //         // Salve a imagem na pasta especificada
-    //         using (var stream = new FileStream(imagePath, FileMode.Create))
-    //         {
-    //             await productImageFile.CopyToAsync(stream);
-    //         }
-    //     }
-
-
-    // }
-
     public async Task CreateProduct()
-    {
-
-        
+    {  
         var context = await _authenticationService.GetContext();
         model.TenantId = context.Tenant.Id;
 
@@ -307,7 +299,10 @@
             Toaster.Error("Name is invalid");
         }
 
-        var response = await _productService.CreateProduct(model);
+        var productRequest = new ProductRequest();
+        productRequest.ProductInfo = model;
+        productRequest.Media = new ProductMedia();
+        var response = await _productService.CreateProduct(productRequest);
         if (response.Successful())
         {
             Toaster.Success(response!.Result.Name, "was created successfully!.");

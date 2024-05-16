@@ -102,6 +102,7 @@ namespace Backend.Domain.Entities.Products
         public string? CategoryName { get; set; }
         public string? SubCategoryName { get; set; }
         public string ProductTypeName { get; set; }
+        public string MediaURL { get; set; }
     }
 
     public class ItemThumbnail

@@ -1,5 +1,6 @@
 using Backend.Domain.Entities.Authentication.Users.UserContext;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.Products.Request;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Products;
 using Microsoft.AspNetCore.Authorization;
@@ -49,11 +50,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Add")]
-        public async Task<ActionResult> Add(Product product)
+        public async Task<ActionResult> Add(ProductRequest product)
         {
             try
             {
-                return Ok(await _productService.Add(product));
+                return Ok(await _productService.Add(product.ProductInfo, product.Media));
             }
             catch (Exception ex)
             {

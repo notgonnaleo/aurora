@@ -27,14 +27,16 @@ namespace Backend.Infrastructure.Services.Products
         private readonly ProductTypeService _productType;
         private readonly CategoryService _categoryService;
         private readonly SubCategoryService _subCategoryService;
+        private readonly ProductMediaService _productMediaService;
 
-        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService)
+        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService, ProductMediaService productMediaService)
             : base(main)
         {
             _appDbContext = appDbContext;
             _productType = productTypeService;
             _categoryService = categoryService;
             _subCategoryService = subCategoryService;
+            _productMediaService = productMediaService;
         }
 
         public IEnumerable<Product> Get(Guid tenantId)
@@ -53,17 +55,22 @@ namespace Backend.Infrastructure.Services.Products
                 .FirstOrDefault();
         }
 
-        public async Task<Product> Add(Product product)
+        public async Task<Product> Add(Product product, ProductMedia? media)
         {
             var context = LoadContext();
             product.TenantId = context.Tenant.Id;
             product = new Product(product, context.UserId);
             product.ValidateFields(context.Language);
-
             _appDbContext.Products.Add(product);
             if (await _appDbContext.SaveChangesAsync() > 0)
+            {
+                if (media is not null && !string.IsNullOrEmpty(media.MediaURL))
+                {
+                    media.ProductId = product.ProductId; 
+                    await _productMediaService.Add(media);
+                }
                 return product;
-
+            }
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
@@ -120,6 +127,7 @@ namespace Backend.Infrastructure.Services.Products
             var subCategories = _subCategoryService.Get();
             return products.Select(product => new ProductDetail
             {
+                MediaURL = _productMediaService.Get(product.ProductId).FirstOrDefault() is not null ? _productMediaService.Get(product.ProductId).FirstOrDefault().MediaURL : null,
                 TenantId = product.TenantId,
                 ProductId = product.ProductId,
                 ProductTypeId = product.ProductTypeId,
@@ -141,7 +149,7 @@ namespace Backend.Infrastructure.Services.Products
                 Updated = product.Updated,
                 UpdatedBy = product.UpdatedBy,
                 Active = product.Active,
-            });
+            }); ;
         }
 
         public ProductDetail GetProductThumbnail(Guid tenantId, Guid productId)

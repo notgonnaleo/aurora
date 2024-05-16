@@ -50,7 +50,7 @@ namespace Backend.Infrastructure.Services.Products
 
             var context = LoadContext();
             model.TenantId = context.Tenant.Id;
-
+            model.MediaURL = $"/assets/images/users/aurora/{model.MediaURL}";
             _appDbContext.ProductMedia.Add(model);
             if (await _appDbContext.SaveChangesAsync() > 0)
                 return model;
