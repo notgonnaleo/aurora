@@ -72,7 +72,6 @@ else
         LoadAppTheme();
         isAuthenticated = await IsAuthenticated();
         Redirect(isAuthenticated);
-        await JS.InvokeVoidAsync("googleTranslateElementInit");
         isLoading = false;
     }
 
