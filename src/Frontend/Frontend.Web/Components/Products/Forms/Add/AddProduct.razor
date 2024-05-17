@@ -244,7 +244,7 @@
         var browserFile = e.File;
         if (browserFile != null)
         {   
-            var productMedia = new ProductMedia
+            mediaModel = new ProductMedia
             {
                 MediaType = ProductMediaType.Image,
                 MediaURL = browserFile.Name,
@@ -252,31 +252,47 @@
                 ProductId = model.ProductId,
                 TenantId = context.Tenant.Id
             };
-            
+
             try
             {
-                var fileStream = browserFile.OpenReadStream(5000 * 1024);
-                var file = Path.GetTempFileName();
-                var extension = Path.GetExtension(browserFile.Name);
-                var target = Path.ChangeExtension(file, extension);
-                var targetStream = new FileStream(target, FileMode.Create);
-                await fileStream.CopyToAsync(targetStream);
-                targetStream.Close();
+                using var stream = browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // Adjust max allowed size as needed
+
+                var content = new MultipartFormDataContent
+                {
+                    { new StreamContent(stream), "File", browserFile.Name }
+                };
+
+                // Add other required form data
+                content.Add(new StringContent(model.ProductId.ToString()), "ProductId");
+                content.Add(new StringContent(context.Tenant.Id.ToString()), "TenantId");
+                content.Add(new StringContent(ProductMediaType.Image.ToString()), "MediaType");
+                content.Add(new StringContent(browserFile.Name), "MediaURL");
+                content.Add(new StringContent("0"), "Priority");
+                multipartFormDataContent = content;
             }
             catch (Exception ex)
             {
                 Toaster.Error(ex.Message);
             }
-
-
         }   
     }
 }
 
 @code
 {
+    private bool UploadImage(MultipartFormDataContent multipartFormDataContent)
+    {
+        // httprequest post
+        return true;
+    }
+}
+
+@code
+{
+    private MultipartFormDataContent? multipartFormDataContent = null;
     private UserSessionContext context = new UserSessionContext();
     private Product model = new Product();
+    private ProductMedia mediaModel = new ProductMedia();
     public async Task CreateProduct()
     {  
         var context = await _authenticationService.GetContext();
@@ -301,11 +317,15 @@
 
         var productRequest = new ProductRequest();
         productRequest.ProductInfo = model;
-        productRequest.Media = new ProductMedia();
+        productRequest.Media = mediaModel;
         var response = await _productService.CreateProduct(productRequest);
         if (response.Successful())
         {
             Toaster.Success(response!.Result.Name, "was created successfully!.");
+            if(multipartFormDataContent is not null)
+            {
+                UploadImage(multipartFormDataContent);
+            }
             navigator.NavigateTo("/products", true);
         }
         else

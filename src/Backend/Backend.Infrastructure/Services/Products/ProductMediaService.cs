@@ -17,17 +17,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Infrastructure.Services.Products
 {
     public class ProductMediaService : Service
     {
         private readonly AppDbContext _appDbContext;
+        private readonly IConfiguration _configuration;
 
-        public ProductMediaService(AppDbContext appDbContext, UserContextService main)
+        public ProductMediaService(AppDbContext appDbContext, IConfiguration configuration, UserContextService main)
             : base(main)
         {
             _appDbContext = appDbContext;
+            _configuration = configuration;
         }
 
         public IEnumerable<ProductMedia> Get(Guid productId)
@@ -50,13 +56,38 @@ namespace Backend.Infrastructure.Services.Products
 
             var context = LoadContext();
             model.TenantId = context.Tenant.Id;
-            model.MediaURL = $"/assets/images/users/aurora/{model.MediaURL}";
             _appDbContext.ProductMedia.Add(model);
             if (await _appDbContext.SaveChangesAsync() > 0)
+            {
                 return model;
-
+            }
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
+
+        public async Task<string> UploadFile(IFormFile file)
+        {
+            var context = LoadContext();
+            if (file == null || file.Length == 0)
+                throw new Exception("Invalid file.");
+
+            var connectionString = _configuration["AzureStorage:ConnectionString"];
+            var containerName = _configuration["AzureStorage:ContainerName"];
+
+            var blobServiceClient = new BlobServiceClient(connectionString);
+            var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+            // Generate a unique name for the file to avoid collisions
+            var blobName = $"{Guid.NewGuid()}-{context.Tenant.Name}-{file.FileName}";
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            using (var stream = file.OpenReadStream())
+            {
+                await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
+            }
+
+            return blobClient.Uri.ToString();
+        }
+
 
         public bool Update(ProductMedia model)
         {

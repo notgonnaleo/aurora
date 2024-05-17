@@ -62,7 +62,20 @@ namespace Backend.API.Controllers.Products
                 return BadRequest(ex.Message);
             }
         }
-
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPost]
+        [Route("Upload")]
+        public async Task<ActionResult> UploadFile([FromBody] IFormFile file)
+        {
+            try
+            {
+                return Ok(await _productMediaService.UploadFile(file));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut]
         [Route("Update")]
