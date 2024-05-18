@@ -20237,14 +20237,16 @@ textarea.form-control-lg {
     transition: transform .3s; /* Animation */
 }
 
-.zoom:hover {
-    transform: scale(0.9); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-}
+    .zoom:hover {
+        -ms-transform: scale(1.1); /* IE 9 */
+        -webkit-transform: scale(1.1); /* Safari 3-8 */
+        transform: scale(1.1);
+    }
 
 .content {
     position: relative;
-    width: 90%;
-    max-width: 400px;
+    width: 180px;
+    max-width: 180px;
     margin: auto;
     overflow: hidden;
 }
@@ -20252,8 +20254,8 @@ textarea.form-control-lg {
     .content .content-overlay {
         background: rgba(0,0,0,0.7);
         position: absolute;
-        height: 99%;
-        width: 100%;
+        height: 180px;
+        width: 180px;
         left: 0;
         top: 0;
         bottom: 0;
@@ -20277,7 +20279,7 @@ textarea.form-control-lg {
     text-align: center;
     padding-left: 1em;
     padding-right: 1em;
-    width: 100%;
+    width: 180px;
     top: 50%;
     left: 50%;
     opacity: 0;
