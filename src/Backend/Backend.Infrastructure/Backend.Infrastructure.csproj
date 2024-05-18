@@ -8,12 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\AppDbMigrations\**" />
     <Compile Remove="Repository\**" />
+    <EmbeddedResource Remove="Migrations\AppDbMigrations\**" />
     <EmbeddedResource Remove="Repository\**" />
+    <None Remove="Migrations\AppDbMigrations\**" />
     <None Remove="Repository\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.20.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
@@ -39,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\AppDbMigration\" />
     <Folder Include="Migrations\AuthDbMigrations\" />
   </ItemGroup>
 

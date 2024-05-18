@@ -9,7 +9,6 @@
 @inject AuthenticationService _authenticationService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
-<PageTitle>Aurora - Edit</PageTitle>
 @if (Model is not null && Model.Agent is not null)
 {
 <aside class="right-sidebar @formCssClass">
@@ -56,10 +55,10 @@
             <div class="col-lg-6 align-items-strech">
                 <div class="card w-100">
                     @* Agent basic info *@
-                    <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model.Agent" />
+                    <Frontend.Web.Components.Agents.Forms.Edit.EditAgent Agent="Model!.Agent" />
                     <div class="border-bottom"></div>
                     @* Profile *@
-                    <Frontend.Web.Components.Profiles.Forms.Edit.EditProfile Profile="Model?.Profile" AgentId="Model.Agent.AgentId" AgentTypeId="Model.Agent.AgentTypeId"/>
+                    <Frontend.Web.Components.Profiles.Forms.Edit.EditProfile Profile="Model?.Profile" AgentId="Model!.Agent!.AgentId" AgentTypeId="Model.Agent.AgentTypeId"/>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -233,7 +232,7 @@
 @code
 {
     public bool isLoading = true;
-    public AgentDetail Model = new AgentDetail();
+    public AgentDetail? Model = null;
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
@@ -245,7 +244,6 @@
             }
             else
             {
-                Model = new AgentDetail();
                 Toaster.Warning(response.ErrorMessage);
             }
         }

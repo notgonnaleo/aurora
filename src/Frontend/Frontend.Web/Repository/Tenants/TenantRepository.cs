@@ -32,7 +32,7 @@ namespace Frontend.Web.Repository.TenantRepository
         {
             var parameters = new RouteParameterRequest() { ParameterName = Methods.Authentication.SetTenantParameters.tenantId, ParameterValue = tenantId.ToString() };
             var request = new RouteBuilder<Tenant>().Send(Endpoints.Authentication, Methods.Authentication.SetTenant, parameters);
-            return await _httpClientRepository.Post(request);
+            return await _httpClientRepository.Post<Tenant, Tenant>(request);
         }
     }
 }

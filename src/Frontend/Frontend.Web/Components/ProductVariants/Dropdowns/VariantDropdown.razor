@@ -1,0 +1,49 @@
+﻿@using Backend.Domain.Entities.Products;
+@using Frontend.Web.Services.Authentication;
+@using Frontend.Web.Services.Products;
+@inject ProductVariantService _productVariantService;
+@inject AuthenticationService _authenticationService;
+
+@if (SelectedProduct is not null && variants is not null)
+{
+    <label for="variandId" class="form-label"> Variant</label>
+    <select class="form-select" @onchange="OnVariantChange">
+        <option value="" disabled hidden selected>Select a Product</option>
+        @foreach (var variant in variants)
+        {
+            <option value="@variant.VariantId">@variant.Name</option>
+        }
+    </select>    
+}
+
+@code
+{
+    private IEnumerable<ProductVariant>? variants = null;
+    protected override async Task OnInitializedAsync()
+    {
+        var context = await _authenticationService.GetContext();
+        if (SelectedProduct is not null)
+        {
+            var response = await _productVariantService.GetVariantsByProduct(context.Tenant.Id.ToString(), SelectedProduct.ProductId.ToString());
+            if (response.Successful())
+            {
+                variants = response.Result;
+            }    
+        }
+    }
+    private async Task OnVariantChange(ChangeEventArgs e)
+    {
+        string selectedVariantId = e.Value.ToString();
+        var selectedVariant = variants.Where(x => x.VariantId == Guid.Parse(selectedVariantId)).FirstOrDefault();
+        await Variant.InvokeAsync(new ProductThumbnail() { ProductId = selectedVariant.VariantId, ProductName = selectedVariant.Name });
+    }
+}
+
+@code
+{
+    [Parameter]
+    public ProductThumbnail? SelectedProduct { get; set; }
+
+    [Parameter]
+    public EventCallback<ProductThumbnail> Variant { get; set; }
+}

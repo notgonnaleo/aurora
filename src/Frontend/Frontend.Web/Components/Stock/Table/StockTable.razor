@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Stocks;
 @using Backend.Domain.Entities.Authentication.Users.UserContext;
+@using Frontend.Web.Components.Placeholders.EmptyMessages
 @using Frontend.Web.Services.Stocks;
 @using Frontend.Web.Services.Authentication;
 @using Microsoft.AspNetCore.Components.Forms;
@@ -91,7 +92,7 @@
         }
         else
         {
-            <p>No stock created yet.</p>
+            <EmptyListVersionA />
         }
     }
 </div>

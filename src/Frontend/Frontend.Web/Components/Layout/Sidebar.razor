@@ -9,7 +9,6 @@
 @inject NavigationManager navigator;
 @inject AgentService _agentService;
 
-
 <aside class="left-sidebar d-print-none" data-bs-theme=@(Theme ? "light" : "dark")>
     <div class="">
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -21,7 +20,8 @@
                     <strong>Aurora</strong>
                 </h3>
             </a>
-            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse" @onclick="ToggleNavMenu">
+            <div id="google_translate_element"></div>
+            <div class="close-btn text d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse" @onclick="ToggleNavMenu">
                 <i class="ti ti-x fs-8"></i>
             </div>
         </div>
@@ -29,7 +29,7 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">Home</span>
+                    <span class="hide-menu">OVERVIEW</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -43,7 +43,7 @@
 
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">TENANTS</span>
+                    <span class="hide-menu">PORTFOLIO</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -72,7 +72,7 @@
 
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">COMMERCIAL</span>
+                    <span class="hide-menu">BUSINESS</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -129,6 +129,27 @@
                             <i class="ti ti-box"></i>
                         </span>
                         <span class="hide-menu">Stock</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/orders" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-shopping-cart"></i>
+                        </span>
+                        <span class="hide-menu">Orders</span>
+                    </a>
+                </li>
+
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">PROFILE</span>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="/settings" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-settings"></i>
+                        </span>
+                        <span class="hide-menu">Settings</span>
                     </a>
                 </li>
             </ul>

@@ -1,0 +1,96 @@
+﻿@using Backend.Domain.Entities.OrderHistories.Request;
+@using Backend.Domain.Entities.OrderItems.Request;
+@using Backend.Domain.Entities.Orders.Request
+@using Backend.Domain.Entities.Orders.Response;
+@using Backend.Domain.Entities.Products
+@using Backend.Domain.Entities.Stocks
+@using Backend.Domain.Enums.EnumExtensions
+@using Frontend.Web.Components.Products.Dropdowns
+@using Frontend.Web.Services.Authentication
+@using Frontend.Web.Services.Orders;
+@using Frontend.Web.Services.Products
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
+@inject AuthenticationService _authenticationService;
+@inject NavigationManager navigator;
+@inject ProductService _productService;
+@inject ProductVariantService _productVariantService
+@inject OrderService _orderService;
+@inject AuthenticationService _authenticationService;
+
+<div class="m-2 p-2">
+    <i class="text ti ti-x cursor-pointer" @onclick="ToggleRightSidebar"></i>
+</div>
+
+<div class="container scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
+    <div class="row">
+        <div class="mb-2 col-sm-12">
+            <label for="parcel" class="form-label">Movement Type</label>
+            @if (Items is not null && Items.Any())
+            {
+                <select class="form-select" @bind="entry.OrderItemId">
+                    <option value="" disabled hidden selected>Select item</option>
+                    @foreach (var item in Items)
+                    {
+                        <option value="@(item.OrderItemId)">@(item.ItemName)</option>
+                    }
+                </select>
+            }
+            else
+            {
+                <span class="warning">This order does not have items, Please review or contact a superior</span>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="mb-2 col-sm-6">
+            <label for="parcel" class="form-label">Movement Type</label>
+            <select class="form-select" @bind="entry.OrderMovementType">
+                <option value="" disabled hidden selected>Select a payment method</option>
+                @foreach (var types in Enum.GetValues(typeof(Backend.Domain.Enums.StockMovements.MovementType.MovementTypes)))
+                {
+                    <option value="@((int)types)">@(types.ToString())</option>
+                }
+            </select>
+        </div>
+        <div class="mb-2 col-sm-6">
+            <label for="value" class="form-label">Amount</label>
+            <input type="number" class="form-control" id="value" min="1" placeholder="1" @bind="entry.OrderTotalItemsMovement">
+        </div>
+    </div>
+</div>
+
+<div class="position-fixed bottom-0 m-9 mt-5 rounded">
+    <button type="button" @onclick="() => CreateEntry()" class="btn btn-primary">
+        Save <i class="ti ti-device-floppy"></i>
+    </button>
+</div>
+
+@code
+{
+    private OrderMovementEntryHistoryRequest? entry = new OrderMovementEntryHistoryRequest();
+    private async void CreateEntry()
+    {
+        var context = await _authenticationService.GetContext();
+        entry.OrderId = Order.OrderId;
+        entry.From = Order.Seller.Agent.AgentId;
+        entry.To = Order.Customer.Agent.AgentId;
+        var response = await _orderService.ExecuteMovement(entry);
+        if (response.Successful())
+        {
+            Toaster.Success("OK");
+            navigator.NavigateTo(navigator.Uri, true);
+        }
+        else
+        {
+            Toaster.Error(response.ErrorMessage);
+        }
+    }
+}
+
+@code
+{
+    [Parameter] public IEnumerable<ItemThumbnail> Items { get; set; }
+    [Parameter] public OrderResponse Order { get; set; }
+    [Parameter] public Action? ToggleRightSidebar { get; set; }
+    [Parameter] public bool CollapseRightSidebar { get; set; }
+}

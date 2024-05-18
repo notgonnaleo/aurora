@@ -12,14 +12,16 @@
 @inject ProductVariantService _productVariantService
 @inject AuthenticationService _authenticationService
 @inject NavigationManager navigator
+@inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
+<br />
 <div>
-    <i class="ti ti-x cursor-pointer p-4" @onclick="ToggleRightSidebar"></i>
+    <i class="ti ti-x cursor-pointer p-2 text-black " style="font-size:20px" @onclick="ToggleRightSidebar"></i>
 </div>
 <div class="container scroll-sidebar" style="max-height:550px; overflow-y:auto;">
     <div class="card-body p-2">
         <form>
-            @if (ParentProductDetail is not null)
+            @if (ParentProductDetail is not null && SelectedItemVariantt is null )
             {
                 <div class="row">
                     <div class="accordion accordion-flush position-relative overflow-hidden @productAccordionHeaderToggle" id="accordionFlushExample">
@@ -72,88 +74,172 @@
                         </div>
                     </div>
                 </div>
-            }
 
-            <div class="accordion accordion-flush position-relative overflow-hidden @weightAccordionHeaderToggle" id="accordionFlushExample">
-                <div class="accordion-item mb-3 shadow-none border rounded">
-                    <h2 class="accordion-header" id="flush-headingOne">
-                        <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseWeightAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleWeightAccordion>
-                            Variant
-                        </button>
-                    </h2>
-                    <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
-                        <div class="accordion-body px-3 fw-normal">
-                            <div class="row">
-                                <div class="mb-2 col-sm-12">
-                                    <label for="sku" class="form-label">Variant SKU</label>
-                                    <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled="@isAutoGenerateSKU">
+                //add variant
+                <div class="accordion accordion-flush position-relative overflow-hidden @weightAccordionHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseWeightAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleWeightAccordion>
+                                Variant
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="sku" class="form-label">Variant SKU</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.SKU" disabled="@isAutoGenerateSKU">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12 p-2">
-                                    <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAutoGenerateSKU">
-                                    <label>Auto generate SKU</label>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAutoGenerateSKU">
+                                        <label>Auto generate SKU</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12">
-                                    <label for="sku" class="form-label">Variant Name</label>
-                                    <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.Name">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="sku" class="form-label">Variant Name</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="Variant Name" @bind="@model.Name">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12">
-                                    <label for="sku" class="form-label">Variant Description</label>
-                                    <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@model.Description">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="sku" class="form-label">Variant Description</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="Variant Description" @bind="@model.Description">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12 p-2">
-                                    <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAddNewWeight">
-                                    <label>Insert new weight for variant</label>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAddNewWeight">
+                                        <label>Insert new weight for variant</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row @(isOverwriteOriginalWeight ? "collapse" : null)">
-                                <div class="mb-2 col-sm-6">
-                                    <label for="liquidWeight" class="form-label">Variant Liquid Weight</label>
-                                    <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@model.LiquidWeight">
+                                <div class="row @(isOverwriteOriginalWeight ? "collapse" : null)">
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="liquidWeight" class="form-label">Variant Liquid Weight</label>
+                                        <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@model.LiquidWeight">
+                                    </div>
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="totalWeight" class="form-label">Variant Total Weight</label>
+                                        <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@model.TotalWeight">
+                                    </div>
                                 </div>
-                                <div class="mb-2 col-sm-6">
-                                    <label for="totalWeight" class="form-label">Variant Total Weight</label>
-                                    <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@model.TotalWeight">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <label for="colors" class="form-label">Variant Color</label>
+                                        <select class="form-select" @bind="@model.ColorName">
+                                            <option value="" disabled hidden selected>Color of your product</option>
+                                            @foreach (var color in Colors.ColorList)
+                                            {
+                                                <option value="@color">@color</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="value" class="form-label">Variant Value</label>
+                                        <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@model.Value" disabled="@isOverwriteOriginalValue">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12 p-2">
-                                    <label for="colors" class="form-label">Variant Color</label>
-                                    <select class="form-select" @bind="@model.ColorName">
-                                        <option value="" disabled hidden selected>Color of your product</option>
-                                        @foreach (var color in Colors.ColorList)
-                                        {
-                                            <option value="@color">@color</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="mb-2 col-sm-12">
-                                    <label for="value" class="form-label">Variant Value</label>
-                                    <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@model.Value" disabled="@isOverwriteOriginalValue">
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="mb-2 col-sm-12 p-2">
-                                    <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAddNewValue">
-                                    <label>Insert new value for variant</label>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAddNewValue">
+                                        <label>Insert new value for variant</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+                    <button type="button" @onclick="CreateProductVariant" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
+                </div>
+            }
+            else
+            {
+                <div class="accordion accordion-flush position-relative overflow-hidden @weightAccordionHeaderToggle" id="accordionFlushExample">
+                    <div class="accordion-item mb-3 shadow-none border rounded">
+                        <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseWeightAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleWeightAccordion>
+                               Edit Variant
+                            </button>
+                        </h2>
+                        <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                            <div class="accordion-body px-3 fw-normal">
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="sku" class="form-label">Variant SKU</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@SelectedItemVariantt.SKU" disabled="@isAutoGenerateSKU">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAutoGenerateSKU">
+                                        <label>Auto generate SKU</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="sku" class="form-label">Variant Name</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@SelectedItemVariantt.Name">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="sku" class="form-label">Variant Description</label>
+                                        <input type="text" class="form-control" id="sku" placeholder="SKU" @bind="@SelectedItemVariantt.Description">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAddNewWeight">
+                                        <label>Insert new weight for variant</label>
+                                    </div>
+                                </div>
+                                <div class="row @(isOverwriteOriginalWeight ? "collapse" : null)">
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="liquidWeight" class="form-label">Variant Liquid Weight</label>
+                                        <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@SelectedItemVariantt.LiquidWeight">
+                                    </div>
+                                    <div class="mb-2 col-sm-6">
+                                        <label for="totalWeight" class="form-label">Variant Total Weight</label>
+                                        <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@SelectedItemVariantt.TotalWeight">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <label for="colors" class="form-label">Variant Color</label>
+                                        <select class="form-select" @bind="@model.ColorName">
+                                            <option value="" disabled hidden selected>Color of your product</option>
+                                            @foreach (var color in Colors.ColorList)
+                                            {
+                                                <option value="@color">@color</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="mb-2 col-sm-12">
+                                        <label for="value" class="form-label">Variant Value</label>
+                                        <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@SelectedItemVariantt.Value" disabled="@isOverwriteOriginalValue">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="mb-2 col-sm-12 p-2">
+                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAddNewValue">
+                                        <label>Insert new value for variant</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
+                    <button type="button" @onclick="UpdateVariant" class="btn btn-primary"> Save <i class="ti ti-device-floppy"></i></button>
+                </div>
+               
+            }   
         </form>
     </div>
-    <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
-        <button type="button" @onclick="CreateProductVariant" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
-    </div>
+
 </div>
 
 @code
@@ -178,7 +264,7 @@
     {
         var context = await _authenticationService.GetContext();
         model.TenantId = context.Tenant.Id;
-        if(model.SKU is null)
+        if (model.SKU is null)
         {
             model.SKU = string.Empty;
         }
@@ -191,6 +277,28 @@
         {
             navigator.NavigateTo($"/products/edit/{model.ProductId}", true);
         }
+    }
+}
+
+@code{
+    public async Task UpdateVariant()
+    {
+        if (SelectedItemVariantt is not null)
+        {
+            var context = await _authenticationService.GetContext();
+            SelectedItemVariantt.TenantId = context.Tenant.Id;
+            
+            var response = await _productVariantService.UpdateVariant(SelectedItemVariantt);
+            if (response.Successful())
+            {
+                navigator.NavigateTo(navigator.Uri, true);
+            }
+            else
+            {
+                Toaster.Error(response.ErrorMessage);
+            }
+        }
+
     }
 }
 
@@ -215,6 +323,9 @@
 @code
 {
     [Parameter] public ProductDetail? ParentProductDetail { get; set; }
-    [Parameter] public Action ToggleRightSidebar { get; set; }
+    [Parameter] public Action? ToggleRightSidebar { get; set; }
     [Parameter] public bool CollapseRightSidebar { get; set; }
+
+    [Parameter]
+    public ProductVariant? SelectedItemVariantt { get; set; }
 }

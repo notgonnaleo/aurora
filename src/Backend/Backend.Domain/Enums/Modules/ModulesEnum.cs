@@ -28,6 +28,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Membership = "Membership";
         public static string Products = "Products";
         public static string ProductsTypes = "ProductsTypes";
+        public static string ProductMedia = "ProductMedia";
         public static string ProductVariants = "ProductVariants";
         public static string Category = "Categories";
         public static string SubCategory = "SubCategories";
@@ -38,6 +39,7 @@ namespace Backend.Infrastructure.Enums.Modules
         public static string Addresses = "Addresses";
         public static string EmailAddresses = "EmailAddresses";
         public static string Stock = "Stock";
+        public static string Orders = "Orders";
     }
 
     /// <summary>
@@ -158,6 +160,16 @@ namespace Backend.Infrastructure.Enums.Modules
             }
         }
 
+        public class ProductMedia
+        {
+            public static class POST
+            {
+                public static string AddProductMedia = "ProductMedia/Add";
+            }
+        }
+
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -173,11 +185,28 @@ namespace Backend.Infrastructure.Enums.Modules
                 {
                     public static string GetAllVariantsByProductEndpoint = "GetAllVariantsByProduct";
                 }
+
+
             }
 
             public static class POST
             {
                 public static string AddProductVariant = "ProductVariant/Add";
+            }
+
+            public static class PUT
+            {
+                public static string UpdateProductVariant = "ProductVariant/Update";
+            }
+
+            public static class DELETE
+            {
+                public static class DeleteVariant
+                {
+                    public static string tenantId = "tenantId";
+                    public static string variantId = "variantId";
+                }
+                
             }
         }
 
@@ -503,9 +532,9 @@ namespace Backend.Infrastructure.Enums.Modules
         }
         #endregion
 
+        #region Stocks
         public class Stock
         {
-
             public static class GET
             {
                 public static class GetStocks
@@ -553,7 +582,6 @@ namespace Backend.Infrastructure.Enums.Modules
                     }
                 }
             }
-
             public static class POST
             {
                 public static class AddStock
@@ -561,7 +589,6 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                 }
             }
-
             public static class PUT
             {
                 public static class UpdateStock
@@ -570,7 +597,6 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                 }
             }
-
             public static class DELETE
             {
                 public static class DeleteStock
@@ -579,8 +605,39 @@ namespace Backend.Infrastructure.Enums.Modules
                     public static string tenantId = "tenantId";
                 }
             }
+        }
+        #endregion
 
-
+        public class Orders
+        {
+            public static class GET
+            {
+                public static class GetOrders
+                {
+                    public static string GetOrdersEndpointName = "GetOrders";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                    }
+                }
+                public static class GetOrder
+                {
+                    public static string GetOrderEndpointName = "GetOrder";
+                    public static class Args
+                    {
+                        public static string tenantId = "tenantId";
+                        public static string orderId = "orderId";
+                        public static string orderCode = "orderCode";
+                    }
+                }
+            }
+            public static class POST
+            {
+                public static class OpenNewOrder
+                {
+                    public static string OpenNewOrderEndpointName = "OpenNewOrder";
+                }
+            }
         }
     }
 }

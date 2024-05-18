@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Products;
 using Frontend.Web.Models.Client;
+using Frontend.Web.Repository.Agents;
 using Frontend.Web.Repository.Products;
 
 namespace Frontend.Web.Services.Products
@@ -21,5 +22,16 @@ namespace Frontend.Web.Services.Products
         {
             return await _productVariantRepository.CreateProductVariant(productVariant);
         }
+        public async Task<ApiResponse<ProductVariant>> UpdateVariant(ProductVariant productVariant)
+        {
+            return await _productVariantRepository.UpdateProductVariant(productVariant);
+        }
+
+        public async Task<bool> DeleteVariant(string tenantId, string variantId)
+        {
+            return await _productVariantRepository.DeleteVariant(tenantId, variantId);
+        }
+
+
     }
-} 
+}

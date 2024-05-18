@@ -48,7 +48,7 @@ namespace Frontend.Web.Repository.Contacts
             public async Task<ApiResponse<Profile>> CreateProfile(Profile profile)
             {
                 var model = new RouteBuilder<Profile>().Send(Endpoints.Profiles, Methods.Default.POST, profile);
-                return await _httpClientRepository.Post(model);
+                return await _httpClientRepository.Post<Profile, Profile>(model);
             }
 
             public async Task<ApiResponse<bool>> UpdateProfile(Profile profile)

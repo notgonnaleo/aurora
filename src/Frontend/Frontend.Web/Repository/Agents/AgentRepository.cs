@@ -22,7 +22,7 @@ namespace Frontend.Web.Repository.Agents
         public async Task<ApiResponse<Agent>> CreateAgent(Agent agent)
         {
             var model = new RouteBuilder<Agent>().Send(Endpoints.Agents, Methods.Default.POST, agent);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<Agent, Agent>(model);
         }
 
         public async Task<ApiResponse<IEnumerable<Agent>>> GetAgents(string tenantId)

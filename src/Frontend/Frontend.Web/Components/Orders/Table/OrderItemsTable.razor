@@ -1,0 +1,54 @@
+﻿@using Backend.Domain.Entities.OrderItems.Response;
+@inject NavigationManager NavigationManager
+@if (OrdersItems is not null && OrdersItems.Count() > 0)
+{
+    <div class="table-responsive mt-5">
+        <table class="table table-hover">
+            <thead>
+                <!-- start row -->
+                <tr>
+                    <th class="text-center">#</th>
+                    <th>Description</th>
+                    <th class="text-end">Quantity</th>
+                    <th class="text-end">Unit Cost</th>
+                    <th class="text-end">Total</th>
+                </tr>
+                <!-- end row -->
+            </thead>
+            <tbody>
+                @foreach (var item in OrdersItems)
+                {
+                    int seq = 0;
+                    <!-- start row -->
+                    <tr>
+                        <td class="text-center">@(seq++)</td>
+                        <td>@item.Item.Name</td>
+                        <td class="text-end">@item.ItemQuantity</td>
+                        <td class="text-end">@item.ItemUnitAmount</td>
+                        <td class="text-end">@item.ItemTotalAmount</td>
+                    </tr>
+                    <!-- end row -->
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <h6>No items were found for this order.</h6>
+    <a class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
+        View order details
+    </a>
+}
+@code 
+{
+    public void RedirectToOrderEditPage()
+    {
+        NavigationManager.NavigateTo($"/order-summary/{OrderId}");
+    }
+
+    [Parameter]
+    public Guid OrderId { get; set; }
+    [Parameter]
+    public IEnumerable<OrderItemsResponse> OrdersItems { get; set; }
+}

@@ -3,6 +3,7 @@
 @using Frontend.Web.Services.Products;
 @inject ProductVariantService _productVariantService;
 @inject AuthenticationService _auth;
+@inject NavigationManager NavigationManager;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
 
 <div class="card card-body">
@@ -76,14 +77,17 @@
                                 </td>
                                 <td>
                                     <div class="action-btn">
-                                        <a class="text-primary edit">
+                                        <a class="text-primary edit" @onclick="() => Edit(variant)">
                                             <i class="ti ti-eye fs-5"></i>
                                         </a>
-                                        <a class="text-dark delete ms-2">
+                                        <a class="text-dark delete ms-2" @onclick="() => DeleteModalAction(variant)">
                                             <i class="ti ti-trash fs-5"></i>
                                         </a>
+                                        
                                     </div>
+
                                 </td>
+
                             </tr>
                             <!-- end row -->
                         }
@@ -97,6 +101,23 @@
         }
     }
 </div>
+
+
+@if (selectedvariant is not null)
+{
+    <Frontend.Web.Components.ProductVariants.Modals.DeleteVariant ShowModal="ShowModal" selectedvariant="selectedvariant" />
+}
+
+@code
+{
+    ProductVariant? selectedvariant = null;
+    public void DeleteModalAction(ProductVariant variant)
+    {
+        ShowModal = true;
+        selectedvariant = variant;
+    }
+
+}
 
 @code {
     public bool isLoading;
@@ -118,8 +139,24 @@
     }
 }
 
+@code
+{
+    [Parameter]
+    public EventCallback<ProductVariant> SelectedItemVariant { get; set; }
+
+    private void Edit(ProductVariant variant)
+    {
+        SelectedItemVariant.InvokeAsync(variant);
+    }
+}
+
 @code 
 {
     [Parameter]
     public string parentProductId { get; set; }
+
+    [Parameter]
+    public bool ShowModal { get; set; }
 }
+
+

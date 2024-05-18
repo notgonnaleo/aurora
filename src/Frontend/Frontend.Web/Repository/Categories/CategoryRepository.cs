@@ -48,7 +48,7 @@ namespace Frontend.Web.Repository.Categories
         public async Task<ApiResponse<Category>> CreateCategory(Category category)
         {
             var model = new RouteBuilder<Category>().Send(Endpoints.Category, Methods.Default.POST, category);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<Category, Category>(model);
         }
         public async Task<ApiResponse<Category>> UpdateCategory(Category category)
         {

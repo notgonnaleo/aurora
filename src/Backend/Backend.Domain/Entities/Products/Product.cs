@@ -25,7 +25,7 @@ namespace Backend.Domain.Entities.Products
         public Product() { }
 
         [Required]
-        public Guid TenantId { get; set; }        
+        public Guid TenantId { get; set; }
 
         [Key]
         public Guid ProductId { get; set; }
@@ -33,7 +33,10 @@ namespace Backend.Domain.Entities.Products
         public string GTIN { get; set; }
 
         public string Name { get; set; }
+
+        [StringLength(1000, MinimumLength = 6, ErrorMessage = "field must be atleast 6 characters")]
         public string? Description { get; set; }
+        
         public string? ColorName { get; set; }
         public string? MetricUnitName { get; set; }
 
@@ -44,7 +47,7 @@ namespace Backend.Domain.Entities.Products
         public int ProductTypeId { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? SubCategoryId { get; set; }
-        
+
         [ForeignKey("CategoryId")]
         public virtual Category? Category { get; set; }
         [ForeignKey("SubCategoryId")]
@@ -63,7 +66,7 @@ namespace Backend.Domain.Entities.Products
             ColorName = product.ColorName;
             MetricUnitName = product.MetricUnitName;
             CategoryId = product.CategoryId;
-            SubCategoryId = product.SubCategoryId;   
+            SubCategoryId = product.SubCategoryId;
             ProductTypeId = product.ProductTypeId;
             Value = product.Value;
             TotalWeight = product.TotalWeight;
@@ -102,5 +105,25 @@ namespace Backend.Domain.Entities.Products
         public string? CategoryName { get; set; }
         public string? SubCategoryName { get; set; }
         public string ProductTypeName { get; set; }
+        public string MediaURL { get; set; }
+    }
+
+    public class ItemThumbnail
+    {
+        public Guid? OrderItemId { get; set; }
+        public int ItemSequence { get; set; }
+        public Guid ProductId { get; set; }
+        public Guid? VariantId { get; set; }
+        public string ItemName { get; set; }
+        public int Quantity { get; set; }
+        public decimal ItemValue { get; set; }
+        public decimal Value { get; set; }
+    }
+
+    public class ProductThumbnail 
+    {
+        public Guid ProductId { get; set; }
+        public string ProductName { get; set; }
+        public decimal ItemValue { get; set; }
     }
 }

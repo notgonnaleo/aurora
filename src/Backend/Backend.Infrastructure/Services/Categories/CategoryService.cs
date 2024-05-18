@@ -95,7 +95,7 @@ namespace Backend.Infrastructure.Services.Categories
         public Category GetCategoryAndSubCategoriesById(Guid categoryId)
         {
             var context = LoadContext();
-            Category category = _appDbContext.Categories
+            var category = _appDbContext.Categories
                 .FirstOrDefault(x => x.TenantId == context.Tenant.Id &&
                 x.CategoryId == categoryId &&
                 x.Active);
