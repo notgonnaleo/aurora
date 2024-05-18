@@ -15,10 +15,14 @@ public class ProductMedia : Model
     [Key]
     public Guid Id { get; set; }
     public ProductMediaType MediaType { get; set; }
-    public byte[] FileBytes { get; set; }
 
-    [Required]
-    public string MediaURL { get; set; } = string.Empty;
+    /// <summary>
+    /// Image buffer data converted to Base64 string.
+    /// </summary>
+    [NotMapped]
+    public string ImageBuffer { get; set; }
+    public string? MediaURL { get; set; }
+
     public uint Priority { get; set; } // This is just to make it easier to sort the product media, the higher the number the more importance will be given to this media
     [JsonIgnore]
     [ForeignKey("ProductId")]

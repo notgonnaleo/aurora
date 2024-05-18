@@ -33,7 +33,10 @@ namespace Backend.Domain.Entities.Products
         public string GTIN { get; set; }
 
         public string Name { get; set; }
+
+        [StringLength(1000, MinimumLength = 6, ErrorMessage = "field must be atleast 6 characters")]
         public string? Description { get; set; }
+        
         public string? ColorName { get; set; }
         public string? MetricUnitName { get; set; }
 

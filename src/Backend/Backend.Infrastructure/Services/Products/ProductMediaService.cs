@@ -56,36 +56,37 @@ namespace Backend.Infrastructure.Services.Products
 
             var context = LoadContext();
             model.TenantId = context.Tenant.Id;
-            _appDbContext.ProductMedia.Add(model);
-            if (await _appDbContext.SaveChangesAsync() > 0)
+            if (!string.IsNullOrEmpty(model.ImageBuffer))
             {
-                return model;
+               model.MediaURL = await UploadFile(model.ImageBuffer);
             }
+
+            if (!string.IsNullOrEmpty(model.MediaURL))
+            {
+                _appDbContext.ProductMedia.Add(model);
+                if (await _appDbContext.SaveChangesAsync() > 0)
+                    return model;
+            }
+
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
-        public async Task<string> UploadFile(IFormFile file)
+        public async Task<string> UploadFile(string base64string)
         {
+            byte[] data = Convert.FromBase64String(base64string);
             var context = LoadContext();
-            if (file == null || file.Length == 0)
-                throw new Exception("Invalid file.");
-
-            var connectionString = _configuration["AzureStorage:ConnectionString"];
-            var containerName = _configuration["AzureStorage:ContainerName"];
-
-            var blobServiceClient = new BlobServiceClient(connectionString);
-            var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-
-            // Generate a unique name for the file to avoid collisions
-            var blobName = $"{Guid.NewGuid()}-{context.Tenant.Name}-{file.FileName}";
-            var blobClient = containerClient.GetBlobClient(blobName);
-
-            using (var stream = file.OpenReadStream())
+            // por tudo que é mais sagrado, criar vergonha na cara e colocar essa aberração inteira na appsettings
+            var blobContainerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=appaurorablobstorage;AccountKey=LedXk/66YH5xRnk7fUFau6CR1ID2cu87Qek2Jnx55EExzYCgSg4rqK4VkIbZpN6siSUf8qxzPrA++ASttiIX1w==;EndpointSuffix=core.windows.net", "assets");
+            var blobHttpHeader = new BlobHttpHeaders();
+            blobHttpHeader.ContentType = "image/jpeg";
+            BlobClient blob = blobContainerClient.GetBlobClient($"{context.Tenant.Name!.ToLower()}/images/{Guid.NewGuid()}.jpg");
+            using (var ms = new MemoryStream(data, false))
             {
-                await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = file.ContentType });
+                var response = await blob.UploadAsync(ms, blobHttpHeader);
+                if (response != null && response.GetRawResponse().Status == 201)
+                return blob.Uri.AbsoluteUri;
             }
-
-            return blobClient.Uri.ToString();
+            throw new Exception("Image failed during upload process");
         }
 
 

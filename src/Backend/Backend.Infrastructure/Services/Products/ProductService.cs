@@ -64,7 +64,7 @@ namespace Backend.Infrastructure.Services.Products
             _appDbContext.Products.Add(product);
             if (await _appDbContext.SaveChangesAsync() > 0)
             {
-                if (media is not null && !string.IsNullOrEmpty(media.MediaURL))
+                if (media is not null && !string.IsNullOrEmpty(media.ImageBuffer))
                 {
                     media.ProductId = product.ProductId; 
                     await _productMediaService.Add(media);

@@ -65,11 +65,11 @@ namespace Backend.API.Controllers.Products
         [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost]
         [Route("Upload")]
-        public async Task<ActionResult> UploadFile([FromBody] IFormFile file)
+        public async Task<ActionResult> UploadFile([FromBody] string base64string)
         {
             try
             {
-                return Ok(await _productMediaService.UploadFile(file));
+                return Ok(await _productMediaService.UploadFile(base64string));
             }
             catch (Exception ex)
             {

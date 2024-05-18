@@ -31,20 +31,17 @@ else
                             <div class="row">
                                 <div class="col-md-12 col-lg-3 col-xl-3 mb-lg-0">
                                     <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                        <img src="@product.MediaURL"
-                                             class="w-100" />
+                                        <img width="150" height="150" src="@product.MediaURL" class="rounded cursor-pointer" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-6 col-xl-6">
-                                    <h5>@product.Name</h5>
+                                    <h5 class="smart-link">@product.Name</h5>
                                     <div class="d-flex flex-row justify-content-between">
 
-                                        <span class="text-info mb-1 me-2" @onclick="() => Edit(product)">#@product.SKU</span>
+                                        <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(product)">#@product.SKU</span>
                                         <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@product.ProductTypeName<br /></span>
                                     </div>
-
-
-                                    <p class=" mt-4 mb-4 mb-md-0" >
+                                    <p class=" mt-4 mb-4 mb-md-0 card-description" >
                                         @product.Description
                                     </p>
                                 </div>
@@ -52,26 +49,18 @@ else
                                     <div class="d-flex flex-row align-items-center mb-1">
                                         <h4 class="mb-1 me-1">R$ @product.Value</h4>
                                     </div>
-                                    <h6 class="text-success">Free shipping</h6>
-                                   
-
                                     <div class="d-flex flex-column mt-4">
                                         <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => CreateNewVariant(product)">Add Variant</button>
                                         <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => Edit(product)">Edit<i class="ti ti-edit m-1"></i></button>
                                         <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => DeleteModalAction(product)">Delete<i class="ti ti-trash-x m-1"></i> </button>
-
                                     </div>
                                 </div>
-
-                               
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         }
-
-
     }
 }
 

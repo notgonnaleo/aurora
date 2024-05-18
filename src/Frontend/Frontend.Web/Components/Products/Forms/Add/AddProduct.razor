@@ -62,10 +62,12 @@
 
                                 <!-- upload img -->
                                 <div class="row">
-                                    <div class="mb-2 col-sm-12 p-2">
-                                        <label for="productImage" class="form-label">Product Image</label>
+                                    <label for="file" class="custum-file-upload">
+                                        <div class="text">
+                                            <span>Click to upload image</span>
+                                        </div>
                                         <InputFile id="productImage" OnChange="HandleFileUpload" accept="image/*" />
-                                    </div>
+                                    </label>
                                 </div> 
 
                                 <!-- Name -->
@@ -241,55 +243,17 @@
 
     public async Task HandleFileUpload(InputFileChangeEventArgs e)
     {
-        var browserFile = e.File;
-        if (browserFile != null)
-        {   
-            mediaModel = new ProductMedia
-            {
-                MediaType = ProductMediaType.Image,
-                MediaURL = browserFile.Name,
-                Priority = 0,
-                ProductId = model.ProductId,
-                TenantId = context.Tenant.Id
-            };
-
-            try
-            {
-                using var stream = browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024); // Adjust max allowed size as needed
-
-                var content = new MultipartFormDataContent
-                {
-                    { new StreamContent(stream), "File", browserFile.Name }
-                };
-
-                // Add other required form data
-                content.Add(new StringContent(model.ProductId.ToString()), "ProductId");
-                content.Add(new StringContent(context.Tenant.Id.ToString()), "TenantId");
-                content.Add(new StringContent(ProductMediaType.Image.ToString()), "MediaType");
-                content.Add(new StringContent(browserFile.Name), "MediaURL");
-                content.Add(new StringContent("0"), "Priority");
-                multipartFormDataContent = content;
-            }
-            catch (Exception ex)
-            {
-                Toaster.Error(ex.Message);
-            }
-        }   
+        var format = "image/jpg";
+        var resizeImage = await e.File.RequestImageFileAsync(format, 600, 600);
+        var buffer = new byte[resizeImage.Size];
+        await resizeImage.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"{Convert.ToBase64String(buffer)}";
+        mediaModel.ImageBuffer = imageData;
     }
 }
 
 @code
 {
-    private bool UploadImage(MultipartFormDataContent multipartFormDataContent)
-    {
-        // httprequest post
-        return true;
-    }
-}
-
-@code
-{
-    private MultipartFormDataContent? multipartFormDataContent = null;
     private UserSessionContext context = new UserSessionContext();
     private Product model = new Product();
     private ProductMedia mediaModel = new ProductMedia();
@@ -322,10 +286,6 @@
         if (response.Successful())
         {
             Toaster.Success(response!.Result.Name, "was created successfully!.");
-            if(multipartFormDataContent is not null)
-            {
-                UploadImage(multipartFormDataContent);
-            }
             navigator.NavigateTo("/products", true);
         }
         else
