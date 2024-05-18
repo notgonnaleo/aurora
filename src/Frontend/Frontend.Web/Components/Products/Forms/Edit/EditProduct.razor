@@ -8,12 +8,42 @@
 @inject AuthenticationService _authenticationService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 
+@code
+{
+
+    public async Task HandleFileUpload(InputFileChangeEventArgs e)
+    {
+        var format = "image/jpg";
+        var resizeImage = await e.File.RequestImageFileAsync(format, 600, 600);
+        var buffer = new byte[resizeImage.Size];
+        await resizeImage.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"{Convert.ToBase64String(buffer)}";
+        //Model.ImageBuffer = imageData;
+    }
+}
+
 <div>
     <div class="card p-4">
         <h5 class="card-title fw-semibold mb-4">Product details</h5>
         <div class="row">
             <div class="mb-3 col-md-3">
-                <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png" alt="" class="card-img rounded-12">
+                @if(Model.MediaURL is null)
+                {
+                    <label for="productImage" class="custum-file-upload">
+                        <div class="icon">
+                            <i class="ti ti-upload"></i>
+                        </div>
+                        <div class="text">
+                            <span>Click to upload image</span>
+                        </div>
+                        <InputFile id="productImage" OnChange="HandleFileUpload" accept="image/*" />
+                    </label>
+                }
+                else
+                {
+                    <img src="@Model.MediaURL" class="card-img rounded-12">
+                    <InputFile id="productImage" OnChange="HandleFileUpload" accept="image/*" class="form-control mt-4" />
+                }
             </div>
             <div class="col-md-9">
                 <form>
@@ -34,7 +64,7 @@
                     <div class="row">
                         <div class="mb-3 col-sm-6">
                             <label for="description">Description</label>
-                            <input type="text" class="form-control" id="description" placeholder="Description" @bind="@Model.Description">
+                            <textarea type="text" class="form-control" id="description" placeholder="Description" @bind="@Model.Description" />
                         </div>
                         <div class="mb-3 col-sm-3">
                             <label for="value">Value</label>

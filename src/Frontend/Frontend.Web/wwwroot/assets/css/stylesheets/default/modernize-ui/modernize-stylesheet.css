@@ -214,6 +214,7 @@
     --bs-font-color: #fff;
     --bs-table-on-hover-color: #1f2e48;
     --bs-step-line: #203146;
+    --bs-form-control-disabled-bg: #1f2c3c;
 }
 
 *, :after, :before {
@@ -20193,8 +20194,6 @@ textarea.form-control-lg {
 
 
 .custum-file-upload {
-    height: 200px;
-    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: space-between;
@@ -20202,7 +20201,7 @@ textarea.form-control-lg {
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    border: 2px dashed var(--bs-primary);
+    border: 2px dashed var(--bs-border-color);
     background-color: var(--bs-card-bg);
     padding: 1.5rem;
     border-radius: 10px;
@@ -20233,3 +20232,74 @@ textarea.form-control-lg {
     .custum-file-upload input {
         display: none;
     }
+
+.zoom {
+    transition: transform .3s; /* Animation */
+}
+
+.zoom:hover {
+    transform: scale(0.9); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+.content {
+    position: relative;
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
+    overflow: hidden;
+}
+
+    .content .content-overlay {
+        background: rgba(0,0,0,0.7);
+        position: absolute;
+        height: 99%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        opacity: 0;
+        -webkit-transition: all 0.4s ease-in-out 0s;
+        -moz-transition: all 0.4s ease-in-out 0s;
+        transition: all 0.4s ease-in-out 0s;
+    }
+
+    .content:hover .content-overlay {
+        opacity: 1;
+    }
+
+.content-image {
+    width: 100%;
+}
+
+.content-details {
+    position: absolute;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    -webkit-transition: all 0.3s ease-in-out 0s;
+    -moz-transition: all 0.3s ease-in-out 0s;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.content:hover .content-details {
+    top: 50%;
+    left: 50%;
+    opacity: 1;
+}
+
+
+.content-details p {
+    color: #fff;
+    font-size: 0.8em;
+}
+.fadeIn-top {
+    top: 20%;
+}

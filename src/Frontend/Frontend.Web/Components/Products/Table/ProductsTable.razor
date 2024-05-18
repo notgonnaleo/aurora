@@ -24,18 +24,26 @@ else
     {
         @foreach (var product in Model.Result)
         {
-            <div class="row justify-content-center mb-1">
+            <div class="row justify-content-center mb-1 zoom">
                 <div class="col-md-12 col-xl-10">
                     <div class="card shadow-0 ">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12 col-lg-3 col-xl-3 mb-lg-0">
-                                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                        <img width="150" height="150" src="@product.MediaURL" class="rounded cursor-pointer" />
+                                    <div class="content">
+                                        <div class="content-overlay"></div>
+                                        <div class="bg-image hover-zoom ripple rounded ripple-surface content-image">
+                                            <img width="150" height="150" src="@product.MediaURL" class="rounded cursor-pointer" @onclick="() => Edit(product)" />
+                                            <div class="content-details fadeIn-top">
+                                                <h3>This is a title</h3>
+                                                <p>This is a short description</p>
+                                            </div>
+                                        </div>
                                     </div>
+
                                 </div>
                                 <div class="col-md-6 col-lg-6 col-xl-6">
-                                    <h5 class="smart-link">@product.Name</h5>
+                                    <h5 class="smart-link" @onclick="() => Edit(product)">@product.Name</h5>
                                     <div class="d-flex flex-row justify-content-between">
 
                                         <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(product)">#@product.SKU</span>
