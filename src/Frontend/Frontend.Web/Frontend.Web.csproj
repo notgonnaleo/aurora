@@ -47,6 +47,8 @@
 
   <ItemGroup>
     <Folder Include="Components\Addresses\Forms\Edit\" />
+    <Folder Include="wwwroot\assets\images\NovaPasta\" />
+    <Folder Include="wwwroot\assets\images\users\aurora\" />
   </ItemGroup>
 
 </Project>

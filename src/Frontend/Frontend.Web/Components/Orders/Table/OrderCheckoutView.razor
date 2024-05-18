@@ -1,0 +1,38 @@
+﻿@using Backend.Domain.Entities.Orders.Response;
+@inject NavigationManager NavigationManager;
+
+@if (Order.OrderTotalAmount is null && Order.OrderItems is null || Order!.OrderItems!.Count() == 0)
+{
+    <p>Add items to your order to calculate the invoice value.</p>
+    <a class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
+        Calculate order
+    </a>
+}
+else
+{
+    <div class="pull-right mt-4 mb-4 text-end">
+        <p>Parcels: x@(Order.OrderParcelAmount) | @(Order.OrderTotalAmount/Order.OrderParcelAmount) </p>
+        <h5>
+            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "Not calculated" : Order.OrderTotalAmount)</strong>
+        </h5>
+    </div>
+}
+<div class="text-end">
+    <button class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
+        View Details
+    </button>
+    <button class="btn btn-outline-primary" type="button">
+        <i class="ti ti-printer fs-5"></i>
+            Generate Report
+    </button>
+</div>
+
+@code {
+    public void RedirectToOrderEditPage()
+    {
+        NavigationManager.NavigateTo($"/order-summary/{Order.OrderId}");
+    }
+
+    [Parameter]
+    public OrderResponse Order { get; set; }
+}

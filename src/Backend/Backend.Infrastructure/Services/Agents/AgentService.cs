@@ -13,15 +13,14 @@ using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Enums.Localization;
 using Backend.Domain.Entities.Products;
 using static Backend.Infrastructure.Enums.Modules.Methods;
-
+using Backend.Domain.Entities.Agents.Response;
+using Backend.Domain.Enums.Agents;
 
 namespace Backend.Infrastructure.Services.Agents
 {
     public class AgentService : Service
     {
-
         private readonly AppDbContext _appDbContext;
-
         public AgentService(AppDbContext appDbContext, UserContextService main) : base(main)
         {
             _appDbContext = appDbContext;
@@ -61,6 +60,43 @@ namespace Backend.Infrastructure.Services.Agents
             return _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.TenantId == context.Tenant.Id);
         }
 
+        public Domain.Entities.Agents.Agent? GetEmployee(Guid tenantId, Guid agentId)
+        {
+            if (tenantId == Guid.Empty || agentId == Guid.Empty)
+                return null;
+
+            var context = LoadContext();
+            ValidateTenant(tenantId);
+            var seller = _appDbContext.Agents
+                .FirstOrDefault(x => x.AgentId == agentId && 
+                x.TenantId == context.Tenant.Id &&
+                x.AgentTypeId == (int)AgentTypes.Employee);
+
+            if(seller is null)
+                throw new Exception("Employee is invalid or could not be found");
+
+            return seller;
+        }
+
+        public Domain.Entities.Agents.Agent? GetCustomer(Guid tenantId, Guid agentId)
+        {
+            if (tenantId == Guid.Empty || agentId == Guid.Empty)
+                return null;
+
+            var context = LoadContext();
+            ValidateTenant(tenantId);
+            var customer = _appDbContext.Agents
+                .FirstOrDefault(x => x.AgentId == agentId &&
+                x.TenantId == context.Tenant.Id &&
+                x.AgentTypeId == (int)AgentTypes.Customer);
+
+            if(customer is null)
+                throw new Exception("Customer is invalid or could not be found");
+
+            return customer;
+        }
+
+
         public bool Update(Domain.Entities.Agents.Agent model)
         {
             var context = LoadContext();
@@ -74,15 +110,16 @@ namespace Backend.Infrastructure.Services.Agents
 
         public AgentDetail GetAgentDetails(Guid agentId)
         {
-            var agent = _appDbContext.Agents.FirstOrDefault(x => x.AgentId == agentId && x.Active);
+            var tenantId = LoadContext().Tenant.Id;
+            var agent = _appDbContext.Agents.FirstOrDefault(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active);
             agent.AgentType = _appDbContext.AgentTypes.FirstOrDefault(x => x.AgentTypeId == agent.AgentTypeId);    
             return new AgentDetail
             {
                 Agent = agent,
-                Profile = _appDbContext.Profiles.FirstOrDefault(x => x.AgentId == agent.AgentId && x.Active),
-                PhoneNumbers = _appDbContext.Phones.Where(x => x.AgentId == agentId && x.Active),
-                EmailAddresses = _appDbContext.Emails.Where(x => x.AgentId == agentId && x.Active),
-                Addresses = _appDbContext.Addresses.Where(x => x.AgentId == agentId && x.Active)
+                Profile = _appDbContext.Profiles.FirstOrDefault(x => x.TenantId == tenantId && x.AgentId == agent.AgentId && x.Active),
+                PhoneNumbers = _appDbContext.Phones.Where(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active),
+                EmailAddresses = _appDbContext.Emails.Where(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active),
+                Addresses = _appDbContext.Addresses.Where(x => x.TenantId == tenantId && x.AgentId == agentId && x.Active)
             };
         }
 

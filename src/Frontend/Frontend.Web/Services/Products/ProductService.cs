@@ -1,5 +1,6 @@
 ﻿using Backend.Domain.Entities.Authentication.Tenants;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.Products.Request;
 using Backend.Infrastructure.Enums.Modules;
 using Frontend.Web.Models.Client;
 using Frontend.Web.Models.Route;
@@ -36,7 +37,7 @@ namespace Frontend.Web.Services.Products
             return await _productRepository.GetProduct(tenantId, productId);
         }
 
-        public async Task<ApiResponse<Product>> CreateProduct(Product product)
+        public async Task<ApiResponse<Product>> CreateProduct(ProductRequest product)
         {
             return await _productRepository.CreateProduct(product);
         }

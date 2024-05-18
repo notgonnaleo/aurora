@@ -22,7 +22,7 @@ namespace Frontend.Web.Repository.Stocks
         public async Task<ApiResponse<Stock>> CreateStock(Stock stock)
         {
             var model = new RouteBuilder<Stock>().Send(Endpoints.Stock, Methods.Default.POST, stock);
-            return await _httpClientRepository.Post(model);
+            return await _httpClientRepository.Post<Stock, Stock>(model);
         }
 
         public async Task<IEnumerable<StockDetail>> GetStockWithDetail(string tenantId)

@@ -1,0 +1,46 @@
+﻿@using Backend.Domain.Entities.OrderHistories.Response
+@using Backend.Domain.Entities.Products
+@using Frontend.Web.Repository.Orders
+@using Frontend.Web.Services.Authentication
+@using MovementTypes = Backend.Domain.Enums.StockMovements.MovementType.MovementTypes;
+@inject OrderRepository _orderRepository;
+@inject AuthenticationService _authService;
+
+<div class="table-responsive">
+    <table id="table" class="table search-table align-middle text-nowrap table-fixed">
+        <thead>
+            <tr>
+                <th>From - To</th>
+                <th>Quantity</th>
+                <th>Movement Type</th>
+                <th>Item Name</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Logs)
+            {
+                <tr>
+                    <td>
+                        @log.From.Agent.Name
+                        <span>
+                            <i class="@(log.OrderMovementType == (int)MovementTypes.Input ? "ti ti-arrow-right text-success fs-4" : "ti ti-arrow-left text-danger fs-4")"></i>
+                        </span>
+                        @log.To.Agent.Name
+                    </td>
+                    <td>@log.OrderTotalItemsMovement</td>
+                    <td>
+                        <span class="badge @(log.OrderMovementType == (int)MovementTypes.Input ? "bg-primary" : "bg-danger")">@(((MovementTypes)log.OrderMovementType).ToString())</span>
+                    </td>
+                    <td>@log.Item.ItemName</td>
+                    <td>@log.MovementTimestamp</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code
+{
+    [Parameter] public IEnumerable<OrderMovementEntryHistoryResponse>? Logs { get; set; }
+}

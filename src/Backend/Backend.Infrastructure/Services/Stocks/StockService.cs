@@ -34,7 +34,7 @@ namespace Backend.Infrastructure.Services.Stocks
             _appDbContext = appDbContext;
             _agentService = agentService;
             _productService = productService;
-            _productVariantService=productVariantService;
+            _productVariantService = productVariantService;
 
         }
 
@@ -170,6 +170,10 @@ namespace Backend.Infrastructure.Services.Stocks
         {
             IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId && x.Active);
             List<ProductDetail> products = _productService.GetProductsWithDetail(tenantId).ToList();
+
+            if (!products.Any() || products is null ) { 
+                return Enumerable.Empty<StockDetail>();
+            }
 
             return stock.Select(x => new StockDetail
             {

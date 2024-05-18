@@ -11,6 +11,8 @@ using Backend.Infrastructure.Services.ProductTypes;
 using Backend.Infrastructure.Services.SubCategories;
 using Backend.Infrastructure.Services.Tenants;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Internal;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Backend.Infrastructure.Enums.Modules.Methods;
 
 namespace Backend.Infrastructure.Services.Products
 {
@@ -27,14 +30,16 @@ namespace Backend.Infrastructure.Services.Products
         private readonly ProductTypeService _productType;
         private readonly CategoryService _categoryService;
         private readonly SubCategoryService _subCategoryService;
+        private readonly ProductMediaService _productMediaService;
 
-        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService)
+        public ProductService(AppDbContext appDbContext, ProductTypeService productTypeService, UserContextService main, CategoryService categoryService, SubCategoryService subCategoryService, ProductMediaService productMediaService)
             : base(main)
         {
             _appDbContext = appDbContext;
             _productType = productTypeService;
             _categoryService = categoryService;
             _subCategoryService = subCategoryService;
+            _productMediaService = productMediaService;
         }
 
         public IEnumerable<Product> Get(Guid tenantId)
@@ -53,17 +58,22 @@ namespace Backend.Infrastructure.Services.Products
                 .FirstOrDefault();
         }
 
-        public async Task<Product> Add(Product product)
+        public async Task<Product> Add(Product product, Domain.Entities.Products.ProductMedia? media)
         {
             var context = LoadContext();
             product.TenantId = context.Tenant.Id;
             product = new Product(product, context.UserId);
             product.ValidateFields(context.Language);
-
             _appDbContext.Products.Add(product);
             if (await _appDbContext.SaveChangesAsync() > 0)
+            {
+                if (media is not null && !string.IsNullOrEmpty(media.ImageBuffer))
+                {
+                    media.ProductId = product.ProductId; 
+                    await _productMediaService.Add(media);
+                }
                 return product;
-
+            }
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
 
@@ -120,6 +130,7 @@ namespace Backend.Infrastructure.Services.Products
             var subCategories = _subCategoryService.Get();
             return products.Select(product => new ProductDetail
             {
+                MediaURL = _productMediaService.Get(product.ProductId).FirstOrDefault() is not null ? _productMediaService.Get(product.ProductId).FirstOrDefault().MediaURL : null,
                 TenantId = product.TenantId,
                 ProductId = product.ProductId,
                 ProductTypeId = product.ProductTypeId,
@@ -141,7 +152,7 @@ namespace Backend.Infrastructure.Services.Products
                 Updated = product.Updated,
                 UpdatedBy = product.UpdatedBy,
                 Active = product.Active,
-            });
+            }); ;
         }
 
         public ProductDetail GetProductThumbnail(Guid tenantId, Guid productId)
@@ -151,11 +162,18 @@ namespace Backend.Infrastructure.Services.Products
                 x.ProductId == productId &&
                 x.Active);
 
+            if (product is null) throw new Exception("No products were found.");
+
             var types = _productType.Get();
-            var category = _categoryService.GetCategoryAndSubCategoriesById(product.CategoryId.Value);
+            var category = new Domain.Entities.Categories.Category();
+            if (product.CategoryId.HasValue)
+            {
+                category = _categoryService.GetCategoryAndSubCategoriesById(product.CategoryId.Value);
+            }
 
             return new ProductDetail
             {
+                MediaURL = _productMediaService.Get(product.ProductId).FirstOrDefault() is not null ? _productMediaService.Get(product.ProductId).FirstOrDefault().MediaURL : null,
                 TenantId = product.TenantId,
                 ProductId = product.ProductId,
                 ProductTypeId = product.ProductTypeId,
@@ -170,15 +188,15 @@ namespace Backend.Infrastructure.Services.Products
                 LiquidWeight = product.LiquidWeight,
                 ProductType = types.First(x => x.Id == product.ProductTypeId),
                 ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
-                CategoryId = product.CategoryId ?? null,
-                SubCategoryId = product.SubCategoryId ?? null,
-                CategoryName = category.CategoryName,
-                SubCategoryName = category.SubCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName,
+                CategoryId = product.CategoryId,
+                SubCategoryId = product.SubCategoryId,
+                CategoryName = product.CategoryId != null ? category.CategoryName : string.Empty,
+                SubCategoryName = product.CategoryId != null ? category.SubCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId)?.SubCategoryName ?? string.Empty : string.Empty,
                 Created = product.Created,
                 CreatedBy = product.CreatedBy,
                 Updated = product.Updated,
                 UpdatedBy = product.UpdatedBy,
-                Active = product.Active,
+                Active = product.Active
             };
 
         }

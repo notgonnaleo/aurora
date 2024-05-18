@@ -8,6 +8,10 @@
         <!-- URI Base Reference -->
         <base href="/" />
 
+        <!-- Datatables -->
+        <link href="https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.css" />
+        <link href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.css" />
+
         <!-- Modernize UI -->
         <link href="assets/css/stylesheets/default/modernize-ui/modernize-stylesheet.css" rel="stylesheet" />
         <!-- Blazor UI -->
@@ -19,21 +23,42 @@
         <link href="assets/css/stylesheets/loaders/loader-dots.css" rel="stylesheet" />
         <!-- Backgrounds -->
         <link href="assets/css/stylesheets/animations/backgrounds/cubes-floating-bg.css" rel="stylesheet" />
-
     </head>
-        <body>
-            <div id="app">
-                <div style=" display: flex; justify-content: center; align-items: center; text-align: center; min-height: 100vh;">
-                    <svg viewBox="25 25 50 50">
-                        <circle r="20" cy="50" cx="50"></circle>
-                    </svg>
-                </div>
+    <body>
+        <div id="app">
+            <div style=" display: flex; justify-content: center; align-items: center; text-align: center;">
+                <svg viewBox="25 25 50 50">
+                    <circle r="20" cy="50" cx="50"></circle>
+                </svg>
             </div>
-            <!-- Web Assembly -->
-            <script src="_framework/blazor.webassembly.js"></script>
-            <!-- Scripts -->
-            <script src="assets/js/ReportEditorHandler/ReportExportTools.js"></script>
-        </body>
+        </div>
+        <!-- Web Assembly -->
+        <script src="_framework/blazor.webassembly.js"></script>
+        <!-- Jquery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!-- Scripts -->
+        <script src="assets/js/ReportEditorHandler/ReportExportTools.js"></script>
+        <!-- Datatables -->
+        <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
+        <script src="assets/js/ToolsUI/Tables/Datatables.js"></script>
+        <script src="assets/js/ToolsUI/Themes/DarkTheme.js"></script>
+
+        <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <script>
+            function googleTranslateElementInit() {
+                new google.translate.TranslateElement({ pageLanguage: 'pt' }, 'google_translate_element');
+            };
+        </script>
+
+    </body>
     </html>
 
 

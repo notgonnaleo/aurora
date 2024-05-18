@@ -8,15 +8,14 @@
 @inject AuthenticationService _authenticationService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 
-<PageTitle>Aurora - Edit Product</PageTitle>
 <aside class="right-sidebar @formCssClass">
-@if (isVariantSidebar)
-{
-    <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseProductVariantForm
-        ToggleRightSidebar="ToggleProductVariantForm"
-        ParentProductDetail="@Model.Result" 
-    />
-}
+    @if (isVariantSidebar)
+    {
+        <Frontend.Web.Components.ProductVariants.Forms.Add.AddProductVariant CollapseRightSidebar=collapseProductVariantForm
+                                                                             ToggleRightSidebar="ToggleProductVariantForm"
+                                                                             ParentProductDetail="@Model.Result"
+                                                                             SelectedItemVariantt="SelectedItemVariantt"/>
+    }
 </aside>
 <div class="container-fluid">
     @if (Model.Result is null && isLoading)
@@ -27,23 +26,66 @@
     {
         @if (Model.StatusCode == 200)
         {
-            <a class="btn" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Generate report</a>
+            <a class="btn btn-outline-primary" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Generate report</a>
+            <br />
+            <br />
             <Frontend.Web.Components.Products.Forms.Edit.EditProduct Model="@Model.Result" />
 
-            <button class="btn btn-outline-primary" @onclick="ToggleProductVariantForm">
+            <button class="btn btn-outline-primary" @onclick="AddVariant">
                 @btnText
             </button>
-            <Frontend.Web.Components.ProductVariants.Table.ProductVariantsTable parentProductId="@productId" />
+            <br />
+            <br />
+            <Frontend.Web.Components.ProductVariants.Table.ProductVariantsTable parentProductId="@productId"  ShowModal="ShowVariantModal" SelectedItemVariant="EditVariant"/>
         }
         else
         {
-            <h6>Selected item does not exist...</h6>
+            <Frontend.Web.Components.Placeholders.EmptyMessages.EmptyListVersionA></Frontend.Web.Components.Placeholders.EmptyMessages.EmptyListVersionA>
         }
     }
-
 </div>
 
 @code
+{
+    
+    public void EditVariant(ProductVariant selectedItem)
+    {
+        SelectedItemVariantt = selectedItem;
+        ToggleProductVariantForm();
+    }
+
+    public void AddVariant()
+    {
+        SelectedItemVariantt = null;
+        ToggleProductVariantForm();
+    }
+}
+
+@code
+{
+    public bool ShowVariantModal;
+
+}
+
+@code {
+    private string? btnText = "New";
+    public string? formCssClass = null;
+    public bool isVariantSidebar = false;
+
+
+    private bool collapseProductVariantForm = true;
+    private void ToggleProductVariantForm()
+    {
+        ShowVariantModal = false;
+
+        isVariantSidebar = true;
+        collapseProductVariantForm = !collapseProductVariantForm;
+        formCssClass = collapseProductVariantForm ? null : "show-menu";
+        btnText = collapseProductVariantForm ? "New" : "Hide menu";
+    }
+}
+
+@* @code
 {
     private string? btnText = "New";
     public string? formCssClass = null;
@@ -56,7 +98,7 @@
         collapseProductVariantForm = !collapseProductVariantForm;
         formCssClass = collapseProductVariantForm ? null : "show-menu";
     }
-}
+} *@
 
 @code
 {
@@ -77,7 +119,7 @@
         isLoading = true;
         var context = await _authenticationService.GetContext();
         Model = await _productService.GetProductWithDetails(context!.Tenant.Id.ToString(), productId.ToString());
-        if(Model.StatusCode != 200)
+        if (Model.StatusCode != 200)
         {
             Toaster.Error(Model.ErrorMessage);
         }
@@ -90,4 +132,11 @@
 {
     [Parameter]
     public string productId { get; set; }
+
+    [Parameter]
+    public bool ShowModal { get; set; }
+
+    [Parameter]
+    public ProductVariant SelectedItemVariantt { get; set; }
 }
+
