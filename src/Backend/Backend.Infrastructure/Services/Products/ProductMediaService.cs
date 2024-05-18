@@ -17,17 +17,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Infrastructure.Services.Products
 {
     public class ProductMediaService : Service
     {
         private readonly AppDbContext _appDbContext;
+        private readonly IConfiguration _configuration;
 
-        public ProductMediaService(AppDbContext appDbContext, UserContextService main)
+        public ProductMediaService(AppDbContext appDbContext, IConfiguration configuration, UserContextService main)
             : base(main)
         {
             _appDbContext = appDbContext;
+            _configuration = configuration;
         }
 
         public IEnumerable<ProductMedia> Get(Guid productId)
@@ -50,13 +56,39 @@ namespace Backend.Infrastructure.Services.Products
 
             var context = LoadContext();
             model.TenantId = context.Tenant.Id;
+            if (!string.IsNullOrEmpty(model.ImageBuffer))
+            {
+               model.MediaURL = await UploadFile(model.ImageBuffer);
+            }
 
-            _appDbContext.ProductMedia.Add(model);
-            if (await _appDbContext.SaveChangesAsync() > 0)
-                return model;
+            if (!string.IsNullOrEmpty(model.MediaURL))
+            {
+                _appDbContext.ProductMedia.Add(model);
+                if (await _appDbContext.SaveChangesAsync() > 0)
+                    return model;
+            }
 
             throw new Exception(Localization.GenericValidations.ErrorSaveItem(context.Language));
         }
+
+        public async Task<string> UploadFile(string base64string)
+        {
+            byte[] data = Convert.FromBase64String(base64string);
+            var context = LoadContext();
+            // por tudo que é mais sagrado, criar vergonha na cara e colocar essa aberração inteira na appsettings
+            var blobContainerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=appaurorablobstorage;AccountKey=LedXk/66YH5xRnk7fUFau6CR1ID2cu87Qek2Jnx55EExzYCgSg4rqK4VkIbZpN6siSUf8qxzPrA++ASttiIX1w==;EndpointSuffix=core.windows.net", "assets");
+            var blobHttpHeader = new BlobHttpHeaders();
+            blobHttpHeader.ContentType = "image/jpeg";
+            BlobClient blob = blobContainerClient.GetBlobClient($"{context.Tenant.Name!.ToLower()}/images/{Guid.NewGuid()}.jpg");
+            using (var ms = new MemoryStream(data, false))
+            {
+                var response = await blob.UploadAsync(ms, blobHttpHeader);
+                if (response != null && response.GetRawResponse().Status == 201)
+                return blob.Uri.AbsoluteUri;
+            }
+            throw new Exception("Image failed during upload process");
+        }
+
 
         public bool Update(ProductMedia model)
         {

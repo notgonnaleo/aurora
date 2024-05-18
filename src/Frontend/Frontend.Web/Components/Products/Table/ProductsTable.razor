@@ -26,52 +26,55 @@ else
         {
             <div class="row justify-content-center mb-1">
                 <div class="col-md-12 col-xl-10">
-                    <div class="card shadow-0 ">
+                    <div class="card shadow-0 zoom">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12 col-lg-3 col-xl-3 mb-lg-0">
-                                    <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                                        <img src="https://chamegobaby.com.br/wp-content/uploads/2022/11/Produto-teste2.png"
-                                             class="w-100" />
+                                <div class="col-md-3 rounded-1">
+                                    <div class="content-container rounded-1">
+                                        <div class="content-overlay"></div>
+                                        <div class="bg-image ripple ripple-surface content-image">
+                                            <img width="160" height="160" src="@product.MediaURL" class="cursor-pointer" @onclick="() => Edit(product)" />
+                                            <div class="content-details fadeIn-top">
+                                                <button class="btn btn-outline-primary" @onclick="() => Edit(product)">
+                                                    <i class="ti ti-eye m-1"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xl-6">
-                                    <h5>@product.Name</h5>
+                                <div class="col-md-6">
+                                    <h5 class="smart-link mt-2" @onclick="() => Edit(product)">@product.Name</h5>
                                     <div class="d-flex flex-row justify-content-between">
 
-                                        <span class="text-info mb-1 me-2" @onclick="() => Edit(product)">#@product.SKU</span>
+                                        <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(product)">#@product.SKU</span>
                                         <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@product.ProductTypeName<br /></span>
                                     </div>
-
-
-                                    <p class=" mt-4 mb-4 mb-md-0" >
+                                    <p class=" mt-4 mb-4 mb-md-0 card-description" >
                                         @product.Description
                                     </p>
                                 </div>
-                                <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start d-flex flex-column">
+                                <div class="col-md-3 border-sm-start-none border-start d-flex flex-column">
                                     <div class="d-flex flex-row align-items-center mb-1">
                                         <h4 class="mb-1 me-1">R$ @product.Value</h4>
                                     </div>
-                                    <h6 class="text-success">Free shipping</h6>
-                                   
-
                                     <div class="d-flex flex-column mt-4">
-                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => CreateNewVariant(product)">Add Variant</button>
-                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => Edit(product)">Edit<i class="ti ti-edit m-1"></i></button>
-                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => DeleteModalAction(product)">Delete<i class="ti ti-trash-x m-1"></i> </button>
-
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-sm m-1" type="button" @onclick="() => CreateNewVariant(product)">
+                                            Add Variant
+                                        </button>
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => Edit(product)">
+                                            <i class="ti ti-edit m-1"></i>
+                                        </button>
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-sm m-1" type="button" @onclick="() => DeleteModalAction(product)">
+                                            <i class="ti ti-trash-x m-1"></i> 
+                                        </button>
                                     </div>
                                 </div>
-
-                               
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         }
-
-
     }
 }
 
