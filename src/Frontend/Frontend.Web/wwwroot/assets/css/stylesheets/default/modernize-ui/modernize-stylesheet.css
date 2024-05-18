@@ -20243,19 +20243,19 @@ textarea.form-control-lg {
         transform: scale(1.1);
     }
 
-.content {
+.content-container {
+    width: 160px;
+    margin-left: 0px !important;
     position: relative;
-    width: 180px;
-    max-width: 180px;
     margin: auto;
     overflow: hidden;
 }
 
-    .content .content-overlay {
+    .content-container .content-overlay {
         background: rgba(0,0,0,0.7);
         position: absolute;
-        height: 180px;
-        width: 180px;
+        height: 160px;
+        width: 160px;
         left: 0;
         top: 0;
         bottom: 0;
@@ -20266,7 +20266,7 @@ textarea.form-control-lg {
         transition: all 0.4s ease-in-out 0s;
     }
 
-    .content:hover .content-overlay {
+    .content-container:hover .content-overlay {
         opacity: 1;
     }
 
@@ -20279,7 +20279,7 @@ textarea.form-control-lg {
     text-align: center;
     padding-left: 1em;
     padding-right: 1em;
-    width: 180px;
+    width: 160px;
     top: 50%;
     left: 50%;
     opacity: 0;
@@ -20291,7 +20291,7 @@ textarea.form-control-lg {
     transition: all 0.3s ease-in-out 0s;
 }
 
-.content:hover .content-details {
+.content-container:hover .content-details {
     top: 50%;
     left: 50%;
     opacity: 1;

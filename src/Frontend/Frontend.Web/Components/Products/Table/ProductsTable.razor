@@ -29,11 +29,11 @@ else
                     <div class="card shadow-0 zoom">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-12 col-lg-3 col-xl-3 mb-lg-0">
-                                    <div class="content">
+                                <div class="col-md-3 rounded-1">
+                                    <div class="content-container rounded-1">
                                         <div class="content-overlay"></div>
-                                        <div class="bg-image ripple rounded-circle ripple-surface content-image">
-                                            <img width="180" height="180" src="@product.MediaURL" class="pb-2 cursor-pointer" @onclick="() => Edit(product)" />
+                                        <div class="bg-image ripple ripple-surface content-image">
+                                            <img width="160" height="160" src="@product.MediaURL" class="cursor-pointer" @onclick="() => Edit(product)" />
                                             <div class="content-details fadeIn-top">
                                                 <button class="btn btn-outline-primary" @onclick="() => Edit(product)">
                                                     <i class="ti ti-eye m-1"></i>
@@ -41,10 +41,9 @@ else
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xl-6">
-                                    <h5 class="smart-link" @onclick="() => Edit(product)">@product.Name</h5>
+                                <div class="col-md-6">
+                                    <h5 class="smart-link mt-2" @onclick="() => Edit(product)">@product.Name</h5>
                                     <div class="d-flex flex-row justify-content-between">
 
                                         <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(product)">#@product.SKU</span>
@@ -54,7 +53,7 @@ else
                                         @product.Description
                                     </p>
                                 </div>
-                                <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start d-flex flex-column">
+                                <div class="col-md-3 border-sm-start-none border-start d-flex flex-column">
                                     <div class="d-flex flex-row align-items-center mb-1">
                                         <h4 class="mb-1 me-1">R$ @product.Value</h4>
                                     </div>
