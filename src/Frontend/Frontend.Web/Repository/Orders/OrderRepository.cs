@@ -109,5 +109,59 @@ namespace Frontend.Web.Repository.Orders
             var model = new RouteBuilder<OrderMovementEntryHistoryRequest>().Send(Endpoints.Orders, "ExecuteOrderMovementAction", request);
             return await _httpClientRepository.Post<OrderMovementEntryHistoryRequest, bool>(model);
         }
+        public async Task<ApiResponse<bool>> Approve(string tenantId, string orderId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = "tenantId",
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = "orderId",
+                    ParameterValue = orderId,
+                }
+            };
+            var model = new RouteBuilder<bool>().SendMultiple(Endpoints.Orders, "Approve", parameters);
+            return await _httpClientRepository.Post<bool, bool>(model);
+        }
+        public async Task<ApiResponse<bool>> Refund(string tenantId, string orderId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = "tenantId",
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = "orderId",
+                    ParameterValue = orderId,
+                }
+            };
+            var model = new RouteBuilder<bool>().SendMultiple(Endpoints.Orders, "Refund", parameters);
+            return await _httpClientRepository.Post<bool, bool>(model);
+        }
+        public async Task<ApiResponse<bool>> Cancel(string tenantId, string orderId)
+        {
+            var parameters = new List<RouteParameterRequest>()
+            {
+                new RouteParameterRequest()
+                {
+                    ParameterName = "tenantId",
+                    ParameterValue = tenantId,
+                },
+                new RouteParameterRequest()
+                {
+                    ParameterName = "orderId",
+                    ParameterValue = orderId,
+                }
+            };
+            var model = new RouteBuilder<bool>().SendMultiple(Endpoints.Orders, "Cancel", parameters);
+            return await _httpClientRepository.Post<bool, bool>(model);
+        }
     }
 }

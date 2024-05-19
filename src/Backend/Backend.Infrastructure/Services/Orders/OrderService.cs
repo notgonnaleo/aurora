@@ -62,7 +62,7 @@ namespace Backend.Infrastructure.Services.Orders
                         ItemQuantity = orderItem.ItemQuantity,
                         ItemTotalAmount = orderItem.ItemTotalAmount,
                         ItemUnitAmount = orderItem.ItemUnitAmount,
-                    });                    
+                    });
                 }
                 ordersThumbnails.Add(new OrderResponse()
                 {
@@ -130,7 +130,7 @@ namespace Backend.Infrastructure.Services.Orders
             if (seller is null)
                 throw new Exception("Seller must be selected");
 
-            if (AddOrder(newOrder)) 
+            if (AddOrder(newOrder))
             {
                 if (orderRequest.OrderItems is not null && orderRequest.OrderItems.Any())
                 {
@@ -178,7 +178,7 @@ namespace Backend.Infrastructure.Services.Orders
                 {
                     variant = _productVariantService.GetVariant(item.TenantId, item.ItemId, item.ItemVariantId.Value);
                 }
-                if(variant is not null)
+                if (variant is not null)
                 {
                     orderLine = new OrderItem(item, Convert.ToDecimal(product.TotalWeight), Convert.ToDecimal(product.Value), item.ItemQuantity);
                     orderLines.Add(orderLine);
@@ -241,7 +241,7 @@ namespace Backend.Infrastructure.Services.Orders
                     {
                         ProductId = orderItem.ProductId,
                         VariantId = orderItem.VariantId,
-                        ItemName = orderItem.VariantId.HasValue && orderItem.VariantId.Value != Guid.Empty 
+                        ItemName = orderItem.VariantId.HasValue && orderItem.VariantId.Value != Guid.Empty
                         ? _productVariantService.GetVariant(orderItem.TenantId, orderItem.ProductId, orderItem.VariantId.Value).Name : _productService.GetById(orderItem.TenantId, orderItem.ProductId).Name,
                         OrderItemId = orderItem.OrderItemId,
                         ItemValue = orderItem.ItemUnitAmount,
@@ -256,24 +256,100 @@ namespace Backend.Infrastructure.Services.Orders
 
         public bool ExecuteOrderMovementAction(OrderMovementEntryHistoryRequest action)
         {
+            if (action.OrderTotalItemsMovement == 0)
+                throw new Exception("You cannot send an empty movement");
+
             var context = LoadContext();
-            var orderHistory = new OrderHistory()
+            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == action.OrderId);
+
+            var orderItem = _appDbContext.OrderItems.FirstOrDefault(x => x.OrderId == action.OrderId && action.OrderItemId == x.OrderItemId);
+
+            // Bruh how?
+            if (order is null || orderItem is null)
+                throw new Exception("Order does not exist");
+
+            if (action.OrderTotalItemsMovement > orderItem.ItemQuantity)
             {
-                TenantId = context.Tenant.Id,
-                OrderHistoryId = action.OrderHistoryId,
-                OrderId = action.OrderId,
-                OrderItemId = action.OrderItemId,
-                OrderMovementType = action.OrderMovementType,
-                OrderTotalItemsMovement = action.OrderTotalItemsMovement,
-                From = action.From,
-                To = action.To,
-                Active = true,
-                Created = DateTime.UtcNow,
-                CreatedBy = context.UserId, 
-                Updated = null,
-                UpdatedBy = null,                
-            };
-            _appDbContext.OrderHistories.Add(orderHistory);
+                action.OrderTotalItemsMovement = orderItem.ItemQuantity;
+                if (FinishOrder(context.Tenant.Id, action.OrderId))
+                {
+                    var orderHistory = new OrderHistory()
+                    {
+                        TenantId = context.Tenant.Id,
+                        OrderHistoryId = action.OrderHistoryId,
+                        OrderId = action.OrderId,
+                        OrderItemId = action.OrderItemId,
+                        OrderMovementType = action.OrderMovementType,
+                        OrderTotalItemsMovement = action.OrderTotalItemsMovement,
+                        From = action.From,
+                        To = action.To,
+                        Active = true,
+                        Created = DateTime.UtcNow,
+                        CreatedBy = context.UserId,
+                        Updated = null,
+                        UpdatedBy = null,
+                    };
+                    _appDbContext.OrderHistories.Add(orderHistory);
+                    return _appDbContext.SaveChanges() > 0;
+                }
+                throw new Exception("Could not realize the expected movement.");
+            }
+
+            if (action.OrderTotalItemsMovement <= orderItem.ItemQuantity)
+            {
+                if (SetPartialDelivery(context.Tenant.Id, action.OrderId))
+                {
+                    var orderHistory = new OrderHistory()
+                    {
+                        TenantId = context.Tenant.Id,
+                        OrderHistoryId = action.OrderHistoryId,
+                        OrderId = action.OrderId,
+                        OrderItemId = action.OrderItemId,
+                        OrderMovementType = action.OrderMovementType,
+                        OrderTotalItemsMovement = action.OrderTotalItemsMovement,
+                        From = action.From,
+                        To = action.To,
+                        Active = true,
+                        Created = DateTime.UtcNow,
+                        CreatedBy = context.UserId,
+                        Updated = null,
+                        UpdatedBy = null,
+                    };
+                    _appDbContext.OrderHistories.Add(orderHistory);
+                    return _appDbContext.SaveChanges() > 0;
+                }
+                throw new Exception("Could not realize the expected movement.");
+            }
+            return false;
+        }
+
+        public bool ApproveOrder(Guid tenantId, Guid orderId)
+        {
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
+        }
+        public bool CancelOrder(Guid tenantId, Guid orderId)
+        {
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Canceled);
+        }
+        public bool RefundOrder(Guid tenantId, Guid orderId)
+        {
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Refunding);
+        }
+        public bool FinishOrder(Guid tenantId, Guid orderId)
+        {
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Done);
+        }
+        public bool SetPartialDelivery(Guid tenantId, Guid orderId)
+        {
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.PartiallyDone);
+        }
+        public bool UpdateOrderStatus(Guid tenantId, Guid orderId, int statusId)
+        {
+            var context = LoadContext();
+            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId);
+            if (order is null) throw new Exception("Order does not exist and cannot be approved.");
+            order.OrderStatusId = statusId;
+            _appDbContext.Orders.Update(order);
             return _appDbContext.SaveChanges() > 0;
         }
     }

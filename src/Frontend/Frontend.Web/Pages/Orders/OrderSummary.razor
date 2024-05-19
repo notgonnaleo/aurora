@@ -3,9 +3,11 @@
 @using Backend.Domain.Entities.OrderItems.Response;
 @using Backend.Domain.Entities.Orders.Response;
 @using Backend.Domain.Entities.Products;
+@using Backend.Domain.Enums.Orders;
 @using Frontend.Web.Components.Orders.Table
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Orders;
+@inject NavigationManager Navigator;
 @inject OrderService _orderService;
 @inject AuthenticationService _authenticationService;
 @inject Sotsera.Blazor.Toaster.IToaster Toaster;
@@ -63,10 +65,58 @@
                         <div class="card-body p-4">
                             <h5 class="card-title fw-semibold mb-4">Actions</h5>
                             <div class="row text-center pt-4">
+                            @code
+                            {
+                                private async Task Approve()
+                                {
+                                    var response = await _orderService.Approve(OrderDetails.TenantId.ToString(), OrderDetails.OrderId.ToString());
+                                    if (response.Successful())
+                                    {
+                                        Navigator.NavigateTo(Navigator.Uri, true);
+                                    }
+                                }
+                                private async Task Cancel()
+                                {
+                                    var response = await _orderService.Cancel(OrderDetails.TenantId.ToString(), OrderDetails.OrderId.ToString());
+                                    if (response.Successful())
+                                    {
+                                        Navigator.NavigateTo(Navigator.Uri, true);
+                                    }
+                                }
+                            }
+
+                            @code
+                            {
+                                private void SendEmail()
+                                {
+                                    // ok
+                                }
+                            }
+
+                            @if(OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Open)
+                            {
                                 <div class="col">
                                     <span><i class="ti ti-file-like fs-10 cursor-pointer"></i></span>
-                                    <p class="smart-link cursor-pointer">Aprovar</p>
+                                    <p class="smart-link cursor-pointer" @onclick="Approve">Aprovar</p>
                                 </div>
+                            }
+
+                            @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.InProgress)
+                            {
+                                <div class="col">
+                                    <span><i class="ti ti-truck fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer" @onclick="ToggleForm">Realizar movimentação</p>
+                                </div>
+                            }
+
+                            @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Done)
+                            {
+                                <div class="col">
+                                    <span><i class="ti ti-arrow-back fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer" @onclick="Approve">Iniciar devolução</p>
+                                </div>
+                            }
+
                                 <div class="col">
                                     <span><i class="ti ti-file-description fs-10 cursor-pointer"></i></span>
                                     <p class="smart-link cursor-pointer">Relatório</p>
@@ -77,7 +127,7 @@
                                 </div>
                                 <div class="col">
                                     <span><i class="ti ti-file-off fs-10 cursor-pointer"></i></span>
-                                    <p class="smart-link cursor-pointer">Recusar</p>
+                                        <p class="smart-link cursor-pointer" @onclick="Cancel">Recusar</p>
                                 </div>
                             </div>
                         </div>
@@ -211,11 +261,13 @@
     protected override async Task OnInitializedAsync()
     {
         await GetOrder();
-        if (OrderDetails is not null)
-        {
+
+        if (OrderDetails is not null) 
             MapItems(OrderDetails.OrderItems);
-        }
-        await GetLogs();
+
+        if(!(OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Open)) 
+            await GetLogs();
+
         isLoading = false;
     }
 

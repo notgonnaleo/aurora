@@ -34,5 +34,17 @@ namespace Frontend.Web.Services.Orders
         {
             return await _orderRepository.ExecuteOrderMovement(orderRequest);
         }
+        public async Task<ApiResponse<bool>> Approve(string tenantId, string orderId)
+        {
+            return await _orderRepository.Approve(tenantId, orderId);
+        }
+        public async Task<ApiResponse<bool>> Refund(string tenantId, string orderId)
+        {
+            return await _orderRepository.Refund(tenantId, orderId);
+        }
+        public async Task<ApiResponse<bool>> Cancel(string tenantId, string orderId)
+        {
+            return await _orderRepository.Cancel(tenantId, orderId);
+        }
     }
 }
