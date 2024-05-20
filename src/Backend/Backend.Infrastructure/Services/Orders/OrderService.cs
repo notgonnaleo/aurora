@@ -475,32 +475,32 @@ namespace Backend.Infrastructure.Services.Orders
         }
         public bool ApproveOrder(Guid tenantId, Guid orderId)
         {
-            var order = _appDbContext.Orders
-            .FirstOrDefault(x => x.OrderId == orderId && x.Active);
+            //var order = _appDbContext.Orders
+            //.FirstOrDefault(x => x.OrderId == orderId && x.Active);
 
-            var orderItem = _appDbContext.OrderItems
-                .Where(x => x.OrderId == orderId && x.Active).ToList();
+            //var orderItem = _appDbContext.OrderItems
+            //    .Where(x => x.OrderId == orderId && x.Active).ToList();
 
-            // Bruh how?
-            if (order is null || orderItem is null)
-                throw new Exception("Order does not exist");
+            //// Bruh how?
+            //if (order is null || orderItem is null)
+            //    throw new Exception("Order does not exist");
 
-            foreach (var item in orderItem)
-            {
-                var stockResult = new Inventory();
-                if (item.VariantId is not null)
-                {
-                    stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, item.VariantId);
-                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
-                        throw new Exception($"You need more of the selected item to make a movement");
-                }
-                else
-                {
-                    stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, null);
-                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
-                        throw new Exception($"You need more of the selected item to make a movement");
-                }
-            }
+            //foreach (var item in orderItem)
+            //{
+            //    var stockResult = new Inventory();
+            //    if (item.VariantId is not null)
+            //    {
+            //        stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, item.VariantId);
+            //        if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
+            //            throw new Exception($"You need more of the selected item to make a movement");
+            //    }
+            //    else
+            //    {
+            //        stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, null);
+            //        if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
+            //            throw new Exception($"You need more of the selected item to make a movement");
+            //    }
+            //}
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
         }
         public bool FinishOrder(Guid tenantId, Guid orderId)
