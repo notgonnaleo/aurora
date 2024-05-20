@@ -260,17 +260,33 @@ namespace Backend.Infrastructure.Services.Orders
                 throw new Exception("You cannot send an empty movement");
 
             var context = LoadContext();
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == action.OrderId);
+            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == action.OrderId && x.Active);
 
-            var orderItem = _appDbContext.OrderItems.FirstOrDefault(x => x.OrderId == action.OrderId && action.OrderItemId == x.OrderItemId);
+            var orderItem = _appDbContext.OrderItems
+                .FirstOrDefault(x => x.OrderId == action.OrderId && action.OrderItemId == x.OrderItemId && x.Active);
 
             // Bruh how?
             if (order is null || orderItem is null)
                 throw new Exception("Order does not exist");
 
-            if (action.OrderTotalItemsMovement > orderItem.ItemQuantity)
+            var totalOrderItem = 0;
+            if (orderItem is not null)
             {
-                action.OrderTotalItemsMovement = orderItem.ItemQuantity;
+                totalOrderItem = _appDbContext.OrderHistories
+                .Where(x => x.OrderId == action.OrderId &&
+                x.OrderItemId == action.OrderItemId &&
+                x.OrderMovementType == 1 &&
+                x.Active)
+                .Count();
+            }
+
+            if (action.OrderTotalItemsMovement > orderItem.ItemQuantity || orderItem.ItemQuantity >= totalOrderItem)
+            {
+                if (totalOrderItem == 0)
+                {
+                    action.OrderTotalItemsMovement = orderItem.ItemQuantity;
+                }
+
                 if (FinishOrder(context.Tenant.Id, action.OrderId))
                 {
                     var orderHistory = new OrderHistory()
