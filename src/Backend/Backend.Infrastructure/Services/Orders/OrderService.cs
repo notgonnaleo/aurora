@@ -8,13 +8,16 @@ using Backend.Domain.Entities.Orders;
 using Backend.Domain.Entities.Orders.Request;
 using Backend.Domain.Entities.Orders.Response;
 using Backend.Domain.Entities.Products;
+using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Enums.Orders;
+using Backend.Domain.Enums.StockMovements.MovementType;
 using Backend.Infrastructure.Context;
 using Backend.Infrastructure.Migrations.AppDbMigration;
 using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
 using Backend.Infrastructure.Services.Products;
+using Backend.Infrastructure.Services.Stocks;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,6 +25,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Backend.Infrastructure.Enums.Modules.Methods;
+using static System.Collections.Specialized.BitVector32;
+using MovementTypes = Backend.Domain.Enums.StockMovements.MovementType.MovementTypes;
 
 namespace Backend.Infrastructure.Services.Orders
 {
@@ -31,12 +36,15 @@ namespace Backend.Infrastructure.Services.Orders
         private readonly ProductService _productService;
         private readonly ProductVariantService _productVariantService;
         private readonly AgentService _agentService;
-        public OrderService(UserContextService userContextService, AppDbContext appDbContext, ProductService productService, ProductVariantService productVariantService, AgentService agentService) : base(userContextService)
+        private readonly StockService _stockService;
+
+        public OrderService(UserContextService userContextService, AppDbContext appDbContext, ProductService productService, ProductVariantService productVariantService, AgentService agentService, StockService stockService) : base(userContextService)
         {
             _appDbContext = appDbContext;
             _productService = productService;
             _productVariantService = productVariantService;
             _agentService = agentService;
+            _stockService = stockService;
         }
 
         public IEnumerable<OrderResponse> GetOrders(Guid tenantId)
@@ -167,6 +175,17 @@ namespace Backend.Infrastructure.Services.Orders
             var orderLines = new List<OrderItem>();
             foreach (var item in orderItems)
             {
+                var stockResult = new Inventory();
+                if (item.ItemVariantId is not null)
+                {
+                    stockResult = _stockService.GetProductStock(item.TenantId, item.ItemId, item.ItemVariantId);
+                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
+                        throw new Exception($"You need more of the selected item to make a movement");
+                }
+                stockResult = _stockService.GetProductStock(item.TenantId, item.ItemId, null);
+                if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
+                    throw new Exception($"You need more of the selected item to make a movement");
+
                 if (item.ItemQuantity == 0)
                     throw new Exception("By selecting an item you must provide the desired quantity");
 
@@ -260,33 +279,98 @@ namespace Backend.Infrastructure.Services.Orders
                 throw new Exception("You cannot send an empty movement");
 
             var context = LoadContext();
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == action.OrderId && x.Active);
+            var order = _appDbContext.Orders
+                .FirstOrDefault(x => x.OrderId == action.OrderId && x.Active);
 
             var orderItem = _appDbContext.OrderItems
                 .FirstOrDefault(x => x.OrderId == action.OrderId && action.OrderItemId == x.OrderItemId && x.Active);
-
+            
             // Bruh how?
             if (order is null || orderItem is null)
                 throw new Exception("Order does not exist");
 
-            var totalOrderItem = 0;
-            if (orderItem is not null)
+            var stockResult = new Inventory();
+            if(action.OrderMovementType == (int)MovementTypes.Input)
             {
-                totalOrderItem = _appDbContext.OrderHistories
-                .Where(x => x.OrderId == action.OrderId &&
-                x.OrderItemId == action.OrderItemId &&
-                x.OrderMovementType == 1 &&
-                x.Active)
-                .Count();
+                if (orderItem.VariantId is not null)
+                {
+                    stockResult = _stockService.GetProductStock(orderItem.TenantId, orderItem.ProductId, orderItem.VariantId);
+                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < action.OrderTotalItemsMovement)
+                        throw new Exception($"You need more of the selected item to make a movement");
+                }
+                else
+                {
+                    stockResult = _stockService.GetProductStock(orderItem.TenantId, orderItem.ProductId, null);
+                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < action.OrderTotalItemsMovement)
+                        throw new Exception($"You need more of the selected item to make a movement");
+                }
             }
 
-            if (action.OrderTotalItemsMovement > orderItem.ItemQuantity || orderItem.ItemQuantity >= totalOrderItem)
+            var totalOrderItem = new List<OrderHistory>();
+            var totalCalculated = 0;
+
+            totalOrderItem = _appDbContext.OrderHistories
+                .Where(x => x.OrderId == action.OrderId &&
+                    x.OrderItemId == action.OrderItemId &&
+                    x.OrderMovementType == 1 &&
+                    x.Active)
+                .ToList();
+
+            if (totalOrderItem.Count > 0)
             {
-                if (totalOrderItem == 0)
+                foreach (var item in totalOrderItem)
                 {
-                    action.OrderTotalItemsMovement = orderItem.ItemQuantity;
+                    totalCalculated += item.OrderTotalItemsMovement;
                 }
 
+                // When user sends the rest to complete the order
+                if (action.OrderTotalItemsMovement + totalCalculated >= orderItem.ItemQuantity)
+                {
+                    if (FinishOrder(context.Tenant.Id, action.OrderId))
+                    {
+                        var orderHistory = new OrderHistory()
+                        {
+                            TenantId = context.Tenant.Id,
+                            OrderHistoryId = action.OrderHistoryId,
+                            OrderId = action.OrderId,
+                            OrderItemId = action.OrderItemId,
+                            OrderMovementType = action.OrderMovementType,
+                            OrderTotalItemsMovement = action.OrderTotalItemsMovement,
+                            From = action.From,
+                            To = action.To,
+                            Active = true,
+                            Created = DateTime.UtcNow,
+                            CreatedBy = context.UserId,
+                            Updated = null,
+                            UpdatedBy = null,
+                        };
+
+                        _stockService.Add(new Domain.Entities.Stocks.Stock()
+                        {
+                            TenantId = context.Tenant.Id,
+                            UserId = context.UserId,
+                            AgentId = action.From, // always
+                            MovementType =  action.OrderMovementType,
+                            Quantity = action.OrderTotalItemsMovement,
+                            MovementDate = DateTime.Now,
+                            CreatedBy = context.UserId,
+                            Created = DateTime.UtcNow,
+                            Updated = null,
+                            UpdatedBy = null,
+                            Active = true,
+                        });
+
+                        _appDbContext.OrderHistories.Add(orderHistory);
+                        return _appDbContext.SaveChanges() > 0;
+                    }
+                    throw new Exception("Could not realize the expected movement.");
+                }
+            }
+
+            // When user deliveres ALL items at once AND when user sends more than expected to finish it in the first movement.
+            if (totalOrderItem.Count() == 0 && action.OrderTotalItemsMovement >= orderItem.ItemQuantity)
+            {
+                action.OrderTotalItemsMovement = orderItem.ItemQuantity;
                 if (FinishOrder(context.Tenant.Id, action.OrderId))
                 {
                     var orderHistory = new OrderHistory()
@@ -305,10 +389,23 @@ namespace Backend.Infrastructure.Services.Orders
                         Updated = null,
                         UpdatedBy = null,
                     };
+                    _stockService.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = action.From, // always
+                        MovementType =  action.OrderMovementType,
+                        Quantity = action.OrderTotalItemsMovement,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
                     _appDbContext.OrderHistories.Add(orderHistory);
                     return _appDbContext.SaveChanges() > 0;
                 }
-                throw new Exception("Could not realize the expected movement.");
             }
 
             if (action.OrderTotalItemsMovement <= orderItem.ItemQuantity)
@@ -331,6 +428,20 @@ namespace Backend.Infrastructure.Services.Orders
                         Updated = null,
                         UpdatedBy = null,
                     };
+                    _stockService.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = action.From, // always
+                        MovementType = action.OrderMovementType,
+                        Quantity = action.OrderTotalItemsMovement,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
                     _appDbContext.OrderHistories.Add(orderHistory);
                     return _appDbContext.SaveChanges() > 0;
                 }
@@ -339,24 +450,95 @@ namespace Backend.Infrastructure.Services.Orders
             return false;
         }
 
-        public bool ApproveOrder(Guid tenantId, Guid orderId)
+        public bool RefundOrder(Guid tenantId, Guid orderId)
         {
-            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
+            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
+            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
+
+            foreach (var item in orderItems)
+            {
+                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
+                {
+                    OrderId = orderId,
+                    From = order.CustomerId,
+                    To = order.SellerId,
+                    OrderTotalItemsMovement = item.ItemQuantity,
+                    OrderItemId = item.OrderItemId,
+                    OrderMovementType = (int)MovementTypes.Output,
+                });
+            }
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Refunding);
         }
         public bool CancelOrder(Guid tenantId, Guid orderId)
         {
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Canceled);
         }
-        public bool RefundOrder(Guid tenantId, Guid orderId)
+        public bool ApproveOrder(Guid tenantId, Guid orderId)
         {
-            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Refunding);
+            var order = _appDbContext.Orders
+            .FirstOrDefault(x => x.OrderId == orderId && x.Active);
+
+            var orderItem = _appDbContext.OrderItems
+                .Where(x => x.OrderId == orderId && x.Active).ToList();
+
+            // Bruh how?
+            if (order is null || orderItem is null)
+                throw new Exception("Order does not exist");
+
+            foreach (var item in orderItem)
+            {
+                var stockResult = new Inventory();
+                if (item.VariantId is not null)
+                {
+                    stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, item.VariantId);
+                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
+                        throw new Exception($"You need more of the selected item to make a movement");
+                }
+                else
+                {
+                    stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, null);
+                    if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
+                        throw new Exception($"You need more of the selected item to make a movement");
+                }
+            }
+            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
         }
         public bool FinishOrder(Guid tenantId, Guid orderId)
         {
+            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
+            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
+
+            foreach (var item in orderItems)
+            {
+                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
+                {
+                    OrderId = orderId,
+                    From = order.SellerId,
+                    To = order.CustomerId,
+                    OrderTotalItemsMovement = item.ItemQuantity,
+                    OrderItemId = item.OrderItemId,
+                    OrderMovementType = (int)MovementTypes.Input,
+                });
+            }
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Done);
         }
         public bool SetPartialDelivery(Guid tenantId, Guid orderId)
         {
+            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
+            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
+
+            foreach (var item in orderItems)
+            {
+                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
+                {
+                    OrderId = orderId,
+                    From = order.SellerId,
+                    To = order.CustomerId,
+                    OrderTotalItemsMovement = item.ItemQuantity,
+                    OrderItemId = item.OrderItemId,
+                    OrderMovementType = (int)MovementTypes.Input,
+                });
+            }
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.PartiallyDone);
         }
         public bool UpdateOrderStatus(Guid tenantId, Guid orderId, int statusId)
