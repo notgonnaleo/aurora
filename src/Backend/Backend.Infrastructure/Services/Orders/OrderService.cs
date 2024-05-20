@@ -10,7 +10,6 @@ using Backend.Domain.Entities.Orders.Response;
 using Backend.Domain.Entities.Products;
 using Backend.Domain.Enums.Orders;
 using Backend.Infrastructure.Context;
-using Backend.Infrastructure.Migrations.AppDbMigration;
 using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;

@@ -1,8 +1,11 @@
 ﻿@using Backend.Domain.Entities.Agents;
+@using Backend.Domain.Entities.Profiles
 @using Frontend.Web.Components.Placeholders.EmptyMessages
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Agents;
 @using Frontend.Web.Util.Session;
+@using Frontend.Web.Services.Contacts;
+@inject ContactService _contactService;
 @inject AgentService _agentService;
 @inject AuthenticationService _authenticationService;
 @inject NavigationManager NavigationManager;
@@ -14,38 +17,34 @@
 }
 else
 {
-    @if(agents is not null && agents.Any())
+    @if (agents is not null && agents.Any())
     {
         @foreach (var agent in agents)
         {
-            <div class="row ">
-                <div class="col-sm-6 col-xl-3 w-100">
-                    <div class="card overflow-hidden rounded-2">
-                        <div class="card-body pt-3 p-4">
-                            <div class="d-flex justify-content-between">
-                                <h6 class="fw-semibold fs-4 mb-2">
-                                    @agent.Name
-                                </h6>
-
-                                <h6 class="fw-bold fs-2 cursor-pointer" @onclick="() => Edit(agent)">
-                                    CPF ou CNPJ fica aqui
-                                </h6>
-                            </div>
-                            <div>
-                                <span class="mb-2 badge rounded-pill font-small bg-info-subtle text-info">Vendor/Employ</span>
-                            </div>
-
-                            <div class="d-flex align-items-center justify-content-between">
-
-                                <div>
-                                    <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => Edit(agent)">
-                                        <i class="ti ti-edit"></i>
-                                    </a>
+            <div class="row justify-content-center mb-1">
+                <div class="col-md-12 col-xl-10">
+                    <div class="card shadow-0 zoom">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h5 class="smart-link mt-2" @onclick="() => Edit(agent)">@agent.Name</h5>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(agent)">@* CPForCNPJ *@</span>
+                                        <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@* Vendor/Employ *@</span>
+                                    </div>
+                                    <p class="mt-4 mb-4 mb-md-0 card-description">
+                                       
+                                    </p>
                                 </div>
-                                <div>
-                                    <a class="p-2 d-inline-flex cursor-pointer" @onclick="() => DeleteModalAction(agent)">
-                                        <i class="ti ti-trash-x"></i>
-                                    </a>
+                                <div class="col-md-3 border-sm-start-none border-start d-flex flex-column">
+                                    <div class="d-flex flex-column mt-4">
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => Edit(agent)">
+                                            <i class="ti ti-edit m-1"></i> Edit
+                                        </button>
+                                        <button data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-sm m-1" type="button" @onclick="() => DeleteModalAction(agent)">
+                                            <i class="ti ti-trash-x m-1"></i> Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -53,6 +52,7 @@ else
                 </div>
             </div>
         }
+
     }
     else
     {
@@ -76,11 +76,14 @@ else
 
 }
 
+
+
+
 @code {
     [Parameter] public string? IdSelected { get; set; }
 }
 
-@code 
+@code
 {
     private bool isLoading = true;
     private IEnumerable<Agent>? agents;
@@ -88,6 +91,7 @@ else
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
+        
 
         var response = await _agentService.GetAgents(context.Tenant.Id.ToString());
         if (response.Successful())
