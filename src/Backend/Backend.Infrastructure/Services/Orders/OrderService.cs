@@ -345,20 +345,20 @@ namespace Backend.Infrastructure.Services.Orders
                             UpdatedBy = null,
                         };
 
-                        _stockService.Add(new Domain.Entities.Stocks.Stock()
-                        {
-                            TenantId = context.Tenant.Id,
-                            UserId = context.UserId,
-                            AgentId = action.From, // always
-                            MovementType =  action.OrderMovementType,
-                            Quantity = action.OrderTotalItemsMovement,
-                            MovementDate = DateTime.Now,
-                            CreatedBy = context.UserId,
-                            Created = DateTime.UtcNow,
-                            Updated = null,
-                            UpdatedBy = null,
-                            Active = true,
-                        });
+                        //_stockService.Add(new Domain.Entities.Stocks.Stock()
+                        //{
+                        //    TenantId = context.Tenant.Id,
+                        //    UserId = context.UserId,
+                        //    AgentId = action.From, // always
+                        //    MovementType =  action.OrderMovementType,
+                        //    Quantity = action.OrderTotalItemsMovement,
+                        //    MovementDate = DateTime.Now,
+                        //    CreatedBy = context.UserId,
+                        //    Created = DateTime.UtcNow,
+                        //    Updated = null,
+                        //    UpdatedBy = null,
+                        //    Active = true,
+                        //});
 
                         _appDbContext.OrderHistories.Add(orderHistory);
                         return _appDbContext.SaveChanges() > 0;
@@ -389,20 +389,20 @@ namespace Backend.Infrastructure.Services.Orders
                         Updated = null,
                         UpdatedBy = null,
                     };
-                    _stockService.Add(new Domain.Entities.Stocks.Stock()
-                    {
-                        TenantId = context.Tenant.Id,
-                        UserId = context.UserId,
-                        AgentId = action.From, // always
-                        MovementType =  action.OrderMovementType,
-                        Quantity = action.OrderTotalItemsMovement,
-                        MovementDate = DateTime.Now,
-                        CreatedBy = context.UserId,
-                        Created = DateTime.UtcNow,
-                        Updated = null,
-                        UpdatedBy = null,
-                        Active = true,
-                    });
+                    //_stockService.Add(new Domain.Entities.Stocks.Stock()
+                    //{
+                    //    TenantId = context.Tenant.Id,
+                    //    UserId = context.UserId,
+                    //    AgentId = action.From, // always
+                    //    MovementType =  action.OrderMovementType,
+                    //    Quantity = action.OrderTotalItemsMovement,
+                    //    MovementDate = DateTime.Now,
+                    //    CreatedBy = context.UserId,
+                    //    Created = DateTime.UtcNow,
+                    //    Updated = null,
+                    //    UpdatedBy = null,
+                    //    Active = true,
+                    //});
                     _appDbContext.OrderHistories.Add(orderHistory);
                     return _appDbContext.SaveChanges() > 0;
                 }
@@ -428,20 +428,20 @@ namespace Backend.Infrastructure.Services.Orders
                         Updated = null,
                         UpdatedBy = null,
                     };
-                    _stockService.Add(new Domain.Entities.Stocks.Stock()
-                    {
-                        TenantId = context.Tenant.Id,
-                        UserId = context.UserId,
-                        AgentId = action.From, // always
-                        MovementType = action.OrderMovementType,
-                        Quantity = action.OrderTotalItemsMovement,
-                        MovementDate = DateTime.Now,
-                        CreatedBy = context.UserId,
-                        Created = DateTime.UtcNow,
-                        Updated = null,
-                        UpdatedBy = null,
-                        Active = true,
-                    });
+                    //_stockService.Add(new Domain.Entities.Stocks.Stock()
+                    //{
+                    //    TenantId = context.Tenant.Id,
+                    //    UserId = context.UserId,
+                    //    AgentId = action.From, // always
+                    //    MovementType = action.OrderMovementType,
+                    //    Quantity = action.OrderTotalItemsMovement,
+                    //    MovementDate = DateTime.Now,
+                    //    CreatedBy = context.UserId,
+                    //    Created = DateTime.UtcNow,
+                    //    Updated = null,
+                    //    UpdatedBy = null,
+                    //    Active = true,
+                    //});
                     _appDbContext.OrderHistories.Add(orderHistory);
                     return _appDbContext.SaveChanges() > 0;
                 }
