@@ -308,7 +308,7 @@ namespace Backend.Infrastructure.Services.Orders
                 TenantId = context.Tenant.Id,
                 UserId = context.UserId,
                 AgentId = action.From, // always
-                MovementType = action.OrderMovementType,
+                MovementType = action.OrderMovementType == 0 ? 1 : 0, // HACK: in the stock is inverted
                 Quantity = action.OrderTotalItemsMovement,
                 MovementDate = DateTime.Now,
                 CreatedBy = context.UserId,
