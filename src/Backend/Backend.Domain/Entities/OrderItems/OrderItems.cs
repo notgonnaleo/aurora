@@ -56,5 +56,6 @@ namespace Backend.Domain.Entities.OrderItems
         public decimal ItemTotalAmount { get; set; }
 
         public Order? Order { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

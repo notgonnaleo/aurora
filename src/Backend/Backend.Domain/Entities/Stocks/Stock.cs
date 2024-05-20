@@ -34,6 +34,7 @@ namespace Backend.Domain.Entities.Stocks
 
         [ForeignKey("ProductId")]
         public Guid ProductId { get; set; }
+        public virtual Product Product { get; set; }
     }
 
     public class StockDetail : Model

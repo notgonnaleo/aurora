@@ -2,6 +2,7 @@
 using Backend.Domain.Entities.Base;
 using Backend.Domain.Entities.Categories;
 using Backend.Domain.Entities.ProductTypes;
+using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Entities.SubCategories;
 using Backend.Domain.Enums.Colors;
 using Backend.Domain.Enums.MetricUnits;
@@ -54,6 +55,7 @@ namespace Backend.Domain.Entities.Products
         public virtual SubCategory? SubCategory { get; set; }
         [ForeignKey("ProductTypeId")]
         public virtual ProductType? ProductType { get; set; }
+        public virtual List<Stock> Stocks { get; set; }
 
         public Product(Product product, Guid userId)
         {

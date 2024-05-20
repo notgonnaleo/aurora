@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Backend.Domain.Entities.Agents;
 using Backend.Domain.Entities.Orders.Request;
 using Backend.Domain.Enums.Orders;
+using Backend.Domain.Entities.OrderItems;
 
 namespace Backend.Domain.Entities.Orders
 {
@@ -73,6 +74,7 @@ namespace Backend.Domain.Entities.Orders
         public int PaymentMethodId { get; set; }
         public Agent? Customer { get; set; }
         public Agent? Seller { get; set; }
+        public virtual List<OrderItem> OrderItems { get; set; }
     }
 
     public class OrderStatus
