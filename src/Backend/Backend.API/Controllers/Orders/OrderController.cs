@@ -69,6 +69,32 @@ namespace Backend.API.Controllers.Orders
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPost, Route("Approve")]
+        public ActionResult ApproveOrder(Guid tenantId, Guid orderId)
+        {
+            try
+            {
+                return Ok(_orderService.ApproveOrder(tenantId, orderId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPost, Route("Cancel")]
+        public ActionResult CancelOrder(Guid tenantId, Guid orderId)
+        {
+            try
+            {
+                return Ok(_orderService.CancelOrder(tenantId, orderId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPut, Route("UpdateOrderItem")]
         public ActionResult UpdateOrderItem(OrderItemsRequest orderRequest)
         {
