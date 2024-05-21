@@ -55,7 +55,8 @@ namespace Backend.Domain.Entities.Products
         public virtual SubCategory? SubCategory { get; set; }
         [ForeignKey("ProductTypeId")]
         public virtual ProductType? ProductType { get; set; }
-        public virtual List<Stock> Stocks { get; set; }
+
+        public virtual List<Stock>? Stocks { get; set; }
 
         public Product(Product product, Guid userId)
         {

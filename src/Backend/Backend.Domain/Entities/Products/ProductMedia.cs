@@ -20,7 +20,7 @@ public class ProductMedia : Model
     /// Image buffer data converted to Base64 string.
     /// </summary>
     [NotMapped]
-    public string ImageBuffer { get; set; }
+    public string? ImageBuffer { get; set; }
     public string? MediaURL { get; set; }
 
     public uint Priority { get; set; } // This is just to make it easier to sort the product media, the higher the number the more importance will be given to this media
