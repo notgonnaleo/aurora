@@ -128,31 +128,39 @@ namespace Backend.Infrastructure.Services.Products
             var types = _productType.Get();
             var categories = _categoryService.Get();
             var subCategories = _subCategoryService.Get();
-            return products.Select(product => new ProductDetail
-            {
-                MediaURL = _productMediaService.Get(product.ProductId).FirstOrDefault() is not null ? _productMediaService.Get(product.ProductId).FirstOrDefault().MediaURL : null,
-                TenantId = product.TenantId,
-                ProductId = product.ProductId,
-                ProductTypeId = product.ProductTypeId,
-                SKU = product.SKU,
-                GTIN = product.GTIN,
-                Name = product.Name,
-                Description = product.Description,
-                Value = product.Value,
-                TotalWeight = product.TotalWeight,
-                LiquidWeight = product.LiquidWeight,
-                ProductType = types.First(x => x.Id == product.ProductTypeId),
-                ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
-                CategoryId = product.CategoryId ?? null,
-                SubCategoryId = product.SubCategoryId ?? null,
-                CategoryName = (product.CategoryId != null) ? categories.FirstOrDefault(x => x.CategoryId == product.CategoryId).CategoryName ?? string.Empty : string.Empty,
-                SubCategoryName = (product.CategoryId != null) ? subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId).SubCategoryName ?? string.Empty : string.Empty,
-                Created = product.Created,
-                CreatedBy = product.CreatedBy,
-                Updated = product.Updated,
-                UpdatedBy = product.UpdatedBy,
-                Active = product.Active,
-            }); ;
+            return products.Select(product => {
+                var media = _productMediaService.Get(product.ProductId).FirstOrDefault();
+                return new ProductDetail
+                {
+                    MediaURL = media?.MediaURL,
+                    TenantId = product.TenantId,
+                    ProductId = product.ProductId,
+                    ProductTypeId = product.ProductTypeId,
+                    SKU = product.SKU,
+                    GTIN = product.GTIN,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Value = product.Value,
+                    TotalWeight = product.TotalWeight,
+                    LiquidWeight = product.LiquidWeight,
+                    ProductType = types.First(x => x.Id == product.ProductTypeId),
+                    ProductTypeName = types.First(x => x.Id == product.ProductTypeId).Name,
+                    CategoryId = product.CategoryId ?? null,
+                    SubCategoryId = product.SubCategoryId ?? null,
+                    CategoryName = product.CategoryId != null
+                        ? categories.FirstOrDefault(x => x.CategoryId == product.CategoryId)?.CategoryName ?? string.Empty
+                        : string.Empty,
+                    SubCategoryName = product.SubCategoryId != null
+                        ? subCategories.FirstOrDefault(x => x.SubCategoryId == product.SubCategoryId)?.SubCategoryName ?? string.Empty
+                        : string.Empty,
+                    Created = product.Created,
+                    CreatedBy = product.CreatedBy,
+                    Updated = product.Updated,
+                    UpdatedBy = product.UpdatedBy,
+                    Active = product.Active,
+                };
+            });
+
         }
 
         public ProductDetail GetProductThumbnail(Guid tenantId, Guid productId)

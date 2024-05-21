@@ -63,6 +63,7 @@ namespace Backend.Infrastructure.Services.Products
 
             if (!string.IsNullOrEmpty(model.MediaURL))
             {
+                model.Active = true;
                 _appDbContext.ProductMedia.Add(model);
                 if (await _appDbContext.SaveChangesAsync() > 0)
                     return model;
@@ -73,19 +74,46 @@ namespace Backend.Infrastructure.Services.Products
 
         public async Task<string> UploadFile(string base64string)
         {
-            byte[] data = Convert.FromBase64String(base64string);
-            var context = LoadContext();
-            // por tudo que é mais sagrado, criar vergonha na cara e colocar essa aberração inteira na appsettings
-            var blobContainerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=appaurorablobstorage;AccountKey=LedXk/66YH5xRnk7fUFau6CR1ID2cu87Qek2Jnx55EExzYCgSg4rqK4VkIbZpN6siSUf8qxzPrA++ASttiIX1w==;EndpointSuffix=core.windows.net", "assets");
-            var blobHttpHeader = new BlobHttpHeaders();
-            blobHttpHeader.ContentType = "image/jpeg";
-            BlobClient blob = blobContainerClient.GetBlobClient($"{context.Tenant.Name!.ToLower()}/images/{Guid.NewGuid()}.jpg");
-            using (var ms = new MemoryStream(data, false))
+            byte[] data;
+
+            try
             {
-                var response = await blob.UploadAsync(ms, blobHttpHeader);
-                if (response != null && response.GetRawResponse().Status == 201)
-                return blob.Uri.AbsoluteUri;
+                data = Convert.FromBase64String(base64string);
             }
+            catch (FormatException)
+            {
+                throw new ArgumentException("Invalid base64 string");
+            }
+
+            var context = LoadContext();
+
+            // Definições do Blob Storage
+            var blobContainerClient = new BlobContainerClient(
+                "DefaultEndpointsProtocol=https;AccountName=appaurorablobstorage;AccountKey=LedXk/66YH5xRnk7fUFau6CR1ID2cu87Qek2Jnx55EExzYCgSg4rqK4VkIbZpN6siSUf8qxzPrA++ASttiIX1w==;EndpointSuffix=core.windows.net",
+                "assets"
+            );
+
+            var blobHttpHeader = new BlobHttpHeaders { ContentType = "image/jpeg" };
+            var blobClient = blobContainerClient.GetBlobClient($"{context.Tenant.Name!.ToLower()}/images/{Guid.NewGuid()}.jpg");
+
+            try
+            {
+                using (var ms = new MemoryStream(data, false))
+                {
+                    var response = await blobClient.UploadAsync(ms, blobHttpHeader);
+                    if (response.GetRawResponse().Status == 201)
+                    {
+                        return blobClient.Uri.AbsoluteUri;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Logar o erro
+                // _logger.LogError(ex, "Error uploading file to blob storage");
+                throw new Exception("Image failed during upload process", ex);
+            }
+
             throw new Exception("Image failed during upload process");
         }
 
