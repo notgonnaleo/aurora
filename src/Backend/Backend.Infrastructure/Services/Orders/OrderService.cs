@@ -12,7 +12,6 @@ using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Enums.Orders;
 using Backend.Domain.Enums.StockMovements.MovementType;
 using Backend.Infrastructure.Context;
-using Backend.Infrastructure.Migrations.AppDbMigration;
 using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
