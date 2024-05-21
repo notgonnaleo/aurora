@@ -261,7 +261,8 @@ namespace Backend.Infrastructure.Services.Orders
                         ProductId = orderItem.ProductId,
                         VariantId = orderItem.VariantId,
                         ItemName = orderItem.VariantId.HasValue && orderItem.VariantId.Value != Guid.Empty
-                        ? _productVariantService.GetVariant(orderItem.TenantId, orderItem.ProductId, orderItem.VariantId.Value).Name : _productService.GetById(orderItem.TenantId, orderItem.ProductId).Name,
+                        ? _productVariantService.GetVariant(orderItem.TenantId, orderItem.ProductId, orderItem.VariantId.Value).Name 
+                        : _productService.GetById(orderItem.TenantId, orderItem.ProductId).Name,
                         OrderItemId = orderItem.OrderItemId,
                         ItemValue = orderItem.ItemUnitAmount,
                         Quantity = orderItem.ItemQuantity,
@@ -372,28 +373,12 @@ namespace Backend.Infrastructure.Services.Orders
             else
                 order.OrderStatusId = (int)OrdersStatusEnums.PartiallyDone;
             _appDbContext.Update(order);
-
             _appDbContext.SaveChanges();
             return true;
         }
 
         public bool RefundOrder(Guid tenantId, Guid orderId)
         {
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
-            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
-
-            foreach (var item in orderItems)
-            {
-                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
-                {
-                    OrderId = orderId,
-                    From = order.CustomerId,
-                    To = order.SellerId,
-                    OrderTotalItemsMovement = item.ItemQuantity,
-                    OrderItemId = item.OrderItemId,
-                    OrderMovementType = (int)MovementTypes.Output,
-                });
-            }
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Refunding);
         }
         public bool CancelOrder(Guid tenantId, Guid orderId)
@@ -402,32 +387,6 @@ namespace Backend.Infrastructure.Services.Orders
         }
         public bool ApproveOrder(Guid tenantId, Guid orderId)
         {
-            //var order = _appDbContext.Orders
-            //.FirstOrDefault(x => x.OrderId == orderId && x.Active);
-
-            //var orderItem = _appDbContext.OrderItems
-            //    .Where(x => x.OrderId == orderId && x.Active).ToList();
-
-            //// Bruh how?
-            //if (order is null || orderItem is null)
-            //    throw new Exception("Order does not exist");
-
-            //foreach (var item in orderItem)
-            //{
-            //    var stockResult = new Inventory();
-            //    if (item.VariantId is not null)
-            //    {
-            //        stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, item.VariantId);
-            //        if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
-            //            throw new Exception($"You need more of the selected item to make a movement");
-            //    }
-            //    else
-            //    {
-            //        stockResult = _stockService.GetProductStock(item.TenantId, item.ProductId, null);
-            //        if (stockResult.TotalAmount == 0 || stockResult.TotalAmount < item.ItemQuantity)
-            //            throw new Exception($"You need more of the selected item to make a movement");
-            //    }
-            //}
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
         }
         public bool FinishOrder(Guid tenantId, Guid orderId)
