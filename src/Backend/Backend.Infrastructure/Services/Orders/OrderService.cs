@@ -382,6 +382,57 @@ namespace Backend.Infrastructure.Services.Orders
 
         public bool RefundOrder(Guid tenantId, Guid orderId)
         {
+            var context = LoadContext();
+            var order = _appDbContext.Orders
+                .Include(_ => _.OrderItems)
+                .First(_ => _.OrderId == orderId);
+            foreach (var itemGroup in order.OrderItems.GroupBy(x => x.OrderItemId))
+            {
+                // Assuming you want to create an order history entry for each item in the group
+                foreach (var item in itemGroup)
+                {
+                    // Check if stock is finished
+                    Dictionary<Guid, int> productQuantity = new Dictionary<Guid, int>();
+                    var history = _appDbContext.OrderHistories.Where(x => x.OrderId == item.OrderId);
+                    var totalAlreadySent = history.Where(x => x.OrderId == orderId &&
+                    x.OrderItemId == item.OrderItemId)
+                        .Sum(x => x.OrderTotalItemsMovement);
+
+                    var orderHistory = new OrderHistory()
+                    {
+                        TenantId = tenantId,
+                        OrderHistoryId = Guid.NewGuid(),
+                        OrderId = orderId,
+                        OrderItemId = item.OrderItemId,
+                        OrderMovementType = 0,
+                        OrderTotalItemsMovement = totalAlreadySent,
+                        From = order.CustomerId,
+                        To = order.SellerId,
+                        Active = true,
+                        Created = DateTime.UtcNow,
+                        CreatedBy = context.UserId,
+                        Updated = null,
+                        UpdatedBy = null,
+                    };
+                    _appDbContext.OrderHistories.Add(orderHistory);
+                    _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = order.SellerId, // always
+                        ProductId = item.ProductId,
+                        VariantId = item.VariantId.HasValue ? item.VariantId.Value : null,
+                        MovementType = 1,
+                        Quantity = totalAlreadySent,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
+                }
+            }
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Refunding);
         }
         public bool CancelOrder(Guid tenantId, Guid orderId)
