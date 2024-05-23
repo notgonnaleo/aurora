@@ -291,7 +291,7 @@ namespace Backend.Infrastructure.Services.Orders
                 OrderHistoryId = action.OrderHistoryId,
                 OrderId = action.OrderId,
                 OrderItemId = action.OrderItemId,
-                OrderMovementType = action.OrderMovementType,
+                OrderMovementType = (int)MovementTypes.Input,
                 OrderTotalItemsMovement = action.OrderTotalItemsMovement,
                 From = action.From,
                 To = action.To,
@@ -344,6 +344,24 @@ namespace Backend.Infrastructure.Services.Orders
                         isDone = false;
                         break;
                     }
+
+                    _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = order.SellerId, // always
+                        ProductId = item.ProductId,
+                        VariantId = item.VariantId.HasValue ? item.VariantId.Value : null,
+                        MovementType = (int)MovementTypes.Output,
+                        Quantity = quantity,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
+                    _appDbContext.SaveChanges();
                 }
                 else
                 {
@@ -408,8 +426,8 @@ namespace Backend.Infrastructure.Services.Orders
                         AgentId = order.SellerId, // always
                         ProductId = item.ProductId,
                         VariantId = item.VariantId.HasValue ? item.VariantId.Value : null,
-                        MovementType = 0, 
-                        Quantity = item.ItemQuantity,
+                        MovementType = 1, 
+                        Quantity = totalAlreadySent,
                         MovementDate = DateTime.Now,
                         CreatedBy = context.UserId,
                         Created = DateTime.UtcNow,
@@ -425,44 +443,7 @@ namespace Backend.Infrastructure.Services.Orders
         {
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
         }
-        public bool FinishOrder(Guid tenantId, Guid orderId)
-        {
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
-            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
 
-            foreach (var item in orderItems)
-            {
-                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
-                {
-                    OrderId = orderId,
-                    From = order.SellerId,
-                    To = order.CustomerId,
-                    OrderTotalItemsMovement = item.ItemQuantity,
-                    OrderItemId = item.OrderItemId,
-                    OrderMovementType = (int)MovementTypes.Input,
-                });
-            }
-            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Done);
-        }
-        public bool SetPartialDelivery(Guid tenantId, Guid orderId)
-        {
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
-            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
-
-            foreach (var item in orderItems)
-            {
-                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
-                {
-                    OrderId = orderId,
-                    From = order.SellerId,
-                    To = order.CustomerId,
-                    OrderTotalItemsMovement = item.ItemQuantity,
-                    OrderItemId = item.OrderItemId,
-                    OrderMovementType = (int)MovementTypes.Input,
-                });
-            }
-            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.PartiallyDone);
-        }
         public bool UpdateOrderStatus(Guid tenantId, Guid orderId, int statusId)
         {
             var context = LoadContext();
