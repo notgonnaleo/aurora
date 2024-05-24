@@ -44,6 +44,7 @@ namespace Backend.Infrastructure.Services.Stocks
             var context = LoadContext();
             ValidateTenant(stock.TenantId);
 
+            // Yes we are just ovewritting some props, don't worry it's not magic, the other props still exists
             stock.TenantId = context.Tenant.Id;
             stock.UserId = context.UserId;
             stock.MovementDate = DateTime.Now;

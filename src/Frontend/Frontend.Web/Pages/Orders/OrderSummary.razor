@@ -75,6 +75,14 @@
                                         Navigator.NavigateTo(Navigator.Uri, true);
                                     }
                                 }
+                                private async Task Refund()
+                                {
+                                    var response = await _orderService.Refund(OrderDetails.TenantId.ToString(), OrderDetails.OrderId.ToString());
+                                    if (response.Successful())
+                                    {
+                                        Navigator.NavigateTo(Navigator.Uri, true);
+                                    }
+                                }
                                 private async Task Cancel()
                                 {
                                     var response = await _orderService.Cancel(OrderDetails.TenantId.ToString(), OrderDetails.OrderId.ToString());
@@ -101,8 +109,11 @@
                                 </div>
                             }
 
-                            @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.InProgress)
-                            {
+                                @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.InProgress || 
+                                OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.PartiallyDone || 
+                                OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Refunding ||
+                                OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Overdue)
+                                {
                                 <div class="col">
                                     <span><i class="ti ti-truck fs-10 cursor-pointer"></i></span>
                                     <p class="smart-link cursor-pointer" @onclick="ToggleForm">Realizar movimentação</p>
@@ -113,7 +124,7 @@
                             {
                                 <div class="col">
                                     <span><i class="ti ti-arrow-back fs-10 cursor-pointer"></i></span>
-                                    <p class="smart-link cursor-pointer" @onclick="Approve">Iniciar devolução</p>
+                                    <p class="smart-link cursor-pointer" @onclick="Refund">Iniciar devolução</p>
                                 </div>
                             }
 

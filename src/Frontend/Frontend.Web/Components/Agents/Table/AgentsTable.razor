@@ -101,14 +101,15 @@ else
 
 
 
-    @code {
+
+@code {
     [Parameter] public string? IdSelected { get; set; }
     
 
     }
 
-    @code
-    {
+@code
+{
     private bool isLoading = true;
     private IEnumerable<Agent>? agents;
     protected override async Task OnInitializedAsync()
@@ -136,7 +137,7 @@ else
     {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-
+        
 
         var response = await _agentService.GetAgents(context.Tenant.Id.ToString());
 
@@ -154,8 +155,6 @@ else
             }
             else
             {
-                //aqui buscar os profiles
-
                 agents = response.Result;
             }
         }
