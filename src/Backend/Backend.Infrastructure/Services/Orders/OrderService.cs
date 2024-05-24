@@ -12,6 +12,7 @@ using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Enums.Orders;
 using Backend.Domain.Enums.StockMovements.MovementType;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Migrations.AppDbMigration;
 using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
@@ -27,6 +28,7 @@ using System.Threading.Tasks;
 using static Backend.Infrastructure.Enums.Modules.Methods;
 using static System.Collections.Specialized.BitVector32;
 using MovementTypes = Backend.Domain.Enums.StockMovements.MovementType.MovementTypes;
+using Stock = Backend.Domain.Entities.Stocks.Stock;
 
 namespace Backend.Infrastructure.Services.Orders
 {
@@ -290,7 +292,7 @@ namespace Backend.Infrastructure.Services.Orders
                 OrderHistoryId = action.OrderHistoryId,
                 OrderId = action.OrderId,
                 OrderItemId = action.OrderItemId,
-                OrderMovementType = action.OrderMovementType,
+                OrderMovementType = (int)MovementTypes.Input,
                 OrderTotalItemsMovement = action.OrderTotalItemsMovement,
                 From = action.From,
                 To = action.To,
@@ -301,52 +303,28 @@ namespace Backend.Infrastructure.Services.Orders
                 UpdatedBy = null,
             };
             _appDbContext.OrderHistories.Add(orderHistory);
+            _appDbContext.SaveChanges();
 
-            // Add items to stock 
-            _stockService.Add(new Domain.Entities.Stocks.Stock()
-            {
-                TenantId = context.Tenant.Id,
-                UserId = context.UserId,
-                AgentId = action.From, // always
-                MovementType = action.OrderMovementType == 0 ? 1 : 0, // HACK: in the stock is inverted
-                Quantity = action.OrderTotalItemsMovement,
-                MovementDate = DateTime.Now,
-                CreatedBy = context.UserId,
-                Created = DateTime.UtcNow,
-                Updated = null,
-                UpdatedBy = null,
-                Active = true,
-            });
-
-            // Check if stock is finished
+            // Calculate total amount already sent based on the order items history log
             Dictionary<Guid, int> productQuantity = new Dictionary<Guid, int>();
-            var history = _appDbContext.OrderHistories.Where(x => x.OrderId == action.OrderId);
+            var history = _appDbContext.OrderHistories.Where(x => x.OrderId == action.OrderId).ToList();
             foreach (var h in history)
             {
                 if (productQuantity.ContainsKey(h.OrderItemId))
                 {
-                    // Contem no dicionario
                     var quantity = productQuantity[h.OrderItemId];
-                    if (h.OrderMovementType == 0)
-                        quantity -= h.OrderTotalItemsMovement;
-                    else
-                        quantity += h.OrderTotalItemsMovement;
-
+                    quantity += h.OrderTotalItemsMovement;
                     productQuantity[h.OrderItemId] = quantity;
                 }
                 else
                 {
                     var quantity = 0;
-                    if (h.OrderMovementType == 0)
-                        quantity -= h.OrderTotalItemsMovement;
-                    else
-                        quantity += h.OrderTotalItemsMovement;
-
+                    quantity += h.OrderTotalItemsMovement;
                     productQuantity.Add(h.OrderItemId, quantity);
                 }
-
-
             }
+
+            // Compare the total amount with expected amount and update the status
             bool isDone = true;
             var items = order.OrderItems;
             foreach (var item in items)
@@ -357,13 +335,29 @@ namespace Backend.Infrastructure.Services.Orders
                     if (item.ItemQuantity > quantity)
                     {
                         isDone = false;
-                        break;
                     }
+
+                    _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = order.SellerId, // always
+                        ProductId = item.ProductId,
+                        VariantId = item.VariantId.HasValue ? item.VariantId.Value : null,
+                        MovementType = (int)MovementTypes.Output,
+                        Quantity = quantity,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
+                    _appDbContext.SaveChanges();
                 }
                 else
                 {
                     isDone = false;
-                    break;
                 }
             }
 
@@ -379,54 +373,120 @@ namespace Backend.Infrastructure.Services.Orders
 
         public bool RefundOrder(Guid tenantId, Guid orderId)
         {
+            var context = LoadContext();
+            var order = _appDbContext.Orders
+                .Include(_ => _.OrderItems)
+                .First(_ => _.OrderId == orderId);
+            foreach (var itemGroup in order.OrderItems.GroupBy(x => x.OrderItemId))
+            {
+                // Assuming you want to create an order history entry for each item in the group
+                foreach (var item in itemGroup)
+                {
+                    // Check if stock is finished
+                    Dictionary<Guid, int> productQuantity = new Dictionary<Guid, int>();
+                    var history = _appDbContext.OrderHistories.Where(x => x.OrderId == item.OrderId);
+                    var totalAlreadySent = history.Where(x => x.OrderId == orderId &&
+                    x.OrderItemId == item.OrderItemId)
+                        .Sum(x => x.OrderTotalItemsMovement);
+
+                    var orderHistory = new OrderHistory()
+                    {
+                        TenantId = tenantId,
+                        OrderHistoryId = Guid.NewGuid(),
+                        OrderId = orderId,
+                        OrderItemId = item.OrderItemId,
+                        OrderMovementType = 0,
+                        OrderTotalItemsMovement = totalAlreadySent,
+                        From = order.CustomerId,
+                        To = order.SellerId,
+                        Active = true,
+                        Created = DateTime.UtcNow,
+                        CreatedBy = context.UserId,
+                        Updated = null,
+                        UpdatedBy = null,
+                    };
+                    _appDbContext.OrderHistories.Add(orderHistory);
+
+                    _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = order.SellerId, // always
+                        ProductId = item.ProductId,
+                        VariantId = item.VariantId.HasValue ? item.VariantId.Value : null,
+                        MovementType = 1,
+                        Quantity = totalAlreadySent,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
+                }
+            }
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Refunding);
         }
         public bool CancelOrder(Guid tenantId, Guid orderId)
         {
+            var context = LoadContext();
+            var order = _appDbContext.Orders
+                .Include(_ => _.OrderItems)
+                .First(_ => _.OrderId == orderId);
+            foreach (var itemGroup in order.OrderItems.GroupBy(x => x.OrderItemId))
+            {
+                // Assuming you want to create an order history entry for each item in the group
+                foreach (var item in itemGroup)
+                {
+                    // Check if stock is finished
+                    Dictionary<Guid, int> productQuantity = new Dictionary<Guid, int>();
+                    var history = _appDbContext.OrderHistories.Where(x => x.OrderId == item.OrderId);
+                    var totalAlreadySent = history.Where(x => x.OrderId == orderId &&
+                    x.OrderItemId == item.OrderItemId)
+                        .Sum(x => x.OrderTotalItemsMovement);
+
+                    var orderHistory = new OrderHistory()
+                    {
+                        TenantId = tenantId,
+                        OrderHistoryId = Guid.NewGuid(),
+                        OrderId = orderId,
+                        OrderItemId = item.OrderItemId,
+                        OrderMovementType = 0,
+                        OrderTotalItemsMovement = totalAlreadySent,
+                        From = order.CustomerId,
+                        To = order.SellerId,
+                        Active = true,
+                        Created = DateTime.UtcNow,
+                        CreatedBy = context.UserId,
+                        Updated = null,
+                        UpdatedBy = null,
+                    };
+                    _appDbContext.OrderHistories.Add(orderHistory);
+                    _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
+                    {
+                        TenantId = context.Tenant.Id,
+                        UserId = context.UserId,
+                        AgentId = order.SellerId, // always
+                        ProductId = item.ProductId,
+                        VariantId = item.VariantId.HasValue ? item.VariantId.Value : null,
+                        MovementType = 1, 
+                        Quantity = totalAlreadySent,
+                        MovementDate = DateTime.Now,
+                        CreatedBy = context.UserId,
+                        Created = DateTime.UtcNow,
+                        Updated = null,
+                        UpdatedBy = null,
+                        Active = true,
+                    });
+                }
+            }
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Canceled);
         }
         public bool ApproveOrder(Guid tenantId, Guid orderId)
         {
             return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.InProgress);
         }
-        public bool FinishOrder(Guid tenantId, Guid orderId)
-        {
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
-            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
 
-            foreach (var item in orderItems)
-            {
-                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
-                {
-                    OrderId = orderId,
-                    From = order.SellerId,
-                    To = order.CustomerId,
-                    OrderTotalItemsMovement = item.ItemQuantity,
-                    OrderItemId = item.OrderItemId,
-                    OrderMovementType = (int)MovementTypes.Input,
-                });
-            }
-            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.Done);
-        }
-        public bool SetPartialDelivery(Guid tenantId, Guid orderId)
-        {
-            var order = _appDbContext.Orders.FirstOrDefault(x => x.OrderId == orderId && x.Active);
-            var orderItems = _appDbContext.OrderItems.Where(x => x.OrderId == orderId && x.Active).ToList();
-
-            foreach (var item in orderItems)
-            {
-                ExecuteOrderMovementAction(new OrderMovementEntryHistoryRequest()
-                {
-                    OrderId = orderId,
-                    From = order.SellerId,
-                    To = order.CustomerId,
-                    OrderTotalItemsMovement = item.ItemQuantity,
-                    OrderItemId = item.OrderItemId,
-                    OrderMovementType = (int)MovementTypes.Input,
-                });
-            }
-            return UpdateOrderStatus(tenantId, orderId, (int)OrdersStatusEnums.PartiallyDone);
-        }
         public bool UpdateOrderStatus(Guid tenantId, Guid orderId, int statusId)
         {
             var context = LoadContext();
