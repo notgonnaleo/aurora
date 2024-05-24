@@ -29,11 +29,34 @@ else
                                 <div class="col-md-9">
                                     <h5 class="smart-link mt-2" @onclick="() => Edit(agent)">@agent.Name</h5>
                                     <div class="d-flex flex-row justify-content-between">
-                                        <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(agent)">@* CPForCNPJ *@</span>
-                                        <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">@* Vendor/Employ *@</span>
+                                        @foreach (var resul in profiles)
+                                        {
+                                            @if (agent.AgentId == resul.AgentId)
+                                            {
+                                                <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(agent)">
+                                                   <strong class="text-black">CPF:</strong> @resul.CPF
+
+                                                </span>
+                                            }
+                                        }
+
+                                        <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">
+                                            @if (IdSelected == "2")
+                                            {
+                                                <span class="text-info">Customer</span>
+                                            }
+                                            else if (IdSelected == "3")
+                                            {
+                                                <span class="text-info">Employee</span>
+                                            }
+                                            else if (IdSelected == "4")
+                                            {
+                                                <span class="text-info">Employee</span>
+                                            }
+                                        </span>
                                     </div>
                                     <p class="mt-4 mb-4 mb-md-0 card-description">
-                                       
+
                                     </p>
                                 </div>
                                 <div class="col-md-3 border-sm-start-none border-start d-flex flex-column">
@@ -78,28 +101,52 @@ else
 
 
 
-
-@code {
+    @code {
     [Parameter] public string? IdSelected { get; set; }
-}
+    
 
-@code
-{
+    }
+
+    @code
+    {
     private bool isLoading = true;
     private IEnumerable<Agent>? agents;
     protected override async Task OnInitializedAsync()
     {
+
+        await BuscarAgents();
+        await Profile();
+
+
+    }
+
+    
+    @code
+    {
+        private IEnumerable<Profile> profiles;
+        public async Task Profile()
+        {
+
+            var context = await _authenticationService.GetContext();
+            var responses = await _contactService.GetProfiles(context.Tenant.Id.ToString());
+            profiles = responses.Result;
+        }
+    }
+    public async Task BuscarAgents()
+    {
         isLoading = true;
         var context = await _authenticationService.GetContext();
-        
+
 
         var response = await _agentService.GetAgents(context.Tenant.Id.ToString());
+
         if (response.Successful())
         {
             if (!string.IsNullOrEmpty(IdSelected))
             {
                 var id = Convert.ToInt32(IdSelected);
                 agents = response.Result.Where(agent => agent.AgentTypeId == id);
+
                 if (agents.Count() == 0)
                 {
                     agents = response.Result;
@@ -107,6 +154,8 @@ else
             }
             else
             {
+                //aqui buscar os profiles
+
                 agents = response.Result;
             }
         }
@@ -125,4 +174,4 @@ else
 
     [Parameter]
     public bool ShowModal { get; set; } = false;
-}
+    }
