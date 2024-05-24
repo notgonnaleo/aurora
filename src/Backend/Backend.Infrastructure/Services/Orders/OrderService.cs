@@ -406,6 +406,7 @@ namespace Backend.Infrastructure.Services.Orders
                         UpdatedBy = null,
                     };
                     _appDbContext.OrderHistories.Add(orderHistory);
+
                     _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
                     {
                         TenantId = context.Tenant.Id,
