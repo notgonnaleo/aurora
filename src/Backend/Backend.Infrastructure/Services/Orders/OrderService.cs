@@ -12,6 +12,7 @@ using Backend.Domain.Entities.Stocks;
 using Backend.Domain.Enums.Orders;
 using Backend.Domain.Enums.StockMovements.MovementType;
 using Backend.Infrastructure.Context;
+using Backend.Infrastructure.Migrations.AppDbMigration;
 using Backend.Infrastructure.Services.Agents;
 using Backend.Infrastructure.Services.Authorization;
 using Backend.Infrastructure.Services.Base;
@@ -302,36 +303,28 @@ namespace Backend.Infrastructure.Services.Orders
                 UpdatedBy = null,
             };
             _appDbContext.OrderHistories.Add(orderHistory);
+            _appDbContext.SaveChanges();
 
-            // Check if stock is finished
+            // Calculate total amount already sent based on the order items history log
             Dictionary<Guid, int> productQuantity = new Dictionary<Guid, int>();
-            var history = _appDbContext.OrderHistories.Where(x => x.OrderId == action.OrderId);
+            var history = _appDbContext.OrderHistories.Where(x => x.OrderId == action.OrderId).ToList();
             foreach (var h in history)
             {
                 if (productQuantity.ContainsKey(h.OrderItemId))
                 {
-                    // Contem no dicionario
                     var quantity = productQuantity[h.OrderItemId];
-                    if (h.OrderMovementType == 0)
-                        quantity -= h.OrderTotalItemsMovement;
-                    else
-                        quantity += h.OrderTotalItemsMovement;
-
+                    quantity += h.OrderTotalItemsMovement;
                     productQuantity[h.OrderItemId] = quantity;
                 }
                 else
                 {
                     var quantity = 0;
-                    if (h.OrderMovementType == 0)
-                        quantity -= h.OrderTotalItemsMovement;
-                    else
-                        quantity += h.OrderTotalItemsMovement;
-
+                    quantity += h.OrderTotalItemsMovement;
                     productQuantity.Add(h.OrderItemId, quantity);
                 }
-
-
             }
+
+            // Compare the total amount with expected amount and update the status
             bool isDone = true;
             var items = order.OrderItems;
             foreach (var item in items)
@@ -342,7 +335,6 @@ namespace Backend.Infrastructure.Services.Orders
                     if (item.ItemQuantity > quantity)
                     {
                         isDone = false;
-                        break;
                     }
 
                     _appDbContext.Stocks.Add(new Domain.Entities.Stocks.Stock()
@@ -366,7 +358,6 @@ namespace Backend.Infrastructure.Services.Orders
                 else
                 {
                     isDone = false;
-                    break;
                 }
             }
 
