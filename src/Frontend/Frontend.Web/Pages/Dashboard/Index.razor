@@ -22,6 +22,16 @@
 else
 {
     <div class="container-fluid">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
+                <li class="breadcrumb-item">
+                    <a href="/" class="text-info d-flex align-items-center">
+                        <i class="ti ti-home fs-4 mt-1"></i>
+                        <p class="text-info mb-0" style="margin-left: 10px;">Homepage</p>                    
+                    </a>
+                </li>
+            </ol>
+        </nav>
         <div class="row">
             <div class="col-md-4">
                 <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated Profile=@dashboardProfile />
@@ -136,7 +146,7 @@ else
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 d-flex align-items-stretch">
+            <div class="col-lg-8 d-flex align-items-stretch" style="height: 550px;">
                 <Frontend.Web.Components.Stock.Table.StockEntryLogViewTable />
             </div>
         </div>

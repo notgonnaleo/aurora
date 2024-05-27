@@ -2,6 +2,7 @@
 @using Backend.Domain.Entities.Addresses;
 @using Backend.Domain.Entities.Agents;
 @using Backend.Domain.Entities.Contacts;
+@using Backend.Domain.Enums.Agents
 @using Frontend.Web.Services.Agents;
 @using Frontend.Web.Services.Authentication;
 @inject NavigationManager NavigationManager
@@ -35,16 +36,22 @@
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
             <li class="breadcrumb-item">
-                <a href="#" class="text-info d-flex align-items-center"><i class="ti ti-home fs-4 mt-1"></i></a>
+                <a href="/" class="text-info d-flex align-items-center">
+                    <i class="ti ti-home fs-4 mt-1"></i>
+                </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="#" class="text-info">Library</a>
+                <a href="/agents" class="text-info">Agents</a>
             </li>
             <li class="breadcrumb-item active text-info " aria-current="page">
-                Data
+                @(((AgentTypes)Model!.Agent.AgentTypeId).ToString())
+            </li>
+            <li class="breadcrumb-item active text-info " aria-current="page">
+                <a href="/agents/edit/@Model.Agent.AgentId"><strong>@(Model!.Agent.Name)</strong></a>
             </li>
         </ol>
     </nav>
+
     @if (isLoading && Model is null)
     {
         <Frontend.Web.Components.Loader.LoadingSpinner />
