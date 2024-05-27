@@ -1,0 +1,25 @@
+﻿<nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0)" class="text-info d-flex align-items-center">
+                <i class="ti ti-home fs-4 mt-1"></i>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="javascript:void(0)" class="text-info">Library</a>
+        </li>
+        <li class="breadcrumb-item active text-info " aria-current="page">
+            Data
+        </li>
+    </ol>
+</nav>
+@code 
+{
+    // queria muito fazer da forma certa mas ninguem liga entao vou fazer de qualquer jeito 
+    [Parameter]
+    public int ModuleId { get; set; }
+
+    [Parameter]
+    public List<KeyValuePair<string, string>> LinkList { get; set; }
+}
+

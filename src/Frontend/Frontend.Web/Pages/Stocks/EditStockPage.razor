@@ -8,6 +8,21 @@
 @inject StockService _stockService;
 
 <div class="container-fluid">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
+            <li class="breadcrumb-item">
+                <a href="/" class="text-info d-flex align-items-center">
+                    <i class="ti ti-home fs-4 mt-1"></i>
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/stock" class="text-info">Inventory</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="/stock/edit/@StockMovementId" class="text-info">Stock Log - @Model.MovementDate - @Model!.Product!.Name</a>
+            </li>
+        </ol>
+    </nav>
     <Frontend.Web.Components.Stock.Forms.Edit.EditStock Model="@Model"/>
     
     <div class="row ">
