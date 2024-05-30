@@ -44,6 +44,7 @@ namespace Backend.Infrastructure.Services.Stocks
             var context = LoadContext();
             ValidateTenant(stock.TenantId);
 
+            // Yes we are just ovewritting some props, don't worry it's not magic, the other props still exists
             stock.TenantId = context.Tenant.Id;
             stock.UserId = context.UserId;
             stock.MovementDate = DateTime.Now;
@@ -168,10 +169,10 @@ namespace Backend.Infrastructure.Services.Stocks
 
         public IEnumerable<StockDetail> GetStockWithDetail(Guid tenantId)
         {
-            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId && x.Active);
+            IEnumerable<Stock> stock = _appDbContext.Stocks.Where(x => x.TenantId == tenantId && x.Active && x.ProductId != Guid.Empty);
             List<ProductDetail> products = _productService.GetProductsWithDetail(tenantId).ToList();
 
-            if (!products.Any() || products is null ) { 
+            if (!products.Any() || products is null) { 
                 return Enumerable.Empty<StockDetail>();
             }
 

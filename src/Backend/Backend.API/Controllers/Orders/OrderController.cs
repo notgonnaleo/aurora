@@ -82,6 +82,19 @@ namespace Backend.API.Controllers.Orders
             }
         }
         [TypeFilter(typeof(ValidateUserContextAttribute))]
+        [HttpPost, Route("Refund")]
+        public ActionResult RefundOrder(Guid tenantId, Guid orderId)
+        {
+            try
+            {
+                return Ok(_orderService.RefundOrder(tenantId, orderId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [TypeFilter(typeof(ValidateUserContextAttribute))]
         [HttpPost, Route("Cancel")]
         public ActionResult CancelOrder(Guid tenantId, Guid orderId)
         {

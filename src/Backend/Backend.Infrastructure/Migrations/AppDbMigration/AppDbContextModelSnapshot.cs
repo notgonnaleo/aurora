@@ -197,11 +197,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.HasData(
                         new
                         {
-                            AgentTypeId = 1,
-                            AgentTypeName = "Company"
-                        },
-                        new
-                        {
                             AgentTypeId = 2,
                             AgentTypeName = "Customer"
                         },
@@ -214,11 +209,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         {
                             AgentTypeId = 4,
                             AgentTypeName = "Vendor"
-                        },
-                        new
-                        {
-                            AgentTypeId = 5,
-                            AgentTypeName = "Physical Store"
                         });
                 });
 
@@ -259,7 +249,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             Active = true,
                             CategoryName = "Eletronic",
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(836),
+                            Created = new DateTime(2024, 5, 20, 19, 7, 22, 5, DateTimeKind.Utc).AddTicks(6225),
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });
                 });
@@ -713,7 +703,8 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .HasColumnType("uuid");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("GTIN")
                         .IsRequired()
@@ -767,11 +758,11 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("97901075-f6da-48b1-8216-97302f5576f6"),
+                            ProductId = new Guid("169a1e41-ab2d-47aa-9d5d-7c87cbdf489e"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
                             ColorName = "Preto",
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(1015),
+                            Created = new DateTime(2024, 5, 20, 19, 7, 22, 5, DateTimeKind.Utc).AddTicks(6397),
                             Description = "Produto de teste gerado na migration - Aurora",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.13,
@@ -786,10 +777,10 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         },
                         new
                         {
-                            ProductId = new Guid("39cafd27-f6be-4bb8-9553-ce8e2dad46da"),
+                            ProductId = new Guid("df3d9097-50df-4676-9dc9-d7d49347a458"),
                             Active = true,
                             ColorName = "Azul-Marinho",
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(1025),
+                            Created = new DateTime(2024, 5, 20, 19, 7, 22, 5, DateTimeKind.Utc).AddTicks(6405),
                             Description = "Produto de teste gerado na migration - SampleCompany",
                             GTIN = "012345678910111213",
                             LiquidWeight = 0.0,
@@ -822,7 +813,6 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                         .HasColumnType("integer");
 
                     b.Property<string>("MediaURL")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("Priority")
@@ -1065,7 +1055,7 @@ namespace Backend.Infrastructure.Migrations.AppDbMigration
                             SubCategoryId = new Guid("cb1dd75f-6cf2-4c6e-b050-ee80444ad1c6"),
                             Active = true,
                             CategoryId = new Guid("63cf51c6-e90e-4725-b6c3-1c40986d6847"),
-                            Created = new DateTime(2024, 5, 14, 22, 40, 59, 750, DateTimeKind.Utc).AddTicks(973),
+                            Created = new DateTime(2024, 5, 20, 19, 7, 22, 5, DateTimeKind.Utc).AddTicks(6345),
                             SubCategoryName = "Smartphone",
                             TenantId = new Guid("cabaa57a-37ff-4871-be7d-0187ed3534a5")
                         });

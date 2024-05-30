@@ -75,6 +75,14 @@
                                         Navigator.NavigateTo(Navigator.Uri, true);
                                     }
                                 }
+                                private async Task Refund()
+                                {
+                                    var response = await _orderService.Refund(OrderDetails.TenantId.ToString(), OrderDetails.OrderId.ToString());
+                                    if (response.Successful())
+                                    {
+                                        Navigator.NavigateTo(Navigator.Uri, true);
+                                    }
+                                }
                                 private async Task Cancel()
                                 {
                                     var response = await _orderService.Cancel(OrderDetails.TenantId.ToString(), OrderDetails.OrderId.ToString());
@@ -101,19 +109,21 @@
                                 </div>
                             }
 
-                            @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.InProgress)
+                            @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.InProgress || 
+                            OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.PartiallyDone || 
+                            OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Overdue)
                             {
-                                <div class="col">
+                                <div class="col" @onclick="ToggleForm">
                                     <span><i class="ti ti-truck fs-10 cursor-pointer"></i></span>
-                                    <p class="smart-link cursor-pointer" @onclick="ToggleForm">Realizar movimentação</p>
+                                    <p class="smart-link cursor-pointer" >Realizar movimentação</p>
                                 </div>
                             }
 
                             @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Done)
                             {
-                                <div class="col">
+                                    <div class="col" @onclick="Refund">
                                     <span><i class="ti ti-arrow-back fs-10 cursor-pointer"></i></span>
-                                    <p class="smart-link cursor-pointer" @onclick="Approve">Iniciar devolução</p>
+                                    <p class="smart-link cursor-pointer">Realizar devolução</p>
                                 </div>
                             }
 
@@ -125,10 +135,25 @@
                                     <span><i class="ti ti-mail fs-10 cursor-pointer"></i></span>
                                     <p class="smart-link cursor-pointer">Email</p>
                                 </div>
-                                <div class="col">
+
+                            @if(OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Open)
+                            {
+                                <div class="col" @onclick="Cancel">
                                     <span><i class="ti ti-file-off fs-10 cursor-pointer"></i></span>
-                                        <p class="smart-link cursor-pointer" @onclick="Cancel">Recusar</p>
+                                    <p class="smart-link cursor-pointer">Recusar</p>
                                 </div>
+                            }
+                            @if (OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Overdue ||
+                            OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.InProgress ||
+                            OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.PartiallyDone ||
+                            OrderDetails.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Refunding
+                            )
+                            {
+                                <div class="col" @onclick="Cancel">
+                                    <span><i class="ti ti-file-off fs-10 cursor-pointer"></i></span>
+                                    <p class="smart-link cursor-pointer">Cancelar</p>
+                                </div>
+                            }
                             </div>
                         </div>
                     </div>

@@ -3,26 +3,27 @@
     @if (Addresses is null || Addresses.Any())
     {
         <div class="table-responsive">
-            <table class="table search-table align-middle text-nowrap">
+            <table class="table table-bordered table-hover">
                 <tbody>
                     @foreach (var address in Addresses)
                     {
                         <!-- start row -->
                         <tr class="search-items">
+                           
                             <td>
-                                <p>@(address.Primary ?? false ? "Primary contact" : $"{string.Empty}")</p>
-                            </td>
-                            <td>
-                                <span class="usr-email-addr" id="@address.AddressId">@address.CityName, @address.CountryName - @address.PostalCode</span>
-                            </td>
-                            <td class="text-end">
-                                <div class="action-btn">
-                                    <a class="text-primary edit" @onclick="() => EditItem(address)">
-                                        <i class="ti ti-eye fs-5"></i>
-                                    </a>
-                                    <a class="text-dark delete ms-2" @onclick="() => DeleteModalAction(address)">
-                                        <i class="ti ti-trash fs-5"></i>
-                                    </a>
+                                <div class="">
+                                    <h6 class="m-3"><strong>Endereço:</strong> <span class="text-muted">@address.StreetName, @address.StreetNumber</span></h6>
+                                    <h6 class="m-3"><strong>Cidade:</strong> <span class="text-muted">@address.CityName</span></h6>
+                                    <h6 class="m-3"><strong>País:</strong> <span class="text-muted">@address.CountryName</span></h6>
+                                    <h6 class="m-3"><strong>CEP:</strong> <span class="text-muted">@address.PostalCode</span></h6>
+                                    <div class="action-btn m-3">
+                                        <a class="text-primary edit" @onclick="() => EditItem(address)">
+                                            <i class="ti ti-eye fs-5"></i>
+                                        </a>
+                                        <a class="text-dark delete ms-2" @onclick="() => DeleteModalAction(address)">
+                                            <i class="ti ti-trash fs-5"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -31,6 +32,8 @@
                 </tbody>
             </table>
         </div>
+
+
     }
     else
     {
