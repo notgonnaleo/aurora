@@ -1,0 +1,13 @@
+﻿@page "/Welcome"
+@inject NavigationManager Navigator;
+
+<h3>LandingPage</h3>
+
+<button class="btn btn-primary" @onclick="GoToLoginpage">
+    Go to Loginpage
+</button>
+
+@code 
+{
+    private void GoToLoginpage() => Navigator.NavigateTo("/Login");
+}
