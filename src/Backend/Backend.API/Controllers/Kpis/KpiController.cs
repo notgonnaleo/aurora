@@ -8,10 +8,10 @@ namespace Backend.API.Controllers.Kpis
 {
     [ApiController]
     [Route("Kpi")]
-    public class KpiController : ControllerBase
+    public class AuditLogController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
-        public KpiController(AppDbContext appDbContext) 
+        public AuditLogController(AppDbContext appDbContext) 
         {
             _appDbContext = appDbContext;
         }

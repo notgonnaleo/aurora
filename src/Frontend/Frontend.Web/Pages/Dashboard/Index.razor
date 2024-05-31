@@ -16,196 +16,229 @@
 @inject NavigationManager Navigator
 @inject Sotsera.Blazor.Toaster.IToaster Toaster
 
-
-
-@if (isLoading)
-{
-    <Frontend.Web.Components.Loader.LoadingSpinner />
-}
-else
-{
-    <div class="container-fluid">
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
-                <li class="breadcrumb-item">
-                    <a href="/" class="text-info d-flex align-items-center">
-                        <i class="ti ti-home fs-4 mt-1"></i>
-                        <p class="text-info mb-0" style="margin-left: 10px;">Homepage</p>                    
-                    </a>
-                </li>
-            </ol>
-        </nav>
-        <div class="row">
-            <div class="col-md-4">
-                <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated Profile=@dashboardProfile />
-            </div>
-            <div class="col-md-2">
-                <div class="card card-body bg-success" style="height: 205px;">
-                    <h2>
-                        <i class="ti ti-building-store cursor-pointer m-2" style="color: #fff"></i>
-                    </h2>
-                    <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
-                        <strong>@KpiResponse.TotalProducts</strong>
-                    </h3>
-                    <p class="text-light mb-0"><strong>Total products</strong></p>
+<div class="container-fluid">
+    @if (isLoading)
+    {
+        <Frontend.Web.Components.Loader.LoadingSpinner />
+    }
+    else
+    {
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb bg-info-subtle px-3 py-2 rounded">
+                    <li class="breadcrumb-item">
+                        <a href="/" class="text-info d-flex align-items-center">
+                            <i class="ti ti-home fs-4 mt-1"></i>
+                            <p class="text-info mb-0" style="margin-left: 10px;">Homepage</p>                    
+                        </a>
+                    </li>
+                </ol>
+            </nav>
+            <div class="row">
+                <div class="col-md-4">
+                    <Frontend.Web.Components.Dashboard.CompanyNameCard IsAuthenticated=isAuthenticated Profile=@dashboardProfile />
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card card-body bg-warning" style="height: 205px;">
-                    <h2>
-                        <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
-                    </h2>
-                    <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
-                        <strong>@KpiResponse.TotalOpenOrders</strong>
-                    </h3>
-                    <p class="text-light mb-0"><strong>Open orders</strong></p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card card-body bg-danger" style="height: 205px;">
-                    <h2>
-                        <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
-                    </h2>
-                    <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
-                        <strong>@KpiResponse.TotalCustomers</strong>
-                    </h3>
-                    <p class="text-light mb-0"><strong>Total clients</strong></p>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card card-body" style="background-color: #5e00c5; height: 205px;">
-                    <h2>
-                        <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
-                    </h2>
-                    <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
-                        <strong>@KpiResponse.TotalClosedOrders</strong>
-                    </h3>
-                    <p class="text-light mb-0"><strong>Closed orders</strong></p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 d-flex align-items-stretch">
-                <div class="card w-100">
-                    <div class="card-body p-4">
-                    <div class="mb-4">
-                        <h5 class="card-title fw-semibold">Transações recentes</h5>
+                <div class="col-md-2">
+                    <div class="card card-body bg-success" style="height: 205px;">
+                        <h2>
+                            <i class="ti ti-building-store cursor-pointer m-2" style="color: #fff"></i>
+                        </h2>
+                        @if (isLoading)
+                        {
+                            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+                        }
+                        else
+                        {
+                            <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
+                                <strong>@KpiResponse.TotalProducts</strong>
+                            </h3>
+                        }
+                        <p class="text-light mb-0"><strong>Total products</strong></p>
                     </div>
-                    @if (Transactions is not null && Transactions.Any())
-                    {
-                        <ul class="timeline-widget mb-0 position-relative mb-n5">
-                            @foreach (var txn in Transactions)
+                </div>
+                <div class="col-md-2">
+                    <div class="card card-body bg-warning" style="height: 205px;">
+                        <h2>
+                            <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
+                        </h2>
+                        @if (isLoading)
+                        {
+                            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+                        }
+                        else
+                        {
+                            <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
+                                <strong>@KpiResponse.TotalOpenOrders</strong>
+                            </h3>
+                        }
+                        <p class="text-light mb-0"><strong>Open orders</strong></p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card card-body bg-danger" style="height: 205px;">
+                        <h2>
+                            <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
+                        </h2>
+                        @if (isLoading)
+                        {
+                            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+                        }
+                        else
+                        {
+                            <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
+                                <strong>@KpiResponse.TotalCustomers</strong>
+                            </h3>
+                        }
+                        <p class="text-light mb-0"><strong>Total clients</strong></p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="card card-body" style="background-color: #5e00c5; height: 205px;">
+                        <h2>
+                            <i class="ti ti-truck-delivery cursor-pointer m-2" style="color: #fff"></i>
+                        </h2>
+                        @if (isLoading)
+                        {
+                            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+                        }
+                        else
+                        {
+                            <h3 style="font-size: 30px" class="card-title text-light text-center fw-semibold mb-4">
+                                <strong>@KpiResponse.TotalClosedOrders</strong>
+                            </h3>
+                        }
+                        <p class="text-light mb-0"><strong>Closed orders</strong></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 d-flex align-items-stretch">
+                    <div class="card w-100">
+                        <div class="card-body p-4">
+                        <div class="mb-4">
+                            <h5 class="card-title fw-semibold">Transações recentes</h5>
+                        </div>
+                        @if(isLoading)
+                        {
+                            <Frontend.Web.Components.Loader.LoadingSpinner></Frontend.Web.Components.Loader.LoadingSpinner>
+                        }
+                        else
+                        {
+                            @if (Transactions is not null && Transactions.Any())
                             {
-                                @if(txn.Customer is not null || txn.Seller is not null)
-                                {
-                                    @if (txn.OrderStatusId == (int)OrdersStatusEnums.Open)
+                                <ul class="timeline-widget mb-0 position-relative">
+                                    @foreach (var txn in Transactions)
                                     {
-                                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                                                <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyyMMdd")</div>
-                                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                                                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                            </div>
-                                            <div class="timeline-desc fs-3 text mt-n1">
-                                                    Pedido aberto para <strong><a href="agent/edit/@txn.CustomerId">@txn.Customer.Name</a></strong>
-                                                    por <strong><a href="agents/edit/@txn.SellerId">@txn.Seller.Name</a></strong> - R$ @txn.OrderTotalAmount
-                                                <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
-                                            </div>
-                                        </li>
-                                    }
+                                        @if (txn.Customer is not null || txn.Seller is not null)
+                                        {
+                                            @if (txn.OrderStatusId == (int)OrdersStatusEnums.Open)
+                                            {
+                                                <li class="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyy/MM/dd")</div>
+                                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div class="timeline-desc fs-3 text mt-n1">
+                                                        Pedido aberto para <strong><a href="agent/edit/@txn.CustomerId">@txn.Customer.Name</a></strong>
+                                                        por <strong><a href="agents/edit/@txn.SellerId">@txn.Seller.Name</a></strong> - R$ @txn.OrderTotalAmount
+                                                        <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
+                                                    </div>
+                                                </li>
+                                            }
 
-                                    @if (txn.OrderStatusId == (int)OrdersStatusEnums.Done)
-                                    {
-                                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                                            <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyyMMdd")</div>
-                                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
-                                                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                            </div>
-                                            <div class="timeline-desc fs-3 text mt-n1">
-                                                    Pedido de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> finalizado - R$ @txn.OrderTotalAmount
-                                                <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
-                                            </div>
-                                        </li>
-                                    }
+                                            @if (txn.OrderStatusId == (int)OrdersStatusEnums.Done)
+                                            {
+                                                <li class="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyy/MM/dd")</div>
+                                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span class="timeline-badge border-2 border border-success flex-shrink-0 my-8"></span>
+                                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div class="timeline-desc fs-3 text mt-n1">
+                                                        Pedido de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> finalizado - R$ @txn.OrderTotalAmount
+                                                        <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
+                                                    </div>
+                                                </li>
+                                            }
 
-                                    @if (txn.OrderStatusId == (int)OrdersStatusEnums.Overdue)
-                                    {
-                                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                                            <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyyMMdd")</div>
-                                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
-                                                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                            </div>
-                                            <div class="timeline-desc fs-3 text mt-n1">
-                                                    Pedido em atraso de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
-                                                <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
-                                            </div>
-                                        </li>
-                                    }
+                                            @if (txn.OrderStatusId == (int)OrdersStatusEnums.Overdue)
+                                            {
+                                                <li class="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyy/MM/dd")</div>
+                                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span class="timeline-badge border-2 border border-warning flex-shrink-0 my-8"></span>
+                                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div class="timeline-desc fs-3 text mt-n1">
+                                                        Pedido em atraso de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
+                                                        <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
+                                                    </div>
+                                                </li>
+                                            }
 
-                                    @if (txn.OrderStatusId == (int)OrdersStatusEnums.InProgress)
-                                    {
-                                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                                            <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyyMMdd")</div>
-                                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
-                                                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                            </div>
-                                            <div class="timeline-desc fs-3 text mt-n1">
-                                                    Pedido em progresso de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
-                                                <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
-                                            </div>
-                                        </li>
-                                    }
+                                            @if (txn.OrderStatusId == (int)OrdersStatusEnums.InProgress)
+                                            {
+                                                <li class="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyy/MM/dd")</div>
+                                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span class="timeline-badge border-2 border border-info flex-shrink-0 my-8"></span>
+                                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div class="timeline-desc fs-3 text mt-n1">
+                                                        Pedido em progresso de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
+                                                        <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
+                                                    </div>
+                                                </li>
+                                            }
 
-                                    @if (txn.OrderStatusId == (int)OrdersStatusEnums.Refunding)
-                                    {
-                                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                                            <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyyMMdd")</div>
-                                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                                                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                            </div>
-                                            <div class="timeline-desc fs-3 text mt-n1">
-                                                    Pedido reembolsado de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
-                                                <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
-                                            </div>
-                                        </li>
-                                    }
+                                            @if (txn.OrderStatusId == (int)OrdersStatusEnums.Refunding)
+                                            {
+                                                <li class="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyy/MM/dd")</div>
+                                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+                                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div class="timeline-desc fs-3 text mt-n1">
+                                                        Pedido reembolsado de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
+                                                        <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
+                                                    </div>
+                                                </li>
+                                            }
 
-                                    @if (txn.OrderStatusId == (int)OrdersStatusEnums.Canceled)
-                                    {
-                                        <li class="timeline-item d-flex position-relative overflow-hidden">
-                                            <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyyMMdd")</div>
-                                            <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                                                <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
-                                                <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                                            </div>
-                                            <div class="timeline-desc fs-3 text mt-n1">
-                                                    Pedido cancelado de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
-                                                <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
-                                            </div>
-                                        </li>
+                                            @if (txn.OrderStatusId == (int)OrdersStatusEnums.Canceled)
+                                            {
+                                                <li class="timeline-item d-flex position-relative overflow-hidden">
+                                                    <div class="timeline-time text flex-shrink-0 text-end">@txn!.Created?.ToString("yyyy/MM/dd")</div>
+                                                    <div class="timeline-badge-wrap d-flex flex-column align-items-center">
+                                                        <span class="timeline-badge border-2 border border-danger flex-shrink-0 my-8"></span>
+                                                        <span class="timeline-badge-border d-block flex-shrink-0"></span>
+                                                    </div>
+                                                    <div class="timeline-desc fs-3 text mt-n1">
+                                                        Pedido cancelado de <strong><a href="agents/edit/@txn.CustomerId">@txn.Customer.Name</a></strong> - R$ @txn.OrderTotalAmount
+                                                        <a href="/order-summary/@txn.OrderId" class="text-primary d-block fw-normal">#@txn.OrderCode</a>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
                                     }
-                                }
+                                </ul>
                             }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p>Sem transações recentes.</p>
-                    }
+                            else
+                            {
+                                <p>Sem transações recentes.</p>
+                            }
+                        }
+                        </div>
                     </div>
                 </div>
+                <div class="col-lg-8 d-flex align-items-stretch" style="height: 550px;">
+                    <Frontend.Web.Components.Stock.Table.StockEntryLogViewTable />
+                </div>
             </div>
-            <div class="col-lg-8 d-flex align-items-stretch" style="height: 550px;">
-                <Frontend.Web.Components.Stock.Table.StockEntryLogViewTable />
-            </div>
-        </div>
-    </div>
 
-}
+    }
+</div>
 
 @code {
     private bool isAuthenticated = false;
