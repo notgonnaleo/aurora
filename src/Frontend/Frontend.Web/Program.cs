@@ -29,6 +29,7 @@ using Frontend.Web.Components.Settings.Theme;
 using Frontend.Web.Repository.Orders;
 using Frontend.Web.Services.Orders;
 using Frontend.Web.Repository.Contacts.Frontend.Web.Services.Addresses;
+using Frontend.Web.Repository.Kpis;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -57,6 +58,7 @@ builder.Services.AddScoped<HttpRequestHeader>();
 builder.Services.AddScoped<EnvironmentHandler>();
 builder.Services.AddScoped<ProductRepository>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<KpiRepository>();
 builder.Services.AddScoped<TenantRepository>();
 builder.Services.AddScoped<TenantService>();
 builder.Services.AddScoped<CategoryRepository>();
