@@ -1,0 +1,35 @@
+﻿<div class="dropdown-menu content-dd dropdown-menu-end dropdown-menu-animate-up @(ShowTab ? "show" : "collapse")" aria-labelledby="drop2" style="left: 0;">
+    <div class="d-flex align-items-center justify-content-between py-3 px-7">
+        <p class="mb-0">Notifications</p>
+        @* <span class="badge text-bg-primary rounded-4 px-3 py-1 lh-sm">5 new</span> *@
+    </div>
+    <div class="message-body simplebar-scrollable-y scroll-sidebar" data-simplebar="init">
+        <div class="simplebar-wrapper w-100" style="margin: 0px;">
+            <div class="simplebar-mask scroll-sidebar" style="overflow-y: scroll; height:400px;">
+                <div class="scroll-sidebar">
+                    <div class="simplebar-content notification-bar cursor-pointer" style="margin-left: 0.3rem;">
+                        <a class="py-6 px-7 d-flex align-items-center dropdown-item">
+                            <span class="me-3">
+                                <i class="ti ti-building"></i>
+                            </span>
+                            <div class="w-100">
+                                <h6 class="mb-1 fw-semibold lh-base">New message</h6>
+                                <span class="fs-2 d-block text-body-secondary">Salma sent you new message</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div><div class="simplebar-placeholder" style="width: 360px; height: 432px;"></div>
+        </div>
+    </div>
+    @*     
+    <div class="py-6 px-7 mb-1">
+        <button class="btn btn-outline-primary w-100">See All Notifications</button>
+    </div 
+    *@
+</div>
+
+@code 
+{
+    [Parameter] public bool ShowTab { get; set; }
+}
