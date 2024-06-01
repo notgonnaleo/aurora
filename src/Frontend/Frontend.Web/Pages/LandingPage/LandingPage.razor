@@ -1,20 +1,20 @@
 ﻿@page "/Welcome"
 @inject NavigationManager Navigator;
+@inject IJSRuntime JSRuntime
 
-@* <h3>LandingPage</h3>
-
-<button class="btn btn-primary" @onclick="GoToLoginpage">
-    Go to Loginpage
-</button> *@
-
-@* @code
+@code
 {
     private void GoToLoginpage() => Navigator.NavigateTo("/Login");
-} *@
+    protected override async Task OnInitializedAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("landingPageAnimations");
+    }
+}
 
 
 <style>
-    .landingpagehtml {
+    .landing-page-html 
+    {
         line-height: 1.15;
         -ms-text-size-adjust: 100%;
         -webkit-text-size-adjust: 100%
@@ -27,7 +27,8 @@
 
     h1 {
         font-size: 2em;
-        margin: 0.67em 0
+        margin: 0.67em 0;
+        color: #fff
     }
 
     figcaption, figure, main {
@@ -62,11 +63,14 @@
     }
 
     b, strong {
-        font-weight: inherit
+        font-weight: inherit;
+        color: #fff
+
     }
 
     b, strong {
-        font-weight: bolder
+        font-weight: bolder;
+        color: #fff
     }
 
     code, kbd, samp {
@@ -332,7 +336,7 @@
 
     h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         clear: both;
-        color: #fff;
+        color: #fff !important;
         font-weight: 600
     }
 
@@ -451,7 +455,8 @@
 
     p {
         margin-top: 0;
-        margin-bottom: 24px
+        margin-bottom: 24px;
+        color: #fff !important
     }
 
     dfn, cite, em, i {
@@ -535,29 +540,30 @@
         line-height: 30px
     }
 
-    .container, .container-sm {
+    .container-lp, .container-lp-sm {
         width: 100%;
         margin: 0 auto;
         padding-left: 16px;
-        padding-right: 16px
+        padding-right: 16px;
+
     }
 
     @@media (min-width: 481px) {
-        .container, .container-sm {
+        .container-lp, .container-lp-sm {
             padding-left: 24px;
             padding-right: 24px
         }
     }
 
-    .container {
+    .container-lp {
         max-width: 1128px
     }
 
-    .container-sm {
+    .container-lp-sm {
         max-width: 848px
     }
 
-    .container .container-sm {
+    .container-lp .container-lp-sm {
         max-width: 800px;
         padding-left: 0;
         padding-right: 0
@@ -1700,7 +1706,7 @@
         min-height: 100vh
     }
 
-    .boxed-container {
+    .boxed-container-lp {
         max-width: 1440px;
         margin: 0 auto;
         box-shadow: 0 24px 48px rgba(21,24,29,0.24);
@@ -1805,17 +1811,16 @@
     }
 </style>
 
-<div lang="en" class=" landingpagehtmlsr js anime-ready">
-
+<div class="landing-page-html sr js anime-ready">
     <div class="is-boxed has-animations" style="height: 100%;">
         <div class="body-wrap">
             <header class="site-header">
-                <div class="container">
+                <div class="container-lp">
                     <div class="site-header-inner">
                         <div class="brand header-brand">
                             <h1 class="m-0">
                                 <a href="#">
-                                    <img class="header-logo-image" src="../dist/images/aurora.png" alt="Logo">
+                                    <img class="header-logo-image" src="/assets/landingpage/aurora.png" alt="Logo">
                                 </a>
                             </h1>
                         </div>
@@ -1825,12 +1830,12 @@
 
             <main>
                 <section class="hero">
-                    <div class="container">
+                    <div class="container-lp">
                         <div class="hero-inner">
                             <div class="hero-copy">
                                 <h1 class="hero-title mt-0"> Aurora</h1>
                                 <p class="hero-paragraph"> Simplificando a Gestão de Produtos, Estoque e Relações Empresariais com Nosso ERP Integrado</p>
-                                <div class="hero-cta"><a class="button button-primary" href="#">Login</a><a class="button" href="#">Cadastre-se</a></div>
+                                <div class="hero-cta"><a class="button button-primary" @onclick="GoToLoginpage">Login</a><a class="button">Cadastre-se</a></div>
                             </div>
                             <div class="hero-figure anime-element">
                                 <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
@@ -1854,7 +1859,7 @@
 
 
                 <section class="features section">
-                    <div class="container">
+                    <div class="container-lp">
                         <div class="features-inner section-inner has-bottom-divider">
 
                             <h1 class="pricing-header text-center">Features</h1>
@@ -1863,7 +1868,7 @@
                                 <div class="feature text-center is-revealing" style="visibility: visible; border: 2px solid rgba(247,247,247,0.1); border-radius: 5px; transition: all 0.5s ease 0s;">
                                     <div class="feature-inner">
                                         <div class="feature-icon">
-                                            <img src="../dist/images/feature-icon-01.svg" alt="Feature 01">
+                                            <img src="/assets/landingpage/feature-icon-01.svg" alt="Feature 01">
                                         </div>
                                         <h4 class="feature-title mt-24">Produtos</h4>
                                         <p class="text-sm mb-0">Simplifique a gestão do estoque com a Aurora, desde a adição de novos itens até o acompanhamento das vendas, garantindo controle e eficiência</p>
@@ -1872,7 +1877,7 @@
                                 <div class="feature text-center is-revealing" style="visibility: visible; border: 2px solid rgba(247,247,247,0.1); border-radius: 5px; transition: all 0.5s ease 0s; ">
                                     <div class="feature-inner">
                                         <div class="feature-icon">
-                                            <img src="../dist/images/feature-icon-02.svg" alt="Feature 02">
+                                            <img src="/assets/landingpage/feature-icon-02.svg" alt="Feature 02">
                                         </div>
                                         <h4 class="feature-title mt-24">Pedidos</h4>
                                         <p class="text-sm mb-0">Agilize o processo de pedidos na Aurora, da criação à finalização, proporcionando uma experiência de compra sem complicações para seus clientes.</p>
@@ -1881,7 +1886,7 @@
                                 <div class="feature text-center is-revealing" style="visibility: visible; border: 2px solid rgba(247,247,247,0.1); border-radius: 5px; transition: all 0.5s ease 0s;">
                                     <div class="feature-inner">
                                         <div class="feature-icon">
-                                            <img src="../dist/images/feature-icon-03.svg" alt="Feature 03">
+                                            <img src="/assets/landingpage/feature-icon-03.svg" alt="Feature 03">
                                         </div>
                                         <h4 class="feature-title mt-24">Controle de Estoque</h4>
                                         <p class="text-sm mb-0">Mantenha um controle preciso do seu estoque na Aurora, monitorando entradas, saídas e níveis em tempo real para evitar problemas de escassez ou excesso</p>
@@ -1890,7 +1895,7 @@
                                 <div class="feature text-center is-revealing" style="visibility: visible; border: 2px solid rgba(247,247,247,0.1); border-radius: 5px; transition: all 0.5s ease 0s;">
                                     <div class="feature-inner">
                                         <div class="feature-icon">
-                                            <img src="../dist/images/feature-icon-04.svg" alt="Feature 04">
+                                            <img src="/assets/landingpage/feature-icon-04.svg" alt="Feature 04">
                                         </div>
                                         <h4 class="feature-title mt-24">Categorização e separação por tipo</h4>
                                         <p class="text-sm mb-0">Organize seus produtos de forma intuitiva na Aurora, utilizando categorias e separação por tipo para facilitar a busca e o controle de estoque</p>
@@ -1899,7 +1904,7 @@
                                 <div class="feature text-center is-revealing" style="visibility: visible; border: 2px solid rgba(247,247,247,0.1); border-radius: 5px; transition: all 0.5s ease 0s;">
                                     <div class="feature-inner">
                                         <div class="feature-icon">
-                                            <img src="../dist/images/feature-icon-05.svg" alt="Feature 05">
+                                            <img src="/assets/landingpage/feature-icon-05.svg" alt="Feature 05">
                                         </div>
                                         <h4 class="feature-title mt-24">Integravél</h4>
                                         <p class="text-sm mb-0">Conecte facilmente a Aurora a outras ferramentas e sistemas essenciais, permitindo uma integração perfeita e aumentando a eficiência operacional.</p>
@@ -1908,7 +1913,7 @@
                                 <div class="feature text-center is-revealing" style="visibility: visible; border: 2px solid rgba(247,247,247,0.1); border-radius: 5px; transition: all 0.5s ease 0s;">
                                     <div class="feature-inner">
                                         <div class="feature-icon">
-                                            <img src="../dist/images/feature-icon-06.svg" alt="Feature 06">
+                                            <img src="/assets/landingpage/feature-icon-06.svg" alt="Feature 06">
                                         </div>
                                         <h4 class="feature-title mt-24">Cadastro de Empresas</h4>
                                         <p class="text-sm mb-0">Centralize e simplifique o cadastro de empresas, funcionários e parceiros na Aurora, mantendo suas relações comerciais organizadas e acessíveis.</p>
@@ -1920,7 +1925,7 @@
                 </section>
 
                 <section class="pricing section">
-                    <div class="container-sm">
+                    <div class="container-lp-sm">
                         <div class="pricing-inner section-inner">
                             <div class="pricing-header text-center">
                                 <h2 class="section-title mt-0">Gestão Empresarial Simplificada com o ERP Aurora</h2>
@@ -1964,7 +1969,7 @@
 
 
                 <section class="cta section">
-                    <div class="container">
+                    <div class="container-lp">
                         <div class="cta-inner section-inner">
                             <h3 class="section-title mt-0">Ainda não está convencido em usar ?</h3>
                             <div class="cta-cta">
@@ -1976,7 +1981,7 @@
             </main>
 
             <footer class="site-footer">
-                <div class="container">
+                <div class="container-lp">
                     <div class="site-footer-inner">
                         <div class="brand footer-brand">
                             <a href="#">
@@ -2028,18 +2033,6 @@
                 </div>
             </footer>
         </div>
-
-
-        <script src="../dist/js/main.min.js"></script>
-        <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-CFBJNKSYBN', { 'anonymize_ip': true });</script>
-        <script>function closeBanner() { document.getElementById("banner").remove() }</script>
-
-
-
     </div>
 </div>
-
-
-
-
 
