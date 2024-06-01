@@ -16,6 +16,8 @@ namespace Backend.Domain.Entities.Notifications
         public int NotificationTypeId { get; set; }
         public string? NotificationName { get; set; }
         public string? NotificationDescription { get; set; }
+        public string? NotificationCustomerName { get; set; }
+        public string? NotificationEmployeeName { get; set; }
         public string? NotificationItemCode { get; set; }
         
         /// <summary>
