@@ -35,7 +35,7 @@
                     <div class="accordion-item mb-3 shadow-none border rounded">
                         <h2 class="accordion-header" id="flush-headingOne">
                             <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseProductAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleProductAccordion>
-                                Basic Info
+                                Detalhes base do item
                             </button>
                         </h2>
                         <div id="flush-collapseOne" class="accordion-collapse @productAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
@@ -56,7 +56,7 @@
                                     <!-- Auto generate SKU -->
                                     <div class="mb-2 col-sm-12 p-2">
                                         <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ToggleAutoGenerateSKU">
-                                        <label>Auto generate SKU</label>
+                                        <label>Gerar SKU</label>
                                     </div>
                                 </div>
 
@@ -68,7 +68,7 @@
                                                 <i class="ti ti-upload"></i>
                                             </div>
                                             <div class="text">
-                                                <span>Click to upload image</span>
+                                                <span>Upload de imagem</span>
                                             </div>
                                             <InputFile id="productImage" OnChange="HandleFileUpload" accept="image/*" />
                                         </label>
@@ -78,36 +78,36 @@
                                 <!-- Name -->
                                 <div class="row">
                                     <div class="mb-2 col-sm-12">
-                                        <label for="name" class="form-label">Name</label>
-                                        <InputText type="text" class="form-control" id="name" placeholder="Your product name" @bind-Value="@model.Name"></InputText>
+                                        <label for="name" class="form-label">Nome</label>
+                                        <InputText type="text" class="form-control" id="name" placeholder="Nome do item" @bind-Value="@model.Name"></InputText>
                                     </div>
                                 </div>
                                 <!-- Description -->
                                 <div class="mb-2 col-sm-12">
-                                    <label for="description" class="form-label">Description</label>
-                                    <input type="text" class="form-control" id="description" placeholder="Small details of the product" @bind="@model.Description">
+                                    <label for="description" class="form-label">Descrição</label>
+                                    <input type="text" class="form-control" id="description" placeholder="Descrição do item" @bind="@model.Description">
                                 </div>
                                 <!-- Value -->
                                 <div class="mb-2 col-sm-12">
-                                    <label for="value" class="form-label">Value</label>
+                                    <label for="value" class="form-label">Valor</label>
                                     <input type="number" class="form-control" id="value" placeholder="Ex: 150.00" @bind="@model.Value">
                                 </div>
                                 <!-- Product Type -->
                                 <div class="mb-3 col-sm-12">
-                                    <label for="productType" class="form-label">Product Type</label>
+                                    <label for="productType" class="form-label">Tipo do Produto</label>
                                     <select class="form-select" @bind="@model.ProductTypeId">
-                                        <option value="" disabled hidden selected>The type of your product</option>
-                                        <option value="1">Feedstock</option>
-                                        <option value="2">Intermediate Component</option>
-                                        <option value="3">Product</option>
+                                        <option value="" disabled hidden selected>Selecione o tipo do item</option>
+                                        <option value="1">Matéria-Prima</option>
+                                        <option value="2">Componente</option>
+                                        <option value="3">Produto Final</option>
                                     </select>
                                 </div>
                                 <!-- Color -->
                                 <div class="row">
                                     <div class="mb-2 col-sm-12 p-2">
-                                        <label for="colors" class="form-label">Color</label>
+                                        <label for="colors" class="form-label">Cores</label>
                                         <select class="form-select" @bind="@model.ColorName">
-                                            <option value="" disabled hidden selected>Color of your product</option>
+                                            <option value="" disabled hidden selected>Cor principal</option>
                                             @foreach (var color in Colors.ColorList)
                                             {
                                                 <option value="@color">@color</option>
@@ -116,9 +116,9 @@
                                     </div>
                                     <!-- Metric Unit -->
                                     <div class="mb-2 col-sm-12 p-2">
-                                        <label for="metricUnits" class="form-label">Metric Unit</label>
+                                        <label for="metricUnits" class="form-label">Unidade Métrica</label>
                                         <select class="form-select" @bind="@model.MetricUnitName">
-                                            <option value="" disabled hidden selected>Measure unit type</option>
+                                            <option value="" disabled hidden selected>Tipo de unidade métrica</option>
                                             @foreach (var unitType in MetricUnits.Measure.measurementUnitTypes)
                                             {
                                                 <option value="@unitType">@unitType</option>
@@ -139,7 +139,7 @@
                 <div class="accordion-item mb-3 shadow-none border rounded">
                     <h2 class="accordion-header" id="flush-headingOne">
                         <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseWeightAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleWeightAccordion>
-                            Weight
+                            Pesos e Medidas
                         </button>
                     </h2>
                     <div id="flush-collapseOne" class="accordion-collapse @weightAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
@@ -147,12 +147,12 @@
                             <div class="row">
                                 <!-- Liquid Weight -->
                                 <div class="mb-2 col-sm-6">
-                                    <label for="liquidWeight" class="form-label">Liquid Weight</label>
+                                    <label for="liquidWeight" class="form-label">Peso Líquido</label>
                                     <input type="number" class="form-control" id="liquidWeight" placeholder="Ex: 2.5" @bind="@model.LiquidWeight">
                                 </div>
                                 <!-- Total Weight -->
                                 <div class="mb-2 col-sm-6">
-                                    <label for="totalWeight" class="form-label">Total Weight</label>
+                                    <label for="totalWeight" class="form-label">Peso Total</label>
                                     <input type="number" class="form-control" id="totalWeight" placeholder="Ex: 3.0" @bind="@model.TotalWeight">
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                         <div class="accordion-item mb-3 shadow-none border rounded">
                             <h2 class="accordion-header" id="flush-headingOne">
                                 <button class="accordion-button fs-4 fw-semibold px-3 py-6 lh-base border-0 rounded-top" type="button" data-bs-toggle="collapse" aria-expanded="@collapseCategoryAccordion" data-bs-target="#flush-collapseOne" aria-controls="flush-collapseOne" @onclick=ToggleCategoryAccordion>
-                                    Categories
+                                    Categorização
                                 </button>
                             </h2>
                             <div id="flush-collapseOne" class="accordion-collapse @categoryAccordionToggle" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
@@ -176,9 +176,9 @@
                                     <div class="row">
                                         <!-- Category -->
                                         <div class="mb-3 col-sm-12">
-                                            <label for="category" class="form-label">Category</label>
+                                            <label for="category" class="form-label">Categoria primária</label>
                                             <select class="form-select" @onchange="LoadSubCategories">
-                                                <option value="" disabled hidden selected>The category of your product</option>
+                                                <option value="" disabled hidden selected>Categoria primária do produto</option>
                                                 @foreach (var category in categories)
                                                 {
                                                     <option value="@category.CategoryId">@category.CategoryName</option>
@@ -187,9 +187,9 @@
                                         </div>
                                         <!-- Sub Category -->
                                         <div class="mb-3 col-sm-12">
-                                            <label for="productType" class="form-label">Sub Category</label>
+                                            <label for="productType" class="form-label">Categoria secundária (Sub-categoria)</label>
                                             <select class="form-select" @bind="@model.SubCategoryId">
-                                                <option value="" disabled hidden selected>The sub category of your product</option>
+                                                <option value="" disabled hidden selected>Sub-categoria do produto</option>
                                                 @foreach (var subCategory in subCategories)
                                                 {
                                                     <option value="@subCategory.SubCategoryId">@subCategory.SubCategoryName</option>
@@ -208,7 +208,7 @@
 
     <!-- Botão de envio -->
     <div class="position-fixed bottom-0 mb-9 mt-5 rounded">
-        <button type="button" @onclick="CreateProduct" class="btn btn-primary">Save <i class="ti ti-device-floppy"></i></button>
+        <button type="button" @onclick="CreateProduct" class="btn btn-primary">Salvar <i class="ti ti-device-floppy"></i></button>
     </div>
 </div>
 

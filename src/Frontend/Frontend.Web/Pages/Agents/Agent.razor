@@ -10,7 +10,7 @@
 {
     private bool collapseForm = true;
     private string? formCssClass => collapseForm ? null : "show-menu";
-    private string? btnText => collapseForm ? "New" : "Hide menu";
+    private string? btnText => collapseForm ? "Novo" : "Ocultar";
 
     private void ToggleForm()
     {
@@ -31,7 +31,7 @@
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/agents" class="text-info">Agents</a>
+                <a href="/agents" class="text-info">Agentes</a>
             </li>
             <li class="breadcrumb-item active text-info " aria-current="page">
                 @((AgentTypes)int.Parse(IdSelected))

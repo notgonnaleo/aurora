@@ -11,21 +11,21 @@
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h4 class="modal-title" id="myModalLabel">
-                    Warning
+                    Aviso
                 </h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
             </div>
             <div class="modal-body">
                 <h4>
-                    Do you really want to delete it?
+                    Tem certeza que deseja excluir: @selectedvariant.Name
                 </h4>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
-                    Close
+                    Cancelar
                 </button>
                 <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => DeleteItem()">
-                    Confirm
+                    Confirmar
                 </button>
             </div>
         </div>
