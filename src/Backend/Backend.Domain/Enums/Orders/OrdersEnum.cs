@@ -10,19 +10,19 @@ namespace Backend.Domain.Enums.Orders
 {
     public enum OrdersStatusEnums
     {
-        [Description("Open")]
+        [Description("Em aberto")]
         Open = 1,
-        [Description("In Progress")]
+        [Description("Em andamento")]
         InProgress = 2,
-        [Description("Partially Done")]
+        [Description("Parcialmente finalizado")]
         PartiallyDone = 3,
-        [Description("Done")]
+        [Description("Finalizado")]
         Done = 4,
-        [Description("Overdue")]
+        [Description("Em atraso")]
         Overdue = 5,
-        [Description("Canceled")]
+        [Description("Cancelado")]
         Canceled = 6,
-        [Description("Refunding")]
+        [Description("Reembolsado")]
         Refunding = 7,
     }
 }

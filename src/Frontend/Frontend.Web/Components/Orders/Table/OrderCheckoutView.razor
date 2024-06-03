@@ -11,9 +11,9 @@
 else
 {
     <div class="pull-right mt-4 mb-4 text-end">
-        <p>Parcelas: x@(Order.OrderParcelAmount) | @(Order.OrderTotalAmount/Order.OrderParcelAmount) </p>
+        <p>Parcelas: x@(Order.OrderParcelAmount) | @((Order.OrderTotalAmount/Order.OrderParcelAmount)?.ToString("F2").Substring(0,6)) </p>
         <h5>
-            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "Não calculado" : Order.OrderTotalAmount.ToString().Substring(0,6))</strong>
+            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "Não calculado" : Order.OrderTotalAmount?.ToString("F2").Substring(0,6))</strong>
         </h5>
     </div>
 }

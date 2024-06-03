@@ -1,5 +1,7 @@
 ﻿@using Backend.Domain.Entities.Orders;
 @using Backend.Domain.Enums.Orders;
+@using Backend.Domain.Enums.EnumExtensions;
+
 <h5>
     <strong>
         Status:
@@ -26,7 +28,7 @@
             return "text-bg-primary";
         }
     }
-    <span class="badge @CurrentStatus()">@Status.OrderStatusName</span>
+    <span class="badge @CurrentStatus()">@(((OrdersStatusEnums)Status.OrderStatusId).GetDescription())</span>
 </h5>
 @code {
     [Parameter]

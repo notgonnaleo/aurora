@@ -20,35 +20,34 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="report" id="reportContent">
-            <h1 class="report-watermark"><strong>Powered by <i class="ti ti-robot"></i> Aurora</strong></h1>
-            <h1 class="report-title">Product - #@Product.SKU</h1>
+    <div class="row report" style="background-color: white;" id="reportContent">
+        <div style="background-color: white;">
+            <h1 class="report-watermark"><strong>Provido por Aurora Sistemas</strong></h1>
+            <h1 class="report-title">Item - #@Product.SKU</h1>
 
             <div class="report-detail">
                 <p><strong>SKU:</strong>@Product.SKU</p>
                 <p><strong>GTIN:</strong>@Product.GTIN</p>
-                <p><strong>Name:</strong>@Product.Name</p>
-                <p><strong>Type:</strong>@(Product.ProductType is null ? "N/A" : Product.ProductType.Name)</p>
-                <p><strong>Default Color:</strong>@(Product.ColorName ?? "N/A")</p>
-                <p><strong>Unit Price:</strong>@Product.Value</p>
-                <p><strong>Producer/Vendor:</strong> John Doe</p>
+                <p><strong>Nome:</strong>@Product.Name</p>
+                <p><strong>Tipo:</strong>@(Product.ProductType is null ? "N/A" : Product.ProductType.Name)</p>
+                <p><strong>Cor:</strong>@(Product.ColorName ?? "N/A")</p>
+                <p><strong>Preço Unit:</strong>@Product.Value</p>
             </div>
 
             <hr />
 
             <h6>
-                <strong>Item Summary</strong>
+                <strong>Detalhes do Item</strong>
             </h6>
             <table class="report-table">
                 <thead>
                     <tr>
                         <th class="report-table-label">SKU</th>
                         <th class="report-table-label">GTIN</th>
-                        <th class="report-table-label">Name</th>
-                        <th class="report-table-label">Description</th>
-                        <th class="report-table-label">Category</th>
-                        <th class="report-table-label">Sub-Category</th>
+                        <th class="report-table-label">Nome</th>
+                        <th class="report-table-label">Descrição</th>
+                        <th class="report-table-label">Categoria</th>
+                        <th class="report-table-label">Sub-Categoria</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,10 +65,10 @@
             <table class="report-table">
                 <thead class="report-table-label">
                     <tr>
-                        <th class="report-table-label">Liquid Weight</th>
-                        <th class="report-table-label">Total Weight</th>
-                        <th class="report-table-label">Metric Unit</th>
-                        <th class="report-table-label">Unit Price</th>
+                        <th class="report-table-label">Peso Líquido</th>
+                        <th class="report-table-label">Peso Bruto</th>
+                        <th class="report-table-label">Unidade de Medida</th>
+                        <th class="report-table-label">Preço Unit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,17 +85,17 @@
             <hr />
 
                 <h6>
-                    <strong>Item Variations</strong>
+                    <strong>Variações</strong>
                 </h6>
                 <table class="report-table">
                     <thead class="report-table-label">
                         <tr>
                             <th class="report-table-label">SKU</th>
-                            <th class="report-table-label">Name</th>
-                            <th class="report-table-label">Description</th>
-                            <th class="report-table-label">Liquid Weight</th>
-                            <th class="report-table-label">Total Weight</th>
-                            <th class="report-table-label">Unit Price</th>
+                            <th class="report-table-label">Nome</th>
+                            <th class="report-table-label">Descrição</th>
+                            <th class="report-table-label">Peso Líquido</th>
+                            <th class="report-table-label">Peso Bruto</th>
+                            <th class="report-table-label">Preço Unit</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -136,16 +135,18 @@
         font-size: @(CustomSettings.FontTitleSize)px;
         text-align: @(CustomSettings.TitleAlign);
         font-weight: @(CustomSettings.FontTitleBold ? "bold" : "normal");
-        color: @(CustomSettings.FontTitleColor);
+        color: @(CustomSettings.FontTitleColor) !important;
     }
 
     .report-detail {
         text-align: @(CustomSettings.DetailsTextAlign);
+        color: @(CustomSettings.LabelTextColor);
         margin-bottom: 20px;
     }
 
     .report-detail p {
         margin: 5px 0;
+        color: @(CustomSettings.LabelTextColor);
     }
 
     .report-table {
