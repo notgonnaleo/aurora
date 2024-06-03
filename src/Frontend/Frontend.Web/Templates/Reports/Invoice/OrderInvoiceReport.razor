@@ -1,0 +1,224 @@
+﻿@page "/report/{tenantId}/invoice-report/{orderId}"
+@using Backend.Domain.Entities.Agents
+@using Backend.Domain.Entities.Orders.Response
+@using Backend.Domain.Entities.Products
+@using Backend.Domain.Entities.Reports
+@using Backend.Domain.Enums.Orders
+@using Backend.Domain.Enums.EnumExtensions
+@using Backend.Domain.Enums.Payments
+@using Frontend.Web.Services.Agents
+@using Frontend.Web.Services.Orders
+@using Frontend.Web.Services.Products
+@inject OrderService _order;
+
+<aside class="d-print-none right-sidebar @formCssClass">
+    <Frontend.Web.Components.Reports.Forms.ReportTools TemplateSettingsChanged="SetCustomReportSettings"
+                                                        CollapseRightSidebar="collapseReportTools"
+                                                        ToggleRightSidebar="ToggleReportTools" />
+</aside>
+
+<div class="container-fluid">
+    <div class="d-print-none row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleReportTools">
+                <i class="ti ti-tools p-2"></i> @btnText
+            </button>
+        </div>
+    </div>
+
+    <div class="row report" style="background-color: white;" id="reportContent">
+        <div style="background-color: white;">
+            <h1 class="report-watermark"><strong>Provido por Aurora Sistemas</strong></h1>
+            <h1 class="report-title">Relatório de Pedido</h1>
+
+            <div class="report-detail">
+                <p><strong>N.:</strong>#@Order.OrderCode</p>
+                <p><strong>Cliente:</strong>@Order.Customer.Agent.Name</p>
+                <p><strong>Responsável pela captação:</strong>@Order.Seller.Agent.Name</p>
+            </div>
+            <hr />
+            <h6>
+                <strong>Detalhes do Pedido</strong>
+            </h6>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th class="report-table-label">Cód. Pedido</th>
+                        <th class="report-table-label">Dt. Abertura</th>
+                        <th class="report-table-label">Dt. Estimada de Entrega</th>
+                        <th class="report-table-label">Dt. Encerramento</th>
+                        <th class="report-table-label">Status Atual</th>
+                        <th class="report-table-label">Método de Pagamento</th>
+                        <th class="report-table-label">Valor Total</th>
+                        <th class="report-table-label">Qtde Parcelas</th>
+                        <th class="report-table-label">Valor Parcela</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="report-table-row">@Order.OrderCode</td>
+                        <td class="report-table-row">@Order.OrderOpeningDate</td>
+                        <td class="report-table-row">@Order.OrderEstimatedDate</td>
+                        <td class="report-table-row">@Order.OrderEffectiveDate</td>
+                        <td class="report-table-row">@(((OrdersStatusEnums)Order.OrderStatus.OrderStatusId).GetDescription())</td>
+                        <th class="report-table-row">@(((PaymentTypesEnum)Order.PaymentMethodId).GetDescription())</th>
+                        <td class="report-table-row">@Order.OrderTotalAmount</td
+                        <td class="report-table-row">@Order.TotalParcels</td>
+                        <td class="report-table-row">@Order.OrderParcelAmount</td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th class="report-table-label">Imagem</th>
+                        <th class="report-table-label">Nome do Item</th>
+                        <th class="report-table-label">Valor Unit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Order.OrderItems)
+                    {
+                    <tr>
+                        <td class="report-table-row"><img src="@item.Item.MediaURL" alt="Alternate Text" width="150px"/></td>
+                        <td class="report-table-row">@item.Item.Name</td>
+                        <td class="report-table-row">@item.ItemUnitAmount</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    body{
+        background-color: white !important;
+    }
+
+    .body-wrapper{
+        background-color: white !important;
+    }
+
+    .container-fluid{
+        background-color: white !important;
+    }
+
+    .page-wrapper {
+        height: 150vh;
+        position: relative;
+        background-color: white !important;
+    }
+
+    .report {
+        max-width: @(CustomSettings.ReportWidthSize)%;
+        margin: 0 auto;
+        border: @(CustomSettings.BorderSize)px solid @(CustomSettings.BorderColor);
+        padding: 20px;
+        border-radius: @(CustomSettings.BorderRadius)px;
+    }
+
+    .report-watermark{
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .report-title {
+        font-size: @(CustomSettings.FontTitleSize)px;
+        text-align: @(CustomSettings.TitleAlign);
+        font-weight: @(CustomSettings.FontTitleBold ? "bold" : "normal");
+        color: @(CustomSettings.FontTitleColor) !important;
+    }
+
+    .report-detail {
+        text-align: @(CustomSettings.DetailsTextAlign);
+        color: @(CustomSettings.LabelTextColor);
+        margin-bottom: 20px;
+    }
+
+    .report-detail p {
+        margin: 5px 0;
+        color: @(CustomSettings.LabelTextColor);
+    }
+
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+
+    .report-table-label{
+        font-size: @(CustomSettings.LabelTextSize)px;
+        color: @(CustomSettings.LabelTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
+        padding: 0.3rem;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .report-table-row{
+        font-size: @(CustomSettings.RowTextSize)px;
+        color: @(CustomSettings.RowTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
+        padding: 0.3rem;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .report tfoot {
+        font-weight: bold;
+    }
+
+</style>
+
+@code 
+{
+    [Parameter]
+    public string tenantId { get; set; }
+
+    [Parameter]
+    public string orderId { get; set; }
+}
+
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await GetOrder();
+        SetCustomReportSettings(CustomSettings);
+    }
+
+    public int ItemCount = 0;
+    public TemplateSettings CustomSettings = new TemplateSettings();
+    private void SetCustomReportSettings(TemplateSettings templateSettings)
+    {
+        CustomSettings = templateSettings;
+    }
+}
+
+@code
+{
+    private string? btnText = "Open Report Editor";
+    public string? formCssClass = null;
+    private bool collapseReportTools = true;
+
+    private void ToggleReportTools()
+    {
+        collapseReportTools = !collapseReportTools;
+        formCssClass = collapseReportTools ? null : "show-menu";
+        btnText = collapseReportTools ? "Open Report Editor" : "Close Report Editor";
+    }
+
+}
+
+@code
+{
+    OrderResponse Order = new OrderResponse();
+
+    public async Task GetOrder()
+    {
+        Order = (await _order.GetOrder(tenantId, orderId, null))!.Result;
+    }
+}

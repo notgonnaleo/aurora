@@ -21,10 +21,10 @@ else
     <button class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
         Ver Detalhes
     </button>
-    <button class="btn btn-outline-primary" type="button">
+    <a class="btn btn-outline-primary" href="/report/@Order.TenantId/invoice-report/@Order.OrderId">
         <i class="ti ti-printer fs-5"></i>
             Gerar Relatório
-    </button>
+    </a>
 </div>
 
 @code {
