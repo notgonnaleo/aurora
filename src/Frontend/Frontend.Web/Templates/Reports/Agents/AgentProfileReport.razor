@@ -21,34 +21,52 @@
         </div>
     </div>
 
-
-    <div class="row report" style="background-color: white;" id="reportContent">
-        <div style="background-color: white;">
-            <h1 class="report-watermark"><strong>Provido por Aurora Sistemas</strong></h1>
-            <h1 class="report-title">Relatório Cadastral de Agente</h1>
-
-            <div class="report-detail">
-                <p><strong>Nome:</strong>@Agent.Agent.Name</p>
+    <div class=" mt-4" id="reportContent">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                
+                <h1 class="text-center mb-4">Relatório Cadastral de Agente</h1>
             </div>
-            <hr />
+        </div>
 
-            <h6>
-                <strong>Detalhes do Item</strong>
-            </h6>
-            <table class="report-table">
-                <thead>
-                    <tr>
-                        <th class="report-table-label">Nome</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="report-table-row">Exemplo</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>Informações Pessoais</strong></h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Nome:</strong> @Agent.Agent.Name</li>
+                            <li class="list-group-item"><strong>Sobrenome:</strong> @Agent.Profile.LastName</li>
+                            <li class="list-group-item"><strong>Telefone:</strong> @Agent.PhoneNumbers.FirstOrDefault().PhoneNumber</li>
+                            <li class="list-group-item"><strong>Endereço:</strong> @Agent.Addresses.FirstOrDefault().StreetName,@Agent.Addresses.FirstOrDefault().CityName</li>
+                            <li class="list-group-item"><strong>CPF:</strong> @Agent.Profile.CPF</li>
+                            <li class="list-group-item"><strong>Email:</strong> @Agent.EmailAddresses.FirstOrDefault().EmailAddress</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><strong>Dados Comerciais</strong></h4>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>CNPJ:</strong> @Agent.Profile.CNPJ</li>
+                            <li class="list-group-item"><strong>CNAE:</strong> @Agent.Profile.CNAE</li>
+                            <li class="list-group-item"><strong>Telefone:</strong> @Agent.PhoneNumbers.FirstOrDefault().PhoneNumber</li>
+                            <li class="list-group-item"><strong>Endereço:</strong> @Agent.Addresses.FirstOrDefault().StreetName,@Agent.Addresses.FirstOrDefault().CityName</li>
+                            <li class="list-group-item"><strong>Email:</strong> @Agent.EmailAddresses.FirstOrDefault().EmailAddress</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
+    
 </div>
 
 <style>

@@ -25,9 +25,9 @@
                 <div class="mb-2 col-sm-12">
                     <div class="row">
                         <div class="mb-2 col-sm-4">
-                            <label for="colors" class="form-label">Código da área</label>
+                            <label for="colors" class="form-label">área</label>
                             <select class="form-select" @bind="@phoneNumber.AreaCode">
-                                <option value="" disabled hidden selected>Código da área</option>
+                                <option value="" disabled hidden selected>área</option>
                                 @foreach (var areaCode in AreaCode.Codes)
                                 {
                                     <option value="@areaCode">@areaCode</option>
