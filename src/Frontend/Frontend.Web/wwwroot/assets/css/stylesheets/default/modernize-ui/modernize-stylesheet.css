@@ -19796,8 +19796,8 @@ textarea.form-control-lg {
             padding: 24px;
             -webkit-transition: 0.2s ease-in;
             transition: 0.2s ease-in;
-            background-color: var(--bs-body-bg) !important;
-        }
+/*            background-color: var(--bs-body-bg) !important;
+*/        }
 
     @media (max-width:767.98px) {
         .body-wrapper > .container-fluid, .body-wrapper > .container-lg, .body-wrapper > .container-md, .body-wrapper > .container-sm, .body-wrapper > .container-xl, .body-wrapper > .container-xxl {

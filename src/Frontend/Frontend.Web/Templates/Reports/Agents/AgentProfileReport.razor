@@ -1,0 +1,181 @@
+﻿@page "/report/{tenantId}/agent-profile-report/{agentId}"
+@using Backend.Domain.Entities.Agents
+@using Backend.Domain.Entities.Products
+@using Backend.Domain.Entities.Reports;
+@using Frontend.Web.Services.Agents
+@using Frontend.Web.Services.Products
+@inject AgentService _agentService;
+
+<aside class="d-print-none right-sidebar @formCssClass">
+    <Frontend.Web.Components.Reports.Forms.ReportTools TemplateSettingsChanged="SetCustomReportSettings"
+                                                        CollapseRightSidebar="collapseReportTools"
+                                                        ToggleRightSidebar="ToggleReportTools" />
+</aside>
+
+<div class="container-fluid">
+    <div class="d-print-none row">
+        <div class="m-4">
+            <button class="btn btn-outline-primary" @onclick="ToggleReportTools">
+                <i class="ti ti-tools p-2"></i> @btnText
+            </button>
+        </div>
+    </div>
+
+    <div class="row report" style="background-color: white;" id="reportContent">
+        <div style="background-color: white;">
+            <h1 class="report-watermark"><strong>Provido por Aurora Sistemas</strong></h1>
+            <h1 class="report-title">Relatório Cadastral de Agente</h1>
+
+            <div class="report-detail">
+                <p><strong>Nome:</strong>@Agent.Agent.Name</p>
+            </div>
+            <hr />
+
+            <h6>
+                <strong>Detalhes do Item</strong>
+            </h6>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th class="report-table-label">Nome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="report-table-row">Exemplo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    body{
+        background-color: white !important;
+    }
+
+    .body-wrapper{
+        background-color: white !important;
+    }
+
+    .container-fluid{
+        background-color: white !important;
+    }
+
+    .page-wrapper {
+        height: 150vh;
+        position: relative;
+        background-color: white !important;
+    }
+
+    .report {
+        max-width: @(CustomSettings.ReportWidthSize)%;
+        margin: 0 auto;
+        border: @(CustomSettings.BorderSize)px solid @(CustomSettings.BorderColor);
+        padding: 20px;
+        border-radius: @(CustomSettings.BorderRadius)px;
+    }
+
+    .report-watermark{
+        font-size: 12px;
+        text-align: left;
+    }
+
+    .report-title {
+        font-size: @(CustomSettings.FontTitleSize)px;
+        text-align: @(CustomSettings.TitleAlign);
+        font-weight: @(CustomSettings.FontTitleBold ? "bold" : "normal");
+        color: @(CustomSettings.FontTitleColor) !important;
+    }
+
+    .report-detail {
+        text-align: @(CustomSettings.DetailsTextAlign);
+        color: @(CustomSettings.LabelTextColor);
+        margin-bottom: 20px;
+    }
+
+    .report-detail p {
+        margin: 5px 0;
+        color: @(CustomSettings.LabelTextColor);
+    }
+
+    .report-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+
+    .report-table-label{
+        font-size: @(CustomSettings.LabelTextSize)px;
+        color: @(CustomSettings.LabelTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
+        padding: 0.3rem;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .report-table-row{
+        font-size: @(CustomSettings.RowTextSize)px;
+        color: @(CustomSettings.RowTextColor);
+        border: 1px solid @(CustomSettings.TableColor);
+        padding: 0.3rem;
+        text-align: left;
+        box-sizing: border-box;
+    }
+
+    .report tfoot {
+        font-weight: bold;
+    }
+
+</style>
+
+@code 
+{
+    [Parameter]
+    public string tenantId { get; set; }
+
+    [Parameter]
+    public string agentId { get; set; }
+}
+
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAgent();
+        SetCustomReportSettings(CustomSettings);
+    }
+
+    public TemplateSettings CustomSettings = new TemplateSettings();
+    private void SetCustomReportSettings(TemplateSettings templateSettings)
+    {
+        CustomSettings = templateSettings;
+    }
+}
+
+@code
+{
+    private string? btnText = "Open Report Editor";
+    public string? formCssClass = null;
+    private bool collapseReportTools = true;
+
+    private void ToggleReportTools()
+    {
+        collapseReportTools = !collapseReportTools;
+        formCssClass = collapseReportTools ? null : "show-menu";
+        btnText = collapseReportTools ? "Open Report Editor" : "Close Report Editor";
+    }
+
+}
+
+@code
+{
+    AgentDetail Agent = new AgentDetail();
+    IEnumerable<ProductVariant> Variants = new List<ProductVariant>();
+
+    public async Task GetAgent()
+    {
+        Agent = (await _agentService.GetAgentWithDetail(agentId))!.Result;
+    }
+}
