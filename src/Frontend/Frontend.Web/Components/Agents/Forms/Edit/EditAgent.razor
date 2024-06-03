@@ -24,14 +24,14 @@ else
                 <div class="mb-3 col-sm-12">
                     <label for="agentTypes">Agent Type</label>
                     <select class="form-select" @bind="@Agent.AgentTypeId">
-                        <option value="" disabled hidden selected>Update the agent type.</option>
+                        <option value="" disabled hidden selected>Atualize o tipo do agente</option>
                         @foreach (var agentType in agentTypes)
                         {
                             <option value="@agentType.AgentTypeId">@agentType.AgentTypeName</option>
                         }
                     </select>
                 </div>
-                <button type="button" @onclick="UpdateAgent" class="btn btn-primary float-right">Save basic info</button>
+                <button type="button" @onclick="UpdateAgent" class="btn btn-primary float-right">Salvar</button>
             </EditForm>
         }
     </div>

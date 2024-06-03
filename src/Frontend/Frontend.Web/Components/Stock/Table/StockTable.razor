@@ -19,28 +19,19 @@
     }
     else
     {
-        <h3 class="card-title fw-semibold mb-4">Stock Entries Log</h3>
+        <h3 class="card-title fw-semibold mb-4">Histórico geral de inventário</h3>
         @if (!(Model is null || Model.Count() == 0))
         {
             <div class="table-responsive">
                 <table class="table search-table align-middle text-nowrap table-fixed">
                     <thead class="header-item">
                         <tr>
-                            <th>
-                                <div class="n-chk align-self-center text-center">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
-                                        <label class="form-check-label" for="contact-check-all"></label>
-                                        <span class="new-control-indicator"></span>
-                                    </div>
-                                </div>
-                            </th>
                             <th>SKU</th>
                             <th>GTIN</th>
-                            <th>Product Name</th>
-                            <th>Value</th>
-                            <th>Movement Type</th>
-                            <th>Quantity</th>
+                            <th>Nome do Produto</th>
+                            <th>Valor</th>
+                            <th>Movimentação</th>
+                            <th>Quantidade</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,14 +39,6 @@
                         {
                             <!-- start row -->
                             <tr class="search-items">
-                                <td>
-                                    <div class="n-chk align-self-center text-center">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
-                                            <label class="form-check-label" for="checkbox1"></label>
-                                        </div>
-                                    </div>
-                                </td>
                                 <td>
                                     <span class="usr-ph-no">@stock.SKU</span>
                                 </td>

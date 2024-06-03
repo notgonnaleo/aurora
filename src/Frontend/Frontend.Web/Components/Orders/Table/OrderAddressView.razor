@@ -4,19 +4,19 @@
 
 <div class="text-end">
     <p class="mt-4 mb-1">
-        <span>Opening Date :</span>
+        <span>Data de Abertura:</span>
         <i class="ti ti-calendar"></i>
         @Order.OrderOpeningDate
     </p>
     <p>
-        <span><strong>Due Date:</strong></span>
+        <span><strong>Data Estimada:</strong></span>
         <i class="ti ti-calendar"></i>
         @Order.OrderEstimatedDate
     </p>
     @if (Order.OrderStatus.OrderStatusId == (int)OrdersStatusEnums.Done)
     {
         <p>
-            <span><strong>Closed Date:</strong></span>
+            <span><strong>Data de Encerramento:</strong></span>
             <i class="ti ti-calendar"></i>
             @Order.OrderEffectiveDate
         </p>

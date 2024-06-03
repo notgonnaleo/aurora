@@ -25,9 +25,9 @@
             {
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="country" class="form-label">Country</label>
+                        <label for="country" class="form-label">País</label>
                         <select class="form-select" @onchange="SetState">
-                            <option value="" disabled hidden selected> The selected category</option>
+                            <option value="" disabled hidden selected> Selecione um país</option>
                             @foreach (var country in Countries.List)
                             {
                                 <option value="@country.CountryId">@country.CountryName</option>
@@ -37,9 +37,9 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="state" class="form-label">State</label>
+                        <label for="state" class="form-label">Estado</label>
                         <select class="form-select" @onchange="SetCities">
-                            <option value="" disabled hidden selected> The selected category</option>
+                            <option value="" disabled hidden selected>Estado</option>
                             @foreach (var state in states)
                             {
                                 <option value="@state.StateId">@state.StateName</option>
@@ -49,9 +49,9 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="state" class="form-label">City</label>
+                        <label for="state" class="form-label">Cidade</label>
                         <select class="form-select" @bind="address.CityId">
-                            <option value="" disabled hidden selected> The selected category</option>
+                            <option value="" disabled hidden selected>Cidade</option>
                             @foreach (var city in cities)
                             {
                                 <option value="@city.CityId">@city.CityName</option>
@@ -61,37 +61,37 @@
                 </div>
                 <div class="row col-sm-12">
                     <div class="mb-3 col-sm-6">
-                        <label for="streetName" class="form-label">Street Name</label>
+                        <label for="streetName" class="form-label">Nome da Rua</label>
                         <input id="streetName" type="text" class="form-control" placeholder="St. Lucas Nogueira" @bind="address.StreetName"></input>
                     </div>
 
                     <div class="mb-3 col-sm-6">
-                        <label for="streetNumber" class="form-label">Street Number</label>
+                        <label for="streetNumber" class="form-label">N. da Rua</label>
                         <input id="streetNumber" type="text" class="form-control" placeholder="12345" @bind="address.StreetNumber"></input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <label for="postalCode" class="form-label">CEP</label>
                         <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="address.PostalCode"></input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="reference" class="form-label">Reference</label>
+                        <label for="reference" class="form-label">Referência</label>
                         <input id="reference" type="text" class="form-control" placeholder="Ex: Next to a gas station" @bind="address.Reference"></input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-2 col-sm-12 p-2">
-                        <label>Primary Address</label>
+                        <label>Principal</label>
                         <input type="checkbox" class="form-check-input primary" id="contact-check-all" @bind="address.Primary">
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-2 col-sm-6">
                         <button @onclick="CreateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                            Save <i class="ti ti-device-floppy"></i>
+                            Salvar <i class="ti ti-device-floppy"></i>
                         </button>
                     </div>
                 </div>
@@ -100,7 +100,7 @@
             {
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="country" class="form-label">Country</label>
+                        <label for="country" class="form-label">País</label>
                         <select class="form-select" @onchange="SetState">
                             <option value="@Model.CountryName" disabled hidden selected>@Model.CountryName</option>
                             @foreach (var country in Countries.List)
@@ -112,7 +112,7 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="state" class="form-label">State</label>
+                        <label for="state" class="form-label">Estado</label>
                         <select class="form-select" @onchange="SetCities">
                             <option value="@Model.StateName" disabled hidden selected>@Model.StateName</option>
                             @foreach (var state in states)
@@ -124,7 +124,7 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="state" class="form-label">City</label>
+                        <label for="state" class="form-label">Cidade</label>
                         <select class="form-select" @bind="Model.CityId">
                             <option value="@Model.CityId" disabled hidden selected>@Model.CityName</option>
                             @foreach (var city in cities)
@@ -136,43 +136,43 @@
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <label for="postalCode" class="form-label">CEP</label>
                         <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="Model.PostalCode"></input>
                     </div>
                 </div>
                 <div class="row col-sm-12">
                     <div class="mb-3 col-sm-6">
-                        <label for="streetName" class="form-label">Street Name</label>
+                        <label for="streetName" class="form-label">Nome da Rua</label>
                         <input id="streetName" type="text" class="form-control" placeholder="St. Lucas Nogueira" @bind="Model.StreetName"></input>
                     </div>
 
                     <div class="mb-3 col-sm-6">
-                        <label for="streetNumber" class="form-label">Street Number</label>
+                        <label for="streetNumber" class="form-label">N. da Rua</label>
                         <input id="streetNumber" type="text" class="form-control" placeholder="12345" @bind="Model.StreetNumber"></input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <label for="postalCode" class="form-label">CEP</label>
                         <input id="postalCode" type="text" class="form-control" placeholder="XXXXXXXX" @bind="Model.PostalCode"></input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-sm-12">
-                        <label for="reference" class="form-label">Reference</label>
+                        <label for="reference" class="form-label">Referência</label>
                         <input id="reference" type="text" class="form-control" placeholder="Ex: Next to a gas station" @bind="Model.Reference"></input>
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-2 col-sm-12 p-2">
-                        <label>Primary Address</label>
+                        <label>Principal</label>
                         <input type="checkbox" class="form-check-input primary" id="contact-check-all" @bind="Model.Primary">
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-2 col-sm-6">
                         <button @onclick="UpdateAddress" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                            Save <i class="ti ti-device-floppy"></i>
+                            Salvar <i class="ti ti-device-floppy"></i>
                         </button>
                     </div>
                 </div>

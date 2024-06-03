@@ -26,7 +26,7 @@ else
                     <i class="ti ti-x cursor-pointer p-2 "></i> Cancel
                 </button>
                 <div class="mb-3 col-sm-6">
-                    <label for="profileName" class="form-label">Profile Name/Display Name</label>
+                    <label for="profileName" class="form-label">Nome de Exibição</label>
                     <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@NewProfile.DisplayName">
                 </div>
                 <div class="mb-3 col-sm-6">
@@ -54,28 +54,28 @@ else
                     </div>
                 }
                 <div class="mb-3 col-sm-6">
-                    <label for="profileName" class="form-label">First Name</label>
+                    <label for="profileName" class="form-label">Primeiro Nome</label>
                     <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@NewProfile.FirstName">
                 </div>
                 <div class="mb-3 col-sm-6">
-                    <label for="profileName" class="form-label">Last Name</label>
+                    <label for="profileName" class="form-label">Último Nome</label>
                     <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@NewProfile.LastName">
                 </div>
                 <div class="mb-3 col-sm-6">
-                    <button type="button" class="btn btn-primary float-right" @onclick="CreateProfile">Save agent profile</button>
+                    <button type="button" class="btn btn-primary float-right" @onclick="CreateProfile">Salvar</button>
                 </div>
             }
             else
             {
                 <button type="button" class="btn btn-outline-primary mb-4" @onclick="ShowProfileComponent">
-                    <i class="ti ti-circle-plus cursor-pointer p-2"></i> Create agent profile
+                    <i class="ti ti-circle-plus cursor-pointer p-2"></i> Criar novo perfil
                 </button>
             }
         }
         else
         {
             <div class="mb-3 col-sm-12">
-                <label for="profileName" class="form-label">Profile Name</label>
+                <label for="profileName" class="form-label">Nome de Exibição</label>
                 <input type="text" class="form-control" id="profileName" placeholder="Profile name" @bind="@Profile.DisplayName">
             </div>
             <div class="mb-3 col-sm-6">
@@ -103,15 +103,15 @@ else
                 </div>
             }
             <div class="mb-3 col-sm-6">
-                <label for="profileName" class="form-label">First Name</label>
+                <label for="profileName" class="form-label">Primeiro Nome</label>
                 <input type="text" class="form-control" id="firstName" placeholder="First name" @bind="@Profile.FirstName">
             </div>
             <div class="mb-3 col-sm-6">
-                <label for="profileName" class="form-label">Last Name</label>
+                <label for="profileName" class="form-label">Último Nome</label>
                 <input type="text" class="form-control" id="lastName" placeholder="Last name" @bind="@Profile.LastName">
             </div>
             <div class="mb-3 col-sm-6">
-                <button type="button" class="btn btn-primary float-right" @onclick="UpdateProfile">Save agent profile</button>
+                <button type="button" class="btn btn-primary float-right" @onclick="UpdateProfile">Salvar</button>
             </div>
         }
     </div>

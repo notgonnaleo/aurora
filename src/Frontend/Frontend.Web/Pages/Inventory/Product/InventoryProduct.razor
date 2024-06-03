@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/stock" class="text-info">Inventory</a>
+                <a href="/stock" class="text-info">Inventário</a>
             </li>
             <li class="breadcrumb-item">
                 <a href="/inventory/product/@productId" class="text-info">Stock Log #@Model.SKU - @Model.Name</a>
@@ -54,7 +54,7 @@
 {
     private bool collapseForm = true;
     private string? formCssClass => collapseForm ? null : "show-menu";
-    private string? btnText => collapseForm ? "New" : "Hide menu";
+    private string? btnText => collapseForm ? "Novo" : "Ocultar";
 
     private void ToggleForm()
     {

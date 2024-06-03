@@ -104,11 +104,25 @@
                             <li class="sidebar-item">
                                 @foreach (var agentType in agentTypes)
                                 {
+                                    @if (agentType.AgentTypeId == (int)AgentTypes.Customer)
+                                    {
+                                        agentType.AgentTypeName = "Cliente";
+                                    }
+                                    @if (agentType.AgentTypeId == (int)AgentTypes.Employee)
+                                    {
+                                        agentType.AgentTypeName = "Funcionário";
+                                    }
+                                    @if (agentType.AgentTypeId == (int)AgentTypes.Vendor)
+                                    {
+                                        agentType.AgentTypeName = "Fornecedor";
+                                    }
                                     <a class="sidebar-link cursor-pointer" @onclick="() => SelectAgentType(agentType)">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                             <i class="ti ti-circle-filled"></i>
                                         </div>
-                                        <span class="hide-menu" value="@agentType.AgentTypeId">@agentType.AgentTypeName</span>
+                                        <span class="hide-menu" value="@agentType.AgentTypeId">
+                                            @agentType.AgentTypeName
+                                        </span>
                                     </a>
                                 }
                             </li>

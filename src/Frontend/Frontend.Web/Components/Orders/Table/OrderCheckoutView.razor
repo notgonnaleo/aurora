@@ -3,27 +3,27 @@
 
 @if (Order.OrderTotalAmount is null && Order.OrderItems is null || Order!.OrderItems!.Count() == 0)
 {
-    <p>Add items to your order to calculate the invoice value.</p>
+    <p>Adicione itens para calcular o pedido.</p>
     <a class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
-        Calculate order
+        Calcular Pedido
     </a>
 }
 else
 {
     <div class="pull-right mt-4 mb-4 text-end">
-        <p>Parcels: x@(Order.OrderParcelAmount) | @(Order.OrderTotalAmount/Order.OrderParcelAmount) </p>
+        <p>Parcelas: x@(Order.OrderParcelAmount) | @(Order.OrderTotalAmount/Order.OrderParcelAmount) </p>
         <h5>
-            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "Not calculated" : Order.OrderTotalAmount)</strong>
+            <b>Total: R$</b> <strong>@(Order.OrderTotalAmount is null ? "Não calculado" : Order.OrderTotalAmount.ToString().Substring(0,6))</strong>
         </h5>
     </div>
 }
 <div class="text-end">
     <button class="btn btn-outline-primary" @onclick="() => RedirectToOrderEditPage()">
-        View Details
+        Ver Detalhes
     </button>
     <button class="btn btn-outline-primary" type="button">
         <i class="ti ti-printer fs-5"></i>
-            Generate Report
+            Gerar Relatório
     </button>
 </div>
 
