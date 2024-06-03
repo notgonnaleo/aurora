@@ -51,7 +51,6 @@
 
   <ItemGroup>
     <Folder Include="Components\Addresses\Forms\Edit\" />
-    <Folder Include="Templates\Reports\Invoice\" />
     <Folder Include="wwwroot\assets\images\users\aurora\" />
   </ItemGroup>
 
