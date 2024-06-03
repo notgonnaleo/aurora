@@ -24,7 +24,9 @@
                     return "text-bg-warning";
                 case ((int)OrdersStatusEnums.Canceled):
                     return "text-bg-danger";
-                    
+                case ((int)OrdersStatusEnums.Refunding):
+                    return "text-bg-refund";
+
             };
             return "text-bg-primary";
         }

@@ -9170,6 +9170,11 @@ textarea.form-control-lg {
     background-color: RGBA(250,137,107,var(--bs-bg-opacity,1)) !important
 }
 
+.text-bg-refund {
+    color: #fff !important;
+    background-color: var(--bs-orange) !important
+}
+
 .text-bg-light {
     color: #000 !important;
     background-color: RGBA(246,249,252,var(--bs-bg-opacity,1)) !important
