@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Contacts;
 <div class="card-body">
+<h5 class="card-title fw-semibold mb-4">E-mails</h5>
 @if (EmailAddresses.Any())
 {
     <div class="table-responsive">
@@ -34,7 +35,7 @@
 }
 else
 {
-    <p>No emails created to this agent yet.</p>
+    <p>Sem emails cadastrados.</p>
 }
 </div>
 

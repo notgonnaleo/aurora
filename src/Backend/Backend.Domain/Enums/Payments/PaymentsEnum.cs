@@ -20,11 +20,11 @@ namespace Backend.Domain.Enums.Payments
 
     public enum PaymentTypesEnum
     {
-        [Description("Credit")]
+        [Description("Crédito")]
         Credit = 1,
-        [Description("Debit")]
+        [Description("Debito")]
         Debit = 2,
-        [Description("Bank Slip")]
+        [Description("Cheque")]
         BankSlip = 3,
         [Description("PIX")]
         PIX = 4,

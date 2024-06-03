@@ -18,7 +18,7 @@
         <div class="modal-content">
             <div class="modal-header d-flex align-items-center">
                 <h4 class="modal-title" id="myModalLabel">
-                    Order Items
+                    Carrinho do Pedido
                 </h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
             </div>
@@ -29,22 +29,22 @@
                         <div class="input-group mb-2">
                             <ProductDropdown Product="SetProduct" />
                             <button class="btn btn-primary" type="button" @onclick="AddItemCart">
-                                Add
+                                Adicionar item
                             </button>
                         </div>
                         <div class="row">
                             <div class="mb-2 col-sm-12 p-2">
                                 <input type="checkbox" class="form-check-input primary" id="contact-check-all" @onclick="ShowVariantsDropdown">
-                                <label>Insert item variant</label>
+                                <label>Inserir variação</label>
                             </div>
                         </div>
                         @if (isInsertVariant)
                         {
                             <div class="row">
                                 <div class="mb-2 col-sm-12">
-                                    <label for="variandId" class="form-label"> Variant</label>
+                                    <label for="variandId" class="form-label">Variante</label>
                                     <select class="form-select" @onchange="OnVariantChange">
-                                        <option value="" disabled hidden selected>Select a Variant</option>
+                                        <option value="" disabled hidden selected>Selecione uma variante</option>
                                         @foreach (var variant in variants)
                                         {
                                             <option value="@variant.VariantId">@variant.Name</option>
@@ -53,7 +53,7 @@
                                 </div>
                             </div>
                         }
-                        <label for="productId" class="form-label">Quantity</label>
+                        <label for="productId" class="form-label">Quantidade</label>
                         <input class="form-control" type="number" @bind="ItemQuantity" />
                     </div>
                 </div>
@@ -65,9 +65,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Name</th>
-                                        <th>Quantity</th>
-                                        <th>Value</th>
+                                        <th>Nome</th>
+                                        <th>Qtde</th>
+                                        <th>Valor</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,10 +88,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-info-subtle text-info font-medium waves-effect" data-bs-dismiss="modal" @onclick="CloseModal">
-                    Close
+                    Cancelar
                 </button>
                 <button type="button" class="btn bg-danger-subtle text-danger font-medium waves-effect" data-bs-dismiss="modal" @onclick="() => SendItemList(Items)">
-                    Confirm
+                    Confirmar
                 </button>
             </div>
         </div>
@@ -212,7 +212,7 @@
 
 @code
 {
-    public void CloseModal() => ShowModal = !ShowModal;
+    public void CloseModal() => ShowModal = false;
 
     public void SendItemList(IEnumerable<ItemThumbnail> orderItems)
     {

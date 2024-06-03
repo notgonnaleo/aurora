@@ -2,6 +2,7 @@
 @using Backend.Domain.Entities.Products
 @using Frontend.Web.Repository.Orders
 @using Frontend.Web.Services.Authentication
+@using Backend.Domain.Enums.EnumExtensions;
 @using MovementTypes = Backend.Domain.Enums.StockMovements.MovementType.MovementTypes;
 @inject OrderRepository _orderRepository;
 @inject AuthenticationService _authService;
@@ -10,11 +11,11 @@
     <table id="table" class="table search-table align-middle text-nowrap table-fixed">
         <thead>
             <tr>
-                <th>From - To</th>
-                <th>Quantity</th>
-                <th>Movement Type</th>
-                <th>Item Name</th>
-                <th>Date</th>
+                <th>Remetente - Destinatário</th>
+                <th>Quantidade</th>
+                <th>Movementação</th>
+                <th>Nome do Item</th>
+                <th>Data da Movimentação</th>
             </tr>
         </thead>
         <tbody>
@@ -30,7 +31,7 @@
                     </td>
                     <td>@log.OrderTotalItemsMovement</td>
                     <td>
-                        <span class="badge @(log.OrderMovementType == (int)MovementTypes.Input ? "bg-primary" : "bg-danger")">@(((MovementTypes)log.OrderMovementType).ToString())</span>
+                        <span class="badge @(log.OrderMovementType == (int)MovementTypes.Input ? "bg-primary" : "bg-danger")">@(((MovementTypes)log.OrderMovementType).GetDescription())</span>
                     </td>
                     <td>@log.Item.ItemName</td>
                     <td>@log.MovementTimestamp</td>

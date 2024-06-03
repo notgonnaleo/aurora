@@ -1,5 +1,7 @@
 ﻿@using Backend.Domain.Entities.Orders.Response;
 @using Backend.Domain.Enums.Orders;
+@using Backend.Domain.Enums.EnumExtensions;
+
 <div class="scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
     <ul class="sidebar-nav overflow-auto invoice-users simplebar-scrollable-y" data-simplebar="init">
         @if (Orders is not null)
@@ -40,6 +42,11 @@
                                     <i class="ti ti-clock-check fs-6"></i>
                                 </div>
                                 break;
+                            case ((int)OrdersStatusEnums.Refunding):
+                                <div class="btn btn-success round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-arrow-back fs-6"></i>
+                                </div>
+                                break;
                             default:
                                 <div class="btn btn-primary round rounded-circle d-flex align-items-center justify-content-center px-2">
                                     <i class="ti ti-clock fs-6"></i>
@@ -53,25 +60,25 @@
                             @switch (order.OrderStatus.OrderStatusId)
                             {
                                 case ((int)OrdersStatusEnums.Open):
-                                    <span class="mb-1 badge rounded-pill text-bg-primary">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-primary">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 case ((int)OrdersStatusEnums.Canceled):
-                                    <span class="mb-1 badge rounded-pill text-bg-danger">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-danger">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 case ((int)OrdersStatusEnums.Overdue):
-                                    <span class="mb-1 badge rounded-pill text-bg-warning">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-warning">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 case ((int)OrdersStatusEnums.InProgress):
-                                    <span class="mb-1 badge rounded-pill text-bg-primary">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-primary">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 case ((int)OrdersStatusEnums.PartiallyDone):
-                                    <span class="mb-1 badge rounded-pill text-bg-info">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-info">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 case ((int)OrdersStatusEnums.Done):
-                                    <span class="mb-1 badge rounded-pill text-bg-success">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-success">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 default:
-                                    <span class="mb-1 badge rounded-pill text-bg-primary">@order.OrderStatus.OrderStatusName</span>
+                                    <span class="mb-1 badge rounded-pill text-bg-primary">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                             }
                         </div>

@@ -22,7 +22,7 @@
 <div class="container scroll-sidebar" style="max-height: 550px; overflow-y: auto;">
 <div class="row">
     <div class="mb-2 col-sm-12">
-        <button class="btn btn-primary" @onclick="ShowModalOnScreen">Add items</button>
+        <button class="btn btn-primary" @onclick="ShowModalOnScreen">Adicionar itens no pedido</button>
     </div>
 </div>
 
@@ -63,13 +63,13 @@
     </div>
     <div class="row">
         <div class="mb-2 col-sm-6">
-            <label for="parcel" class="form-label">Parcel Amount</label>
-            <input type="number" class="form-control" id="parcel" placeholder="Amount of parcels" min="1" @bind="newOrder.ParcelsQuantity">
+            <label for="parcel" class="form-label">Parcelas - Não inclui juros</label>
+            <input type="number" class="form-control" id="parcel" placeholder="Quantidade de Parcelas" min="1" @bind="newOrder.ParcelsQuantity">
         </div>
         <div class="mb-2 col-sm-6">
-            <label for="parcel" class="form-label">Payment Method</label>
+            <label for="parcel" class="form-label">Método de Pagamento</label>
             <select class="form-select" @bind="newOrder.PaymentMethodId">
-                <option value="" disabled hidden selected>Select a payment method</option>
+                <option value="" disabled hidden selected>Selecione o método de pagamento</option>
                 @foreach (var paymentTypeMethod in Enum.GetValues(typeof(Backend.Domain.Enums.Payments.PaymentTypesEnum)))
                 {
                     <option value="@((int)paymentTypeMethod)">@(paymentTypeMethod.ToString())</option>
@@ -79,15 +79,15 @@
     </div>
     <div class="row">
         <div class="mb-2 col-sm-12">
-            <label for="date" class="form-label">Estimated Date</label>
-            <input type="datetime-local" class="form-control" id="date" placeholder="Estimated Date" @bind="newOrder.OrderEstimatedDate">
+            <label for="date" class="form-label">Data Estimada</label>
+            <input type="datetime-local" class="form-control" id="date" placeholder="Data Estimada" @bind="newOrder.OrderEstimatedDate">
         </div>
     </div>
 </div>
 
 <div class="position-fixed bottom-0 m-9 mt-5 rounded">
     <button type="button" @onclick="() => CreateNewOrder()" class="btn btn-primary">
-        Save <i class="ti ti-device-floppy"></i>
+        Salvar <i class="ti ti-device-floppy"></i>
     </button>
 </div>
 @code 

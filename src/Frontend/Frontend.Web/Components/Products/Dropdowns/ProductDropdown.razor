@@ -8,7 +8,7 @@
 @inject ProductVariantService _productVariantService;
 
 <select class="form-select" @onchange="OnProductChange">
-    <option value="" disabled hidden selected>Select a Product</option>
+    <option value="" disabled hidden selected>Selecione um produto</option>
     @foreach (var product in products)
     {
         <option value="@product.ProductId">@product.Name</option>

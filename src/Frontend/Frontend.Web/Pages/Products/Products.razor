@@ -28,7 +28,7 @@
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="/products" class="text-info">Products</a>
+                <a href="/products" class="text-info">Produtos</a>
             </li>
         </ol>
     </nav>
@@ -48,7 +48,7 @@
 
 @code
 {
-    private string? btnText = "New";
+    private string? btnText = "Novo";
     public string? formCssClass = null;
     public bool isProductSidebar = false;
     public bool isVariantSidebar = false;
@@ -60,7 +60,7 @@
         collapseProductVariantForm = true; 
         collapseProductForm = !collapseProductForm;
         formCssClass = collapseProductForm ? null : "show-menu";
-        btnText = collapseProductForm ? "New" : "Hide menu";
+        btnText = collapseProductForm ? "Novo" : "Ocultar";
     }
 
     private bool collapseProductVariantForm = true;

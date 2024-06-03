@@ -18,7 +18,7 @@
         <a class="text-nowrap logo-img text-center d-block py-3 w-100">
             <h3 class="panel-title"><strong>Aurora</strong></h3>
         </a>
-        <p class="text-center">Log in your account</p>
+        <p class="text-center">Acesse sua conta</p>
 
         @if (logged.HasValue && logged.Value)
         {
@@ -34,14 +34,14 @@
         }
         <form>
             <div class="mb-3 w-100">
-                <label for="username" class="form-label">Username</label>
-                <input type="email" class="form-control" id="username" placeholder="Enter email" @bind="@model.Username" @onkeydown="@Enter">
+                <label for="username" class="form-label">Usuário</label>
+                <input type="email" class="form-control" id="username" placeholder="Insira seu e-mail" @bind="@model.Username" @onkeydown="@Enter">
             </div>
             <div class="mb-4 w-100">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" @bind="@model.Password" @onkeydown="@Enter">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="password" placeholder="Insira sua senha" @bind="@model.Password" @onkeydown="@Enter">
             </div>
-            <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2 w-100">Log in</button>
+            <button type="button" @onclick="SignIn" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2 w-100">Login</button>
         </form>
         }
     </div>

@@ -25,9 +25,9 @@
                 <div class="mb-2 col-sm-12">
                     <div class="row">
                         <div class="mb-2 col-sm-4">
-                            <label for="colors" class="form-label">Area</label>
+                            <label for="colors" class="form-label">Código da área</label>
                             <select class="form-select" @bind="@phoneNumber.AreaCode">
-                                <option value="" disabled hidden selected>Area code</option>
+                                <option value="" disabled hidden selected>Código da área</option>
                                 @foreach (var areaCode in AreaCode.Codes)
                                 {
                                     <option value="@areaCode">@areaCode</option>
@@ -35,7 +35,7 @@
                             </select>
                         </div>
                         <div class="mb-2 col-sm-8">
-                            <label for="name" class="form-label">Number</label>
+                            <label for="name" class="form-label">Telefone</label>
                             <input type="number" class="form-control" id="number" placeholder="XXXXX-XXXX" @bind="@phoneNumber.PhoneNumber">
                         </div>
                     </div>
@@ -43,7 +43,7 @@
 
                 <div class="mb-2 col-sm-6">
                     <button @onclick="CreatePhoneNumber" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                        Save <i class="ti ti-device-floppy"></i>
+                        Salvar <i class="ti ti-device-floppy"></i>
                     </button>
                 </div>
             </form>
@@ -55,9 +55,9 @@
                 <div class="mb-2 col-sm-12">
                     <div class="row">
                         <div class="mb-2 col-sm-4">
-                            <label for="colors" class="form-label">Area</label>
+                            <label for="colors" class="form-label">Código da área</label>
                             <select class="form-select" @bind="@Model.AreaCode">
-                                <option value="" disabled hidden selected>Area code</option>
+                                <option value="" disabled hidden selected>Código da área</option>
                                 @foreach (var areaCode in AreaCode.Codes)
                                 {
                                     <option value="@areaCode">@areaCode</option>
@@ -65,7 +65,7 @@
                             </select>
                         </div>
                         <div class="mb-2 col-sm-8">
-                            <label for="name" class="form-label">Number</label>
+                            <label for="name" class="form-label">Telefone</label>
                             <input type="number" class="form-control" id="number" placeholder="XXXXX-XXXX" @bind="@Model.PhoneNumber">
                         </div>
                     </div>
@@ -73,7 +73,7 @@
 
                 <div class="mb-2 col-sm-6">
                     <button @onclick="UpdatePhoneNumber" type="button" class="btn btn-primary bottom-0 mb-9 mt-5 rounded">
-                        Save <i class="ti ti-device-floppy"></i>
+                        Salvar <i class="ti ti-device-floppy"></i>
                     </button>
                 </div>
             </form>

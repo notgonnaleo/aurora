@@ -2,6 +2,7 @@
 
 @* Phone numbers  *@
 <div class="card-body">
+    <h5 class="card-title fw-semibold mb-4">Telefones</h5>
     @if (PhoneNumbers.Any())
     {
         <div class="table-responsive">
@@ -36,7 +37,7 @@
     }
     else
     {
-        <p>No phone numbers created to this agent yet.</p>
+        <p>Não há números salvos.</p>
     }
 </div>
 @if(selectedPhoneNumber is not null)

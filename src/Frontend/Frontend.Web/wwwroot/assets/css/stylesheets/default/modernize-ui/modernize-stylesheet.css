@@ -20028,6 +20028,13 @@ textarea.form-control-lg {
         background: linear-gradient(90deg, var(--bs-info) 50%, var(--bs-step-line) 50%) !important;
     }
 
+    .line.active-left-done {
+        background: linear-gradient(90deg, var(--bs-primary) 50%, var(--bs-success) 50%) !important;
+    }
+    .line.active-right-done {
+        background: linear-gradient(90deg, var(--bs-success) 50%, var(--bs-primary) 50%) !important;
+    }
+
     .line.active-left-canceled {
         background: linear-gradient(90deg, var(--bs-primary) 50%, var(--bs-danger) 50%) !important;
     }
@@ -20083,6 +20090,14 @@ textarea.form-control-lg {
         }
         .line.active-right-partial-done {
             background: linear-gradient(var(--bs-info) 50%, var(--bs-step-line) 50%) !important;
+        }
+
+        .line.active-left-done {
+            background: linear-gradient(var(--bs-primary) 50%, var(--bs-success) 50%) !important;
+        }
+
+        .line.active-right-done {
+            background: linear-gradient(var(--bs-success) 50%, var(--bs-primary) 50%) !important;
         }
 
 

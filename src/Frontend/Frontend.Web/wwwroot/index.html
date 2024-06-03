@@ -37,6 +37,24 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <!-- Scripts -->
         <script src="assets/js/ReportEditorHandler/ReportExportTools.js"></script>
+        <script>
+            function printDiv(divId) {
+                // Save the original content
+                var originalContents = document.body.innerHTML;
+
+                // Get the content of the specific div
+                var printContents = document.getElementById(divId).innerHTML;
+
+                // Replace the body content with the specific div content
+                document.body.innerHTML = printContents;
+
+                // Print the content
+                window.print();
+
+                // Restore the original content
+                document.body.innerHTML = originalContents;
+            }
+        </script>
         <!-- Animation js library (Landing page) -->
         <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
         <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>

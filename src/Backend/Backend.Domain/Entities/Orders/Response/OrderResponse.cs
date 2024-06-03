@@ -17,6 +17,7 @@ namespace Backend.Domain.Entities.Orders.Response
         public string OrderCode { get; set; }
         public OrderStatus OrderStatus { get; set; }
 
+        public int? PaymentMethodId { get; set; }
         public int? TotalParcels { get; set; }
         public decimal? OrderParcelAmount { get; set; }
         public decimal? OrderTotalAmount { get; set; }
