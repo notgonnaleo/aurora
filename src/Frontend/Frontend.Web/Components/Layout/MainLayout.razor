@@ -78,7 +78,7 @@ else
     public void Redirect(bool isAuthenticated)
     {
         if (!isAuthenticated)
-            navigator.NavigateTo("/Login");
+            navigator.NavigateTo("/Welcome"); // usuario pode fazer login pela landingpage
         else
             navigator.NavigateTo(navigator.Uri);
     }
@@ -88,7 +88,7 @@ else
         var response = await _authService.IsUserLogged();
         if (response!.StatusCode == 404)
         {
-            navigator.NavigateTo("/Login");
+            navigator.NavigateTo("/Welcome");
         }
         return response.Result;
     }

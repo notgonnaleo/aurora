@@ -160,6 +160,8 @@
     --bs-font-color: #000;
     --bs-table-on-hover-color: #e3ebf8;
     --bs-step-line: #ebe8e8;
+    --bs-notification-bar-hover: #e6e9ed;
+    --bs-notification-icon-hover: #ECF2FF;
 }
 
 [data-bs-theme=dark] {
@@ -215,6 +217,8 @@
     --bs-table-on-hover-color: #1f2e48;
     --bs-step-line: #203146;
     --bs-form-control-disabled-bg: #1f2c3c;
+    --bs-notification-bar-hover: #1b2737;
+    --bs-notification-icon-hover: #111f33;
 }
 
 *, :after, :before {
@@ -4589,6 +4593,16 @@ textarea.form-control-lg {
         margin-left: 0
     }
 
+.notification-bar {
+    background-color: var(--bs-dropdown-bg);
+    color: var(--bs-dropdown-color);
+}
+
+    .notification-bar:hover {
+        background-color: var(--bs-notification-bar-hover);
+        transition: 0.3s
+    }
+
 .dropdown-menu {
     --bs-dropdown-zindex: 1000;
     --bs-dropdown-min-width: 10rem;
@@ -4607,7 +4621,7 @@ textarea.form-control-lg {
     --bs-dropdown-box-shadow: rgba(145,158,171,0.2) 0px 0px 2px 0px,rgba(145,158,171,0.12) 0px 12px 24px -4px;
     --bs-dropdown-link-color: var(--bs-body-color);
     --bs-dropdown-link-hover-color: var(--bs-body-color);
-    --bs-dropdown-link-hover-bg: #F6F9FC;
+    --bs-dropdown-link-hover-bg: var(--bs-dropdown-link-hover-bg);
     --bs-dropdown-link-active-color: #2A3547;
     --bs-dropdown-link-active-bg: #F6F9FC;
     --bs-dropdown-link-disabled-color: #5A6A85;
@@ -4869,13 +4883,14 @@ textarea.form-control-lg {
 
     .dropdown-item:focus, .dropdown-item:hover {
         color: var(--bs-dropdown-link-hover-color);
-        background-color: var(--bs-dropdown-link-hover-bg)
+        background-color: var(--bs-dropdown-link-hover-bg);
+        transition: 0.3s
     }
 
     .dropdown-item.active, .dropdown-item:active {
-        color: var(--bs-dropdown-link-active-color);
+        color: var(--bs-dropdown-link-hover-color);
         text-decoration: none;
-        background-color: var(--bs-dropdown-link-active-bg)
+        background-color: var(--bs-dropdown-link-hover-bg);
     }
 
     .dropdown-item.disabled, .dropdown-item:disabled {
@@ -4909,11 +4924,10 @@ textarea.form-control-lg {
     --bs-dropdown-border-color: transparent;
     --bs-dropdown-box-shadow:;
     --bs-dropdown-link-color: #DFE5EF;
-    --bs-dropdown-link-hover-color: #fff;
     --bs-dropdown-divider-bg: transparent;
-    --bs-dropdown-link-hover-bg: rgba(255,255,255,0.15);
+    --bs-dropdown-link-hover-bg: var(--bs-dropdown-link-hover-bg);
     --bs-dropdown-link-active-color: #2A3547;
-    --bs-dropdown-link-active-bg: #F6F9FC;
+    --bs-dropdown-link-active-bg: var(--bs-dropdown-link-hover-bg);
     --bs-dropdown-link-disabled-color: #5A6A85;
     --bs-dropdown-header-color: #5A6A85
 }
@@ -9154,6 +9168,11 @@ textarea.form-control-lg {
 .text-bg-danger {
     color: #fff !important;
     background-color: RGBA(250,137,107,var(--bs-bg-opacity,1)) !important
+}
+
+.text-bg-refund {
+    color: #fff !important;
+    background-color: var(--bs-orange) !important
 }
 
 .text-bg-light {
@@ -19535,7 +19554,7 @@ textarea.form-control-lg {
             border-radius: 100px;
             -webkit-transition: all 0.3s ease-in-out;
             transition: all 0.3s ease-in-out;
-            background-color: #ECF2FF
+            background-color: var(--bs-notification-icon-hover)
         }
 
     .profile-name {
@@ -20014,6 +20033,13 @@ textarea.form-control-lg {
         background: linear-gradient(90deg, var(--bs-info) 50%, var(--bs-step-line) 50%) !important;
     }
 
+    .line.active-left-done {
+        background: linear-gradient(90deg, var(--bs-primary) 50%, var(--bs-success) 50%) !important;
+    }
+    .line.active-right-done {
+        background: linear-gradient(90deg, var(--bs-success) 50%, var(--bs-primary) 50%) !important;
+    }
+
     .line.active-left-canceled {
         background: linear-gradient(90deg, var(--bs-primary) 50%, var(--bs-danger) 50%) !important;
     }
@@ -20069,6 +20095,14 @@ textarea.form-control-lg {
         }
         .line.active-right-partial-done {
             background: linear-gradient(var(--bs-info) 50%, var(--bs-step-line) 50%) !important;
+        }
+
+        .line.active-left-done {
+            background: linear-gradient(var(--bs-primary) 50%, var(--bs-success) 50%) !important;
+        }
+
+        .line.active-right-done {
+            background: linear-gradient(var(--bs-success) 50%, var(--bs-primary) 50%) !important;
         }
 
 

@@ -1,5 +1,6 @@
 ﻿@using Backend.Domain.Entities.Addresses;
 <div class="card-body">
+    <h5 class="card-title fw-semibold mb-4">Endereços</h5>
     @if (Addresses is null || Addresses.Any())
     {
         <div class="table-responsive">
@@ -37,7 +38,7 @@
     }
     else
     {
-        <p>No phone numbers created to this agent yet.</p>
+        <p>Sem endereços cadastrados</p>
     }
 </div>
 @if (selectedAddress is not null)

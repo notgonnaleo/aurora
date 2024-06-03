@@ -20,40 +20,23 @@
     }
     else
     {
-        <h3 class="card-title fw-semibold mb-4">Inventory Management</h3>
+        <h3 class="card-title fw-semibold mb-4">Inventário</h3>
         @if (!(Model is null || Model.Count() == 0))
         {
             <div class="table-responsive">
                 <table class="table search-table align-middle text-nowrap table-fixed">
                     <thead class="header-item">
                         <tr>
-                            <th>
-                                <div class="n-chk align-self-center text-center">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input primary" id="contact-check-all">
-                                        <label class="form-check-label" for="contact-check-all"></label>
-                                        <span class="new-control-indicator"></span>
-                                    </div>
-                                </div>
-                            </th>
                             <th>SKU</th>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Movement Type</th>
+                            <th>Nome do Produto</th>
+                            <th>Quantidade</th>
+                            <th>Tipo de Movimentação</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr class="table-item-hover search-items">
-                                <td>
-                                    <div class="n-chk align-self-center text-center">
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input contact-chkbox primary" id="checkbox1">
-                                            <label class="form-check-label" for="checkbox1"></label>
-                                        </div>
-                                    </div>
-                                </td>
                                 <td>
                                     <p class="smart-link cursor-pointer m-0" @onclick="() => Edit(item)">@item.Product.SKU</p>
                                 </td>

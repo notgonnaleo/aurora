@@ -10,9 +10,9 @@ namespace Backend.Domain.Enums.StockMovements
 {
     public enum MovementStatus
     {
-        [Description("Available")]
+        [Description("Disponível")]
         Available = 1,
-        [Description("Out of Stock")]
+        [Description("Em falta")]
         OutOfStock = 2,
         [Description("Reserved")]
         Reserved = 3

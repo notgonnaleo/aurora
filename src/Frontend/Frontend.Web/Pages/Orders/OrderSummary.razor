@@ -4,9 +4,11 @@
 @using Backend.Domain.Entities.Orders.Response;
 @using Backend.Domain.Entities.Products;
 @using Backend.Domain.Enums.Orders;
+@using Backend.Domain.Enums.Payments
 @using Frontend.Web.Components.Orders.Table
 @using Frontend.Web.Services.Authentication;
 @using Frontend.Web.Services.Orders;
+@using Backend.Domain.Enums.EnumExtensions;
 @inject NavigationManager Navigator;
 @inject OrderService _orderService;
 @inject AuthenticationService _authenticationService;
@@ -24,7 +26,7 @@
 {
     private bool collapseForm = true;
     private string? formCssClass => collapseForm ? null : "show-menu";
-    private string? btnText => collapseForm ? "New" : "Hide menu";
+    private string? btnText => collapseForm ? "Novo" : "Ocultar";
     
     private void ToggleForm()
     {
@@ -48,7 +50,7 @@
                             <h6>Status #@OrderDetails.OrderCode</h6>
                             <h5>
                                 <strong class="smart-link cursor-pointer">
-                                    @OrderDetails.OrderStatus.OrderStatusName
+                                    @(((OrdersStatusEnums)OrderDetails.OrderStatus.OrderStatusId).GetDescription())
                                 </strong>
                             </h5>
                         </div>
@@ -63,7 +65,7 @@
                     <div class="card w-100">
                         
                         <div class="card-body p-4">
-                            <h5 class="card-title fw-semibold mb-4">Actions</h5>
+                            <h5 class="card-title fw-semibold mb-4">Ações</h5>
                             <div class="row text-center pt-4">
                             @code
                             {
@@ -164,12 +166,12 @@
                 <div class="col-lg-8 d-flex align-items-stretch">
                     <div class="card w-100">
                         <div class="card-body p-4">
-                            <h5 class="text card-title fw-semibold mb-5">Payment & Deadline</h5>
+                            <h5 class="text card-title fw-semibold mb-5">Detalhes do Pedido</h5>
 
                             <div class="row text-center mb-4 align-items-center">
                                 <div class="col">
                                     <p><strong>Cliente:</strong></p>
-                                    <p>@OrderDetails.Customer.Agent.Name</p>
+                                    <p>@(OrderDetails.Customer.Agent!.Name)</p>
                                 </div>
                                 <div class="col">
                                     <p><strong>Emissor:</strong></p>
@@ -177,18 +179,22 @@
                                 </div>
                                 <div class="col">
                                     <p><strong>Responsável</strong></p>
-                                    <p>@OrderDetails.Seller.Agent.Name</p>
+                                    <p>@OrderDetails.Seller.Agent!.Name</p>
                                 </div>
                             </div>
 
                             <div class="row text-center mb-4 align-items-center">
                                 <div class="col">
                                     <p><strong>Método de Pagamento</strong></p>
-                                    <p>Cartão</p>
+                                    <p>@(((PaymentTypesEnum)OrderDetails.PaymentMethodId).GetDescription())</p>
                                 </div>
                                 <div class="col">
                                     <p><strong>Total de Parcelas</strong></p>
-                                    <p>@(OrderDetails.TotalParcels == null ? 10 : OrderDetails.TotalParcels)</p>
+                                    <p>@(OrderDetails.TotalParcels == null ? "N/A" : OrderDetails.TotalParcels)</p>
+                                </div>
+                                <div class="col">
+                                    <p><strong>Valor Total</strong></p>
+                                    <p>@(OrderDetails.OrderTotalAmount == null ? "N/A" : OrderDetails.OrderTotalAmount)</p>
                                 </div>
                             </div>
 
@@ -204,10 +210,7 @@
                             </div>
 
                             <div class="row text-center mb-4 align-items-center">
-                                <div class="col">
-                                    <p><strong>Valor Total</strong></p>
-                                    <p>@(OrderDetails.OrderTotalAmount == null ? 5000 : OrderDetails.OrderTotalAmount)</p>
-                                </div>
+
                             </div>
 
                             @* <p>@OrderDetails.OrderParcelAmount</p>
@@ -221,33 +224,59 @@
                 <div class="col-lg-4 d-flex align-items-stretch">
                     <div class="card w-100">
                         <div class="card-body p-4">
-                            <h5 class="text card-title fw-semibold mb-4">Contact</h5>
+                            <h5 class="text card-title fw-semibold mb-4">Contato:</h5>
+
+                            <div>
+                                <p><strong>Cliente:</strong></p>
+                                <p>Nome: @OrderDetails.Customer.Agent.Name</p>
+                            </div>
                             @if (OrderDetails.Customer.PhoneNumbers is not null &&
-                           OrderDetails.Customer.EmailAddresses is not null &&
-                           OrderDetails.Customer.Addresses is not null)
+                                OrderDetails.Customer.EmailAddresses is not null &&
+                                OrderDetails.Customer.Addresses is not null)
                             {
                                 @foreach (var phone in OrderDetails.Customer.PhoneNumbers)
                                 {
-                                    <p>@phone.PhoneNumber</p>
+                                    <p>Telefone: @phone.PhoneNumber</p>
                                 }
                                 @foreach (var email in OrderDetails.Customer.EmailAddresses)
                                 {
-                                    <p>@email.EmailAddress</p>
+                                    <p>E-mail: @email.EmailAddress</p>
                                 }
                                 @foreach (var addr in OrderDetails.Customer.Addresses)
                                 {
-                                    <p>@addr.CityName @addr.Reference, @addr.CountryName</p>
+                                    <p>Endereço: @addr.CityName @addr.Reference, @addr.CountryName</p>
                                 }
                             }
+                            else
+                            {
+                                <p>Dados não cadastrados.</p>
+                            }
 
-                            <div class="mb-4">
-                                <p class="d-inline"><strong>Customer Name:</strong></p>
-                                <p class="d-inline ml-2">@OrderDetails.Customer.Agent.Name</p>
+                            <div>
+                                <p><strong>Funcionário:</strong></p>
+                                <p>Nome: @OrderDetails.Seller.Agent.Name</p>
                             </div>
-                            <div class="mb-4">
-                                <p class="d-inline"><strong>Seller Name:</strong></p>
-                                <p class="d-inline ml-2">@OrderDetails.Seller.Agent.Name</p>
-                            </div>
+                            @if (OrderDetails.Seller.PhoneNumbers is not null &&
+                           OrderDetails.Seller.EmailAddresses is not null &&
+                           OrderDetails.Seller.Addresses is not null)
+                            {
+                                @foreach (var phone in OrderDetails.Seller.PhoneNumbers)
+                                {
+                                    <p>Telefone: @phone.PhoneNumber</p>
+                                }
+                                @foreach (var email in OrderDetails.Seller.EmailAddresses)
+                                {
+                                    <p>E-mail: @email.EmailAddress</p>
+                                }
+                                @foreach (var addr in OrderDetails.Seller.Addresses)
+                                {
+                                    <p>Endereço: @addr.CityName @addr.Reference, @addr.CountryName</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>Dados não cadastrados.</p>
+                            }
                         </div>
                     </div>
                 </div>
@@ -257,7 +286,7 @@
                 <div class="row">
                     <div class="m-4">
                         <button class="btn btn-outline-primary" @onclick="ToggleForm">
-                            New entry
+                            Movimentar
                         </button>
                     </div>
                     <div class="card card-body">

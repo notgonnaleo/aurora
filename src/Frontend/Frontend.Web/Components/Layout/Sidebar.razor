@@ -29,7 +29,7 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">OVERVIEW</span>
+                    <span class="hide-menu">GERAL</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -43,7 +43,7 @@
 
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">PORTFOLIO</span>
+                    <span class="hide-menu">PORTIFÓLIO</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -51,7 +51,7 @@
                         <span class="d-flex">
                             <i class="ti ti-building"></i>
                         </span>
-                        <span class="hide-menu">Company</span>
+                        <span class="hide-menu">Empresas</span>
                     </div>
                     <ul aria-expanded="false" class="@SubNavMenuCssClass first-level">
                         <li class="sidebar-item">
@@ -63,8 +63,6 @@
                                     </div>
                                     <span class="hide-menu">@tenant.Name</span>
                                 </a>
-
-
                             }
                         </li>
                     </ul>
@@ -72,7 +70,7 @@
 
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">BUSINESS</span>
+                    <span class="hide-menu">COMERCIAL</span>
                 </li>
 
                 <li class="sidebar-item">
@@ -80,7 +78,7 @@
                         <span>
                             <i class="ti ti-building-store"></i>
                         </span>
-                        <span class="hide-menu">Products</span>
+                        <span class="hide-menu">Produtos</span>
                     </a>
                 </li>
 
@@ -89,7 +87,7 @@
                         <span>
                             <i class="ti ti-category"></i>
                         </span>
-                        <span class="hide-menu">Categories</span>
+                        <span class="hide-menu">Categorias</span>
                     </a>
                 </li>
 
@@ -98,7 +96,7 @@
                         <span class="d-flex">
                             <i class="ti ti-users"></i>
                         </span>
-                        <span class="hide-menu">Agents</span>
+                        <span class="hide-menu">Agentes</span>
                     </div>
                     <ul aria-expanded="false" class="@SubNavMenuCssClassAgent first-level">
                         @if(agentTypes is not null && !isLoading)
@@ -106,11 +104,25 @@
                             <li class="sidebar-item">
                                 @foreach (var agentType in agentTypes)
                                 {
+                                    @if (agentType.AgentTypeId == (int)AgentTypes.Customer)
+                                    {
+                                        agentType.AgentTypeName = "Cliente";
+                                    }
+                                    @if (agentType.AgentTypeId == (int)AgentTypes.Employee)
+                                    {
+                                        agentType.AgentTypeName = "Funcionário";
+                                    }
+                                    @if (agentType.AgentTypeId == (int)AgentTypes.Vendor)
+                                    {
+                                        agentType.AgentTypeName = "Fornecedor";
+                                    }
                                     <a class="sidebar-link cursor-pointer" @onclick="() => SelectAgentType(agentType)">
                                         <div class="round-16 d-flex align-items-center justify-content-center">
                                             <i class="ti ti-circle-filled"></i>
                                         </div>
-                                        <span class="hide-menu" value="@agentType.AgentTypeId">@agentType.AgentTypeName</span>
+                                        <span class="hide-menu" value="@agentType.AgentTypeId">
+                                            @agentType.AgentTypeName
+                                        </span>
                                     </a>
                                 }
                             </li>
@@ -128,7 +140,7 @@
                         <span>
                             <i class="ti ti-box"></i>
                         </span>
-                        <span class="hide-menu">Stock</span>
+                        <span class="hide-menu">Estoque</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
@@ -136,20 +148,20 @@
                         <span>
                             <i class="ti ti-shopping-cart"></i>
                         </span>
-                        <span class="hide-menu">Orders</span>
+                        <span class="hide-menu">Pedidos</span>
                     </a>
                 </li>
 
                 <li class="nav-small-cap">
                     <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                    <span class="hide-menu">PROFILE</span>
+                    <span class="hide-menu">PERFIL</span>
                 </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="/settings" aria-expanded="false">
                         <span>
                             <i class="ti ti-settings"></i>
                         </span>
-                        <span class="hide-menu">Settings</span>
+                        <span class="hide-menu">Configurações</span>
                     </a>
                 </li>
             </ul>

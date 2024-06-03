@@ -91,6 +91,24 @@
                     <i class="ti ti-clock-x fs-6 text-light"></i>
                 </div>
                 break;
+
+            case ((int)OrdersStatusEnums.Refunding):
+                <div class="steps active">
+                    <i class="ti ti-clock fs-6 text-light"></i>
+                </div>
+                <span class="line active"></span>
+                <div class="steps active">
+                    <i class="ti ti-clock-play fs-6 text-light"></i>
+                </div>
+                <span class="line active-left-done"></span>
+                <div class="steps bg-success">
+                    <i class="ti ti-clock-check fs-6 text-light"></i>
+                </div>
+                <span class="line active-right-done"></span>
+                <div style="background-color: var(--bs-orange);" class="steps active">
+                    <i class="ti ti-arrow-back fs-6 text-light"></i>
+                </div>
+                break;
         }
     </div>
 </div>

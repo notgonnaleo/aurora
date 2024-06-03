@@ -115,6 +115,9 @@ namespace Backend.Infrastructure.Services.Orders
             {
                 TenantId = orders.TenantId,
                 OrderId = orders.OrderId,
+                OrderTotalAmount = orders.OrderTotalAmount,
+                TotalParcels = orders.ParcelsQuantity,
+                PaymentMethodId = orders.PaymentMethodId,
                 OrderEffectiveDate = orders.OrderEffectiveDate.GetValueOrDefault(),
                 OrderEstimatedDate = orders.OrderEstimatedDate,
                 OrderOpeningDate = orders.OrderOpeningDate,

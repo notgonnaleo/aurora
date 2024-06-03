@@ -5,9 +5,9 @@
 @inject AgentService _agentService;
 @inject AuthenticationService _authenticationService;
 
-<label for="employeeId" class="form-label">Customer</label>
+<label for="employeeId" class="form-label">Cliente</label>
 <select class="form-select" @onchange="OnCustomerChange">
-    <option value="" disabled hidden selected>Select a Customer</option>
+    <option value="" disabled hidden selected>Selecione um cliente</option>
     @foreach (var agent in agents.Where(x => x.AgentTypeId == (int)AgentTypes.Customer))
     {
         <option value="@agent.AgentId">@agent.Name</option>

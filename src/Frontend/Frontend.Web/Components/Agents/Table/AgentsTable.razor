@@ -35,23 +35,22 @@ else
                                             @if (agent.AgentId == resul.AgentId)
                                             {
                                                 <span class="text-info mb-1 me-2 smart-link" @onclick="() => Edit(agent)">
-                                                   <strong class="text-dark">CPF:</strong> @resul.CPF
-
+                                                    <strong class="text">@resul.CPF</strong>
                                                 </span>
                                             }
                                         }
                                         <span class="mb-1 badge rounded-pill font-small bg-info-subtle text-info">
                                             @if (IdSelected == ((int)AgentTypes.Customer).ToString())
                                             {
-                                                <span class="text-info">Customer</span>
+                                                <span class="text-info">Cliente</span>
                                             }
                                             else if (IdSelected == ((int)AgentTypes.Employee).ToString())
                                             {
-                                                <span class="text-info">Employee</span>
+                                                <span class="text-info">Funcionário</span>
                                             }
                                             else if (IdSelected == ((int)AgentTypes.Vendor).ToString())
                                             {
-                                                <span class="text-info">Vendor</span>
+                                                <span class="text-info">Fornecedor</span>
                                             }
                                         </span>
                                     </div>
@@ -62,10 +61,10 @@ else
                                 <div class="col-md-3 border-sm-start-none border-start d-flex flex-column">
                                     <div class="d-flex flex-column mt-4">
                                         <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-sm m-1" type="button" @onclick="() => Edit(agent)">
-                                            <i class="ti ti-edit m-1"></i> Edit
+                                            <i class="ti ti-edit m-1"></i>
                                         </button>
                                         <button data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-sm m-1" type="button" @onclick="() => DeleteModalAction(agent)">
-                                            <i class="ti ti-trash-x m-1"></i> Delete
+                                            <i class="ti ti-trash-x m-1"></i>
                                         </button>
                                     </div>
                                 </div>

@@ -41,7 +41,7 @@
     {
         @if (Model.StatusCode == 200)
         {
-            <a class="btn btn-outline-primary" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Generate report</a>
+            <a class="btn btn-outline-primary" href="/report/@Model.Result!.TenantId.ToString()/product-summary/@productId">Gerar Relatório</a>
             <br />
             <br />
             <Frontend.Web.Components.Products.Forms.Edit.EditProduct Model="@Model.Result" />
@@ -83,7 +83,7 @@
 }
 
 @code {
-    private string? btnText = "New";
+    private string? btnText = "Novo";
     public string? formCssClass = null;
     public bool isVariantSidebar = false;
 
@@ -96,7 +96,7 @@
         isVariantSidebar = true;
         collapseProductVariantForm = !collapseProductVariantForm;
         formCssClass = collapseProductVariantForm ? null : "show-menu";
-        btnText = collapseProductVariantForm ? "New" : "Hide menu";
+        btnText = collapseProductVariantForm ? "Novo" : "Ocultar";
     }
 }
 

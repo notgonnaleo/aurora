@@ -18,7 +18,7 @@
     }
     else
     {
-        <h3 class="card-title fw-semibold mb-4">Stock Entries Log</h3>
+        <h3 class="card-title fw-semibold mb-4">Histórico de movimentações</h3>
         @if (!(Model is null || Model.Count() == 0))
         {
             <div class="table-responsive scroll-sidebar">
@@ -26,9 +26,9 @@
                     <thead class="header-item">
                         <tr>
                             <th>SKU</th>
-                            <th>Product Name</th>
-                            <th>Movement Type</th>
-                            <th>Quantity</th>
+                            <th>Nome do Produto</th>
+                            <th>Tipo de Movimentação</th>
+                            <th>Quantidade</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,8 +55,8 @@
         }
         else
         {
-            <p>Could not find any stock entries.</p>
-            <a href="/stock" class="btn btn-primary">Add new entry</a>
+            <p>Sem histórico.</p>
+            <a href="/stock" class="btn btn-primary">Adicione uma entrada/saída</a>
         }
     }
 </div>

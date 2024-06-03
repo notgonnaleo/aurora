@@ -10,9 +10,9 @@ namespace Backend.Domain.Enums.StockMovements.MovementType
 {
     public enum MovementTypes
     {
-        [Description("Output")]
+        [Description("Saída")]
         Output = 0,
-        [Description("Input")]
+        [Description("Entrada")]
         Input = 1
     }
 }

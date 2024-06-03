@@ -15,7 +15,9 @@ namespace Backend.Infrastructure.Enums.Modules
         ProductTypes = 2,
         Category = 3,
         SubCategory = 4,
-        Agents = 5 
+        Agents = 5,
+        Inventory = 6,
+        Orders = 7
     }
 
     /// <summary>

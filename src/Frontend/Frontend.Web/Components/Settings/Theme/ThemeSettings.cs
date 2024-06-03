@@ -18,11 +18,11 @@ namespace Frontend.Web.Components.Settings.Theme
         }
         public async Task<ThemeSettings> SetDefaultTheme()
         {
-            await _cookies.SetValueAsync("theme", "1");
+            await _cookies.SetValueAsync("theme", "0");
             return new ThemeSettings()
             {
-                ThemeId = (int)Themes.LightMode,
-                ThemeName = Themes.LightMode.ToString()
+                ThemeId = (int)Themes.DarkMode,
+                ThemeName = Themes.DarkMode.ToString()
             };
         }
         public async Task<ThemeSettings> GetUserTheme()
