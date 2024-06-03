@@ -43,8 +43,8 @@
                                 </div>
                                 break;
                             case ((int)OrdersStatusEnums.Refunding):
-                                <div class="btn btn-success round rounded-circle d-flex align-items-center justify-content-center px-2">
-                                    <i class="ti ti-arrow-back fs-6"></i>
+                                <div style="background-color: var(--bs-orange);" class="btn round rounded-circle d-flex align-items-center justify-content-center px-2">
+                                    <i class="ti ti-arrow-back fs-6 text-light"></i>
                                 </div>
                                 break;
                             default:
@@ -76,6 +76,9 @@
                                     break;
                                 case ((int)OrdersStatusEnums.Done):
                                     <span class="mb-1 badge rounded-pill text-bg-success">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
+                                    break;
+                                case ((int)OrdersStatusEnums.Refunding):
+                                    <span style="background-color: var(--bs-orange);" class="mb-1 badge rounded-pill">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
                                     break;
                                 default:
                                     <span class="mb-1 badge rounded-pill text-bg-primary">@(((OrdersStatusEnums)order.OrderStatus.OrderStatusId).GetDescription())</span>
